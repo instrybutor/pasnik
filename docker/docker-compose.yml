@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    container_name: pasnik-postgres
+    volumes:
+      - pasnik-data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_DB=pasnik
+      - POSTGRES_USER=pasnik
+      - POSTGRES_PASSWORD=pasnik
+
+volumes:
+  pasnik-data:

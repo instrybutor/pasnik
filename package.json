@@ -5,6 +5,8 @@
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
+    "start:api": "nx serve nestjs-api",
+    "start:database": "npm run docker-compose up",
     "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
@@ -23,21 +25,26 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "docker-compose": "docker-compose -f ./docker/docker-compose.yml"
   },
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@nestjs/common": "^7.0.0",
+    "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/typeorm": "^7.1.5",
     "core-js": "^3.6.5",
+    "pg": "^8.7.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
     "rxjs": "~6.6.3",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "typeorm": "^0.2.36"
   },
   "devDependencies": {
     "@nestjs/schematics": "^7.0.0",
