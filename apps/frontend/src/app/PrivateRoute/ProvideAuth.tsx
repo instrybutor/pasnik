@@ -3,25 +3,26 @@ import { authContext } from './authContext';
 import { auth } from './auth';
 
 function useProvideAuth() {
-  const [user, setUser] = useState<string | null>(null);
+  const [jwt, setJwt] = useState<string | null>(null);
 
   const signin = (accessToken: string, cb: (data: any) => void) => {
     return fetch(`/api/auth/google/callback/?access_token=${accessToken}`)
       .then((res) => res.json())
       .then(({ accessToken }) => {
+        setJwt(accessToken);
         cb(accessToken);
       });
   };
 
   const signout = (cb: () => void) => {
     return auth.signout(() => {
-      setUser(null);
+      setJwt(null);
       cb();
     });
   };
 
   return {
-    user,
+    jwt,
     signin,
     signout,
   };
