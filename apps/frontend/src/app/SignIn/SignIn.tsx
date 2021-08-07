@@ -7,7 +7,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import GoogleLogin from 'react-google-login';
+import GoogleLogin, {
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+  GoogleLogout,
+} from 'react-google-login';
+import { useAuth } from '../PrivateRoute';
 
 function Copyright() {
   return (
@@ -41,6 +46,17 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
 
+  const auth = useAuth();
+
+  const onSuccess = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) => {
+    const { accessToken } = response as GoogleLoginResponse;
+    auth.signin(accessToken, (data) => {
+      console.log('logged in', data);
+    });
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -50,8 +66,11 @@ export default function SignIn() {
         </Avatar>
         <GoogleLogin
           className={classes.submit}
-          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}
+          clientId="472844309899-31cjtufcv0knrpavu3qdgablokeo92l2.apps.googleusercontent.com"
+          onSuccess={onSuccess}
+          onFailure={onSuccess}
           cookiePolicy={'single_host_origin'}
+          isSignedIn={true}
         />
       </div>
       <Box mt={3}>

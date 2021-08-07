@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "api-data-transfer": {
+      "tags": []
+    },
     "frontend": {
       "tags": []
     },
