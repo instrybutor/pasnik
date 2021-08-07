@@ -23,14 +23,11 @@ jobs:
             - ~/.npm
             - ~/.cache
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm run build
+      - run: npm run build -- --prod nestjs-api --sourceMap false
+      - run: mv ./dist/apps/nestjs-api/main.js ./dist/apps/nestjs-api/app.js
       - run:
-          name: Deploy Branch
-          command: |
-            sudo apt-get update
-            sudo apt-get -qq install git-ftp
-            echo "Deploying project ..."
-            git ftp push --user "${FTP_USER}" --passwd "${FTP_PASSWORD}" "${FTP_HOST}"
+          name: Deploying
+          command: node ./ftp-deploy.js
 
 workflows:
   version: 2
