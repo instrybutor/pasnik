@@ -145,9 +145,6 @@ workflows:
   pr_check:
     jobs:
       - install
-      - check-formatting:
-          requires:
-            - install
       - lint:
           requires:
             - install
@@ -161,10 +158,6 @@ workflows:
           requires:
             - install
       - deploy:
-          filters:
-            branches:
-              only:
-                - master
           requires:
             - lint
             - test
