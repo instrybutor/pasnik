@@ -158,12 +158,8 @@ workflows:
       - build:
           requires:
             - install
-      - e2e:
-          requires:
-            - install
       - deploy:
           requires:
             - lint
             - test
             - build
-            - e2e
