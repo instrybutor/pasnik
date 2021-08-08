@@ -15,25 +15,20 @@ if (!existsSync(outDir)) {
 }
 
 const config = {
-  username: process.env.FTP_USER,
-  password: process.env.FTP_PASS,
-  host: process.env.FTP_HOST,
-  port: 21,
+  username: argv.user,
+  password: argv.pass,
+  host: argv.host,
+  port: argv.port ?? 21,
   localRoot: outDir,
   remoteRoot: remoteRoot,
   include: ['*'],
   sftp: true
 };
 
-(async () => {
-  await new Promise((resolve, reject) => {
-    ftpDeploy.deploy(config, function (err) {
-      if (err) {
-        reject(`Deploy error ${err.message}`);
-      } else {
-        console.log(`\n🚀 New version of ${argv.appName} is running!\n`);
-        resolve('');
-      }
-    });
-  });
-})();
+ftpDeploy.deploy(config, function (err) {
+  if (err) {
+    throw new Error(`Deploy error ${err.message}`);
+  } else {
+    console.log(`\n🚀 New version of ${argv.appName} is running!\n`);
+  }
+});

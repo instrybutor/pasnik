@@ -8,10 +8,6 @@ defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:14.17.4-browsers
-  enviroments:
-    FTP_USER: $FTP_USER
-    FTP_HOST: $FTP_HOST
-    FTP_PASS: $FTP_PASS
 
 set_env: &set_env
   name: Setup Environment Variables
@@ -137,7 +133,7 @@ jobs:
           <<: *npm_cache
       - restore_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
-      - run: npm run affected -- --target deploy ${AFFECTED_ARGS}
+      - run: npm run affected -- --target deploy ${AFFECTED_ARGS} --user $FTP_USER --host $FTP_HOST --pass $FTP_PASS
       - run: git rev-parse HEAD > dist/last-deploy.txt
       - save_cache:
           key: last-deploy-sha
@@ -149,17 +145,9 @@ workflows:
   pr_check:
     jobs:
       - install
-      - lint:
-          requires:
-            - install
-      - test:
-          requires:
-            - install
       - build:
           requires:
             - install
       - deploy:
           requires:
-            - lint
-            - test
             - build
