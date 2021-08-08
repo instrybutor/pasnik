@@ -155,10 +155,11 @@
           },
           "configurations": {
             "production": {
-              "externalDependencies": "none",
+              "generatePackageJson": true,
               "optimization": true,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "inspect": false,
+              "sourceMap": false,
               "fileReplacements": [
                 {
                   "replace": "apps/nestjs-api/src/environments/environment.ts",
