@@ -5,7 +5,9 @@ export const authContext = createContext<{
   signin: (accessToken: string, cb: (data: any) => void) => void;
   signout: (cb: () => void) => void;
 }>({
-  signin: (accessToken, cb) => {},
+  signin: (accessToken, cb) => {
+    return;
+  },
   signout: () => {
     return;
   },
