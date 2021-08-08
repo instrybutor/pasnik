@@ -132,12 +132,16 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/nestjs-api",
             "main": "apps/nestjs-api/src/main.ts",
             "tsConfig": "apps/nestjs-api/tsconfig.app.json",
-            "assets": ["apps/nestjs-api/src/assets"]
+            "assets": [
+              "apps/nestjs-api/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -162,15 +166,29 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/nestjs-api/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/nestjs-api/**/*.ts"
+            ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/nestjs-api"],
+          "outputs": [
+            "coverage/apps/nestjs-api"
+          ],
           "options": {
             "jestConfig": "apps/nestjs-api/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-api"
+              }
+            ]
           }
         }
       }
