@@ -1,87 +1,173 @@
-# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
-version: 2.1
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
 
 defaults: &defaults
-  # working_directory: ./circleci
+  working_directory: ~/repo
   docker:
     - image: circleci/node:14.17.4-browsers
 
+set_env: &set_env
+  name: Setup Environment Variables
+  command: |
+    if [[ $CIRCLE_PULL_REQUEST ]]
+    then
+      echo 'Fetching Base Commit from GitHub'
+      echo 'export CIRCLE_PR_NUMBER="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"' >> $BASH_ENV
+      source $BASH_ENV
+      echo "export CIRCLE_PR_BASE_SHA=`curl -s https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${CIRCLE_PR_NUMBER} | jq -r '.base.sha'`" >> $BASH_ENV
+      echo 'export AFFECTED_ARGS="--base ${CIRCLE_PR_BASE_SHA}"' >> $BASH_ENV
+    else
+      echo 'Fetching Base Commit from Deploy Cache'
+      if [[ ! -f dist/last-deploy.txt ]]
+      then
+        mkdir dist && git rev-parse HEAD~1 > dist/last-deploy.txt
+      fi
+      echo 'export AFFECTED_ARGS="--base $(cat dist/last-deploy.txt)"' >> $BASH_ENV
+    fi
+    source $BASH_ENV
+    echo $AFFECTED_ARGS
+npm_cache: &npm_cache
+  keys:
+    - v1-dependencies-{{ checksum "package.json" }}
+    # fallback to using the latest cache if no exact match is found
+    - v1-dependencies-
+
+deploy_cache: &deploy_cache
+  key: last-deploy-sha
+
+npm_install: &npm_install
+  name: Install Dependencies
+  command: npm install
+
 jobs:
-  prepare:
+  install:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-      - run: npm install
+          <<: *npm_cache
+      - run:
+          <<: *npm_install
       - save_cache:
-          paths:
-            - node_modules
-            - ~/.npm
-            - ~/.cache
           key: v1-dependencies-{{ checksum "package.json" }}
-      - persist_to_workspace:
-          root: .
           paths:
+            - ~/.cache
             - node_modules
+  check-formatting:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *deploy_cache
+      - run:
+          <<: *set_env
+      - restore_cache:
+          <<: *npm_cache
+      - run: npm run format:check ${AFFECTED_ARGS}
   lint:
     <<: *defaults
     steps:
       - checkout
-      - attach_workspace:
-          at: .
-      - run: npm run lint
-  test:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run: npm run test
+      - restore_cache:
+          <<: *deploy_cache
+      - run:
+          <<: *set_env
+      - restore_cache:
+          <<: *npm_cache
+      - run: ./node_modules/.bin/nx workspace-lint
+      - run: npm run affected:lint ${AFFECTED_ARGS} --parallel
   build:
     <<: *defaults
     steps:
       - checkout
-      - attach_workspace:
-          at: .
-      - run: npm run build -- --prod nestjs-api --sourceMap false
-      - persist_to_workspace:
-          root: .
+      - restore_cache:
+          <<: *deploy_cache
+      - run:
+          <<: *set_env
+      - restore_cache:
+          <<: *npm_cache
+      - run: npm run affected:build -- ${AFFECTED_ARGS} --parallel --configuration production
+      - save_cache:
+          key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
-            - build
-  deploy:
+            - dist
+      - store_artifacts:
+          path: dist
+  test:
     <<: *defaults
-    environment:
-      FTP_USER: ${FTP_USER}
-      FTP_HOST: ${FTP_HOST}
-      FTP_PASS: ${FTP_PASS}
     steps:
       - checkout
-      - attach_workspace:
-          at: .
-      - run: mv ./dist/apps/nestjs-api/main.js ./dist/apps/nestjs-api/app.js
+      - restore_cache:
+          <<: *deploy_cache
       - run:
-          name: Deploying
-          command: node ./ftp-deploy.js
+          <<: *set_env
+      - restore_cache:
+          <<: *npm_cache
+      - run: npm run affected:test -- ${AFFECTED_ARGS} --parallel -- --ci --code-coverage
+  e2e:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *deploy_cache
+      - run:
+          <<: *set_env
+      - restore_cache:
+          <<: *npm_cache
+      - run: npm run affected:e2e -- ${AFFECTED_ARGS} --configuration production -- --headless
+      - store_artifacts:
+          path: dist/cypress
+
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *deploy_cache
+      - run:
+          <<: *set_env
+      - restore_cache:
+          <<: *npm_cache
+      - restore_cache:
+          key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - run: npm run affected -- --target deploy ${AFFECTED_ARGS}
+      - run: git rev-parse HEAD > dist/last-deploy.txt
+      - save_cache:
+          key: last-deploy-sha
+          paths:
+            - dist/last-deploy.txt
 
 workflows:
   version: 2
-  build_accept_deploy:
+  pr_check:
     jobs:
-      - prepare
+      - install
+      - check-formatting:
+          requires:
+            - install
       - lint:
           requires:
-            - prepare
-      - build:
-          requires:
-            - lint
+            - install
       - test:
           requires:
-            - build
-      - deploy:
+            - install
+      - build:
           requires:
+            - install
+      - e2e:
+          requires:
+            - install
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - check-formatting
+            - lint
             - test
-
+            - build
+            - e2e
