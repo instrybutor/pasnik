@@ -186,7 +186,7 @@
           "options": {
             "commands": [
               {
-                "command": "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-api"
+                "command": "mv ./dist/apps/nestjs-api/main.js ./dist/apps/nestjs-api/app.js && npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-api"
               }
             ]
           }
