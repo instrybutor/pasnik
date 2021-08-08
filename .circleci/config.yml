@@ -166,7 +166,6 @@ workflows:
               only:
                 - master
           requires:
-            - check-formatting
             - lint
             - test
             - build
