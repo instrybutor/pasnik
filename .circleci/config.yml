@@ -27,6 +27,20 @@ jobs:
           root: .
           paths:
             - node_modules
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: npm run lint
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: npm run test
   build:
     <<: *defaults
     steps:
@@ -58,9 +72,16 @@ workflows:
   build_accept_deploy:
     jobs:
       - prepare
-      - build:
+      - lint:
           requires:
             - prepare
-      - deploy:
+      - build:
+          requires:
+            - lint
+      - test:
           requires:
             - build
+      - deploy:
+          requires:
+            - test
+
