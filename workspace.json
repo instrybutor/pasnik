@@ -155,6 +155,7 @@
           },
           "configurations": {
             "production": {
+              "externalDependencies": "none",
               "optimization": true,
               "extractLicenses": true,
               "inspect": false,
