@@ -8,27 +8,29 @@ const ftpDeploy = new FtpDeploy();
 const argv = minimist(process.argv.slice(2));
 const root = join(__dirname, '../..');
 const outDir = join(root, 'dist/apps', argv.appName);
-const remoteRoot = argv.remoteRoot ?? './public_nodejs/';
+const remoteRoot = argv.remoteRoot ?? '/public_nodejs/';
 
 if (!existsSync(outDir)) {
   throw new Error(`${outDir} does not exist`);
 }
 
 const config = {
-  username: argv.user,
+  user: argv.user,
   password: argv.pass,
   host: argv.host,
   port: argv.port ?? 21,
   localRoot: outDir,
   remoteRoot: remoteRoot,
   include: ['*'],
-  sftp: true
 };
 
-ftpDeploy.deploy(config, function (err) {
-  if (err) {
-    throw new Error(`Deploy error ${err.message}`);
-  } else {
-    console.log(`\n🚀 New version of ${argv.appName} is running!\n`);
-  }
-});
+(async () =>
+  await ftpDeploy
+    .deploy(config)
+    .then(() => {
+      console.log(`\n🚀 New version of ${argv.appName} is running!\n`);
+    })
+    .catch((err) => {
+      console.log(err.message);
+      process.exit(255);
+    }))();
