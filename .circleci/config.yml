@@ -9,9 +9,9 @@ jobs:
     docker:
       - image: circleci/node:14.17.4-browsers
     environment:
-      FTP_USER: $FTP_USER
-      FTP_HOST: $FTP_HOST
-      FTP_PASS: $FTP_PASS
+      FTP_USER: ${FTP_USER}
+      FTP_HOST: ${FTP_HOST}
+      FTP_PASS: ${FTP_PASS}
     working_directory: ~/repo
     steps:
       - checkout
