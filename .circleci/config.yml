@@ -8,6 +8,10 @@ defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:14.17.4-browsers
+  enviroments:
+    FTP_USER: $FTP_USER
+    FTP_HOST: $FTP_HOST
+    FTP_PASS: $FTP_PASS
 
 set_env: &set_env
   name: Setup Environment Variables

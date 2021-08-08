@@ -24,10 +24,15 @@ const config = {
   include: ['*'],
 };
 
-ftpDeploy.deploy(config, function (err) {
-  if (err) {
-    console.error(`Deploy error ${err}`);
-  } else {
-    console.log(`\n🚀 New version of ${argv.appName} is running!\n`);
-  }
-});
+(async () => {
+  await new Promise((resolve, reject) => {
+    ftpDeploy.deploy(config, function (err) {
+      if (err) {
+        reject(`Deploy error ${err.message}`);
+      } else {
+        console.log(`\n🚀 New version of ${argv.appName} is running!\n`);
+        resolve('');
+      }
+    });
+  });
+})();
