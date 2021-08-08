@@ -1,18 +1,14 @@
 # This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
 version: 2.1
 
-orbs:
-  node: circleci/node@4.1
+defaults: &defaults
+  # working_directory: ./circleci
+  docker:
+    - image: circleci/node:14.17.4-browsers
 
 jobs:
-  deploy:
-    docker:
-      - image: circleci/node:14.17.4-browsers
-    environment:
-      FTP_USER: ${FTP_USER}
-      FTP_HOST: ${FTP_HOST}
-      FTP_PASS: ${FTP_PASS}
-    working_directory: ~/repo
+  prepare:
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
@@ -27,7 +23,31 @@ jobs:
             - ~/.npm
             - ~/.cache
           key: v1-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
       - run: npm run build -- --prod nestjs-api --sourceMap false
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  deploy:
+    <<: *defaults
+    environment:
+      FTP_USER: ${FTP_USER}
+      FTP_HOST: ${FTP_HOST}
+      FTP_PASS: ${FTP_PASS}
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
       - run: mv ./dist/apps/nestjs-api/main.js ./dist/apps/nestjs-api/app.js
       - run:
           name: Deploying
@@ -35,8 +55,12 @@ jobs:
 
 workflows:
   version: 2
-  sample:
+  build_accept_deploy:
     jobs:
-      - node/test:
-          version: '15.1'
-      - deploy
+      - prepare
+      - build:
+          requires:
+            - prepare
+      - deploy:
+          requires:
+            - build
