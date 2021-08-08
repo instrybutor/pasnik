@@ -96,6 +96,16 @@
             "jestConfig": "apps/frontend/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName frontend --remoteRoot /public_nodejs/public/"
+              }
+            ]
+          }
         }
       }
     },
