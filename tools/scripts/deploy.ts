@@ -22,6 +22,7 @@ const config = {
   localRoot: outDir,
   remoteRoot: remoteRoot,
   include: ['*'],
+  sftp: true
 };
 
 (async () => {
