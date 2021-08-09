@@ -134,6 +134,7 @@ jobs:
       - restore_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run: npm run affected -- --target deploy ${AFFECTED_ARGS} --user $FTP_USER --host $FTP_HOST --pass $FTP_PASS
+      - run: curl $ENV_MANAGER_HOST/env/pasnik?auth=$ENV_MANAGER_PASS
       - run: git rev-parse HEAD > dist/last-deploy.txt
       - save_cache:
           key: last-deploy-sha
