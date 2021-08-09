@@ -13,7 +13,7 @@ export class AuthController {
   @UseGuards(AuthGuard('google-token'))
   @Get('/google')
   googleLogin() {
-    // return this.authService.login(user);
+    return;
   }
 
   @Public()
