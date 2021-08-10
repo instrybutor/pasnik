@@ -18,6 +18,7 @@ import { FrontendMiddleware } from './frontend.middleware';
         username: configService.get('TYPEORM_USERNAME'),
         password: configService.get('TYPEORM_PASSWORD'),
         database: configService.get('TYPEORM_DATABASE'),
+        logging: configService.get('TYPEORM_LOGGING', false),
         autoLoadEntities: true,
         synchronize: configService.get('TYPEORM_SYNCHRONIZE'),
         migrationsTableName: 'migrations_typeorm',
