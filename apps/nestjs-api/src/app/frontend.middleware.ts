@@ -6,7 +6,7 @@ import { environment } from '../environments/environment';
 export class FrontendMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     if (environment.production) {
-      res.sendFile('/public/index.html');
+      res.sendFile('./public/index.html', { root: __dirname });
     } else {
       next();
     }
