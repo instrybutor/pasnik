@@ -33,9 +33,9 @@ import { FrontendMiddleware } from './frontend.middleware';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(FrontendMiddleware).forRoutes({
-      path: '/**', // For all routes
-      method: RequestMethod.ALL, // For all methods
+    consumer.apply(FrontendMiddleware).exclude('api/(.*)').forRoutes({
+      path: '/**',
+      method: RequestMethod.ALL,
     });
   }
 }
