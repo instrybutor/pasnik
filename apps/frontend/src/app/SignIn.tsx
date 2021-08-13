@@ -7,12 +7,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import GoogleLogin, {
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-  GoogleLogout,
-} from 'react-google-login';
-import { useAuth } from '../PrivateRoute';
+import GoogleLoginButton from './GoogleButtonLogin';
+import { useHistory } from 'react-router-dom';
+import { useAuth } from './utils/useAuth';
+import { IGoogleCallbackResponse, IGoogleOneTapLoginProps } from './GoogleOneTapLogin/types';
 
 function Copyright() {
   return (
@@ -47,15 +45,20 @@ export default function SignIn() {
   const classes = useStyles();
 
   const auth = useAuth();
+  const history = useHistory();
 
   const onSuccess = (
-    response: GoogleLoginResponse | GoogleLoginResponseOffline
+    response: IGoogleCallbackResponse
   ) => {
-    const { accessToken } = response as GoogleLoginResponse;
-    auth.signin(accessToken, (data) => {
-      console.log('logged in', data);
-    });
+    console.log(response)
   };
+
+  const config: IGoogleOneTapLoginProps = {
+    client_id: process.env.NX_GOOGLE_CLIENT_ID!,
+    cancel_on_tap_outside: false,
+    callback: onSuccess
+  } as IGoogleOneTapLoginProps;
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -64,13 +67,9 @@ export default function SignIn() {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <GoogleLogin
+        <GoogleLoginButton
           className={classes.submit}
-          clientId="472844309899-31cjtufcv0knrpavu3qdgablokeo92l2.apps.googleusercontent.com"
-          onSuccess={onSuccess}
-          onFailure={onSuccess}
-          cookiePolicy={'single_host_origin'}
-          isSignedIn={true}
+          googleAccountConfigs={config}
         />
       </div>
       <Box mt={3}>

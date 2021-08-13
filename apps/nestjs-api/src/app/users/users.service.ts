@@ -24,15 +24,13 @@ export class UsersService {
   }
 
   async createUser(profile: Profile) {
-    const user = await this.usersRepository.findOne({
-      where: { googleId: profile.id },
-    });
-    if (user) {
-      return this.findOne(user.id);
-    }
-    const newUser = new User();
-    newUser.googleId = profile.id;
-    await this.usersRepository.save(newUser);
-    return this.findOne(newUser.id);
+    const user =
+      (await this.usersRepository.findOne({
+        where: { googleId: profile.id },
+      })) ?? new User();
+    user.googleId = profile.id;
+    user.email = profile.emails[0].value;
+    await this.usersRepository.save(user);
+    return this.findOne(user.id);
   }
 }

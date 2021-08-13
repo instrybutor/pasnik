@@ -7,4 +7,7 @@ export class User {
 
   @Column()
   googleId: string;
+
+  @Column()
+  email: string;
 }
