@@ -7,11 +7,14 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  if (!environment.production) {
+    app.setGlobalPrefix(globalPrefix);
+  }
   app.enableCors();
 
   const port = process.env.PORT || 3333;
