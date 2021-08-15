@@ -11,8 +11,10 @@ const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({ children
   const ref = useRef(null);
   useEffect(() => {
     googleLogin.renderButton(ref.current!, {
-      theme: 'outline',
+      theme: 'filled_black',
       size: 'large',
+      text: 'continue_with',
+      shape: 'pill',
     });
   }, []);
 
