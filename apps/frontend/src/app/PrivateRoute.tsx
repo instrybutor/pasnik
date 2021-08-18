@@ -1,6 +1,6 @@
 import { Redirect, Route } from 'react-router-dom';
 import React from 'react';
-import { useAuth } from './useAuth';
+import { useAuth } from './utils/useAuth';
 
 export function PrivateRoute({ children, ...rest }: React.ComponentProps<any>) {
   const auth = useAuth();
@@ -8,7 +8,7 @@ export function PrivateRoute({ children, ...rest }: React.ComponentProps<any>) {
     <Route
       {...rest}
       render={({ location }) =>
-        auth.jwt ? (
+        auth.user ? (
           children
         ) : (
           <Redirect
