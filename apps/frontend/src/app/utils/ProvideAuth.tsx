@@ -1,10 +1,11 @@
 import React, { ComponentProps, useState } from 'react';
 import { AuthContext, authContext, User } from './authContext';
 import { authFetch } from './authFetch';
-import { useGoogleLogout } from 'react-google-login';
+import ProvideGapi, { useGoogleLibrary } from './ProvideGoogleLibrary';
 
 function useProvideAuth(): AuthContext {
   const [user, setUser] = useState<User | null>(null);
+  const gapi = useGoogleLibrary();
 
   const fetchUser = (): Promise<User> => {
     return authFetch('/api/auth/me')
@@ -35,13 +36,14 @@ function useProvideAuth(): AuthContext {
   };
 
   const signOut = () => {
-    useGoogleLogout({
-      clientId: process.env.NX_GOOGLE_CLIENT_ID!,
-      onLogoutSuccess: () => {
-        localStorage.removeItem('jwt');
-        window.location.href = '/login';
-      }
-    });
+    gapi.revoke();
+    // useGoogleLogout({
+    //   clientId: process.env.NX_GOOGLE_CLIENT_ID!,
+    //   onLogoutSuccess: () => {
+    //     localStorage.removeItem('jwt');
+    //     window.location.href = '/login';
+    //   }
+    // });
   };
 
   React.useEffect(() => {
@@ -57,5 +59,10 @@ function useProvideAuth(): AuthContext {
 
 export function ProvideAuth({ children }: ComponentProps<any>) {
   const auth = useProvideAuth();
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+  return (
+    <ProvideGapi>
+      <authContext.Provider value={auth}>{children}</authContext.Provider>
+    </ProvideGapi>
+  );
 }
+

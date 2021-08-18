@@ -4,8 +4,6 @@ import { useScript } from '../utils/useScripts';
 
 const scriptFlag: string = '__googleOneTapScript__';
 const googleClientScriptURL: string = 'https://accounts.google.com/gsi/client';
-const oauthEndpointURL: string =
-  'https://oauth2.googleapis.com/tokeninfo?id_token=';
 
 export function useGoogleButtonLogin({
   disabled,
