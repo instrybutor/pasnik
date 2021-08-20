@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { FrontendMiddleware } from './frontend.middleware';
+import { OrdersModule } from './orders';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FrontendMiddleware } from './frontend.middleware';
     }),
     AuthModule,
     UsersModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],

@@ -2,13 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserModel } from '@pasnik/api/data-transfer';
+import { UserEntity } from './user.entity';
 
 @Entity()
-export class UserEntity implements UserModel {
+export class PaymentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,9 +19,12 @@ export class UserEntity implements UserModel {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
-  googleId: string;
+  @ManyToOne(() => UserEntity)
+  user: UserEntity;
+
+  @ManyToOne(() => UserEntity)
+  payer: UserEntity;
 
   @Column()
-  email: string;
+  balanceCents: number;
 }

@@ -11,15 +11,15 @@ function useProvideAuth(): AuthContext {
     return authFetch('/api/auth/me')
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Unauthorized')
+          throw new Error('Unauthorized');
         }
         return res.json();
       })
       .then((user: User) => {
         setUser(user);
         return user;
-      })
-  }
+      });
+  };
 
   const signIn = (accessToken: string) => {
     return fetch(`/api/auth/google?access_token=${accessToken}`)
@@ -37,17 +37,10 @@ function useProvideAuth(): AuthContext {
 
   const signOut = () => {
     gapi.revoke();
-    // useGoogleLogout({
-    //   clientId: process.env.NX_GOOGLE_CLIENT_ID!,
-    //   onLogoutSuccess: () => {
-    //     localStorage.removeItem('jwt');
-    //     window.location.href = '/login';
-    //   }
-    // });
   };
 
   React.useEffect(() => {
-    fetchUser();
+    fetchUser().catch(() => {});
   }, []);
 
   return {
@@ -65,4 +58,3 @@ export function ProvideAuth({ children }: ComponentProps<any>) {
     </ProvideGapi>
   );
 }
-

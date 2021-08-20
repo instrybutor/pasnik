@@ -1,7 +1,12 @@
 export function authFetch(input: RequestInfo, init?: RequestInit) {
   const { headers } = init ?? {};
   const newHeaders = new Headers(headers ?? {});
-  newHeaders.set('Authorization', `Bearer ${localStorage.getItem('jwt')}`);
+  const jwt = localStorage.getItem('jwt');
+  if (!jwt) {
+    return Promise.reject('JWT missing');
+  }
+  newHeaders.set('Authorization', `Bearer ${jwt}`);
+  newHeaders.set('Content-Type', 'application/json');
   return fetch(input, {
     ...init,
     headers: newHeaders,
