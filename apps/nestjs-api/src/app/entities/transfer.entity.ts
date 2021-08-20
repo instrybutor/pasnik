@@ -2,12 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserEntity } from './user.entity';
 
 @Entity()
-export class UserEntity {
+export class TransferEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,9 +19,15 @@ export class UserEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
-  googleId: string;
+  @ManyToOne(() => UserEntity)
+  from: UserEntity;
+
+  @ManyToOne(() => UserEntity)
+  to: UserEntity;
 
   @Column()
-  email: string;
+  amountCents: number;
+
+  @Column()
+  status: number;
 }
