@@ -3,12 +3,12 @@ import { OrderEntity } from '../entities/order.entity';
 import { CreateOrderDto, OrderStatus } from '@pasnik/api/data-transfer';
 import { UserEntity } from '../entities/user.entity';
 
-@EntityRepository()
+@EntityRepository(OrderEntity)
 export class OrdersRepository extends Repository<OrderEntity> {
   async createOrder(createOrderDto: CreateOrderDto, user: UserEntity) {
     const order = new OrderEntity();
 
-    order.orderedAt = new Date(createOrderDto.orderAt);
+    order.orderedAt = createOrderDto.orderAt;
     order.user = user;
     order.from = createOrderDto.from;
     order.menuUrl = createOrderDto.menuUrl;

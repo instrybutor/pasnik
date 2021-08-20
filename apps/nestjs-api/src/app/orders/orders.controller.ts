@@ -15,8 +15,8 @@ export class OrdersController {
 
   @Post()
   create(
-    @CurrentUser() user: UserEntity,
-    @Body() createOrderDto: CreateOrderDto
+    @Body() createOrderDto: CreateOrderDto,
+    @CurrentUser() user: UserEntity
   ) {
     return this.ordersService.create(createOrderDto, user);
   }

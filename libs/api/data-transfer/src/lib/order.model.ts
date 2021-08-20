@@ -15,6 +15,6 @@ export interface OrderModel {
   shippingCents?: number;
   createdAt: Date;
   updatedAt: Date;
-  orderedAt: Date;
+  orderedAt: string;
   dishes: unknown[];
 }

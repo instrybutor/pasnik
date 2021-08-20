@@ -37,8 +37,8 @@ export class OrderEntity implements OrderModel {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
-  orderedAt: Date;
+  @Column({ type: 'timestamptz' })
+  orderedAt: string;
 
   @OneToMany(() => DishEntity, (dish) => dish.order)
   dishes: OrderEntity[];

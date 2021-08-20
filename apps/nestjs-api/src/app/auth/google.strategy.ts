@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-google-token';
 import { ConfigService } from '@nestjs/config';
 import { Profile } from 'passport';
 import { UsersService } from '../users/users.service';
+import { GoogleIdTokenStrategy } from './google-id-token.strategy';
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'google-token') {
+export class GoogleStrategy extends PassportStrategy(
+  GoogleIdTokenStrategy,
+  'google-token'
+) {
   constructor(
     configService: ConfigService,
     private usersService: UsersService

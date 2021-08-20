@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrderEntity } from '../entities/order.entity';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { DishEntity } from '../entities/dish.entity';
 import { UserEntity } from '../entities/user.entity';
 import { UserDishEntity } from '../entities/user-dish.entity';
+import { OrdersRepository } from '../repositories/orders.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      OrderEntity,
+      OrdersRepository,
       DishEntity,
       UserDishEntity,
       UserEntity,

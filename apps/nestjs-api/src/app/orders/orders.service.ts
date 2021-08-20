@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderEntity } from '../entities/order.entity';
 import { OrdersRepository } from '../repositories/orders.repository';
 import { UserEntity } from '../entities/user.entity';
 import { CreateOrderDto } from '@pasnik/api/data-transfer';
@@ -8,7 +7,7 @@ import { CreateOrderDto } from '@pasnik/api/data-transfer';
 @Injectable()
 export class OrdersService {
   constructor(
-    @InjectRepository(OrderEntity)
+    @InjectRepository(OrdersRepository)
     private ordersRepository: OrdersRepository
   ) {}
 
