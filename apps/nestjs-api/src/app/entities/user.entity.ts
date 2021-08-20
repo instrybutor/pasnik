@@ -5,9 +5,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserModel } from '@pasnik/api/data-transfer';
 
 @Entity()
-export class UserEntity {
+export class UserEntity implements UserModel {
   @PrimaryGeneratedColumn()
   id: number;
 

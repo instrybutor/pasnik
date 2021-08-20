@@ -8,6 +8,12 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 
+export enum TransferStatus {
+  Pending,
+  Accepted,
+  Rejected,
+}
+
 @Entity()
 export class TransferEntity {
   @PrimaryGeneratedColumn()
@@ -28,6 +34,6 @@ export class TransferEntity {
   @Column()
   amountCents: number;
 
-  @Column()
-  status: number;
+  @Column({ default: TransferStatus.Pending })
+  status: TransferStatus;
 }

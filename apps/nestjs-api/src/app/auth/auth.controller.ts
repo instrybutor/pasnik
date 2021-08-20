@@ -11,7 +11,7 @@ export class AuthController {
 
   @Public()
   @UseGuards(AuthGuard('google-token'))
-  @Get('/googlge')
+  @Get('/google')
   googleLogin(@CurrentUser() user: UserEntity) {
     return this.authService.login(user);
   }

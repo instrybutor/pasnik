@@ -10,7 +10,10 @@ import Container from '@material-ui/core/Container';
 import GoogleLoginButton from './GoogleButtonLogin';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from './utils/useAuth';
-import { IGoogleCallbackResponse, IGoogleOneTapLoginProps } from './GoogleOneTapLogin/types';
+import {
+  IGoogleCallbackResponse,
+  IGoogleOneTapLoginProps,
+} from './GoogleOneTapLogin/types';
 
 function Copyright() {
   return (
@@ -47,18 +50,19 @@ export default function SignIn() {
   const auth = useAuth();
   const history = useHistory();
 
-  const onSuccess = (
-    response: IGoogleCallbackResponse
-  ) => {
-    console.log(response)
+  const onSuccess = ({ credential, ...props }: IGoogleCallbackResponse) => {
+    if (credential) {
+      auth.signIn(credential).then(() => {
+        history.push('/');
+      });
+    }
   };
 
   const config: IGoogleOneTapLoginProps = {
     client_id: process.env.NX_GOOGLE_CLIENT_ID!,
     cancel_on_tap_outside: false,
-    callback: onSuccess
+    callback: onSuccess,
   } as IGoogleOneTapLoginProps;
-
 
   return (
     <Container component="main" maxWidth="xs">

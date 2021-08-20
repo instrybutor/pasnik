@@ -9,29 +9,27 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { DishEntity } from './dish.entity';
-
-export enum OrderStatus {
-  InProgress,
-  Ordered,
-  Delivered,
-}
+import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 
 @Entity()
-export class OrderEntity {
+export class OrderEntity implements OrderModel {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => UserEntity)
   user: UserEntity;
 
-  @Column()
+  @Column({ type: 'int', default: OrderStatus.InProgress })
   status: OrderStatus;
 
-  @Column()
-  from: string;
+  @Column({ nullable: true })
+  from?: string;
 
   @Column()
-  shippingCents: number;
+  menuUrl: string;
+
+  @Column({ nullable: true })
+  shippingCents?: number;
 
   @CreateDateColumn()
   createdAt: Date;
