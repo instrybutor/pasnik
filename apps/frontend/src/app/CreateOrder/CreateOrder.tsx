@@ -2,9 +2,9 @@ import { FC, useState } from 'react';
 import { Button, Grid, Input, makeStyles, Paper, Snackbar } from '@material-ui/core';
 import { CreateOrderService } from './CreateOrder.service';
 import { useForm } from 'react-hook-form';
-import { CreateOrderPayload } from './CreateOrder.model';
 import { useHistory } from 'react-router-dom';
 import { Alert } from '@material-ui/lab';
+import { CreateOrderDto } from '@pasnik/api/data-transfer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +38,7 @@ export const CreateOrder: FC = () => {
   const classes = useStyles();
   const service = CreateOrderService();
 
-  const onSubmit = (data: CreateOrderPayload) => {
+  const onSubmit = (data: CreateOrderDto) => {
     service
       .createOrder({ ...data, orderAt: new Date().toISOString() })
       .then(result => history.push('/'))
