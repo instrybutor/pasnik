@@ -1,28 +1,16 @@
-import { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
+import { OrderModel } from '@pasnik/api/data-transfer';
 import { useEffect, useState } from 'react';
 import { authFetch } from '../utils/authFetch';
+import { useHistory } from 'react-router-dom';
 
 export default function Dashboard() {
   const [orders, setOrders] = useState<OrderModel[]>([]);
+  const history = useHistory();
 
-  const createOrderParams = (): CreateOrderDto => {
-    const now = new Date();
-    now.setHours(now.getHours() + 2);
-
-    return {
-      orderAt: now.toISOString(),
-      from: 'Pobite Gary',
-      menuUrl: 'http://pobitegary.online/',
-    };
-  };
-  const makeOrder = () => {
-    authFetch('/api/orders', {
-      method: 'post',
-      body: JSON.stringify(createOrderParams()),
-    })
-      .then((response) => response.json())
-      .then((order: OrderModel) => setOrders([...orders, order]));
-  };
+  const makeOrderHandler = () => {
+    const path = '/create-order';
+    history.push(path);
+  }
 
   useEffect(() => {
     authFetch('/api/orders')
@@ -39,7 +27,7 @@ export default function Dashboard() {
           </li>
         ))}
       </ul>
-      <button onClick={() => makeOrder()}>Make order</button>
+      <button onClick={() => makeOrderHandler()}>Make order</button>
     </div>
   );
 }
