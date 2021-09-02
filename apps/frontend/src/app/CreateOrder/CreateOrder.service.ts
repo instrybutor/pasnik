@@ -1,4 +1,4 @@
-import { CreateOrderPayload } from './createOrder.model';
+import { CreateOrderPayload } from './CreateOrder.model';
 import { authFetch } from '../utils/authFetch';
 
 export const CreateOrderService = () => {

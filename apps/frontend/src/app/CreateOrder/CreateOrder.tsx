@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import { Button, Grid, Input, makeStyles, Paper, Snackbar } from '@material-ui/core';
-import { CreateOrderService } from './createOrder.service';
+import { CreateOrderService } from './CreateOrder.service';
 import { useForm } from 'react-hook-form';
-import { CreateOrderPayload } from './createOrder.model';
+import { CreateOrderPayload } from './CreateOrder.model';
 import { useHistory } from 'react-router-dom';
 import { Alert } from '@material-ui/lab';
 
