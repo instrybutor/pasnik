@@ -1,5 +1,5 @@
 export interface CreateOrderDto {
-  from?: string;
+  from: string;
   menuUrl: string;
   orderAt: string;
 }
