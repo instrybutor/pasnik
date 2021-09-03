@@ -1,7 +1,9 @@
-import { OrderModel } from '@pasnik/api/data-transfer';
 import { useEffect, useState } from 'react';
-import { authFetch } from '../utils/authFetch';
 import { useHistory } from 'react-router-dom';
+
+import { OrderModel } from '@pasnik/api/data-transfer';
+
+import { authFetch } from '../utils/authFetch';
 
 export default function Dashboard() {
   const [orders, setOrders] = useState<OrderModel[]>([]);
@@ -10,7 +12,7 @@ export default function Dashboard() {
   const makeOrderHandler = () => {
     const path = '/create-order';
     history.push(path);
-  }
+  };
 
   useEffect(() => {
     authFetch('/api/orders')
@@ -19,7 +21,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div>
+    <div className="p-4">
       <ul>
         {orders.map((order) => (
           <li key={order.id}>
@@ -27,7 +29,12 @@ export default function Dashboard() {
           </li>
         ))}
       </ul>
-      <button onClick={() => makeOrderHandler()}>Make order</button>
+      <button
+        className="bg-green-400 hover:bg-green-500 text-white p-2 px-4 rounded"
+        onClick={makeOrderHandler}
+      >
+        Make order
+      </button>
     </div>
   );
 }

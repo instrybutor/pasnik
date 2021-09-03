@@ -32,9 +32,6 @@
   },
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "^4.0.0-alpha.60",
     "@nestjs/common": "^7.0.0",
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^7.0.0",
@@ -63,6 +60,7 @@
     "tailwindcss": "^2.2.9",
     "tslib": "^2.0.0",
     "typeorm": "^0.2.36",
+    "yup": "^0.32.9",
     "zustand": "^3.5.10"
   },
   "devDependencies": {

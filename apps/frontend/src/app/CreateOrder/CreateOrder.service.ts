@@ -1,5 +1,6 @@
-import { authFetch } from '../utils/authFetch';
 import { CreateOrderDto } from '@pasnik/api/data-transfer';
+
+import { authFetch } from '../utils/authFetch';
 
 export const CreateOrderService = () => {
   const createOrder = (payload: CreateOrderDto): Promise<Response> => {
