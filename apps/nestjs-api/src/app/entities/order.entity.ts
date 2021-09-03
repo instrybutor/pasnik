@@ -28,8 +28,8 @@ export class OrderEntity implements OrderModel {
   @Column()
   menuUrl: string;
 
-  @Column({ nullable: true })
-  shippingCents?: number;
+  @Column({ default: 0 })
+  shippingCents: number;
 
   @CreateDateColumn()
   createdAt: Date;

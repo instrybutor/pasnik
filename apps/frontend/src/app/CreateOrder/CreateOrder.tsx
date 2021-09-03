@@ -66,9 +66,6 @@ export const CreateOrder: FC = () => {
                   <Grid item>
                     <Input fullWidth={true} {...register('menuUrl')} placeholder='Menu URL'/>
                   </Grid>
-                  <Grid item>
-                    <Input placeholder='Delivery cost' {...register('shippingCents')} type="number"/>
-                  </Grid>
               </Grid>
               <Grid container justifyContent='flex-end' className={classes.footer}>
                 <Grid item>
