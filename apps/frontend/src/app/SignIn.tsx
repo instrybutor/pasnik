@@ -1,5 +1,6 @@
-import GoogleLoginButton from './GoogleButtonLogin';
 import { Link, useHistory } from 'react-router-dom';
+
+import GoogleLoginButton from './GoogleButtonLogin';
 import { useAuth } from './utils/useAuth';
 import {
   IGoogleCallbackResponse,

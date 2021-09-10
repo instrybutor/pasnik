@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { OrderModel } from '@pasnik/api/data-transfer';
+import type { OrderModel } from '@pasnik/api/data-transfer';
 
 import { authFetch } from '../utils/authFetch';
 

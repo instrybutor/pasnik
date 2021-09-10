@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { CreateOrderService } from './CreateOrder.service';
 
-import { CreateOrderDto } from '@pasnik/api/data-transfer';
+import type { CreateOrderDto } from '@pasnik/api/data-transfer';
 
 export const CreateOrder: FC = () => {
   const { register, handleSubmit } = useForm();
