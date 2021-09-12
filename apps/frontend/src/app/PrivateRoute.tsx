@@ -4,6 +4,7 @@ import { useAuth } from './utils/useAuth';
 
 export function PrivateRoute({ children, ...rest }: React.ComponentProps<any>) {
   const auth = useAuth();
+
   return (
     <Route
       {...rest}
