@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { IUseGoogleOneTapLogin, IGoogleCallbackResponse } from './types';
-import { useScript } from '../utils/useScripts';
+import { IUseGoogleOneTapLogin } from './types';
+import { useScript } from '@pasnik/shared/utils-auth';
 
-const scriptFlag: string = '__googleOneTapScript__';
-const googleClientScriptURL: string = 'https://accounts.google.com/gsi/client';
+const scriptFlag = '__googleOneTapScript__';
+const googleClientScriptURL = 'https://accounts.google.com/gsi/client';
 
 export function useGoogleButtonLogin({
   disabled,
@@ -20,7 +20,7 @@ export function useGoogleButtonLogin({
     if (window?.[scriptFlag] && script === 'ready' && buttonArgs) {
       window.google.accounts.id.renderButton.apply(null, buttonArgs);
     }
-  }, [script, window?.[scriptFlag], disabled, buttonArgs]);
+  }, [script, disabled, buttonArgs, googleAccountConfigs]);
 
   return {
     renderButton: (...args: unknown[]) => {

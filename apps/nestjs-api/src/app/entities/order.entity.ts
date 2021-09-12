@@ -13,8 +13,8 @@ import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 
 @Entity()
 export class OrderEntity implements OrderModel {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => UserEntity)
   user: UserEntity;

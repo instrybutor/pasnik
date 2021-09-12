@@ -4,7 +4,7 @@ declare namespace google.accounts {
     renderButton(
       parent: HTMLElement,
       options?: GsiButtonConfiguration,
-      clickHandler?: Function
+      clickHandler?: () => void
     );
     revoke(hint?: string, callback?: (response: RevocationResponse) => void);
   }

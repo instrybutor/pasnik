@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@pasnik/api/data-transfer": ["libs/api/data-transfer/src/index.ts"]
+      "@pasnik/api/data-transfer": ["libs/api/data-transfer/src/index.ts"],
+      "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
+      "@pasnik/orders/active-order": ["libs/orders/active-order/src/index.ts"],
+      "@pasnik/shared/utils-auth": ["libs/shared/utils-auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

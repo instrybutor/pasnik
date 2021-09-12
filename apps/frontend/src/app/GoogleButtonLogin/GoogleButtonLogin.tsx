@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useRef } from 'react';
 import { IUseGoogleOneTapLogin } from './types';
-import { useGoogleLibrary } from '../utils/ProvideGoogleLibrary';
+import { useGoogleLibrary } from '@pasnik/shared/utils-auth';
 
 export interface GoogleButtonLoginProps extends IUseGoogleOneTapLogin {
   className?: string;

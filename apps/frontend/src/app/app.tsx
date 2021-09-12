@@ -1,8 +1,11 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+
+import { ProvideAuth } from '@pasnik/shared/utils-auth';
+import { ActiveOrder } from '@pasnik/orders/active-order';
+
 import SignIn from './SignIn';
 import Dashboard from './Dashboard';
 import { PrivateRoute } from './PrivateRoute';
-import { ProvideAuth } from './utils/ProvideAuth';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 
 export function App() {
@@ -12,7 +15,11 @@ export function App() {
         <Switch>
           <PrivateRoute exact path="/" component={Dashboard} />
           <Route path="/login" component={SignIn} />
+
           <PrivateRoute path="/create-order" component={CreateOrder} />
+          <PrivateRoute path="/order/:id" component={ActiveOrder} />
+
+          <Redirect to="/login" />
         </Switch>
       </BrowserRouter>
     </ProvideAuth>
