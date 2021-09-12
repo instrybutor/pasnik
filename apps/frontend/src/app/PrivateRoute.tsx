@@ -1,6 +1,7 @@
-import { Redirect, Route } from 'react-router-dom';
 import React from 'react';
-import { useAuth } from './utils/useAuth';
+import { Redirect, Route } from 'react-router-dom';
+
+import { useAuth } from '@pasnik/shared/utils-auth';
 
 export function PrivateRoute({ children, ...rest }: React.ComponentProps<any>) {
   const auth = useAuth();

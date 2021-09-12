@@ -1,6 +1,6 @@
 import React, { ComponentProps, useState } from 'react';
 import { AuthContext, authContext, User } from './authContext';
-import { authFetch } from './authFetch';
+import { authFetch } from './auth-fetch.service';
 import ProvideGapi, { useGoogleLibrary } from './ProvideGoogleLibrary';
 
 function useProvideAuth(): AuthContext {
@@ -8,17 +8,10 @@ function useProvideAuth(): AuthContext {
   const gapi = useGoogleLibrary();
 
   const fetchUser = (): Promise<User> => {
-    return authFetch('/api/auth/me')
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Unauthorized');
-        }
-        return res.json();
-      })
-      .then((user: User) => {
-        setUser(user);
-        return user;
-      });
+    return authFetch<User>('/api/auth/me').then((user) => {
+      setUser(user);
+      return user;
+    });
   };
 
   const signIn = (accessToken: string) => {
@@ -40,7 +33,7 @@ function useProvideAuth(): AuthContext {
   };
 
   React.useEffect(() => {
-    fetchUser().catch(() => {});
+    fetchUser();
   }, []);
 
   return {

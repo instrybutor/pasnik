@@ -39,6 +39,15 @@
     },
     "nestjs-api": {
       "tags": []
+    },
+    "orders-active-order": {
+      "tags": []
+    },
+    "orders-data-access": {
+      "tags": []
+    },
+    "shared-utils-auth": {
+      "tags": []
     }
   }
 }

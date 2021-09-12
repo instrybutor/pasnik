@@ -7,7 +7,7 @@ export enum OrderStatus {
 }
 
 export interface OrderModel {
-  id: number;
+  id: string;
   user: UserModel;
   status: OrderStatus;
   from?: string;

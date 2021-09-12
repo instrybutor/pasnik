@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
-import { IUseGoogleOneTapLogin, IGoogleCallbackResponse } from './types';
-import { useScript } from '../utils/useScripts';
+import { IUseGoogleOneTapLogin } from './types';
+import { useScript } from '@pasnik/shared/utils-auth';
 
-const scriptFlag: string = '__googleOneTapScript__';
-const googleClientScriptURL: string = 'https://accounts.google.com/gsi/client';
-const oauthEndpointURL: string =
-  'https://oauth2.googleapis.com/tokeninfo?id_token=';
+const scriptFlag = '__googleOneTapScript__';
+const googleClientScriptURL = 'https://accounts.google.com/gsi/client';
+const oauthEndpointURL = 'https://oauth2.googleapis.com/tokeninfo?id_token=';
 
 export function useGoogleOneTapLogin({
   disabled,
@@ -21,7 +20,7 @@ export function useGoogleOneTapLogin({
     if (window?.[scriptFlag] && script === 'ready' && !disabled) {
       window.google.accounts.id.prompt();
     }
-  }, [script, window?.[scriptFlag], disabled]);
+  }, [script, disabled, googleAccountConfigs]);
 
   return null;
 }

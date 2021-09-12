@@ -1,22 +1,20 @@
-import { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
-import { CreateOrderService } from './CreateOrder.service';
-
-import type { CreateOrderDto } from '@pasnik/api/data-transfer';
+import type { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
+import { useOrdersFacade } from '@pasnik/orders-data-access';
 
 export const CreateOrder: FC = () => {
   const { register, handleSubmit } = useForm();
+  const { createOrder } = useOrdersFacade();
 
   const [error, setError] = useState<string | null>(null);
   const history = useHistory();
-  const service = CreateOrderService();
 
   const onSubmit = (data: CreateOrderDto) => {
-    service
-      .createOrder({ ...data, orderAt: new Date().toISOString() })
-      .then(() => history.push('/'))
+    createOrder({ ...data, orderAt: new Date().toISOString() })
+      .then((params: OrderModel) => history.push(`/order/${params.id}`))
       .catch((err: Error) => setError(err.message));
   };
 

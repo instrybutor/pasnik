@@ -15,6 +15,10 @@ export class OrdersService {
     return this.ordersRepository.find();
   }
 
+  findOne(id: string) {
+    return this.ordersRepository.findOne(id);
+  }
+
   create(createOrderDto: CreateOrderDto, user: UserEntity) {
     return this.ordersRepository.createOrder(createOrderDto, user);
   }

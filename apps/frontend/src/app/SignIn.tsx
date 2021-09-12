@@ -1,7 +1,8 @@
 import { Link, useHistory } from 'react-router-dom';
 
+import { useAuth } from '@pasnik/shared/utils-auth';
+
 import GoogleLoginButton from './GoogleButtonLogin';
-import { useAuth } from './utils/useAuth';
 import {
   IGoogleCallbackResponse,
   IGoogleOneTapLoginProps,

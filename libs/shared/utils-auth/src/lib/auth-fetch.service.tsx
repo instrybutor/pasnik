@@ -1,12 +1,18 @@
-export function authFetch(input: RequestInfo, init?: RequestInit) {
+export function authFetch<T extends unknown>(
+  input: RequestInfo,
+  init?: RequestInit
+): Promise<T> {
   const { headers } = init ?? {};
   const newHeaders = new Headers(headers ?? {});
   const jwt = localStorage.getItem('jwt');
+
   if (!jwt) {
     return Promise.reject('JWT missing');
   }
+
   newHeaders.set('Authorization', `Bearer ${jwt}`);
   newHeaders.set('Content-Type', 'application/json');
+
   return fetch(input, {
     ...init,
     headers: newHeaders,
@@ -15,6 +21,6 @@ export function authFetch(input: RequestInfo, init?: RequestInit) {
       // window.location.href = '/login';
       throw new Error('Unauthorized');
     }
-    return response;
+    return response.json();
   });
 }

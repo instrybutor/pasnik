@@ -1,8 +1,8 @@
-import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { UserEntity } from '../entities/user.entity';
-import { CreateOrderDto } from '@pasnik/api/data-transfer';
+import { CreateOrderDto, FindOrderDto } from '@pasnik/api/data-transfer';
 
 @Controller('orders')
 export class OrdersController {
@@ -11,6 +11,11 @@ export class OrdersController {
   @Get()
   findAll() {
     return this.ordersService.findAll();
+  }
+
+  @Get()
+  findOne(@Body() findOrderDto: FindOrderDto) {
+    return this.ordersService.findOne(findOrderDto.id);
   }
 
   @Post()

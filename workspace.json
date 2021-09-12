@@ -200,6 +200,74 @@
           }
         }
       }
+    },
+    "orders-active-order": {
+      "root": "libs/orders/active-order",
+      "sourceRoot": "libs/orders/active-order/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/orders/active-order/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/orders/active-order"],
+          "options": {
+            "jestConfig": "libs/orders/active-order/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "orders-data-access": {
+      "root": "libs/orders/data-access",
+      "sourceRoot": "libs/orders/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/orders/data-access/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/orders/data-access"],
+          "options": {
+            "jestConfig": "libs/orders/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-utils-auth": {
+      "root": "libs/shared/utils-auth",
+      "sourceRoot": "libs/shared/utils-auth/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/shared/utils-auth/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/utils-auth"],
+          "options": {
+            "jestConfig": "libs/shared/utils-auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
