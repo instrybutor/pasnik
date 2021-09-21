@@ -4,6 +4,10 @@
 #
 version: 2
 
+machine:
+  environment:
+    NX_COMMIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
+
 defaults: &defaults
   working_directory: ~/repo
   docker:
