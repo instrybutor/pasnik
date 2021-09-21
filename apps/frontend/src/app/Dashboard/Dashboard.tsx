@@ -15,8 +15,8 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchOrders().then((orders) => setOrders(orders));
-  }, [fetchOrders]);
+    !orders.length && fetchOrders().then((orders) => setOrders(orders));
+  }, []);
 
   return (
     <div className="p-4">

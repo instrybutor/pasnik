@@ -14,7 +14,7 @@ export const CreateOrder: FC = () => {
 
   const onSubmit = (data: CreateOrderDto) => {
     createOrder({ ...data, orderAt: new Date().toISOString() })
-      .then((params: OrderModel) => history.push(`/order/${params.id}`))
+      .then((params: OrderModel) => history.push(`/`))
       .catch((err: Error) => setError(err.message));
   };
 
