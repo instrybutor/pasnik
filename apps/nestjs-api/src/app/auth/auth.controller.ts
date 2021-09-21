@@ -5,7 +5,7 @@ import { Public } from './public.route';
 import { UserEntity } from '../entities/user.entity';
 import { CurrentUser } from './current-user.decorator';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

@@ -4,7 +4,7 @@ import { CurrentUser } from '../auth/current-user.decorator';
 import { UserEntity } from '../entities/user.entity';
 import { CreateOrderDto, FindOrderDto } from '@pasnik/api/data-transfer';
 
-@Controller('orders')
+@Controller('api/orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
