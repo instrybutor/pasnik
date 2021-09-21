@@ -2,10 +2,12 @@ import React, { ComponentProps, useState } from 'react';
 import { AuthContext, authContext, User } from './authContext';
 import { authFetch } from './auth-fetch.service';
 import ProvideGapi, { useGoogleLibrary } from './ProvideGoogleLibrary';
+import { useHistory } from 'react-router-dom';
 
 function useProvideAuth(): AuthContext {
   const [user, setUser] = useState<User | null>(null);
   const gapi = useGoogleLibrary();
+  const history = useHistory();
 
   const fetchUser = (): Promise<User> => {
     return authFetch<User>('/api/auth/me').then((user) => {
@@ -25,6 +27,9 @@ function useProvideAuth(): AuthContext {
       .then(({ accessToken }) => {
         localStorage.setItem('jwt', accessToken);
         return fetchUser();
+      })
+      .catch(() => {
+        history.push('/login')
       });
   };
 
@@ -33,7 +38,8 @@ function useProvideAuth(): AuthContext {
   };
 
   React.useEffect(() => {
-    fetchUser();
+    fetchUser()
+      .catch(() => {});
   }, []);
 
   return {
