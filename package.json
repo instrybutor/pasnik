@@ -28,7 +28,8 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "docker-compose": "docker-compose -f ./docker/docker-compose.yml",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "schema:drop": "typeorm schema:drop"
   },
   "private": true,
   "dependencies": {

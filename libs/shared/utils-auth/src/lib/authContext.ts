@@ -6,7 +6,7 @@ export interface User {
 
 export interface AuthContext {
   user: User | null;
-  signIn: (accessToken: string) => Promise<User>;
+  signIn: (accessToken: string) => Promise<User | void>;
   signOut: () => void;
 }
 

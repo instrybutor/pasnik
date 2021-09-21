@@ -6,7 +6,14 @@ export function authFetch<T extends unknown>(
   const newHeaders = new Headers(headers ?? {});
   const jwt = localStorage.getItem('jwt');
 
+  function redirectLogin() {
+    if (window.location.pathname !== '/login') {
+      window.location.href = '/login';
+    }
+  }
+
   if (!jwt) {
+    redirectLogin();
     return Promise.reject('JWT missing');
   }
 
@@ -18,7 +25,7 @@ export function authFetch<T extends unknown>(
     headers: newHeaders,
   }).then((response) => {
     if (response.status === 401) {
-      // window.location.href = '/login';
+      window.location.href = '/login';
       throw new Error('Unauthorized');
     }
     return response.json();
