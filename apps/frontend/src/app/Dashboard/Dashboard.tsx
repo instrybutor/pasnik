@@ -1,9 +1,8 @@
-import { Fragment, useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import Grid from '@mui/material/Grid';
+import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
-import OrderElement from '../OrderElement';
+import OrderList from '../OrderList';
 
 export default function Dashboard() {
   const [orders, setOrders] = useState<OrderModel[]>([]);
@@ -28,9 +27,7 @@ export default function Dashboard() {
         Make order
       </button>
       <div className="grid grid-flow-row grid-cols-12 grid-rows-3 gap-1 my-2">
-        {orders.map((order, index) => (
-          <OrderElement order = {order} index = {index}></OrderElement>
-        ))}
+        <OrderList orders={orders}></OrderList>
       </div>
     </div>
   );
