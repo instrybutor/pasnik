@@ -1,12 +1,12 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { ProvideAuth } from '@pasnik/shared/utils-auth';
-import { ActiveOrder } from '@pasnik/orders/active-order';
 
 import SignIn from './SignIn';
 import Dashboard from './Dashboard';
 import { PrivateRoute } from './PrivateRoute';
 import { CreateOrder } from './CreateOrder/CreateOrder';
+import { OrderDetails } from './OrderDetails';
 
 export function App() {
   const commitHash = process.env.NX_COMMIT_HASH;
@@ -20,7 +20,7 @@ export function App() {
               <Route path="/login" component={SignIn} />
 
               <PrivateRoute path="/create-order" component={CreateOrder} />
-              <PrivateRoute path="/order/:id" component={ActiveOrder} />
+              <PrivateRoute path="/:id" component={OrderDetails} />
 
               <Redirect to="/login" />
             </Switch>
