@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import type { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
+import { Grid } from '@mui/material';
 
 export const CreateOrder: FC = () => {
   const { register, handleSubmit } = useForm();
@@ -33,6 +34,9 @@ export const CreateOrder: FC = () => {
               {...register('from')}
               placeholder="Restaurant name"
             />
+            <Grid>
+
+            </Grid>
 
             <input
               className="w-full p-4 border border-gray-400 rounded mb-2"
