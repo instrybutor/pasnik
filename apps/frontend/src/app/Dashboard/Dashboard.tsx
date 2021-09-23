@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+import { OrderModel } from '@pasnik/api/data-transfer';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import OrderList from '../OrderList';
+import { Button, Grid, Typography } from '@mui/material';
 
 export default function Dashboard() {
   const [orders, setOrders] = useState<OrderModel[]>([]);
@@ -19,16 +20,34 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-4">
-      <button
-        className="bg-green-400 hover:bg-green-500 text-white p-2 px-4 rounded"
-        onClick={makeOrderHandler}
-      >
-        Make order
-      </button>
-      <div className="grid grid-flow-row grid-cols-12 grid-rows-3 gap-1 my-2">
-        <OrderList orders={orders}></OrderList>
-      </div>
+    <div>
+      <Grid container>
+        <Grid item xs={12}>
+          &nbsp;
+        </Grid>
+        <Grid xs={2} item></Grid>
+        <Grid xs={8} container>
+          <Grid item xs={10}>
+            <Typography variant="h4" color="initial">
+              Orders
+            </Typography>
+          </Grid>
+          <Grid item xs={2} spacing={3}>
+            <Button
+              className="raise"
+              fullWidth
+              variant="outlined"
+              onClick={makeOrderHandler}
+            >
+              Create order
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <OrderList orders={orders}></OrderList>
+          </Grid>
+        </Grid>
+        <Grid xs={2}></Grid>
+      </Grid>
     </div>
   );
 }
