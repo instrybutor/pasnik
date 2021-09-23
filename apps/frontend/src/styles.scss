@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 .raise {
-  &:hover,
-  &:focus {
+  &:hover {
     transform: translateY(-0.25em);
   }
 }
