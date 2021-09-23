@@ -20,7 +20,7 @@ export function App() {
               <Route path="/login" component={SignIn} />
 
               <PrivateRoute path="/create-order" component={CreateOrder} />
-              <PrivateRoute path="/:id" component={OrderDetails} />
+              <PrivateRoute path="/order/:id" component={OrderDetails} />
 
               <Redirect to="/login" />
             </Switch>

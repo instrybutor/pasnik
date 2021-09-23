@@ -6,6 +6,11 @@ export enum OrderStatus {
   Delivered,
 }
 
+export interface DishModel {
+  name: string;
+  price: number;
+}
+
 export interface OrderModel {
   id: string;
   user: UserModel;
@@ -16,5 +21,5 @@ export interface OrderModel {
   createdAt: Date;
   updatedAt: Date;
   orderedAt: string;
-  dishes: unknown[];
+  dishes: DishModel[];
 }
