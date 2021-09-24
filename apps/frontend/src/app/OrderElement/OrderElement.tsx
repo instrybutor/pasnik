@@ -28,15 +28,13 @@ export default function OrderElement(props: { order: OrderModel }) {
           <Link to={`/order/${order.id}`}>{order.from}</Link>
         </Typography>
         <Typography variant="h6" color="initial" display="block">
-          <span onClick={(event) => redirectToLink(event)}>
-            {order.menuUrl}
-          </span>
+          <span onClick={redirectToLink}>{order.menuUrl}</span>
         </Typography>
         <Typography variant="overline" color="initial" display="block">
           {order.user ? order.user : 'User is not declared (bug)'}
         </Typography>
       </Grid>
-      <Grid item xs={3} direction="column">
+      <Grid item xs={3}>
         <Box>
           <StyledTextField
             inputProps={{

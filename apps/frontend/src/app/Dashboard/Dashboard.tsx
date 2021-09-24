@@ -21,10 +21,8 @@ export default function Dashboard() {
 
   return (
     <div>
+      &nbsp;
       <Grid container>
-        <Grid item xs={12}>
-          &nbsp;
-        </Grid>
         <Grid xs={2} item></Grid>
         <Grid xs={8} container>
           <Grid item xs={10}>
@@ -32,7 +30,7 @@ export default function Dashboard() {
               Orders
             </Typography>
           </Grid>
-          <Grid item xs={2} spacing={3}>
+          <Grid item xs={2}>
             <Button
               className="raise"
               fullWidth
