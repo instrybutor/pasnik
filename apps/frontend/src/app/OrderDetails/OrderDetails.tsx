@@ -15,6 +15,7 @@ import {
   Typography
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { DishModel } from '../../../../../libs/api/data-transfer/src/lib/dish.model';
 
 const initDate = new Date('2015-03-25T12:00:00Z');
 
@@ -151,7 +152,7 @@ export const OrderDetails: FC = () => {
             <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
               <Typography variant='subtitle1'>
                 Total: {
-                order.shippingCents && PriceFormatter(order.shippingCents, order.dishes.map(dish => dish.priceCents))}
+                order.shippingCents && PriceFormatter(order.shippingCents, order.dishes.map(dish => (dish as DishModel).priceCents))}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
@@ -166,7 +167,7 @@ export const OrderDetails: FC = () => {
 
           <Typography variant='h4' style={{ paddingTop: '1rem' }}>Dishes:</Typography>
 
-          <DishList dishes={order.dishes} />
+          <DishList dishes={(order.dishes as DishModel[])} />
 
           {!isAddButtonPressed &&
           <div style={{ paddingTop: '1rem' }}>
