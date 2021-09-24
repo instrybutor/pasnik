@@ -1,14 +1,10 @@
 import { UserModel } from './user.model';
+import { DishModel } from './dish.model';
 
 export enum OrderStatus {
   InProgress,
   Ordered,
   Delivered,
-}
-
-export interface DishModel {
-  name: string;
-  price: number;
 }
 
 export interface OrderModel {
