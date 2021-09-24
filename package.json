@@ -1,6 +1,6 @@
 {
   "name": "pasnik",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -8,6 +8,7 @@
     "start:api": "nx serve nestjs-api",
     "start:database": "npm run docker-compose up",
     "start:database:detached": "npm run docker-compose up -- -d",
+    "dev": "run-p start start:api start:database",
     "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
@@ -108,14 +109,17 @@
     "husky": "^7.0.1",
     "jest": "27.0.3",
     "lint-staged": "^11.1.2",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.3.1",
     "ts-jest": "27.0.3",
     "ts-node": "~9.1.1",
     "typescript": "~4.3.5"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.ts": "prettier --write",
+    "*.{tsx,jsx}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ],
     "*.format:write": "prettier --write"
   }
 }
