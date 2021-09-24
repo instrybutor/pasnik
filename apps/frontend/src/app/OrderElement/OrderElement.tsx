@@ -23,7 +23,7 @@ export default function OrderElement(props: { order: OrderModel }) {
   );
   return (
     <Grid container direction="row">
-      <Grid item xs={9} direction="column">
+      <Grid item xs={9}>
         <Typography variant="h5" color="initial" display="block">
           <Link to={`/order/${order.id}`}>{order.from}</Link>
         </Typography>
