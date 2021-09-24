@@ -1,7 +1,7 @@
 import type { OrderModel } from '@pasnik/api/data-transfer';
 import { OrderStatus } from '@pasnik/api/data-transfer';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -14,9 +14,11 @@ import {
   ThemeProvider,
   Typography
 } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { DishModel } from '../../../../../libs/api/data-transfer/src/lib/dish.model';
 
+import { Link } from 'react-router-dom';
+import { DishModel } from '@pasnik/api/data-transfer';
+
+const theme = createTheme();
 const initDate = new Date('2015-03-25T12:00:00Z');
 
 //TODO: replace mockOrder with real order
@@ -36,7 +38,73 @@ const mockOrder: OrderModel = {
   user: { email: 'example@example.com' }
 };
 
-function Dish(props: { dish: { name: string, priceCents: number } }) {
+function OrderElements(props: OrderProps) {
+  return (
+    <Grid container spacing={2} alignItems='center' justifyContent='space-between' style={{ paddingTop: '1rem' }}>
+      <Grid item xs={6} sm={6} style={{ paddingTop: '0' }}>
+        <Typography variant='h3'>{props.order.from}</Typography>
+      </Grid>
+      <Grid item xs={6} sm={6} style={{ paddingTop: '0' }}>
+        <OrderStatusChip status={props.order.status} />
+      </Grid>
+      <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
+        <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Ordered by: {props.order.user.email}</Typography>
+      </Grid>
+      <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
+        <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Menu url: {props.order.menuUrl}</Typography>
+      </Grid>
+      <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
+        <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Shipping cost: {
+          props.order.shippingCents
+            ? (PriceFormatter(props.order.shippingCents))
+            : 'shipping cost is not declared'
+        }</Typography>
+      </Grid>
+      <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
+        <Typography variant='subtitle1'>
+          Total: {
+          props.order.shippingCents && PriceFormatter(props.order.shippingCents, props.order.dishes.map(dish => (dish as DishModel).priceCents))}
+        </Typography>
+      </Grid>
+      <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
+        <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Creation
+          date: {props.order.createdAt.toLocaleDateString()}</Typography>
+      </Grid>
+      <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
+        <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Update
+          date: {props.order.updatedAt.toLocaleDateString()}</Typography>
+      </Grid>
+    </Grid>
+  );
+}
+
+function OrderStatusChip(props: OrderStatusProps) {
+  const [name, setName] = useState<string>('');
+  const [color, setColor] = useState<any>('error');
+
+  useEffect(() => {
+    switch (props.status) {
+      case OrderStatus.InProgress:
+        setName('Order in progress');
+        setColor('success');
+        break;
+      case OrderStatus.Delivered:
+        setName('Order in progress');
+        setColor('success');
+        break;
+      case OrderStatus.Ordered:
+        setName('Order in progress');
+        setColor('success');
+        break;
+    }
+  }, [props.status]);
+
+  return (
+    <Chip label={name} color={color} />
+  );
+}
+
+function Dish(props: DishProps) {
   return (
     <Grid
       container
@@ -79,16 +147,15 @@ function Dish(props: { dish: { name: string, priceCents: number } }) {
   );
 }
 
-function DishList(props: { dishes: { name: string; priceCents: number; }[]; }) {
+function DishList(props: DishesProps) {
   return (
     <div style={{ width: '100%', paddingLeft: '1rem' }} className='DishList'>
-      {props.dishes.map((dish: { name: string, priceCents: number }) => <Dish key={dish.name} dish={dish} />)}
+      {props.dishes.map((dish: DishModel) => <Dish key={dish.name} dish={dish} />)}
     </div>
   );
 }
 
 export const OrderDetails: FC = () => {
-  const theme = createTheme();
   const [isAddButtonPressed, setIsAddButtonPressed] = useState(false);
 
   const [order, setOrder] = useState<OrderModel>(mockOrder);
@@ -97,9 +164,9 @@ export const OrderDetails: FC = () => {
     //TODO add loading order when getting single order will be available
   }, []);
 
-  const changeAddState = () => {
+  const changeAddState = useCallback(() => {
     setIsAddButtonPressed(!isAddButtonPressed);
-  };
+  }, [isAddButtonPressed]);
 
   function handleSubmit() {
     return;
@@ -127,43 +194,7 @@ export const OrderDetails: FC = () => {
             <Link to={'/'}>&#60;-- Back to list</Link>
           </Button>
 
-          <Grid container spacing={2} alignItems='center' justifyContent='space-between' style={{ paddingTop: '1rem' }}>
-            <Grid item xs={6} sm={6} style={{ paddingTop: '0' }}>
-              <Typography variant='h3'>{order.from}</Typography>
-            </Grid>
-            <Grid item xs={6} sm={6} style={{ paddingTop: '0' }}>
-              {order.status === OrderStatus.InProgress ? <Chip label='Order in progress' color='success' />
-                : order.status === OrderStatus.Ordered ? <Chip label='Order ordered' color='success' />
-                  : <Chip label='Order delivered' color='success' />}
-            </Grid>
-            <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
-              <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Ordered by: {order.user.email}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
-              <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Menu url: {order.menuUrl}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
-              <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Shipping cost: {
-                order.shippingCents
-                  ? (PriceFormatter(order.shippingCents))
-                  : 'shipping cost is not declared'
-              }</Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
-              <Typography variant='subtitle1'>
-                Total: {
-                order.shippingCents && PriceFormatter(order.shippingCents, order.dishes.map(dish => (dish as DishModel).priceCents))}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
-              <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Creation
-                date: {order.createdAt.toLocaleDateString()}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
-              <Typography style={{ paddingTop: '0' }} variant='subtitle1'>Update
-                date: {order.updatedAt.toLocaleDateString()}</Typography>
-            </Grid>
-          </Grid>
+          <OrderElements order={order} />
 
           <Typography variant='h4' style={{ paddingTop: '1rem' }}>Dishes:</Typography>
 
@@ -190,7 +221,7 @@ export const OrderDetails: FC = () => {
             </Grid>
             <Grid item xs={3} />
             <Grid item xs={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button variant='contained' >Save</Button>
+              <Button variant='contained'>Save</Button>
               <Button variant='contained' onClick={changeAddState} style={{ marginLeft: '1rem' }}>Cancel</Button>
             </Grid>
           </Grid>
@@ -206,4 +237,20 @@ function PriceFormatter(singleNumber: number, otherNumbers?: number[]) {
   if (!otherNumbers) numberString = singleNumber / 100;
   else numberString = (otherNumbers.reduce((a, b) => a + b) + singleNumber) / 100;
   return Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(numberString);
+}
+
+interface OrderProps {
+  order: OrderModel;
+}
+
+interface OrderStatusProps {
+  status: OrderStatus;
+}
+
+interface DishProps {
+  dish: DishModel;
+}
+
+interface DishesProps {
+  dishes: DishModel[];
 }
