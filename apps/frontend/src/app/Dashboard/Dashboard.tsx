@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { OrderModel } from '@pasnik/api/data-transfer';
+import { Button, Grid, Typography } from '@mui/material';
+import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import OrderList from '../OrderList';
-import { Button, Grid, Typography } from '@mui/material';
+
 
 export default function Dashboard() {
   const [orders, setOrders] = useState<OrderModel[]>([]);

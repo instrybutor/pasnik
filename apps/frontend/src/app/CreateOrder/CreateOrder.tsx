@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 
 import type { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
-
 export const CreateOrder: FC = () => {
   const { register, handleSubmit } = useForm();
   const { createOrder } = useOrdersFacade();
@@ -33,7 +32,6 @@ export const CreateOrder: FC = () => {
               {...register('from')}
               placeholder="Restaurant name"
             />
-
             <input
               className="w-full p-4 border border-gray-400 rounded mb-2"
               {...register('menuUrl')}
