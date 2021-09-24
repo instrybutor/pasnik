@@ -1,28 +1,56 @@
+
+import { Grid, styled, TextField, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
-import { Fragment } from 'react';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function OrderElement(props: {
-  order: OrderModel;
-  index: number;
-}) {
-  const { order, index } = props;
+const StyledTextField = styled(TextField)`
+  .MuiOutlinedInput-input {
+    cursor: pointer;
+  }
+`;
 
+export default function OrderElement(props: { order: OrderModel }) {
+  const order = props.order;
+  const statusColor =
+    order.status === 0 ? 'primary' : order.status === 1 ? 'warning' : 'success';
+  const redirectToLink = useCallback(
+    (event) => {
+      event.stopPropagation();
+      window.open(order.menuUrl, '_blank');
+    },
+    [order.menuUrl]
+  );
   return (
-    <Fragment key={order.id}>
-      <div className="bg-gray-100 col-span-1 p-2 rounded">{index + 1}</div>
-      <div className="bg-gray-100 col-span-2 p-2 rounded">
-        <Link to={`/order/${order.id}`}>{order.from}</Link>
-      </div>
-      <div className="bg-gray-100 col-span-5 p-2 rounded">{order.menuUrl}</div>
-      <div className="bg-gray-100 col-span-2 p-2 rounded">
-        {order.createdAt}
-      </div>
-      <div className="bg-gray-100 col-span-2 p-2 rounded">
-        <span className="bg-green-300 text-white text-xs p-2 py-1 rounded">
-          {OrderStatus[order.status]}
-        </span>
-      </div>
-    </Fragment>
+    <Grid container direction="row">
+      <Grid item xs={9}>
+        <Typography variant="h5" color="initial" display="block">
+          <Link to={`/order/${order.id}`}>{order.from}</Link>
+        </Typography>
+        <Typography variant="h6" color="initial" display="block">
+          <span onClick={redirectToLink}>{order.menuUrl}</span>
+        </Typography>
+        <Typography variant="overline" color="initial" display="block">
+          {order.user ? order.user : 'User is not declared (bug)'}
+        </Typography>
+      </Grid>
+      <Grid item xs={3}>
+        <Box>
+          <StyledTextField
+            inputProps={{
+              readOnly: true,
+            }}
+            label="ORDER STATUS"
+            color={statusColor}
+            focused
+            defaultValue={OrderStatus[order.status]}
+          />
+          <Typography variant="overline" color="initial" display="block">
+            Created: {order.createdAt}
+          </Typography>
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
