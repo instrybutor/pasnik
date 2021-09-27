@@ -13,9 +13,9 @@ export const CreateOrder: FC = () => {
 
   const [restaurant, setRestaurant] = useState<string>('');
   const [menu, setMenu] = useState<string>('');
-  const [isValid, setIsValid] = useState<boolean>(false);
+  const [formError, setFormError] = useState<boolean>(false);
   const [isValidInput, setIsValidInput] = useState<boolean>(false);
-  const [DeliveryPrice, setDeliveryPrice] = useState<string>('');
+  const [deliveryPrice, setDeliveryPrice] = useState<string>('');
 
   const deliveryRef = useRef<HTMLInputElement>(null);
 
@@ -41,23 +41,20 @@ export const CreateOrder: FC = () => {
     (e: ChangeEvent<HTMLInputElement>) => {
       setRestaurant(e.currentTarget.value);
     },
-    [setRestaurant]
+    []
   );
 
-  const handleChangeMenu = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setMenu(e.currentTarget.value);
-      setIsValid(validUrl(e.currentTarget.value));
-      setIsValidInput(validUrl(e.currentTarget.value));
-    },
-    [setMenu]
-  );
+  const handleChangeMenu = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setMenu(e.currentTarget.value);
+    setFormError(validUrl(e.currentTarget.value));
+    setIsValidInput(validUrl(e.currentTarget.value));
+  }, []);
 
   const handleChangeDeliveryPrice = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setDeliveryPrice(e.currentTarget.value);
     },
-    [setDeliveryPrice]
+    []
   );
 
   return (
@@ -106,7 +103,7 @@ export const CreateOrder: FC = () => {
                 <InputAdornment position="start">PLN</InputAdornment>
               ),
             }}
-            value={DeliveryPrice}
+            value={deliveryPrice}
             {...register('shippingCents')}
             onChange={handleChangeDeliveryPrice}
             type="number"
@@ -115,7 +112,7 @@ export const CreateOrder: FC = () => {
           <Button
             type="submit"
             color="success"
-            disabled={isValid}
+            disabled={formError}
             variant="outlined"
           >
             Confirm
