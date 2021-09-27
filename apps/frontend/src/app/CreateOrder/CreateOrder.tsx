@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import type { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import { Alert, Button, InputAdornment, Paper, TextField } from '@mui/material';
+import { formatter, validUrl } from '../../utils';
 
 export const CreateOrder: FC = () => {
   const { register, handleSubmit } = useForm();
@@ -20,16 +21,17 @@ export const CreateOrder: FC = () => {
   const history = useHistory();
 
   const onSubmit = (data: CreateOrderDto) => {
-    const newPrice =
-      typeof data.shippingCents === 'string'
-        ? data.shippingCents.replace(/,|\./, '')
-        : '';
+    const newPrice = data.shippingCents
+      ? +formatter.format(data.shippingCents)
+      : -1;
     createOrder({
       ...data,
       orderAt: new Date().toISOString(),
-      shippingCents: +newPrice,
+      shippingCents: newPrice * 100,
     })
-      .then((params: OrderModel) => history.push(`order/` + params.id))
+      .then((params: OrderModel) => {
+        history.push(`order/` + params.id);
+      })
       .catch((err: Error) => setError(err.message));
   };
 
@@ -44,22 +46,7 @@ export const CreateOrder: FC = () => {
   }
 
   function handleChangeDeliveryPrice(e: ChangeEvent<HTMLInputElement>) {
-    const inputValue = e.currentTarget.value.replace(/[^0-9.,]/g, '');
-    const priceRefactor = inputValue.split(/,|\./, 2);
-    let price = priceRefactor[0];
-    if (priceRefactor[1] === '' || priceRefactor[1]) {
-      const secondPricePart = ',' + priceRefactor[1].replace(/,|\./, '');
-      price += secondPricePart.replace(/(?<=[0-9]{2}).+/, '');
-    }
-    setDeliveryPrice(price);
-  }
-
-  function validUrl(text: string) {
-    const regex = RegExp(
-      /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
-    );
-
-    return !regex.test(text);
+    setDeliveryPrice(e.currentTarget.value);
   }
 
   return (
@@ -69,9 +56,9 @@ export const CreateOrder: FC = () => {
 
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
           <TextField
+            autoFocus
             margin="normal"
             label="Restaurant"
-            id="email"
             value={restaurant}
             inputProps={{
               fullWidth: true,
@@ -85,7 +72,6 @@ export const CreateOrder: FC = () => {
             margin="normal"
             error={isValidInput}
             label="Menu URL"
-            id="password"
             value={menu}
             inputProps={{
               fullWidth: true,
@@ -102,7 +88,6 @@ export const CreateOrder: FC = () => {
           <TextField
             margin="normal"
             label="Delivery Price (optional)"
-            id="outlined-start-adornment"
             sx={{ m: 1, width: '25ch' }}
             InputProps={{
               startAdornment: (
@@ -112,6 +97,7 @@ export const CreateOrder: FC = () => {
             value={DeliveryPrice}
             {...register('shippingCents')}
             onChange={handleChangeDeliveryPrice}
+            type="number"
           />
 
           <Button
