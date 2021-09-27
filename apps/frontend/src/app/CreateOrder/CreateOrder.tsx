@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from 'react';
+import React, { ChangeEvent, FC, useCallback, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
@@ -16,6 +16,8 @@ export const CreateOrder: FC = () => {
   const [isValid, setIsValid] = useState<boolean>(false);
   const [isValidInput, setIsValidInput] = useState<boolean>(false);
   const [DeliveryPrice, setDeliveryPrice] = useState<string>('');
+
+  const deliveryRef = useRef<HTMLInputElement>(null);
 
   const [error, setError] = useState<string | null>(null);
   const history = useHistory();
@@ -35,19 +37,28 @@ export const CreateOrder: FC = () => {
       .catch((err: Error) => setError(err.message));
   };
 
-  function handleChangeRestaurant(e: ChangeEvent<HTMLInputElement>) {
-    setRestaurant(e.currentTarget.value);
-  }
+  const handleChangeRestaurant = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setRestaurant(e.currentTarget.value);
+    },
+    [setRestaurant]
+  );
 
-  function handleChangeMenu(e: ChangeEvent<HTMLInputElement>) {
-    setMenu(e.currentTarget.value);
-    setIsValid(validUrl(e.currentTarget.value));
-    setIsValidInput(validUrl(e.currentTarget.value));
-  }
+  const handleChangeMenu = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setMenu(e.currentTarget.value);
+      setIsValid(validUrl(e.currentTarget.value));
+      setIsValidInput(validUrl(e.currentTarget.value));
+    },
+    [setMenu]
+  );
 
-  function handleChangeDeliveryPrice(e: ChangeEvent<HTMLInputElement>) {
-    setDeliveryPrice(e.currentTarget.value);
-  }
+  const handleChangeDeliveryPrice = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setDeliveryPrice(e.currentTarget.value);
+    },
+    [setDeliveryPrice]
+  );
 
   return (
     <div>
@@ -86,6 +97,7 @@ export const CreateOrder: FC = () => {
           )}
 
           <TextField
+            inputRef={deliveryRef}
             margin="normal"
             label="Delivery Price (optional)"
             sx={{ m: 1, width: '25ch' }}
