@@ -8,6 +8,13 @@
   }
 }
 
+.formSquare {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 30px;
+}
+
 .form {
   max-width: 830px;
   margin: 0 auto;
@@ -16,8 +23,4 @@
   background: white;
   padding: 20px;
   margin-top: 30px;
-}
-
-.form .form__custom-button {
-  margin-top: 50px;
 }
