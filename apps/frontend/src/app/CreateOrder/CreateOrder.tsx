@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useCallback, useState } from 'react';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
@@ -25,13 +25,14 @@ const schema = yup
         return false;
       }),
     shippingCents: yup
-      .number()
+      .string()
       .test(
         'maxDigitsAfterDecimal',
         'number field must have 2 digits after decimal or less',
-        (number) => {
+        (number: string | undefined) => {
+          console.log(number);
           if (number) {
-            return /^\d+(\.\d{1,2})?$/.test(number.toString());
+            return /^\d+(\.|,\d{1,2})?$/.test(number);
           }
           return false;
         }
@@ -40,8 +41,6 @@ const schema = yup
   .required();
 
 export const CreateOrder: FC = () => {
-  const [deliveryPrice, setDeliveryPrice] = useState<string>();
-
   const {
     register,
     handleSubmit,
@@ -56,7 +55,7 @@ export const CreateOrder: FC = () => {
 
   const onSubmit = (data: CreateOrderDto) => {
     const newPrice = data.shippingCents
-      ? +formatter.format(data.shippingCents)
+      ? +formatter.format(data.shippingCents).replace(/,/, '.')
       : null;
     createOrder({
       ...data,
@@ -69,12 +68,6 @@ export const CreateOrder: FC = () => {
       .catch((err: Error) => setError(err.message));
   };
 
-  const handleChangeDeliveryPrice = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setDeliveryPrice(e.currentTarget.value);
-    },
-    []
-  );
   return (
     <div>
       <Paper elevation={3} className="formSquare">
@@ -119,9 +112,6 @@ export const CreateOrder: FC = () => {
               ),
             }}
             {...register('shippingCents')}
-            value={deliveryPrice}
-            onChange={handleChangeDeliveryPrice}
-            type="number"
           />
           {errors.shippingCents?.message && (
             <Alert severity="error">{errors.shippingCents?.message}</Alert>
