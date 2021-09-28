@@ -30,7 +30,6 @@ const schema = yup
         'maxDigitsAfterDecimal',
         'number field must have 2 digits after decimal or less',
         (number: string | undefined) => {
-          console.log(number);
           if (number) {
             return /^\d+(\.|,\d{1,2})?$/.test(number);
           }
