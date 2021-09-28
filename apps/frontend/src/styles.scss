@@ -7,3 +7,20 @@
     transform: translateY(-0.25em);
   }
 }
+
+.formSquare {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.form {
+  max-width: 830px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  margin-top: 30px;
+}
