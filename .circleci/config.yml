@@ -149,7 +149,9 @@ workflows:
   pr_check:
     jobs:
       - install
-      - lint
+      - lint:
+          requires:
+            - install
       - build:
           requires:
             - install
