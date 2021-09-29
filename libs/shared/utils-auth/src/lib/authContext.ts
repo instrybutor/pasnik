@@ -7,7 +7,7 @@ export interface User {
 export interface AuthContext {
   user: User | null;
   signIn: (accessToken: string) => Promise<User | void>;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 }
 
 export const authContext = createContext({} as AuthContext);

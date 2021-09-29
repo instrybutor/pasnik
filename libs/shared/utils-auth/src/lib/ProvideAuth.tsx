@@ -1,12 +1,11 @@
 import React, { PropsWithChildren, useState } from 'react';
 import { AuthContext, authContext, User } from './authContext';
 import { authFetch } from './auth-fetch.service';
-import ProvideGapi, { useGoogleLibrary } from './ProvideGoogleLibrary';
+import ProvideGapi from './ProvideGoogleLibrary';
 import { useHistory } from 'react-router-dom';
 
 function useProvideAuth(): AuthContext {
   const [user, setUser] = useState<User | null>(null);
-  const gapi = useGoogleLibrary();
   const history = useHistory();
 
   const fetchUser = (): Promise<User> => {
@@ -34,11 +33,14 @@ function useProvideAuth(): AuthContext {
   };
 
   const signOut = () => {
-    gapi.revoke();
+    localStorage.removeItem('jwt');
+    setUser(null);
+    return Promise.resolve();
   };
 
   React.useEffect(() => {
-    fetchUser().catch();
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    fetchUser().catch(() => {});
   }, []);
 
   return {

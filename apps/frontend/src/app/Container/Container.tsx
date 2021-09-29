@@ -1,10 +1,12 @@
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 import { useAuth } from '@pasnik/shared/utils-auth';
 import { Button } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
 export const Container: FC = ({ children }) => {
   const commitHash = process.env.NX_COMMIT_HASH;
   const auth = useAuth();
+  const history = useHistory();
 
   return (
     <div className="flex flex-col h-screen justify-between">
@@ -14,15 +16,23 @@ export const Container: FC = ({ children }) => {
           Version: {commitHash ?? 'Development'}
         </div>
         <div className="flex items-center justify-center">
-          <span className="mr-4">Logged as: {auth.user?.email}</span>
-          <Button
-            type="button"
-            color="error"
-            variant="outlined"
-            onClick={() => auth.signOut()}
-          >
-            Logout
-          </Button>
+          {auth.user ? (
+            <Fragment>
+              <span className="mr-4">Logged as: {auth.user?.email}</span>
+              <Button
+                type="button"
+                color="error"
+                variant="outlined"
+                onClick={() => {
+                  auth.signOut().then(() => {
+                    history.push('/login');
+                  });
+                }}
+              >
+                Logout
+              </Button>
+            </Fragment>
+          ) : null}
         </div>
       </div>
     </div>

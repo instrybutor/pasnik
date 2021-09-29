@@ -11,6 +11,7 @@ export interface GoogleIdTokenOptions {
 
 export type ValidateCallback = (
   profile: Profile,
+  done: (error: Error | null, user: UserEntity | null) => void
 ) => Promise<UserEntity>;
 
 export class GoogleIdTokenStrategy extends Strategy {
@@ -32,16 +33,15 @@ export class GoogleIdTokenStrategy extends Strategy {
 
     const userProfile = await this.getUserProfile(accessToken);
 
-    this.verify(userProfile)
-      .then((user) => {
-        if (user) {
-          this.success(user);
-        } else {
-          this.fail(401);
-        }
-      }).catch((error: Error) => {
-        return this.error(error);
-      });
+    await this.verify(userProfile, (error, user) => {
+      if (error) {
+        this.error(error);
+      } else if (user) {
+        this.success(user);
+      } else {
+        this.fail(401);
+      }
+    });
   }
 
   private async getUserProfile(idToken: string): Promise<Profile> {

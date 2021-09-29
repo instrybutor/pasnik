@@ -23,7 +23,14 @@ export class GoogleStrategy extends PassportStrategy(
 
   async validate(
     profile: Profile,
-  ): Promise<UserEntity> {
-    return this.usersService.createUser(profile);
+    done: (error: Error | null, user: UserEntity | null) => void
+  ): Promise<void> {
+    return this.usersService.createUser(profile)
+      .then((user) => {
+        done(null, user);
+      })
+      .catch((error) => {
+        done(error, null);
+      })
   }
 }
