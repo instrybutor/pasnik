@@ -1,3 +1,4 @@
+import { DishModel } from '@pasnik/api/data-transfer';
 import { UserModel } from './user.model';
 
 export enum OrderStatus {
@@ -16,5 +17,5 @@ export interface OrderModel {
   createdAt: Date;
   updatedAt: Date;
   orderedAt: string;
-  dishes: unknown[];
+  dishes: DishModel[];
 }
