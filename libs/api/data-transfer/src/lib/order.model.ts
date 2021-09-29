@@ -1,4 +1,5 @@
 import { UserModel } from './user.model';
+import { DishModel } from './dish.model';
 
 export enum OrderStatus {
   InProgress,
@@ -16,5 +17,5 @@ export interface OrderModel {
   createdAt: Date;
   updatedAt: Date;
   orderedAt: string;
-  dishes: unknown[];
+  dishes: DishModel[];
 }

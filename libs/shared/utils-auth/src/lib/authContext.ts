@@ -2,6 +2,8 @@ import { createContext } from 'react';
 
 export interface User {
   email: string;
+  id: number;
+  googleId: string;
 }
 
 export interface AuthContext {

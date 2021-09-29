@@ -1,17 +1,19 @@
 import {
   Column,
   CreateDateColumn,
-  Entity,
+  Entity, JoinColumn,
   ManyToOne,
-  OneToMany,
+  OneToMany, OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { OrderEntity } from './order.entity';
 import { UserDishEntity } from './user-dish.entity';
+import { DishModel } from '@pasnik/api/data-transfer';
+import { UserEntity } from './user.entity';
 
 @Entity()
-export class DishEntity {
+export class DishEntity implements DishModel {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,6 +27,13 @@ export class DishEntity {
     cascade: true,
   })
   order: OrderEntity;
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn()
+  orderer: UserEntity
+
+  @Column({ default: false })
+  paid: boolean;
 
   @OneToMany(() => UserDishEntity, (userDish) => userDish.dish)
   usersDishes: UserDishEntity[];

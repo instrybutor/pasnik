@@ -12,10 +12,13 @@ export class OrdersRepository extends Repository<OrderEntity> {
     order.user = user;
     order.from = createOrderDto.from;
     order.menuUrl = createOrderDto.menuUrl;
+    order.shippingCents = createOrderDto.shippingCents || 0;
 
     await this.save(order);
 
-    return await this.findOneOrFail(order.id);
+    const saved = await this.findOneOrFail(order.id, { relations: ['dishes'] });
+
+    return saved;
   }
 
   async markAsOrdered(order: OrderEntity, shippingCents?: number) {

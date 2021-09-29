@@ -41,5 +41,5 @@ export class OrderEntity implements OrderModel {
   orderedAt: string;
 
   @OneToMany(() => DishEntity, (dish) => dish.order)
-  dishes: OrderEntity[];
+  dishes: DishEntity[];
 }

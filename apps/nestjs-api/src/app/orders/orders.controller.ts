@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { UserEntity } from '../entities/user.entity';
-import { CreateOrderDto, FindOrderDto } from '@pasnik/api/data-transfer';
+import { CreateOrderDto, CreateDishBody, CreateDishDto } from '@pasnik/api/data-transfer';
 
 @Controller('api/orders')
 export class OrdersController {
@@ -24,5 +24,14 @@ export class OrdersController {
     @CurrentUser() user: UserEntity
   ) {
     return this.ordersService.create(createOrderDto, user);
+  }
+
+  @Post(':id/dish')
+  createDish(
+    @Body() createDishDto: CreateDishDto,
+    @Param('id') orderId,
+    @CurrentUser() user: UserEntity
+  ) {
+    return this.ordersService.createDish(createDishDto, orderId, user);
   }
 }
