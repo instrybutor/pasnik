@@ -13,7 +13,6 @@ export const Container: FC = ({ children }) => {
         <div className="flex items-center justify-center">
           Version: {commitHash ?? 'Development'}
         </div>
-        {/*<div className="flex-grow" />*/}
         <div className="flex items-center justify-center">
           <span className="mr-4">Logged as: {auth.user?.email}</span>
           <Button
