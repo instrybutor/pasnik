@@ -6,7 +6,7 @@ import GoogleLoginButton from './GoogleButtonLogin';
 import {
   IGoogleCallbackResponse,
   IGoogleOneTapLoginProps,
-} from './GoogleOneTapLogin/types';
+} from './GoogleButtonLogin/types';
 
 function Copyright() {
   return (

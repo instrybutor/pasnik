@@ -16,13 +16,16 @@ const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({
 
   useEffect(() => {
     gapi.initialize(props.googleAccountConfigs);
-    gapi.renderButton(ref.current!, {
-      theme: 'filled_black',
-      size: 'large',
-      text: 'continue_with',
-      shape: 'pill',
-    });
-  }, []);
+    const element = ref.current;
+    if (element !== null && element !== undefined) {
+      gapi.renderButton(element, {
+        theme: 'filled_black',
+        size: 'large',
+        text: 'continue_with',
+        shape: 'pill',
+      });
+    }
+  }, [gapi, props.googleAccountConfigs, ref]);
 
   return <div className={className} ref={ref} />;
 };
