@@ -11,8 +11,8 @@ import { Container } from './Container';
 
 export function App() {
   return (
-    <ProvideAuth>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ProvideAuth>
         <Container>
           <Switch>
             <PrivateRoute exact path="/" component={Dashboard} />
@@ -24,8 +24,8 @@ export function App() {
             <Redirect to="/login" />
           </Switch>
         </Container>
-      </BrowserRouter>
-    </ProvideAuth>
+      </ProvideAuth>
+    </BrowserRouter>
   );
 }
 

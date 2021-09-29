@@ -35,7 +35,7 @@ function useProvideAuth(): AuthContext {
   const signOut = () => {
     localStorage.removeItem('jwt');
     setUser(null);
-    return Promise.resolve();
+    history.push('/login');
   };
 
   React.useEffect(() => {

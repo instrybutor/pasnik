@@ -1,12 +1,13 @@
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useCallback } from 'react';
 import { useAuth } from '@pasnik/shared/utils-auth';
 import { Button } from '@mui/material';
-import { useHistory } from 'react-router-dom';
 
 export const Container: FC = ({ children }) => {
   const commitHash = process.env.NX_COMMIT_HASH;
   const auth = useAuth();
-  const history = useHistory();
+  const logoutHandler = useCallback(() => {
+    auth.signOut();
+  }, [auth]);
 
   return (
     <div className="flex flex-col h-screen justify-between">
@@ -23,11 +24,7 @@ export const Container: FC = ({ children }) => {
                 type="button"
                 color="error"
                 variant="outlined"
-                onClick={() => {
-                  auth.signOut().then(() => {
-                    history.push('/login');
-                  });
-                }}
+                onClick={logoutHandler}
               >
                 Logout
               </Button>
