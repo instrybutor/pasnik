@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { UserEntity } from '../entities/user.entity';
-import { CreateOrderDto, FindOrderDto } from '@pasnik/api/data-transfer';
+import { CreateOrderDto } from '@pasnik/api/data-transfer';
 
 @Controller('api/orders')
 export class OrdersController {

@@ -1,4 +1,4 @@
-import React, { ComponentProps, useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { AuthContext, authContext, User } from './authContext';
 import { authFetch } from './auth-fetch.service';
 import ProvideGapi, { useGoogleLibrary } from './ProvideGoogleLibrary';
@@ -29,7 +29,7 @@ function useProvideAuth(): AuthContext {
         return fetchUser();
       })
       .catch(() => {
-        history.push('/login')
+        history.push('/login');
       });
   };
 
@@ -38,8 +38,7 @@ function useProvideAuth(): AuthContext {
   };
 
   React.useEffect(() => {
-    fetchUser()
-      .catch(() => {});
+    fetchUser().catch();
   }, []);
 
   return {
@@ -49,7 +48,7 @@ function useProvideAuth(): AuthContext {
   };
 }
 
-export function ProvideAuth({ children }: ComponentProps<any>) {
+export function ProvideAuth({ children }: PropsWithChildren<unknown>) {
   const auth = useProvideAuth();
   return (
     <ProvideGapi>

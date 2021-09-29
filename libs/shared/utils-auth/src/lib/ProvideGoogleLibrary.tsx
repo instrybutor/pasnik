@@ -5,7 +5,18 @@ const GoogleLibraryContext = React.createContext<google.accounts.id>(
   {} as google.accounts.id
 );
 
-function ProvideGoogleLibrary({ google, children }: PropsWithChildren<any>) {
+type GoogleLibraryProps = {
+  google?: {
+    accounts: {
+      id: google.accounts.id;
+    };
+  };
+};
+
+function ProvideGoogleLibrary({
+  google,
+  children,
+}: PropsWithChildren<GoogleLibraryProps>) {
   if (!google) {
     return <div>loading</div>;
   }

@@ -1,12 +1,8 @@
 import { Link, useHistory } from 'react-router-dom';
 
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { IGoogleOneTapLoginProps, useAuth } from '@pasnik/shared/utils-auth';
 
 import GoogleLoginButton from './GoogleButtonLogin';
-import {
-  IGoogleCallbackResponse,
-  IGoogleOneTapLoginProps,
-} from './GoogleButtonLogin/types';
 
 function Copyright() {
   return (
@@ -22,7 +18,9 @@ export default function SignIn() {
   const auth = useAuth();
   const history = useHistory();
 
-  const onSuccess = ({ credential }: IGoogleCallbackResponse) => {
+  const onSuccess = ({
+    credential,
+  }: google.accounts.IGoogleCallbackResponse) => {
     if (credential) {
       auth.signIn(credential).then(() => {
         history.push('/');

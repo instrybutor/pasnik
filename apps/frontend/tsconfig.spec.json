@@ -10,11 +10,11 @@
     "**/*.spec.tsx",
     "**/*.spec.js",
     "**/*.spec.jsx",
-    "**/*.d.ts",
-    "../../libs/shared/utils-auth/src/lib/google.accounts.d.ts"
+    "**/*.d.ts"
   ],
   "files": [
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
-    "../../node_modules/@nrwl/react/typings/image.d.ts"
+    "../../node_modules/@nrwl/react/typings/image.d.ts",
+    "../../custom_typings/google.accounts/index.d.ts"
   ]
 }
