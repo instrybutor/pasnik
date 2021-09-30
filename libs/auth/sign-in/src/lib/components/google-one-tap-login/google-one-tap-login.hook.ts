@@ -6,7 +6,6 @@ import { IUseGoogleOneTapLogin } from './types';
 
 const scriptFlag = '__googleOneTapScript__';
 const googleClientScriptURL = 'https://accounts.google.com/gsi/client';
-const oauthEndpointURL = 'https://oauth2.googleapis.com/tokeninfo?id_token=';
 
 export function useGoogleOneTapLogin({
   disabled,

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { useAuth } from '@pasnik/shared/utils-auth';
 
@@ -35,7 +35,7 @@ export const SignIn: React.FC = () => {
   );
 
   return (
-    <div className="flex w-screen min-h-screen items-center justify-center">
+    <div className="flex w-screen h-screen items-center justify-center">
       <div className="flex flex-col text-center gap-4">
         <h1 className="text-4xl">
           <span role="img" aria-label="food">

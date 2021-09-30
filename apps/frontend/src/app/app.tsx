@@ -1,4 +1,4 @@
-import { BrowserRouter, Link, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { ProvideAuth } from '@pasnik/shared/utils-auth';
 import { SignIn } from '@pasnik/auth/sign-in';
