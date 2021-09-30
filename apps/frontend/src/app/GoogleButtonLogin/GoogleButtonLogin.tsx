@@ -1,10 +1,6 @@
 import { FunctionComponent, useEffect, useRef } from 'react';
-import { IUseGoogleOneTapLogin } from './types';
 import { useGoogleLibrary } from '@pasnik/shared/utils-auth';
-
-export interface GoogleButtonLoginProps extends IUseGoogleOneTapLogin {
-  className?: string;
-}
+import { GoogleButtonLoginProps } from './types';
 
 const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({
   children = null,
@@ -16,13 +12,16 @@ const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({
 
   useEffect(() => {
     gapi.initialize(props.googleAccountConfigs);
-    gapi.renderButton(ref.current!, {
-      theme: 'filled_black',
-      size: 'large',
-      text: 'continue_with',
-      shape: 'pill',
-    });
-  }, []);
+    const element = ref.current;
+    if (element !== null && element !== undefined) {
+      gapi.renderButton(element, {
+        theme: 'filled_black',
+        size: 'large',
+        text: 'continue_with',
+        shape: 'pill',
+      });
+    }
+  }, [gapi, props.googleAccountConfigs, ref]);
 
   return <div className={className} ref={ref} />;
 };

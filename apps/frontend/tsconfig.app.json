@@ -6,7 +6,8 @@
   },
   "files": [
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
-    "../../node_modules/@nrwl/react/typings/image.d.ts"
+    "../../node_modules/@nrwl/react/typings/image.d.ts",
+    "../../custom_typings/google.accounts/index.d.ts"
   ],
   "exclude": ["**/*.spec.ts", "**/*.spec.tsx"],
   "include": [
@@ -14,7 +15,6 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
-    "../../libs/shared/utils-auth/src/lib/google.accounts.d.ts",
-    "../../libs/shared/utils-auth/src/lib/refreshToken.ts"
+    "../../libs/shared/utils-auth/src/lib/refreshToken.ts",
   ]
 }

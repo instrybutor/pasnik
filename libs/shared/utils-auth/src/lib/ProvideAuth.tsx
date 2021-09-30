@@ -1,12 +1,11 @@
-import React, { ComponentProps, useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { AuthContext, authContext, User } from './authContext';
 import { authFetch } from './auth-fetch.service';
-import ProvideGapi, { useGoogleLibrary } from './ProvideGoogleLibrary';
+import ProvideGapi from './ProvideGoogleLibrary';
 import { useHistory } from 'react-router-dom';
 
 function useProvideAuth(): AuthContext {
   const [user, setUser] = useState<User | null>(null);
-  const gapi = useGoogleLibrary();
   const history = useHistory();
 
   const fetchUser = (): Promise<User> => {
@@ -29,17 +28,19 @@ function useProvideAuth(): AuthContext {
         return fetchUser();
       })
       .catch(() => {
-        history.push('/login')
+        history.push('/login');
       });
   };
 
   const signOut = () => {
-    gapi.revoke();
+    localStorage.removeItem('jwt');
+    setUser(null);
+    history.push('/login');
   };
 
   React.useEffect(() => {
-    fetchUser()
-      .catch(() => {});
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    fetchUser().catch(() => {});
   }, []);
 
   return {
@@ -49,7 +50,7 @@ function useProvideAuth(): AuthContext {
   };
 }
 
-export function ProvideAuth({ children }: ComponentProps<any>) {
+export function ProvideAuth({ children }: PropsWithChildren<unknown>) {
   const auth = useProvideAuth();
   return (
     <ProvideGapi>

@@ -2,6 +2,7 @@ import { Strategy } from 'passport-strategy';
 import { OAuth2Client } from 'google-auth-library';
 import { Request } from 'express';
 import { Profile } from 'passport';
+import { UserEntity } from '../entities/user.entity';
 
 export interface GoogleIdTokenOptions {
   clientID: string;
@@ -9,11 +10,9 @@ export interface GoogleIdTokenOptions {
 }
 
 export type ValidateCallback = (
-  accessToken: string,
-  refreshToken: string,
   profile: Profile,
-  done: (err: any, user: any, info?: any) => void
-) => Promise<any>;
+  done: (error: Error | null, user: UserEntity | null) => void
+) => Promise<UserEntity>;
 
 export class GoogleIdTokenStrategy extends Strategy {
   name = 'google-token';
@@ -31,24 +30,18 @@ export class GoogleIdTokenStrategy extends Strategy {
 
   async authenticate(req: Request) {
     const accessToken = req.query.access_token as string;
-    const refreshToken = req.query.refresh_token as string;
 
     const userProfile = await this.getUserProfile(accessToken);
 
-    await this.verify(
-      accessToken,
-      refreshToken,
-      userProfile,
-      (err, user, info) => {
-        if (err) {
-          return this.error(err);
-        }
-        if (!user) {
-          return this.fail(info);
-        }
-        this.success(user, info);
+    await this.verify(userProfile, (error, user) => {
+      if (error) {
+        this.error(error);
+      } else if (user) {
+        this.success(user);
+      } else {
+        this.fail(401);
       }
-    );
+    });
   }
 
   private async getUserProfile(idToken: string): Promise<Profile> {

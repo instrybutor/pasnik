@@ -1,4 +1,3 @@
-
 import { CardActionArea, styled } from '@mui/material';
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { useCallback } from 'react';
@@ -23,7 +22,11 @@ export default function OrderList(props: { orders: OrderModel[] }) {
   return (
     <>
       {props.orders.map((order) => (
-        <StyledCardActionArea className="raise" onClick={routeChange(order.id)}>
+        <StyledCardActionArea
+          key={order.id}
+          className="raise"
+          onClick={routeChange(order.id)}
+        >
           <OrderElement order={order}></OrderElement>
         </StyledCardActionArea>
       ))}

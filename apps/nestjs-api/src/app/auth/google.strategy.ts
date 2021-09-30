@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Profile } from 'passport';
 import { UsersService } from '../users/users.service';
 import { GoogleIdTokenStrategy } from './google-id-token.strategy';
+import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(
@@ -21,11 +22,15 @@ export class GoogleStrategy extends PassportStrategy(
   }
 
   async validate(
-    accessToken: string,
-    refreshToken: string,
     profile: Profile,
-    done: (err: any, user: any, info?: any) => void
-  ): Promise<any> {
-    return done(null, this.usersService.createUser(profile));
+    done: (error: Error | null, user: UserEntity | null) => void
+  ): Promise<void> {
+    return this.usersService.createUser(profile)
+      .then((user) => {
+        done(null, user);
+      })
+      .catch((error) => {
+        done(error, null);
+      })
   }
 }

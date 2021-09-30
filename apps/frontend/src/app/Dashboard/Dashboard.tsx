@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Grid, Typography } from '@mui/material';
-import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+import { OrderModel } from '@pasnik/api/data-transfer';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import OrderList from '../OrderList';
-
 
 export default function Dashboard() {
   const [orders, setOrders] = useState<OrderModel[]>([]);
@@ -17,7 +16,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    !orders.length && fetchOrders().then((orders) => setOrders(orders));
+    fetchOrders().then((orders) => setOrders(orders));
   }, []);
 
   return (
