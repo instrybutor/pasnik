@@ -11,21 +11,21 @@ export const Container: FC = ({ children }) => {
   }, [auth]);
 
   return (
-    <div className="flex flex-col w-screen justify-between">
+    <div className="flex flex-col w-screen min-h-screen">
       {children}
 
-      <footer className="p-4 flex flex-row w-screen sticky bottom-0 left-0">
-        <div className="text-xs flex gap-4">
-          <div>
+      <footer className="p-4 flex flex-row">
+        <div className="text-xs flex-grow flex gap-4">
+          <div className="flex items-center">
             Version:{' '}
             <span className="bg-green-200 p-1 px-2 rounded">
               {commitHash ?? 'Development'}
             </span>
           </div>
-          <div>
+          <div className="flex items-center">
             Copyright © <Link to="#">Paśnik</Link> {new Date().getFullYear()}.
           </div>
-          <div className="flex">
+          <div className="flex flex-grow justify-end items-center">
             {auth.user ? (
               <>
                 <span className="mr-4">Logged as: {auth.user?.email}</span>
