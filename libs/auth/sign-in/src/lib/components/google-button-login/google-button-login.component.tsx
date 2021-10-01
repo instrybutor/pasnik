@@ -1,27 +1,27 @@
-import { FunctionComponent, memo, useEffect, useRef } from 'react';
-
+import { FunctionComponent, useEffect, useRef } from 'react';
 import { useGoogleLibrary } from '@pasnik/shared/utils-auth';
+import { GoogleButtonLoginProps } from './types';
 
-import { IUseGoogleOneTapLogin } from './types';
+export const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({
+  children = null,
+  className,
+  ...props
+}) => {
+  const ref = useRef(null);
+  const gapi = useGoogleLibrary();
 
-export interface GoogleButtonLoginProps extends IUseGoogleOneTapLogin {
-  className?: string;
-}
-
-export const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> =
-  memo(({ children = null, className, ...props }) => {
-    const ref = useRef(null);
-    const gapi = useGoogleLibrary();
-
-    useEffect(() => {
-      gapi.initialize(props.googleAccountConfigs);
-      gapi.renderButton(ref.current!, {
+  useEffect(() => {
+    gapi.initialize(props.googleAccountConfigs);
+    const element = ref.current;
+    if (element !== null && element !== undefined) {
+      gapi.renderButton(element, {
         theme: 'filled_black',
         size: 'large',
         text: 'continue_with',
         shape: 'pill',
       });
-    }, []);
+    }
+  }, [gapi, props.googleAccountConfigs, ref]);
 
-    return <div className={className} ref={ref} />;
-  });
+  return <div className={className} ref={ref} />;
+};
