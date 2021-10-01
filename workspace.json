@@ -23,6 +23,28 @@
         }
       }
     },
+    "auth/sign-in": {
+      "root": "libs/auth/sign-in",
+      "sourceRoot": "libs/auth/sign-in/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/auth/sign-in/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/auth/sign-in"],
+          "options": {
+            "jestConfig": "libs/auth/sign-in/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "frontend": {
       "root": "apps/frontend",
       "sourceRoot": "apps/frontend/src",

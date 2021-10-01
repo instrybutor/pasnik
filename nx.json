@@ -30,6 +30,9 @@
     "api-data-transfer": {
       "tags": []
     },
+    "auth/sign-in": {
+      "tags": []
+    },
     "frontend": {
       "tags": []
     },
