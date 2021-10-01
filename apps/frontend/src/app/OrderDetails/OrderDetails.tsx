@@ -29,19 +29,19 @@ const mockOrder: OrderModel = {
     {
       name: 'mockDish 1',
       priceCents: 2150,
-      user: { email: 'example@example1.com' },
+      user: { id: 1, email: 'example@example1.com' },
       paid: false,
     },
     {
       name: 'mockDish 2',
       priceCents: 1030,
-      user: { email: 'example@example2.com' },
+      user: { id: 1, email: 'example@example2.com' },
       paid: false,
     },
     {
       name: 'mockDish 3',
       priceCents: 3820,
-      user: { email: 'example@example2.com' },
+      user: { id: 2, email: 'example@example2.com' },
       paid: true,
     },
   ],
@@ -51,7 +51,7 @@ const mockOrder: OrderModel = {
   orderedAt: '',
   status: OrderStatus.InProgress,
   updatedAt: initDate,
-  user: { email: 'example@example.com' },
+  user: { id: 1, email: 'example@example.com' },
 };
 
 function OrderElements(props: OrderProps) {
@@ -71,7 +71,7 @@ function OrderElements(props: OrderProps) {
       </Grid>
       <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
         <Typography style={{ paddingTop: '0' }} variant="subtitle1">
-          Ordered by: {props.order.user.email}
+          Ordered by: {props.order.user.id}
         </Typography>
       </Grid>
       <Grid item xs={12} sm={6} style={{ paddingTop: '0' }}>
