@@ -1,20 +1,16 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { IGoogleOneTapLoginProps, useAuth } from '@pasnik/shared/utils-auth';
 
 import { GoogleButtonLogin } from './components/google-button-login';
-import {
-  IGoogleCallbackResponse,
-  IGoogleOneTapLoginProps,
-} from './components/google-one-tap-login';
 
 export const SignIn: React.FC = () => {
   const auth = useAuth();
   const history = useHistory();
 
   const onSuccess = useCallback(
-    ({ credential }: IGoogleCallbackResponse) => {
+    ({ credential }: google.accounts.IGoogleCallbackResponse) => {
       if (credential) {
         auth.signIn(credential).then(() => {
           history.push('/');
@@ -24,15 +20,11 @@ export const SignIn: React.FC = () => {
     [auth, history]
   );
 
-  const config: IGoogleOneTapLoginProps = useMemo(
-    () =>
-      ({
-        client_id: process.env.NX_GOOGLE_CLIENT_ID,
-        cancel_on_tap_outside: false,
-        callback: onSuccess,
-      } as IGoogleOneTapLoginProps),
-    [onSuccess]
-  );
+  const config: IGoogleOneTapLoginProps = {
+    client_id: process.env.NX_GOOGLE_CLIENT_ID,
+    cancel_on_tap_outside: false,
+    callback: onSuccess,
+  } as IGoogleOneTapLoginProps;
 
   return (
     <div className="flex w-screen flex-grow items-center justify-center">
