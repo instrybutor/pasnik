@@ -52,8 +52,6 @@
     "autoprefixer": "^10.3.4",
     "core-js": "^3.6.5",
     "google-auth-library": "^7.6.2",
-    "install": "^0.13.0",
-    "npm": "^7.24.1",
     "passport": "^0.4.1",
     "passport-google-token": "^0.1.2",
     "passport-jwt": "^4.0.0",
