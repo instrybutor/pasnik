@@ -5,6 +5,7 @@ import { Tab } from '@headlessui/react';
 import DashboardTabButton from './dashboard-tab-button/dashboard-tab-button';
 import DashboardCompletedOrders from './dashboard-completed-orders/dashboard-completed-orders';
 import DashboardActiveOrders from './dashboard-active-orders/dashboard-active-orders';
+import DashboardHeader from './dashboard-header/dashboard-header';
 
 /* eslint-disable-next-line */
 export interface PagesDashboardProps {}
@@ -47,7 +48,9 @@ export function PagesDashboard(_: PagesDashboardProps) {
 
   return (
     <Fragment>
-      <header className="bg-white shadow"></header>
+      <header className="bg-white shadow">
+        <DashboardHeader />
+      </header>
       <main className="flex-grow">
         {isLoading ? (
           <div className="w-full h-full fixed block top-0 left-0 bg-white opacity-75 z-50" />
