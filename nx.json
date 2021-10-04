@@ -36,6 +36,9 @@
     "frontend": {
       "tags": []
     },
+    "layout": {
+      "tags": []
+    },
     "nestjs-api": {
       "tags": []
     },

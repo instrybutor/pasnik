@@ -62,6 +62,9 @@ export class GoogleIdTokenStrategy extends Strategy {
         familyName: payload.family_name,
         givenName: payload.given_name,
       },
+      photos: [{
+        value: payload.picture
+      }],
       id: payload.sub,
     };
   }

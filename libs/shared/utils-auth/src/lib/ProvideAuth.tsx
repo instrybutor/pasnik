@@ -1,15 +1,16 @@
 import React, { PropsWithChildren, useState } from 'react';
-import { AuthContext, authContext, User } from './authContext';
+import { AuthContext, authContext } from './authContext';
 import { authFetch } from './auth-fetch.service';
 import ProvideGapi from './ProvideGoogleLibrary';
 import { useHistory } from 'react-router-dom';
+import { UserModel } from '@pasnik/api/data-transfer';
 
 function useProvideAuth(): AuthContext {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserModel | null>(null);
   const history = useHistory();
 
-  const fetchUser = (): Promise<User> => {
-    return authFetch<User>('/api/auth/me').then((user) => {
+  const fetchUser = (): Promise<UserModel> => {
+    return authFetch<UserModel>('/api/auth/me').then((user) => {
       setUser(user);
       return user;
     });

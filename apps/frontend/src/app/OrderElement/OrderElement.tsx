@@ -1,4 +1,3 @@
-
 import { Grid, styled, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
@@ -14,7 +13,11 @@ const StyledTextField = styled(TextField)`
 export default function OrderElement(props: { order: OrderModel }) {
   const order = props.order;
   const statusColor =
-    order.status === 0 ? 'primary' : order.status === 1 ? 'warning' : 'success';
+    order.status === OrderStatus.InProgress
+      ? 'primary'
+      : order.status === OrderStatus.Ordered
+      ? 'warning'
+      : 'success';
   const redirectToLink = useCallback(
     (event) => {
       event.stopPropagation();

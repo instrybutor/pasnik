@@ -7,23 +7,22 @@ import Dashboard from './Dashboard';
 import { PrivateRoute } from './PrivateRoute';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { OrderDetails } from './OrderDetails';
-import { Container } from './Container';
+import { Layout } from '@pasnik/layout';
 
 export function App() {
   return (
     <BrowserRouter>
       <ProvideAuth>
-        <Container>
-          <Switch>
+        <Switch>
+          <Route path="/login" component={SignIn} />
+          <Layout>
             <PrivateRoute exact path="/" component={Dashboard} />
-            <Route path="/login" component={SignIn} />
 
             <PrivateRoute path="/create-order" component={CreateOrder} />
             <PrivateRoute path="/order/:id" component={OrderDetails} />
-
-            <Redirect to="/login" />
-          </Switch>
-        </Container>
+          </Layout>
+          <Redirect to="/login" />
+        </Switch>
       </ProvideAuth>
     </BrowserRouter>
   );
