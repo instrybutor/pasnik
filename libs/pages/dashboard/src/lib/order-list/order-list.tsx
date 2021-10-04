@@ -1,10 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { getOrderStatus, OrderModel } from '@pasnik/api/data-transfer';
-import {
-  CashIcon,
-  LocationMarkerIcon,
-  CalendarIcon,
-} from '@heroicons/react/outline';
+import { CashIcon, CalendarIcon } from '@heroicons/react/outline';
 import { formatDistance } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
@@ -35,10 +31,6 @@ export function OrderList(props: OrderListProps) {
                   <p className="flex items-center text-sm text-gray-500">
                     <CashIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
                     55zł
-                  </p>
-                  <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                    <LocationMarkerIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                    <a href={order.menuUrl}>Menu</a>
                   </p>
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
