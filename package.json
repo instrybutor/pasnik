@@ -50,6 +50,7 @@
     "@nestjs/typeorm": "^7.1.5",
     "@types/passport-google-oauth": "^1.0.42",
     "autoprefixer": "^10.3.4",
+    "classnames": "^2.3.1",
     "core-js": "^3.6.5",
     "google-auth-library": "^7.6.2",
     "passport": "^0.4.1",

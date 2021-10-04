@@ -4,6 +4,7 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { useAuth } from '@pasnik/shared/utils-auth';
 import { matchPath } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import classNames from 'classnames';
 
 const navigation = [
   { name: 'Dashboard', href: '' },
@@ -11,18 +12,17 @@ const navigation = [
   { name: 'Transfers', href: 'transfers' },
 ];
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
 export function NavBar() {
   const auth = useAuth();
   const logoutHandler = useCallback(() => {
     auth.signOut();
   }, [auth]);
-  const isCurrent = (href: string) => {
-    return !!matchPath(window.location.pathname, href);
-  };
+  const isCurrent = useCallback(
+    (href: string) => {
+      return !!matchPath(window.location.pathname, href);
+    },
+    [window.location.pathname]
+  );
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
