@@ -4,7 +4,7 @@ import { ProvideAuth } from '@pasnik/shared/utils-auth';
 import { SignIn } from '@pasnik/auth/sign-in';
 
 import { PrivateRoute } from './PrivateRoute';
-import { CreateOrder } from './CreateOrder';
+import { CreateOrder } from './CreateOrder/create-order.component';
 import { OrderDetails } from './OrderDetails';
 import { PagesDashboard } from '@pasnik/pages/dashboard';
 import { Layout } from '@pasnik/layout';

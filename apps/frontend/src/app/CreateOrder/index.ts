@@ -1,1 +1,1 @@
-export * from './CreateOrder';
+export * from './create-order.component';
