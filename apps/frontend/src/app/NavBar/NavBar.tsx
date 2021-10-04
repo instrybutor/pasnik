@@ -17,17 +17,14 @@ export function NavBar() {
   const logoutHandler = useCallback(() => {
     auth.signOut();
   }, [auth]);
-  const isCurrent = useCallback(
-    (href: string) => {
-      return !!matchPath(window.location.pathname, href);
-    },
-    [window.location.pathname]
-  );
+  const isCurrent = useCallback((href: string) => {
+    return !!matchPath(window.location.pathname, href);
+  }, []);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
-        <>
+        <Fragment>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between h-16">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -42,7 +39,7 @@ export function NavBar() {
                 </Disclosure.Button>
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="hidden sm:block sm:ml-6">
+                <div className="hidden sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
                       <NavLink
@@ -92,7 +89,7 @@ export function NavBar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            href="/"
                             className={classNames(
                               active ? 'bg-gray-100' : '',
                               'block px-4 py-2 text-sm text-gray-700'
@@ -105,7 +102,7 @@ export function NavBar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            href="/"
                             className={classNames(
                               active ? 'bg-gray-100' : '',
                               'block px-4 py-2 text-sm text-gray-700'
@@ -154,7 +151,7 @@ export function NavBar() {
               ))}
             </div>
           </Disclosure.Panel>
-        </>
+        </Fragment>
       )}
     </Disclosure>
   );

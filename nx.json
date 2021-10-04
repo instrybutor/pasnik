@@ -48,6 +48,9 @@
     "orders-data-access": {
       "tags": []
     },
+    "pages-dashboard": {
+      "tags": []
+    },
     "shared-utils-auth": {
       "tags": []
     }

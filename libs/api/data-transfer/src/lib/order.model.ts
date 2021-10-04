@@ -1,9 +1,9 @@
 import { UserModel } from './user.model';
 
 export enum OrderStatus {
-  InProgress,
-  Ordered,
-  Delivered,
+  InProgress = 'in-progress',
+  Ordered = 'ordered',
+  Delivered = 'delivered',
 }
 
 export interface OrderModel {
@@ -17,4 +17,16 @@ export interface OrderModel {
   updatedAt: Date;
   orderedAt: string;
   dishes: unknown[];
+}
+
+export function getOrderStatus(order: OrderModel) {
+  switch(order.status) {
+    case OrderStatus.InProgress:
+      return 'W trakcie';
+    case OrderStatus.Ordered:
+      return 'Zamówione';
+    case OrderStatus.Delivered:
+      return 'Dostarczone';
+  }
+  return 'Nieznany'
 }
