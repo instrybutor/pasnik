@@ -4,11 +4,8 @@ import { useOrdersFacade } from '@pasnik/orders-data-access';
 import { useHistory } from 'react-router-dom';
 import { Tab } from '@headlessui/react';
 import OrderList from './order-list/order-list';
-import { BeakerIcon } from '@heroicons/react/solid';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { BeakerIcon } from '@heroicons/react/outline';
+import classnames from 'classnames';
 
 /* eslint-disable-next-line */
 export interface PagesDashboardProps {}
@@ -38,6 +35,7 @@ export function PagesDashboard(_: PagesDashboardProps) {
       setCompletedOrders(completed);
       setIsLoading(false);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tabs = [
@@ -91,7 +89,7 @@ export function PagesDashboard(_: PagesDashboardProps) {
                           {({ selected }) => (
                             <button
                               key={tab.name}
-                              className={classNames(
+                              className={classnames(
                                 selected
                                   ? 'border-purple-500 text-purple-600'
                                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200',
@@ -101,7 +99,7 @@ export function PagesDashboard(_: PagesDashboardProps) {
                               {tab.name}
                               {tab.count ? (
                                 <span
-                                  className={classNames(
+                                  className={classnames(
                                     selected
                                       ? 'bg-purple-100 text-purple-600'
                                       : 'bg-gray-100 text-gray-900',
