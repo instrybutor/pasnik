@@ -2,10 +2,10 @@ import { Fragment, useCallback, useEffect, useState } from 'react';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import { Tab } from '@headlessui/react';
-import DashboardTabButton from './dashboard-tab-button/dashboard-tab-button';
 import DashboardCompletedOrders from './dashboard-completed-orders/dashboard-completed-orders';
 import DashboardActiveOrders from './dashboard-active-orders/dashboard-active-orders';
 import DashboardHeader from './dashboard-header/dashboard-header';
+import DashboardTabs from './dashboard-tabs/dashboard-tabs';
 
 /* eslint-disable-next-line */
 export interface PagesDashboardProps {}
@@ -63,19 +63,7 @@ export function PagesDashboard(_: PagesDashboardProps) {
                     onChange={handleTabGroupChange}
                     defaultIndex={currentTab}
                   >
-                    <Tab.List>
-                      {tabs.map((tab) => (
-                        <Tab key={tab.name} as={Fragment}>
-                          {({ selected }) => (
-                            <DashboardTabButton
-                              selected={selected}
-                              name={tab.name}
-                              count={tab.count}
-                            />
-                          )}
-                        </Tab>
-                      ))}
-                    </Tab.List>
+                    <DashboardTabs tabs={tabs} />
                     <Tab.Panels>
                       <Tab.Panel>
                         <DashboardActiveOrders orders={activeOrders} />

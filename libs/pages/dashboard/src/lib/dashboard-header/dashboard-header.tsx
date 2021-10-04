@@ -1,4 +1,3 @@
-import './dashboard-header.module.scss';
 import { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
