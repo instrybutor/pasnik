@@ -47,7 +47,7 @@ export default function OrderElement(props: { order: OrderModel }) {
             label="ORDER STATUS"
             color={statusColor}
             focused
-            defaultValue={OrderStatus[order.status]}
+            defaultValue={0}
           />
           <Typography variant="overline" color="initial" display="block">
             Created: {order.createdAt}
