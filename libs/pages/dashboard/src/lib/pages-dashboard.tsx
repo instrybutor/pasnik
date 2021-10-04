@@ -55,8 +55,8 @@ export function PagesDashboard(_: PagesDashboardProps) {
         {isLoading ? (
           <div className="w-full h-full fixed block top-0 left-0 bg-white opacity-75 z-50" />
         ) : (
-          <div className="max-w-8xl mx-auto py-6 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="mt-8">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="bg-white shadow overflow-hidden sm:rounded-md">
                 <div className="border-b border-gray-200">
                   <Tab.Group
