@@ -10,12 +10,14 @@ import { OrderDetails } from './OrderDetails';
 import { Layout } from '@pasnik/layout';
 
 export function App() {
+  const version = process.env.NX_COMMIT_HASH;
+
   return (
     <BrowserRouter>
       <ProvideAuth>
         <Switch>
           <Route path="/login" component={SignIn} />
-          <Layout>
+          <Layout version={version}>
             <PrivateRoute exact path="/" component={Dashboard} />
 
             <PrivateRoute path="/create-order" component={CreateOrder} />
