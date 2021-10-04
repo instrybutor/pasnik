@@ -4,7 +4,6 @@ import { CashIcon, CalendarIcon } from '@heroicons/react/outline';
 import { formatDistance } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
-/* eslint-disable-next-line */
 export interface OrderListProps {
   orders: OrderModel[];
 }
