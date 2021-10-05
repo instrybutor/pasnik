@@ -242,6 +242,30 @@
         }
       }
     },
+    "orders-create-order": {
+      "root": "libs/orders/create-order",
+      "sourceRoot": "libs/orders/create-order/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/orders/create-order/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/orders/create-order"],
+          "options": {
+            "jestConfig": "libs/orders/create-order/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "orders-data-access": {
       "root": "libs/orders/data-access",
       "sourceRoot": "libs/orders/data-access/src",

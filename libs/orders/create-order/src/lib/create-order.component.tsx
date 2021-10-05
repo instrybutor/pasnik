@@ -8,7 +8,7 @@ export const CreateOrder: FC = () => {
   const { error, handleSubmit, onSubmit, register, errors } = useCreateOrder();
 
   return (
-    <div className="w-2/4 mx-auto border border-gray-300 shadow-md p-6 rounded">
+    <div className="w-2/4 mx-auto bg-white shadow overflow-hidden sm:rounded-md p-4 mt-8">
       {error && <Alert severity="error">Request Failed!</Alert>}
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -53,7 +53,10 @@ export const CreateOrder: FC = () => {
           )}
         </div>
 
-        <button type="submit" className="bg-blue-300 p-3 mt-4 rounded">
+        <button
+          type="submit"
+          className="items-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+        >
           Confirm
         </button>
       </form>

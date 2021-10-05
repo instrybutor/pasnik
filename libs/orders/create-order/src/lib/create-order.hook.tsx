@@ -1,5 +1,5 @@
-import yup from 'yup';
-import { useState } from 'react';
+import * as yup from 'yup';
+import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 
-import { formatter } from '../../utils';
+import { formatter } from './create-order.utils';
 
 const schema = yup
   .object({
@@ -52,21 +52,22 @@ export const useCreateOrder = () => {
   const [error, setError] = useState<string | null>(null);
   const history = useHistory();
 
-  const onSubmit = (data: CreateOrderDto) => {
-    const newPrice = data.shippingCents
-      ? +formatter.format(data.shippingCents).replace(/,/, '.')
-      : null;
+  const onSubmit = useCallback(
+    (data: CreateOrderDto) => {
+      const newPrice = data.shippingCents
+        ? +formatter.format(data.shippingCents).replace(/,/, '.')
+        : null;
 
-    createOrder({
-      ...data,
-      orderAt: new Date().toISOString(),
-      shippingCents: newPrice ? newPrice * 100 : undefined,
-    })
-      .then((params: OrderModel) => {
-        history.push(`order/` + params.id);
+      createOrder({
+        ...data,
+        orderAt: new Date().toISOString(),
+        shippingCents: newPrice ? newPrice * 100 : undefined,
       })
-      .catch((err: Error) => setError(err.message));
-  };
+        .then((params: OrderModel) => history.push(`order/` + params.id))
+        .catch((err: Error) => setError(err.message));
+    },
+    [createOrder, history]
+  );
 
   return {
     error,
