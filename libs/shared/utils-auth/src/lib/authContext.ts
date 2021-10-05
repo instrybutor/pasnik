@@ -1,12 +1,9 @@
 import { createContext } from 'react';
-
-export interface User {
-  email: string;
-}
+import { UserModel } from '@pasnik/api/data-transfer';
 
 export interface AuthContext {
-  user: User | null;
-  signIn: (accessToken: string) => Promise<User | void>;
+  user: UserModel | null;
+  signIn: (accessToken: string) => Promise<UserModel | void>;
   signOut: () => void;
 }
 

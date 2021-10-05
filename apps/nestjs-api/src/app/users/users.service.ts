@@ -30,6 +30,7 @@ export class UsersService {
       })) ?? new UserEntity();
     user.googleId = profile.id;
     user.email = profile.emails[0].value;
+    user.avatarImg = profile.photos[0]?.value;
     await this.usersRepository.save(user);
     return this.findOne(user.id);
   }

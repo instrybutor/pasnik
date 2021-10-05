@@ -37,7 +37,7 @@ const mockOrder: OrderModel = {
   orderedAt: '',
   status: OrderStatus.InProgress,
   updatedAt: initDate,
-  user: { email: 'example@example.com' },
+  user: { email: 'example@example.com', avatarImg: null },
 };
 
 function OrderElements(props: OrderProps) {

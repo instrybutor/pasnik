@@ -23,4 +23,7 @@ export class UserEntity implements UserModel {
 
   @Column()
   email: string;
+
+  @Column({ nullable: true })
+  avatarImg: string;
 }
