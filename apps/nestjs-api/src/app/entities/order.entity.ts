@@ -19,7 +19,7 @@ export class OrderEntity implements OrderModel {
   @ManyToOne(() => UserEntity)
   user: UserEntity;
 
-  @Column({ type: 'int', default: OrderStatus.InProgress })
+  @Column({ type: 'varchar', default: OrderStatus.InProgress })
   status: OrderStatus;
 
   @Column({ nullable: true })
