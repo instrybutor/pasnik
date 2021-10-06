@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { IGoogleOneTapLoginProps, useAuth } from '@pasnik/shared/utils-auth';
 
 import GoogleLoginButton from './GoogleButtonLogin';
+import { useCallback } from 'react';
 
 function Copyright() {
   return (
@@ -18,15 +19,14 @@ export default function SignIn() {
   const auth = useAuth();
   const history = useHistory();
 
-  const onSuccess = ({
-    credential,
-  }: google.accounts.IGoogleCallbackResponse) => {
-    if (credential) {
-      auth.signIn(credential).then(() => {
-        history.push('/');
-      });
-    }
-  };
+  const onSuccess = useCallback(
+    ({ credential }: google.accounts.IGoogleCallbackResponse) => {
+      if (credential) {
+        auth.signIn(credential).then(() => history.push('/'));
+      }
+    },
+    [auth, history]
+  );
 
   const config: IGoogleOneTapLoginProps = {
     client_id: process.env.NX_GOOGLE_CLIENT_ID,

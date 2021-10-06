@@ -27,7 +27,7 @@ export const SignIn: React.FC = () => {
   } as IGoogleOneTapLoginProps;
 
   return (
-    <div className="flex w-screen flex-grow items-center justify-center">
+    <div className="flex w-screen h-screen flex-grow items-center justify-center">
       <div className="flex flex-col text-center gap-4">
         <h1 className="text-4xl">
           <span role="img" aria-label="food">

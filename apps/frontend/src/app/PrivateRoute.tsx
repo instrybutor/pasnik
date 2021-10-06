@@ -5,21 +5,15 @@ import { useAuth } from '@pasnik/shared/utils-auth';
 export function PrivateRoute({ children, ...rest }: RouteProps) {
   const auth = useAuth();
 
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        auth.user ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: location },
-            }}
-          />
-        )
-      }
-    />
-  );
+  if (!auth.user) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/login',
+        }}
+      />
+    );
+  }
+
+  return <Route {...rest}>{children}</Route>;
 }

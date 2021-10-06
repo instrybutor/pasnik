@@ -17,6 +17,7 @@ export function App() {
       <ProvideAuth>
         <Switch>
           <Route path="/login" component={SignIn} />
+
           <Layout version={version}>
             <PrivateRoute exact path="/" component={PagesDashboard} />
             <PrivateRoute path="/create-order" component={CreateOrder} />
