@@ -2,12 +2,12 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { ProvideAuth } from '@pasnik/shared/utils-auth';
 import { SignIn } from '@pasnik/auth/sign-in';
-
-import { PrivateRoute } from './PrivateRoute';
-import { CreateOrder } from './CreateOrder';
-import { OrderDetails } from './OrderDetails';
+import { CreateOrder } from '@pasnik/orders/create-order';
 import { PagesDashboard } from '@pasnik/pages/dashboard';
 import { Layout } from '@pasnik/layout';
+
+import { PrivateRoute } from './PrivateRoute';
+import { OrderDetails } from './OrderDetails';
 
 export function App() {
   const version = process.env.NX_COMMIT_HASH;
