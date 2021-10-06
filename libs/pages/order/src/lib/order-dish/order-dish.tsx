@@ -9,14 +9,17 @@ export interface OrderDishProps {
 
 export function OrderDish({ dish }: OrderDishProps) {
   const [isDeleting, setIsDeleting] = useState(false);
-  const deleteHandler = useCallback((event: MouseEvent<HTMLButtonElement>) => {
-    const buttonValue = event.currentTarget.value;
-    if (isDeleting && buttonValue) {
-      // delete
-    } else if (isDeleting) {
-      setIsDeleting(!isDeleting);
-    }
-  }, []);
+  const deleteHandler = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const buttonValue = event.currentTarget.value;
+      if (isDeleting && buttonValue) {
+        // delete
+      } else if (isDeleting) {
+        setIsDeleting(!isDeleting);
+      }
+    },
+    [isDeleting]
+  );
 
   return (
     <tr>

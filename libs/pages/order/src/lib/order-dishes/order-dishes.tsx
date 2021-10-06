@@ -38,7 +38,7 @@ export function OrderDishes({ order }: OrderDishesProps) {
               {order.dishes?.map((dish) => (
                 <OrderDish dish={dish} />
               ))}
-              {(!order.dishes || order.dishes.length === 0) && (
+              {!order.dishes?.length && (
                 <tr>
                   <td colSpan={4}>
                     <div className="text-center bg-white px-4 py-12">
