@@ -1,4 +1,5 @@
 import { UserModel } from './user.model';
+import { DishModel } from './dish.model';
 
 export enum OrderStatus {
   InProgress = 'in-progress',
@@ -13,10 +14,10 @@ export interface OrderModel {
   from?: string;
   menuUrl: string;
   shippingCents?: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   orderedAt: string;
-  dishes: unknown[];
+  dishes?: DishModel[];
 }
 
 export function getOrderStatus(order: OrderModel) {

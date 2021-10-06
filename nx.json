@@ -54,6 +54,9 @@
     "pages-dashboard": {
       "tags": []
     },
+    "pages-order": {
+      "tags": []
+    },
     "shared-utils-auth": {
       "tags": []
     }
