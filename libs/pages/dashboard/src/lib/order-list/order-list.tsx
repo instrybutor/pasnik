@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import { getOrderStatus, OrderModel } from '@pasnik/api/data-transfer';
-import { CashIcon, CalendarIcon } from '@heroicons/react/outline';
+import { OrderModel } from '@pasnik/api/data-transfer';
+import { CalendarIcon, CashIcon } from '@heroicons/react/outline';
 import { formatDistance } from 'date-fns';
 import { pl } from 'date-fns/locale';
+import { OrderStatusBadge } from '@pasnik/pages/order';
 
 export interface OrderListProps {
   orders: OrderModel[];
@@ -20,9 +21,7 @@ export function OrderList(props: OrderListProps) {
                   {order.from}
                 </p>
                 <div className="ml-2 flex-shrink-0 flex">
-                  <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    {getOrderStatus(order)}
-                  </p>
+                  <OrderStatusBadge order={order} />
                 </div>
               </div>
               <div className="mt-2 sm:flex sm:justify-between">

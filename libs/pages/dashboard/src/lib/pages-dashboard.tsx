@@ -6,6 +6,7 @@ import DashboardCompletedOrders from './dashboard-completed-orders/dashboard-com
 import DashboardActiveOrders from './dashboard-active-orders/dashboard-active-orders';
 import DashboardHeader from './dashboard-header/dashboard-header';
 import DashboardTabs from './dashboard-tabs/dashboard-tabs';
+import { Spinner } from '@pasnik/layout';
 
 /* eslint-disable-next-line */
 export interface PagesDashboardProps {}
@@ -34,6 +35,7 @@ export function PagesDashboard(_: PagesDashboardProps) {
       setCompletedOrders(completed);
       setIsLoading(false);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tabs = [
@@ -50,9 +52,9 @@ export function PagesDashboard(_: PagesDashboardProps) {
       <header className="bg-white shadow">
         <DashboardHeader />
       </header>
-      <main className="flex-grow">
+      <main className="flex-grow flex-1">
         {isLoading ? (
-          <div className="w-full h-full fixed block top-0 left-0 bg-white opacity-75 z-50" />
+          <Spinner />
         ) : (
           <div className="mt-8">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

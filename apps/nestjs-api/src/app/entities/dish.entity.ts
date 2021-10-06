@@ -9,9 +9,10 @@ import {
 } from 'typeorm';
 import { OrderEntity } from './order.entity';
 import { UserDishEntity } from './user-dish.entity';
+import { DishModel } from '@pasnik/api/data-transfer';
 
 @Entity()
-export class DishEntity {
+export class DishEntity implements DishModel {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -30,8 +31,8 @@ export class DishEntity {
   usersDishes: UserDishEntity[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: string;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: string;
 }

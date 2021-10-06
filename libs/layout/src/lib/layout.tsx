@@ -22,9 +22,9 @@ export function Layout({ children, version }: PropsWithChildren<LayoutProps>) {
         closeSidebar={closeSidebar}
         version={version}
       />
-      <div className="flex-1 overflow-auto focus:outline-none">
+      <div className="flex-1 overflow-auto focus:outline-none flex-col flex">
         <Header sidebarOpen={sidebarOpen} openSidebar={openSidebar} />
-        <main className="flex-1 relative pb-8 z-0 overflow-y-auto">
+        <main className="flex-1 relative pb-8 z-0 overflow-y-auto flex-grow">
           {children}
         </main>
       </div>

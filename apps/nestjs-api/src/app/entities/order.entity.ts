@@ -32,14 +32,14 @@ export class OrderEntity implements OrderModel {
   shippingCents: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: string;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: string;
 
   @Column({ type: 'timestamptz' })
   orderedAt: string;
 
   @OneToMany(() => DishEntity, (dish) => dish.order)
-  dishes: OrderEntity[];
+  dishes: DishEntity[];
 }
