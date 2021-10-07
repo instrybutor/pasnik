@@ -3,9 +3,9 @@ import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useAuth } from '@pasnik/shared/utils-auth';
 
 export function PrivateRoute({ children, ...rest }: RouteProps) {
-  const auth = useAuth();
+  const { user } = useAuth();
 
-  if (!auth.user) {
+  if (!user) {
     return (
       <Redirect
         to={{

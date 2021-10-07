@@ -23,6 +23,7 @@ export function App() {
             <PrivateRoute path="/create-order" component={CreateOrder} />
             <PrivateRoute path="/order/:orderId" component={PagesOrder} />
           </Layout>
+
           <Redirect to="/login" />
         </Switch>
       </ProvideAuth>

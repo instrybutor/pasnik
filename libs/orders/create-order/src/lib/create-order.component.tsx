@@ -1,7 +1,5 @@
 import { FC } from 'react';
 
-import { Alert } from '@mui/material';
-
 import { useCreateOrder } from './create-order.hook';
 
 export const CreateOrder: FC = () => {
@@ -9,7 +7,11 @@ export const CreateOrder: FC = () => {
 
   return (
     <div className="w-2/4 mx-auto bg-white shadow overflow-hidden sm:rounded-md p-4 mt-8">
-      {error && <Alert severity="error">Request Failed!</Alert>}
+      {error && (
+        <div className="bg-red-100 border border-red-400 p-2">
+          Request Failed!
+        </div>
+      )}
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col">
@@ -22,7 +24,9 @@ export const CreateOrder: FC = () => {
             {...register('from')}
           />
           {errors.from?.message && (
-            <Alert severity="error">{errors.from?.message}</Alert>
+            <div className="bg-red-100 border border-red-400 p-2">
+              {errors.from?.message}
+            </div>
           )}
         </div>
 
@@ -37,7 +41,9 @@ export const CreateOrder: FC = () => {
         </div>
 
         {errors.menuUrl?.message && (
-          <Alert severity="error">{errors.menuUrl?.message}</Alert>
+          <div className="bg-red-100 border border-red-400 p-2">
+            {errors.menuUrl?.message}
+          </div>
         )}
 
         <div className="flex flex-col">
@@ -49,7 +55,9 @@ export const CreateOrder: FC = () => {
             {...register('shippingCents')}
           />
           {errors.shippingCents?.message && (
-            <Alert severity="error">{errors.shippingCents?.message}</Alert>
+            <div className="bg-red-100 border border-red-400 p-2">
+              {errors.shippingCents?.message}
+            </div>
           )}
         </div>
 

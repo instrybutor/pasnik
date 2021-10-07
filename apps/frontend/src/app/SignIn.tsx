@@ -1,9 +1,9 @@
+import { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { IGoogleOneTapLoginProps, useAuth } from '@pasnik/shared/utils-auth';
 
 import GoogleLoginButton from './GoogleButtonLogin';
-import { useCallback } from 'react';
 
 function Copyright() {
   return (
