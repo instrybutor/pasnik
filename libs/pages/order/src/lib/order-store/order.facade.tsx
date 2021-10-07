@@ -1,4 +1,4 @@
-import { OrderModel } from '@pasnik/api/data-transfer';
+import { OrderModel, UserModel } from '@pasnik/api/data-transfer';
 
 import { useOrderStore } from './order.store';
 import * as service from './order.service';
@@ -38,10 +38,29 @@ export const useOrderFacade = () => {
     return order;
   }, [store]);
 
+  const markAsPaid = useCallback(
+    async (payer: UserModel): Promise<OrderModel> => {
+      const order = await service.markAsPaid(store.order!.id, payer.id);
+      store.setOrder(order);
+
+      return order;
+    },
+    [store]
+  );
+
+  const markAsDelivered = useCallback(async (): Promise<OrderModel> => {
+    const order = await service.markAsDelivered(store.order!.id);
+    store.setOrder(order);
+
+    return order;
+  }, [store]);
+
   return {
     fetchOrder,
     markAsClosed,
     markAsOpen,
     markAsOrdered,
+    markAsPaid,
+    markAsDelivered,
   };
 };

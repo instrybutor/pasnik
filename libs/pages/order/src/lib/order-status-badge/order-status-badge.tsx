@@ -24,7 +24,7 @@ export function OrderStatusBadge({ order }: OrderStatusBadgeProps) {
         {
           'bg-green-100 text-green-800': order.status === OrderStatus.Delivered,
         },
-        { 'bg-red-100 text-red-800': order.status === OrderStatus.Closed }
+        { 'bg-red-100 text-red-800': order.status === OrderStatus.Canceled }
       )}
     >
       {getOrderStatus(order)}

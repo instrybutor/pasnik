@@ -3,7 +3,7 @@ const colors = require('tailwindcss/colors')
 
 module.exports = {
   purge: createGlobPatternsForDependencies(__dirname),
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
@@ -12,7 +12,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      opacity: ['disabled']
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),

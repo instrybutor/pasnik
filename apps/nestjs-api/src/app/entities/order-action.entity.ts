@@ -14,6 +14,9 @@ export class OrderActionEntity implements OrderActionModel {
   @ManyToOne(() => OrderEntity)
   order: OrderEntity;
 
+  @ManyToOne(() => UserEntity, { nullable: true })
+  actionUser?: UserEntity;
+
   @CreateDateColumn()
   createdAt: string;
 

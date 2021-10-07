@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { Profile } from 'passport';
 
-@EntityRepository()
+@EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
   findByGoogleId(googleId: string) {
     return this.createQueryBuilder('user').where('uer.googleId = :googleId', {

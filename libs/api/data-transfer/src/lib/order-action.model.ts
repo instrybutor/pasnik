@@ -5,14 +5,15 @@ export enum OrderAction {
   Created = 'created',
   Ordered = 'ordered',
   Paid = 'paid',
-  Completed = 'completed',
-  Closed = 'closed',
+  Delivered = 'delivered',
+  Cancel = 'canceled',
   Open = 'open'
 }
 
 export interface OrderActionModel {
   id: number;
   user: UserModel;
+  actionUser?: UserModel;
   order: OrderModel;
   createdAt: string;
   action: OrderAction;

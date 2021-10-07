@@ -3,10 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { DishEntity } from '../entities/dish.entity';
-import { UserEntity } from '../entities/user.entity';
 import { UserDishEntity } from '../entities/user-dish.entity';
 import { OrdersRepository } from '../repositories/orders.repository';
 import { OrderActionEntity } from '../entities/order-action.entity';
+import { UsersRepository } from '../repositories/users.repository';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { OrderActionEntity } from '../entities/order-action.entity';
       OrderActionEntity,
       DishEntity,
       UserDishEntity,
-      UserEntity,
+      UsersRepository
     ]),
   ],
   controllers: [OrdersController],

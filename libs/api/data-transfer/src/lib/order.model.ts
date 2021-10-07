@@ -6,7 +6,7 @@ export enum OrderStatus {
   InProgress = 'in-progress',
   Ordered = 'ordered',
   Delivered = 'delivered',
-  Closed = 'closed'
+  Canceled = 'canceled'
 }
 
 export interface OrderModel {
@@ -19,6 +19,7 @@ export interface OrderModel {
   createdAt: string;
   updatedAt: string;
   orderedAt: string;
+  payer?: UserModel;
   dishes?: DishModel[];
   actions?: OrderActionModel[];
 }
@@ -31,8 +32,8 @@ export function getOrderStatus(order: OrderModel) {
       return 'Zamówione';
     case OrderStatus.Delivered:
       return 'Dostarczone';
-    case OrderStatus.Closed:
-      return 'Zamknięte';
+    case OrderStatus.Canceled:
+      return 'Anulowane';
   }
   return 'Nieznany'
 }

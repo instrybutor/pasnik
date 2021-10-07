@@ -6,6 +6,7 @@ import {
   LockOpenIcon,
   PlusIcon,
   QuestionMarkCircleIcon,
+  XIcon,
 } from '@heroicons/react/outline';
 import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
 import { format } from 'date-fns';
@@ -16,32 +17,56 @@ const typesMap = {
   [OrderAction.Created]: {
     icon: PlusIcon,
     bgColorClass: 'bg-gray-400',
-    text: 'Utworzone przez',
+    text: ({ user }: OrderActionModel) => (
+      <>
+        Utworzone przez <OrderUser user={user} initials={true} />
+      </>
+    ),
   },
-  [OrderAction.Closed]: {
-    icon: LockClosedIcon,
+  [OrderAction.Cancel]: {
+    icon: XIcon,
     bgColorClass: 'bg-red-500',
-    text: 'Zamknięte przez',
+    text: ({ user }: OrderActionModel) => (
+      <>
+        Anulowane przez <OrderUser user={user} initials={true} />
+      </>
+    ),
   },
   [OrderAction.Paid]: {
     icon: CashIcon,
     bgColorClass: 'bg-yellow-500',
-    text: 'Opłacone przez',
+    text: ({ actionUser }: OrderActionModel) => (
+      <>
+        Opłacone przez <OrderUser user={actionUser!} initials={true} />
+      </>
+    ),
   },
-  [OrderAction.Completed]: {
+  [OrderAction.Delivered]: {
     icon: CheckIcon,
     bgColorClass: 'bg-green-500',
-    text: 'Zakończone przez',
+    text: ({ user }: OrderActionModel) => (
+      <>
+        Odebrane przez <OrderUser user={user} initials={true} />
+      </>
+    ),
   },
   [OrderAction.Open]: {
     icon: LockOpenIcon,
     bgColorClass: 'bg-green-500',
-    text: 'Otwarte przez',
+    text: ({ user }: OrderActionModel) => (
+      <>
+        Otwarte przez <OrderUser user={user} initials={true} />
+      </>
+    ),
   },
   [OrderAction.Ordered]: {
     icon: LockClosedIcon,
     bgColorClass: 'bg-red-500',
-    text: 'Zamówione przez',
+    text: ({ user }: OrderActionModel) => (
+      <>
+        Zamówione przez <OrderUser user={user} initials={true} />
+      </>
+    ),
   },
 };
 
@@ -65,7 +90,7 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
           <ul className="-mb-8">
             {actions.map((item, itemIdx) => {
               const ActionIcon = typesMap[item.action]?.icon;
-              const message = typesMap[item.action]?.text;
+              const message = typesMap[item.action]?.text(item) ?? item.action;
               return (
                 <li key={item.id}>
                   <div className="relative pb-8">
@@ -99,10 +124,7 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
                       </div>
                       <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                         <div>
-                          <p className="text-sm text-gray-500">
-                            {message}{' '}
-                            <OrderUser user={item.user} initials={true} />
-                          </p>
+                          <p className="text-sm text-gray-500">{message}</p>
                         </div>
                         <div className="text-right text-sm whitespace-nowrap text-gray-500">
                           <time dateTime={item.createdAt}>

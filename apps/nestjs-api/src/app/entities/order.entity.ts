@@ -20,6 +20,9 @@ export class OrderEntity implements OrderModel {
   @ManyToOne(() => UserEntity)
   user: UserEntity;
 
+  @ManyToOne(() => UserEntity, { nullable: true })
+  payer?: UserEntity;
+
   @Column({ type: 'varchar', default: OrderStatus.InProgress })
   status: OrderStatus;
 

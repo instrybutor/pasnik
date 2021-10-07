@@ -22,7 +22,9 @@ export function PagesDashboard(_: PagesDashboardProps) {
     fetchOrders().then((fetchedOrders) => {
       const [active, completed] = fetchedOrders.reduce(
         (acc, cur) => {
-          if (cur.status === OrderStatus.InProgress) {
+          if (
+            [OrderStatus.InProgress, OrderStatus.Ordered].includes(cur.status)
+          ) {
             acc[0].push(cur);
           } else {
             acc[1].push(cur);
