@@ -41,7 +41,6 @@
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
     "@hookform/resolvers": "^2.8.1",
-    "@mui/material": "^5.0.0",
     "@mui/styled-engine-sc": "^5.0.0",
     "@nestjs/common": "^7.0.0",
     "@nestjs/config": "^1.0.1",

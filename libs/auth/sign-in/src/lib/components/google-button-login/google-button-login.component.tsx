@@ -1,5 +1,7 @@
 import { FunctionComponent, useEffect, useRef } from 'react';
-import { useGoogleLibrary } from '@pasnik/shared/utils-auth';
+
+import { useAuth } from '@pasnik/shared/utils-auth';
+
 import { GoogleButtonLoginProps } from './types';
 
 export const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({
@@ -8,9 +10,13 @@ export const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({
   ...props
 }) => {
   const ref = useRef(null);
-  const gapi = useGoogleLibrary();
+  const { gapi } = useAuth();
 
   useEffect(() => {
+    if (!gapi) {
+      return;
+    }
+
     gapi.initialize(props.googleAccountConfigs);
     const element = ref.current;
     if (element !== null && element !== undefined) {

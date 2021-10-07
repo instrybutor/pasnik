@@ -34,7 +34,7 @@ export function Header({ openSidebar }: HeaderProps) {
         <span className="sr-only">Open sidebar</span>
         <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
       </button>
-      <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
+      <div className="flex-1 px-4 flex justify-between sm:px-6 lg:px-8">
         <div className="flex-1 flex" />
         <div className="ml-4 flex items-center md:ml-6">
           <button
