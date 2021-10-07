@@ -1,9 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { OrderEntity } from '../entities/order.entity';
-import { CreateOrderDto, MarkAsOrderedDto, OrderStatus } from '@pasnik/api/data-transfer';
+import { CreateOrderDto, MarkAsDeliveredDto, MarkAsOrderedDto, OrderStatus } from '@pasnik/api/data-transfer';
 import { UserEntity } from '../entities/user.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { MarkAsDeliveredDto } from '../../../../../libs/api/data-transfer/src/lib/mark-as-delivered.dto';
 
 @EntityRepository(OrderEntity)
 export class OrdersRepository extends Repository<OrderEntity> {

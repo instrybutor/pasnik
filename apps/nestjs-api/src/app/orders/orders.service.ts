@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrdersRepository } from '../repositories/orders.repository';
 import { UserEntity } from '../entities/user.entity';
-import { CreateOrderDto, MarkAsOrderedDto, MarkAsPaidDto, OrderAction } from '@pasnik/api/data-transfer';
+import {
+  CreateOrderDto,
+  MarkAsDeliveredDto,
+  MarkAsOrderedDto,
+  MarkAsPaidDto,
+  OrderAction
+} from '@pasnik/api/data-transfer';
 import { OrderActionsRepository } from '../repositories/order-actions.repository';
 import { Connection } from 'typeorm';
-import { MarkAsDeliveredDto } from '../../../../../libs/api/data-transfer/src/lib/mark-as-delivered.dto';
 import { UsersRepository } from '../repositories/users.repository';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { UserModel } from './user.model';
-import { OrderModel } from '@pasnik/api/data-transfer';
+import { OrderModel } from './order.model';
 
 export enum OrderAction {
   Created = 'created',
