@@ -10,11 +10,13 @@ export class UsersRepository extends Repository<UserEntity> {
     });
   }
 
-  async createUser({ id, emails, photos }: Profile) {
+  async createUser({ id, emails, photos, name }: Profile) {
     const user = (await this.findByGoogleId(id).getOne()) ?? new UserEntity();
     user.googleId = id;
     user.avatarImg = photos[0]?.value;
     user.email = emails[0].value;
+    user.givenName = name.givenName;
+    user.familyName = name.familyName;
     await this.save(user);
     return this.findOne(user.id);
   }

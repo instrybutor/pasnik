@@ -10,7 +10,7 @@ interface OrdersState {
   addOrder: (order: OrderModel) => void;
 }
 
-export const createOrderStore = create<OrdersState>((set) => ({
+export const createOrdersStore = create<OrdersState>((set) => ({
   entities: null,
   ids: [],
 

@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useCallback } from 'react';
 import {
   BookOpenIcon,
   CalendarIcon,
@@ -6,21 +6,37 @@ import {
   ChevronDownIcon,
   CurrencyDollarIcon,
   PencilIcon,
+  ReplyIcon,
   TruckIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import { OrderModel } from '@pasnik/api/data-transfer';
+import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { formatDistance } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
+import { useOrderFacade } from '../order-store/order.facade';
 
 export interface OrderHeaderProps {
   order: OrderModel;
 }
 
 export function OrderHeader({ order }: OrderHeaderProps) {
+  const { markAsClosed, markAsOpen, markAsOrdered } = useOrderFacade();
+
+  const closeOrderHandler = useCallback(async () => {
+    await markAsClosed();
+  }, []);
+
+  const openOrderHandler = useCallback(async () => {
+    await markAsOpen();
+  }, []);
+
+  const makeOrderHandler = useCallback(async () => {
+    await markAsOrdered();
+  }, []);
+
   return (
     <div className="bg-white shadow">
       <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
@@ -70,38 +86,67 @@ export function OrderHeader({ order }: OrderHeaderProps) {
             </div>
           </div>
           <div className="mt-5 flex lg:mt-0 lg:ml-4">
-            <span className="hidden sm:block">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                Zamknij
-              </button>
-            </span>
+            {order.status === OrderStatus.InProgress && (
+              <span className="hidden sm:block">
+                <button
+                  type="button"
+                  onClick={closeOrderHandler}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                  Zamknij
+                </button>
+              </span>
+            )}
 
-            <span className="hidden sm:block sm:ml-3">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                <PencilIcon
-                  className="-ml-1 mr-2 h-5 w-5 text-gray-500"
-                  aria-hidden="true"
-                />
-                Edytuj
-              </button>
-            </span>
+            {[OrderStatus.Closed, OrderStatus.Ordered].includes(
+              order.status
+            ) && (
+              <span className="hidden sm:block">
+                <button
+                  type="button"
+                  onClick={openOrderHandler}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <ReplyIcon
+                    className="-ml-1 mr-2 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  Otwórz
+                </button>
+              </span>
+            )}
 
-            <span className="sm:ml-3">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                Zamów
-              </button>
-            </span>
+            {order.status === OrderStatus.InProgress && (
+              <span className="hidden sm:block sm:ml-3">
+                <button
+                  type="button"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <PencilIcon
+                    className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                    aria-hidden="true"
+                  />
+                  Edytuj
+                </button>
+              </span>
+            )}
+
+            {order.status === OrderStatus.InProgress && (
+              <span className="sm:ml-3">
+                <button
+                  type="button"
+                  onClick={makeOrderHandler}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <CheckIcon
+                    className="-ml-1 mr-2 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  Zamów
+                </button>
+              </span>
+            )}
 
             {/* Dropdown */}
             <Menu as="span" className="ml-3 relative sm:hidden">

@@ -6,11 +6,13 @@ import { DishEntity } from '../entities/dish.entity';
 import { UserEntity } from '../entities/user.entity';
 import { UserDishEntity } from '../entities/user-dish.entity';
 import { OrdersRepository } from '../repositories/orders.repository';
+import { OrderActionEntity } from '../entities/order-action.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       OrdersRepository,
+      OrderActionEntity,
       DishEntity,
       UserDishEntity,
       UserEntity,

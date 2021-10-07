@@ -5,74 +5,52 @@ import {
   LockClosedIcon,
   LockOpenIcon,
   PlusIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/outline';
-import { OrderModel } from '@pasnik/api/data-transfer';
+import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
+import { format } from 'date-fns';
+import { pl } from 'date-fns/locale';
+import OrderUser from '../order-user/order-user';
 
-const eventTypes = {
-  created: { icon: PlusIcon, bgColorClass: 'bg-gray-400' },
-  opened: { icon: LockOpenIcon, bgColorClass: 'bg-green-400' },
-  closed: { icon: LockClosedIcon, bgColorClass: 'bg-red-500' },
-  completed: { icon: CheckIcon, bgColorClass: 'bg-green-500' },
-  paid: { icon: CashIcon, bgColorClass: 'bg-yellow-500' },
+const typesMap = {
+  [OrderAction.Created]: {
+    icon: PlusIcon,
+    bgColorClass: 'bg-gray-400',
+    text: 'Utworzone przez',
+  },
+  [OrderAction.Closed]: {
+    icon: LockClosedIcon,
+    bgColorClass: 'bg-red-500',
+    text: 'Zamknięte przez',
+  },
+  [OrderAction.Paid]: {
+    icon: CashIcon,
+    bgColorClass: 'bg-yellow-500',
+    text: 'Opłacone przez',
+  },
+  [OrderAction.Completed]: {
+    icon: CheckIcon,
+    bgColorClass: 'bg-green-500',
+    text: 'Zakończone przez',
+  },
+  [OrderAction.Open]: {
+    icon: LockOpenIcon,
+    bgColorClass: 'bg-green-500',
+    text: 'Otwarte przez',
+  },
+  [OrderAction.Ordered]: {
+    icon: LockClosedIcon,
+    bgColorClass: 'bg-red-500',
+    text: 'Zamówione przez',
+  },
 };
-
-const timeline = [
-  {
-    id: 1,
-    type: eventTypes.created,
-    content: 'Zamówienie utworzone przez',
-    target: 'PK',
-    date: 'Sep 20',
-    datetime: '2020-09-20',
-  },
-  {
-    id: 2,
-    type: eventTypes.closed,
-    content: 'Zamówienie złożone przez',
-    target: 'Mr Szkatuł',
-    date: 'Sep 22',
-    datetime: '2020-09-22',
-  },
-  {
-    id: 5,
-    type: eventTypes.opened,
-    content: 'Zamówienie otwarte przez',
-    target: 'Mr Szkatuł',
-    date: 'Sep 22',
-    datetime: '2020-09-22',
-  },
-  {
-    id: 6,
-    type: eventTypes.closed,
-    content: 'Zamówienie złożone przez',
-    target: 'PK',
-    date: 'Sep 22',
-    datetime: '2020-09-22',
-  },
-  {
-    id: 3,
-    type: eventTypes.paid,
-    content: 'Zamówienie opłacone przez',
-    target: 'MJ',
-    date: 'Sep 28',
-    datetime: '2020-09-28',
-  },
-  {
-    id: 4,
-    type: eventTypes.completed,
-    content: 'Zamówienie odebrane przez',
-    target: 'PK',
-    date: 'Sep 28',
-    datetime: '2020-09-28',
-  },
-];
 
 /* eslint-disable-next-line */
 export interface OrderTimelineProps {
-  order: OrderModel;
+  actions: OrderActionModel[];
 }
 
-export function OrderTimeline(props: OrderTimelineProps) {
+export function OrderTimeline({ actions }: OrderTimelineProps) {
   return (
     <section
       aria-labelledby="timeline-title"
@@ -85,46 +63,60 @@ export function OrderTimeline(props: OrderTimelineProps) {
 
         <div className="mt-6 flow-root">
           <ul className="-mb-8">
-            {timeline.map((item, itemIdx) => (
-              <li key={item.id}>
-                <div className="relative pb-8">
-                  {itemIdx !== timeline.length - 1 ? (
-                    <span
-                      className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-                      aria-hidden="true"
-                    />
-                  ) : null}
-                  <div className="relative flex space-x-3">
-                    <div>
+            {actions.map((item, itemIdx) => {
+              const ActionIcon = typesMap[item.action]?.icon;
+              const message = typesMap[item.action]?.text;
+              return (
+                <li key={item.id}>
+                  <div className="relative pb-8">
+                    {itemIdx !== actions.length - 1 ? (
                       <span
-                        className={classNames(
-                          item.type.bgColorClass,
-                          'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white'
-                        )}
-                      >
-                        <item.type.icon
-                          className="w-5 h-5 text-white"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                        className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+                        aria-hidden="true"
+                      />
+                    ) : null}
+                    <div className="relative flex space-x-3">
                       <div>
-                        <p className="text-sm text-gray-500">
-                          {item.content}{' '}
-                          <a className="font-medium text-gray-900">
-                            {item.target}
-                          </a>
-                        </p>
+                        <span
+                          className={classNames(
+                            typesMap[item.action]?.bgColorClass ??
+                              'bg-black text-white',
+                            'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white'
+                          )}
+                        >
+                          {typesMap[item.action] ? (
+                            <ActionIcon
+                              className="w-5 h-5 text-white"
+                              aria-hidden="true"
+                            />
+                          ) : (
+                            <QuestionMarkCircleIcon
+                              className="w-5 h-5 text-white"
+                              aria-hidden="true"
+                            />
+                          )}
+                        </span>
                       </div>
-                      <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                        <time dateTime={item.datetime}>{item.date}</time>
+                      <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                        <div>
+                          <p className="text-sm text-gray-500">
+                            {message}{' '}
+                            <OrderUser user={item.user} initials={true} />
+                          </p>
+                        </div>
+                        <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                          <time dateTime={item.createdAt}>
+                            {format(new Date(item.createdAt), 'dd LLL', {
+                              locale: pl,
+                            })}
+                          </time>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
