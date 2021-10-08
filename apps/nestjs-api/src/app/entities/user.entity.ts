@@ -12,6 +12,12 @@ export class UserEntity implements UserModel {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: true })
+  givenName?: string;
+
+  @Column({ nullable: true })
+  familyName?: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

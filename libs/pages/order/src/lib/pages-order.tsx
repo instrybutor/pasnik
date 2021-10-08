@@ -2,10 +2,10 @@ import { useParams } from 'react-router-dom';
 import { Spinner } from '@pasnik/layout';
 import OrderHeader from './order-header/order-header';
 import { Fragment, useEffect, useState } from 'react';
-import { authFetch } from '@pasnik/shared/utils-auth';
-import { OrderModel } from '@pasnik/api/data-transfer';
 import OrderDishes from './order-dishes/order-dishes';
 import OrderTimeline from './order-timeline/order-timeline';
+import { useOrderFacade } from './order-store/order.facade';
+import { useOrderStore } from './order-store/order.store';
 
 export interface PagesOrderProps {
   orderId: string;
@@ -13,12 +13,12 @@ export interface PagesOrderProps {
 
 export function PagesOrder() {
   const [isLoading, setIsLoading] = useState(true);
-  const [order, setOrder] = useState<OrderModel>();
+  const order = useOrderStore((state) => state.order);
   const { orderId } = useParams<PagesOrderProps>();
+  const { fetchOrder } = useOrderFacade();
 
   useEffect(() => {
-    authFetch<OrderModel>(`/api/orders/${orderId}`).then((_order) => {
-      setOrder(_order);
+    fetchOrder(orderId).then((_order) => {
       setIsLoading(false);
     });
   }, [orderId]);
@@ -36,7 +36,7 @@ export function PagesOrder() {
             <div className="space-y-6 lg:col-start-1 lg:col-span-2">
               <OrderDishes order={order!} />
             </div>
-            <OrderTimeline order={order!} />
+            <OrderTimeline actions={order!.actions!} />
           </div>
         </div>
       </main>

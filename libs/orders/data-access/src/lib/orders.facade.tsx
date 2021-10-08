@@ -1,11 +1,11 @@
 import { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 
-import { createOrderStore } from './orders.store';
+import { createOrdersStore } from './orders.store';
 import * as service from './orders.service';
 import { useCallback } from 'react';
 
 export const useOrdersFacade = () => {
-  const store = createOrderStore();
+  const store = createOrdersStore();
 
   const fetchOrders = useCallback(async (): Promise<OrderModel[]> => {
     const orders = await service.fetchOrders();

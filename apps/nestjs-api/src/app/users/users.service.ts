@@ -31,6 +31,8 @@ export class UsersService {
     user.googleId = profile.id;
     user.email = profile.emails[0].value;
     user.avatarImg = profile.photos[0]?.value;
+    user.givenName = profile.name.givenName;
+    user.familyName = profile.name.familyName;
     await this.usersRepository.save(user);
     return this.findOne(user.id);
   }

@@ -1,33 +1,70 @@
-import { Fragment } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import {
   BookOpenIcon,
   CalendarIcon,
   CheckIcon,
   ChevronDownIcon,
   CurrencyDollarIcon,
+  LockOpenIcon,
   PencilIcon,
   TruckIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import { OrderModel } from '@pasnik/api/data-transfer';
+import { OrderModel, OrderStatus, UserModel } from '@pasnik/api/data-transfer';
 import { formatDistance } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
+import { useOrderFacade } from '../order-store/order.facade';
+import OrderPaidButton from '../order-paid-button/order-paid-button';
+import { useAuth } from '@pasnik/shared/utils-auth';
 
 export interface OrderHeaderProps {
   order: OrderModel;
 }
 
 export function OrderHeader({ order }: OrderHeaderProps) {
+  const {
+    markAsClosed,
+    markAsOpen,
+    markAsOrdered,
+    markAsPaid,
+    markAsDelivered,
+  } = useOrderFacade();
+  const { user } = useAuth();
+  const [users] = useState([user!]);
+
+  const markAsDeliveredHandler = useCallback(async () => {
+    await markAsDelivered();
+  }, []);
+
+  const closeOrderHandler = useCallback(async () => {
+    await markAsClosed();
+  }, []);
+
+  const openOrderHandler = useCallback(async () => {
+    await markAsOpen();
+  }, []);
+
+  const makeOrderHandler = useCallback(async () => {
+    await markAsOrdered();
+  }, []);
+
+  const payHandler = useCallback(async (payer: UserModel) => {
+    await markAsPaid(payer);
+  }, []);
+
   return (
     <div className="bg-white shadow">
       <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
         <div className="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
           <div className="flex-1 min-w-0 ml-3">
-            <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
+            <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate flex items-center">
               {order.from}
+              <div className="inline-flex ml-4">
+                <OrderStatusBadge order={order} />
+              </div>
             </h1>
             <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
               <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -64,44 +101,94 @@ export function OrderHeader({ order }: OrderHeaderProps) {
                   locale: pl,
                 })}
               </div>
-              <div className="mt-2 flex items-center text-sm text-gray-500">
-                <OrderStatusBadge order={order} />
-              </div>
             </div>
           </div>
           <div className="mt-5 flex lg:mt-0 lg:ml-4">
-            <span className="hidden sm:block">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                Zamknij
-              </button>
-            </span>
+            {order.status === OrderStatus.InProgress && (
+              <span className="hidden sm:block">
+                <button
+                  type="button"
+                  onClick={closeOrderHandler}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                  Anuluj
+                </button>
+              </span>
+            )}
 
-            <span className="hidden sm:block sm:ml-3">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                <PencilIcon
-                  className="-ml-1 mr-2 h-5 w-5 text-gray-500"
-                  aria-hidden="true"
-                />
-                Edytuj
-              </button>
-            </span>
+            {[OrderStatus.Canceled, OrderStatus.Ordered].includes(
+              order.status
+            ) && (
+              <span className="hidden sm:block">
+                <button
+                  type="button"
+                  onClick={openOrderHandler}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <LockOpenIcon
+                    className="-ml-1 mr-2 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  Otwórz
+                </button>
+              </span>
+            )}
 
-            <span className="sm:ml-3">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                Zamów
-              </button>
-            </span>
+            {[OrderStatus.Ordered, OrderStatus.Delivered].includes(
+              order.status
+            ) && (
+              <span className="hidden sm:block sm:ml-3">
+                <OrderPaidButton users={users} onClick={payHandler} />
+              </span>
+            )}
+
+            {[OrderStatus.Ordered].includes(order.status) && (
+              <span className="sm:ml-3">
+                <button
+                  type="button"
+                  onClick={markAsDeliveredHandler}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <CheckIcon
+                    className="-ml-1 mr-2 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  Dostarczone
+                </button>
+              </span>
+            )}
+
+            {order.status === OrderStatus.InProgress && (
+              <span className="hidden sm:block sm:ml-3">
+                <button
+                  type="button"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <PencilIcon
+                    className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                    aria-hidden="true"
+                  />
+                  Edytuj
+                </button>
+              </span>
+            )}
+
+            {order.status === OrderStatus.InProgress && (
+              <span className="sm:ml-3">
+                <button
+                  type="button"
+                  onClick={makeOrderHandler}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <CheckIcon
+                    className="-ml-1 mr-2 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  Zamów
+                </button>
+              </span>
+            )}
 
             {/* Dropdown */}
             <Menu as="span" className="ml-3 relative sm:hidden">

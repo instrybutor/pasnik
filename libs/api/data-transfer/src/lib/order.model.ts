@@ -1,10 +1,12 @@
 import { UserModel } from './user.model';
 import { DishModel } from './dish.model';
+import { OrderActionModel } from './order-action.model';
 
 export enum OrderStatus {
   InProgress = 'in-progress',
   Ordered = 'ordered',
   Delivered = 'delivered',
+  Canceled = 'canceled'
 }
 
 export interface OrderModel {
@@ -17,7 +19,9 @@ export interface OrderModel {
   createdAt: string;
   updatedAt: string;
   orderedAt: string;
+  payer?: UserModel;
   dishes?: DishModel[];
+  actions?: OrderActionModel[];
 }
 
 export function getOrderStatus(order: OrderModel) {
@@ -28,6 +32,8 @@ export function getOrderStatus(order: OrderModel) {
       return 'Zamówione';
     case OrderStatus.Delivered:
       return 'Dostarczone';
+    case OrderStatus.Canceled:
+      return 'Anulowane';
   }
   return 'Nieznany'
 }

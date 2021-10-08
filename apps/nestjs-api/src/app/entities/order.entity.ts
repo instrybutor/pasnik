@@ -5,11 +5,12 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { DishEntity } from './dish.entity';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+import { OrderActionEntity } from './order-action.entity';
 
 @Entity()
 export class OrderEntity implements OrderModel {
@@ -18,6 +19,9 @@ export class OrderEntity implements OrderModel {
 
   @ManyToOne(() => UserEntity)
   user: UserEntity;
+
+  @ManyToOne(() => UserEntity, { nullable: true })
+  payer?: UserEntity;
 
   @Column({ type: 'varchar', default: OrderStatus.InProgress })
   status: OrderStatus;
@@ -42,4 +46,7 @@ export class OrderEntity implements OrderModel {
 
   @OneToMany(() => DishEntity, (dish) => dish.order)
   dishes: DishEntity[];
+
+  @OneToMany(() => OrderActionEntity, (action) => action.order)
+  actions: OrderActionEntity[];
 }
