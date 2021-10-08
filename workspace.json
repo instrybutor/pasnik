@@ -45,6 +45,28 @@
         }
       }
     },
+    "components": {
+      "root": "libs/components",
+      "sourceRoot": "libs/components/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/components/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/components"],
+          "options": {
+            "jestConfig": "libs/components/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "frontend": {
       "root": "apps/frontend",
       "sourceRoot": "apps/frontend/src",

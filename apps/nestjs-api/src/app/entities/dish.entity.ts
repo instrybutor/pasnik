@@ -27,7 +27,10 @@ export class DishEntity implements DishModel {
   })
   order: OrderEntity;
 
-  @OneToMany(() => UserDishEntity, (userDish) => userDish.dish)
+  @Column()
+  orderId: string;
+
+  @OneToMany(() => UserDishEntity, (userDish) => userDish.dish, { cascade: true })
   usersDishes: UserDishEntity[];
 
   @CreateDateColumn()

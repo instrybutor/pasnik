@@ -1,19 +1,75 @@
-import { OrderModel } from '@pasnik/api/data-transfer';
+import {
+  AddDishDto,
+  DishModel,
+  OrderModel,
+  OrderStatus,
+} from '@pasnik/api/data-transfer';
 import OrderDish from '../order-dish/order-dish';
 import AddDish from '../add-dish/add-dish';
 import { BeakerIcon, PlusIcon } from '@heroicons/react/outline';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useOrderFacade } from '../order-store/order.facade';
+import { UpdateDish } from '../update-dish/update-dish';
 
 export interface OrderDishesProps {
-  order: OrderModel;
+  dishes: DishModel[] | null;
+  order: OrderModel | null;
 }
 
-export function OrderDishes({ order }: OrderDishesProps) {
+export function OrderDishes({ dishes, order }: OrderDishesProps) {
   const [isAdding, setIsAdding] = useState(false);
+  const [updateId, setUpdateId] = useState<number | null>(null);
+  const { addDish, deleteDish, updateDish } = useOrderFacade();
+  const inProgress = order?.status === OrderStatus.InProgress;
 
-  const addDishHandler = useCallback(() => {
+  const addDishClickHandler = useCallback(() => {
     setIsAdding(true);
   }, []);
+
+  const addDishHandler = useCallback(
+    async (data: AddDishDto) => {
+      const dish = await addDish(order!.id, {
+        ...data,
+        priceCents: data.priceCents * 100,
+      });
+
+      setIsAdding(false);
+
+      return dish;
+    },
+    [addDish, order]
+  );
+
+  const deleteDishHandler = useCallback(
+    async (dish: DishModel) => {
+      await deleteDish(dish);
+    },
+    [deleteDish]
+  );
+
+  const updateDishHandler = useCallback(
+    async (dishDto: AddDishDto, dish: DishModel) => {
+      await updateDish(dish.id, {
+        ...dishDto,
+        priceCents: dishDto.priceCents * 100,
+      });
+      setUpdateId(null);
+    },
+    [updateDish]
+  );
+
+  const editClickHandler = useCallback(async (dish: DishModel) => {
+    setUpdateId(dish.id);
+  }, []);
+
+  const cancelUpdateHandler = useCallback(() => {
+    setUpdateId(null);
+  }, []);
+
+  useEffect(() => {
+    setUpdateId(null);
+    setIsAdding(false);
+  }, [inProgress]);
 
   return (
     <section aria-labelledby="notes-title">
@@ -23,22 +79,39 @@ export function OrderDishes({ order }: OrderDishesProps) {
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
               Dania
             </h2>
-            <div className="mt-3 flex sm:mt-0 sm:ml-4">
-              <button
-                onClick={addDishHandler}
-                type="button"
-                className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                <PlusIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-            </div>
+            {inProgress && (
+              <div className="mt-3 flex sm:mt-0 sm:ml-4">
+                <button
+                  onClick={addDishClickHandler}
+                  type="button"
+                  className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                </button>
+              </div>
+            )}
           </div>
           <table className="min-w-full divide-y divide-gray-200">
             <tbody className="bg-white divide-y divide-gray-200">
-              {order.dishes?.map((dish) => (
-                <OrderDish dish={dish} />
-              ))}
-              {!order.dishes?.length && (
+              {dishes?.map((dish) =>
+                updateId === dish.id ? (
+                  <UpdateDish
+                    key={dish.id}
+                    onUpdateDish={updateDishHandler}
+                    dish={dish}
+                    onCancelUpdate={cancelUpdateHandler}
+                  />
+                ) : (
+                  <OrderDish
+                    inProgress={order?.status === OrderStatus.InProgress}
+                    key={dish.id}
+                    onDeleteDish={deleteDishHandler}
+                    dish={dish}
+                    onEditClick={editClickHandler}
+                  />
+                )
+              )}
+              {!dishes?.length && (
                 <tr>
                   <td colSpan={4}>
                     <div className="text-center bg-white px-4 py-12">
@@ -50,7 +123,7 @@ export function OrderDishes({ order }: OrderDishesProps) {
                   </td>
                 </tr>
               )}
-              {isAdding && <AddDish />}
+              {isAdding && <AddDish onAdd={addDishHandler} />}
             </tbody>
           </table>
         </div>

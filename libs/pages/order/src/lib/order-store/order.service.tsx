@@ -1,8 +1,11 @@
-import { OrderModel } from '@pasnik/api/data-transfer';
+import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
 import { authFetch } from '@pasnik/shared/utils-auth';
 
 export const fetchOrder = (id: string) =>
   authFetch<OrderModel>(`/api/orders/${id}`);
+
+export const fetchDishes = (id: string) =>
+  authFetch<DishModel[]>(`/api/orders/${id}/dishes`);
 
 export const markAsClosed = (id: string) =>
   authFetch<OrderModel>(`/api/orders/${id}/mark-as-closed`, { method: 'POST' });
@@ -25,4 +28,25 @@ export const markAsPaid = (id: string, payerId: number) =>
     body: JSON.stringify({
       payerId,
     }),
+  });
+
+export const addDish = (orderId: string, addDishDto: AddDishDto) =>
+  authFetch<DishModel>(`/api/orders/${orderId}/dishes`, {
+    method: 'POST',
+    body: JSON.stringify(addDishDto),
+  });
+
+export const deleteDish = (orderId: string, dishId: number) =>
+  authFetch<DishModel>(`/api/orders/${orderId}/dishes/${dishId}`, {
+    method: 'DELETE',
+  });
+
+export const updateDish = (
+  orderId: string,
+  dishId: number,
+  addDishDto: AddDishDto
+) =>
+  authFetch<DishModel>(`/api/orders/${orderId}/dishes/${dishId}`, {
+    method: 'PUT',
+    body: JSON.stringify(addDishDto),
   });

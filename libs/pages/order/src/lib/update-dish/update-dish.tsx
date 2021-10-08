@@ -1,23 +1,29 @@
 import { ExclamationCircleIcon } from '@heroicons/react/solid';
-import { CheckIcon } from '@heroicons/react/outline';
-import { useAddDish } from './add-dish.hook';
-import { AddDishDto } from '@pasnik/api/data-transfer';
+import { CheckIcon, XIcon } from '@heroicons/react/outline';
+import { useUpdateDish } from './update-dish.hook';
+import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
 import { useCallback } from 'react';
 
-export interface AddDishProps {
-  onAdd: (addDishDto: AddDishDto) => void;
+export interface UpdateDishProps {
+  dish: DishModel;
+  onUpdateDish: (addDishDto: AddDishDto, dishModel: DishModel) => void;
+  onCancelUpdate: () => void;
 }
 
-export function AddDish({ onAdd }: AddDishProps) {
-  const { handleSubmit, register, errors, reset } = useAddDish();
+export function UpdateDish({
+  dish,
+  onUpdateDish,
+  onCancelUpdate,
+}: UpdateDishProps) {
+  const { handleSubmit, register, errors, reset } = useUpdateDish(dish);
 
   const onSubmit = useCallback(
-    async (data: AddDishDto) => {
-      onAdd(data);
+    (data: AddDishDto) => {
+      onUpdateDish(data, dish);
       reset();
     },
-    [onAdd, reset]
+    [onUpdateDish, reset, dish]
   );
 
   return (
@@ -97,9 +103,17 @@ export function AddDish({ onAdd }: AddDishProps) {
         >
           <CheckIcon className="h-5 w-5" aria-hidden="true" />
         </button>
+
+        <button
+          type="button"
+          onClick={onCancelUpdate}
+          className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          <XIcon className="h-5 w-5 pointer-events-none" aria-hidden="true" />
+        </button>
       </td>
     </tr>
   );
 }
 
-export default AddDish;
+export default UpdateDish;

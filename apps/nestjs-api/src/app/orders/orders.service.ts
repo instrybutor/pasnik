@@ -26,7 +26,7 @@ export class OrdersService {
   }
 
   findOne(id: string) {
-    return this.ordersRepository.findOneOrFail(id, { relations: ['dishes', 'actions', 'actions.user', 'payer', 'actions.actionUser'] });
+    return this.ordersRepository.findOneOrFail(id, { relations: ['actions', 'actions.user', 'payer', 'actions.actionUser'] });
   }
 
   async create(createOrderDto: CreateOrderDto, user: UserEntity) {
