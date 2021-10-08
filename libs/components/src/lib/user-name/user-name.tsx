@@ -33,7 +33,5 @@ export function UserName({
         </p>
       )}
     </div>
-  ) : (
-    <div />
-  );
+  ) : null;
 }
