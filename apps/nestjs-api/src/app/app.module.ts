@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { FrontendMiddleware } from './frontend.middleware';
 import { OrdersModule } from './orders';
+import { DishesModule } from './dishes';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { OrdersModule } from './orders';
     AuthModule,
     UsersModule,
     OrdersModule,
+    DishesModule
   ],
   controllers: [],
   providers: [],

@@ -33,6 +33,9 @@
     "auth/sign-in": {
       "tags": []
     },
+    "components": {
+      "tags": []
+    },
     "frontend": {
       "tags": []
     },

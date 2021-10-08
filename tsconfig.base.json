@@ -19,6 +19,7 @@
     "paths": {
       "@pasnik/api/data-transfer": ["libs/api/data-transfer/src/index.ts"],
       "@pasnik/auth/sign-in": ["libs/auth/sign-in/src/index.ts"],
+      "@pasnik/components": ["libs/components/src/index.ts"],
       "@pasnik/layout": ["libs/layout/src/index.ts"],
       "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
       "@pasnik/orders/active-order": ["libs/orders/active-order/src/index.ts"],

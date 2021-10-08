@@ -14,14 +14,18 @@ export interface PagesOrderProps {
 export function PagesOrder() {
   const [isLoading, setIsLoading] = useState(true);
   const order = useOrderStore((state) => state.order);
+  const dishes = useOrderStore((state) => Object.values(state.dishes ?? {}));
   const { orderId } = useParams<PagesOrderProps>();
-  const { fetchOrder } = useOrderFacade();
+  const { fetchOrder, fetchDishes } = useOrderFacade();
 
   useEffect(() => {
     fetchOrder(orderId).then((_order) => {
       setIsLoading(false);
     });
-  }, [orderId]);
+    fetchDishes(orderId).then((_dishes) => {
+      setIsLoading(false);
+    });
+  }, []);
 
   return isLoading ? (
     <Spinner />
@@ -34,7 +38,7 @@ export function PagesOrder() {
         <div className="mt-8">
           <div className="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
             <div className="space-y-6 lg:col-start-1 lg:col-span-2">
-              <OrderDishes order={order!} />
+              <OrderDishes order={order!} dishes={dishes!} />
             </div>
             <OrderTimeline actions={order!.actions!} />
           </div>

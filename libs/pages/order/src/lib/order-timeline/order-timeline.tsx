@@ -11,7 +11,7 @@ import {
 import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
-import OrderUser from '../order-user/order-user';
+import { UserName } from '@pasnik/components';
 
 const typesMap = {
   [OrderAction.Created]: {
@@ -19,7 +19,7 @@ const typesMap = {
     bgColorClass: 'bg-gray-400',
     text: ({ user }: OrderActionModel) => (
       <>
-        Utworzone przez <OrderUser user={user} initials={true} />
+        Utworzone przez <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -28,7 +28,7 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        Anulowane przez <OrderUser user={user} initials={true} />
+        Anulowane przez <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -37,7 +37,7 @@ const typesMap = {
     bgColorClass: 'bg-yellow-500',
     text: ({ actionUser }: OrderActionModel) => (
       <>
-        Opłacone przez <OrderUser user={actionUser!} initials={true} />
+        Opłacone przez <UserName user={actionUser!} initials={true} />
       </>
     ),
   },
@@ -46,7 +46,7 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        Odebrane przez <OrderUser user={user} initials={true} />
+        Odebrane przez <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -55,7 +55,7 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        Otwarte przez <OrderUser user={user} initials={true} />
+        Otwarte przez <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -64,7 +64,7 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        Zamówione przez <OrderUser user={user} initials={true} />
+        Zamówione przez <UserName user={user} initials={true} />
       </>
     ),
   },
