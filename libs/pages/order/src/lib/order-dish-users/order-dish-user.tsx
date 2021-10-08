@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import { UserDishModel } from '@pasnik/api/data-transfer';
@@ -9,8 +9,14 @@ export interface OrderDishProps {
 }
 
 export function OrderDishUsers({ userDishes }: OrderDishProps) {
-  const dishOwner = userDishes.find((userDish) => userDish.dishOwner);
-  const others = userDishes.filter((userDish) => !userDish.dishOwner);
+  const dishOwner = useMemo(
+    () => userDishes.find((userDish) => userDish.dishOwner),
+    [userDishes]
+  );
+  const others = useMemo(
+    () => userDishes.filter((userDish) => !userDish.dishOwner),
+    [userDishes]
+  );
   return (
     <Popover>
       {({ open }) => (

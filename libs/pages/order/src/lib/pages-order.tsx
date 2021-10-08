@@ -15,7 +15,6 @@ export function PagesOrder() {
   const [isLoading, setIsLoading] = useState(true);
   const order = useOrderStore((state) => state.order);
   const dishes = useOrderStore((state) => Object.values(state.dishes ?? {}));
-  console.log(dishes);
   const { orderId } = useParams<PagesOrderProps>();
   const { fetchOrder, fetchDishes } = useOrderFacade();
 
