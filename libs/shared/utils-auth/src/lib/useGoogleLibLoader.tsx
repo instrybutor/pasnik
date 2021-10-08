@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 const API_URL = 'https://accounts.google.com/gsi/client';
 
 export const useGoogleLibLoader = () => {
-  const [pending, setPending] = useState<boolean>(false);
+  const [pending, setPending] = useState<boolean>(true);
   const [gapi, setGoogleAPI] = useState<google.accounts.id>();
 
   const script = document.createElement('script');
