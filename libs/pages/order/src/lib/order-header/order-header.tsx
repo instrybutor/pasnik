@@ -17,7 +17,6 @@ import { formatDistance } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
 import { useOrderFacade } from '../order-store/order.facade';
-import OrderPaidButton from '../order-paid-button/order-paid-button';
 import { useAuth } from '@pasnik/shared/utils-auth';
 
 export interface OrderHeaderProps {
@@ -135,13 +134,13 @@ export function OrderHeader({ order }: OrderHeaderProps) {
               </span>
             )}
 
-            {[OrderStatus.Ordered, OrderStatus.Delivered].includes(
-              order.status
-            ) && (
-              <span className="hidden sm:block sm:ml-3">
-                <OrderPaidButton users={users} onClick={payHandler} />
-              </span>
-            )}
+            {/*{[OrderStatus.Ordered, OrderStatus.Delivered].includes(*/}
+            {/*  order.status*/}
+            {/*) && (*/}
+            {/*  <span className="hidden sm:block sm:ml-3">*/}
+            {/*    <OrderPaidButton users={users} onClick={payHandler} />*/}
+            {/*  </span>*/}
+            {/*)}*/}
 
             {[OrderStatus.Ordered].includes(order.status) && (
               <span className="sm:ml-3">
