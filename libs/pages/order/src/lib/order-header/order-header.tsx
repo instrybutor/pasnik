@@ -15,7 +15,8 @@ import classNames from 'classnames';
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
 import { useOrderFacade } from '../order-store/order.facade';
-import { DateDistance, Price } from '@pasnik/components';
+import { Price } from '@pasnik/components';
+import { OrderTimestamp } from '../order-timestamp/order-timestamp';
 
 export interface OrderHeaderProps {
   order: OrderModel;
@@ -59,21 +60,26 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
               </div>
             </h1>
             <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+              <div className="mt-1.5 flex items-center text-sm text-gray-500">
+                <a
+                  href={order.menuUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center px-2 p-0.5 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-full text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <BookOpenIcon
+                    className="flex-shrink-0 mr-1.5 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  Menu
+                </a>
+              </div>
               <div className="mt-2 flex items-center text-sm text-gray-500">
                 <TruckIcon
                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
                 <Price priceCents={order.shippingCents} />
-              </div>
-              <div className="mt-2 flex items-center text-sm text-gray-500">
-                <BookOpenIcon
-                  className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
-                <a href={order.menuUrl} target="_blank" rel="noreferrer">
-                  Menu
-                </a>
               </div>
               <div className="mt-2 flex items-center text-sm text-gray-500">
                 <CurrencyDollarIcon
@@ -87,7 +93,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
-                Utworzone <DateDistance date={order.createdAt} />
+                <OrderTimestamp order={order} />
               </div>
             </div>
           </div>

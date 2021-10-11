@@ -1,14 +1,17 @@
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { Price, UserAvatar, UserName } from '@pasnik/components';
 import { SwitchHorizontalIcon } from '@heroicons/react/outline';
-import { UserDishesSummary } from '../order-summary/order-summary';
+import { UserDishesSummary } from '../order-summary/order-summary.hook';
 
 export interface OrderPaymentProps {
   order: OrderModel;
   userDishesSummary: UserDishesSummary;
 }
 
-export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
+export function OrderSummaryPayment({
+  order,
+  userDishesSummary,
+}: OrderPaymentProps) {
   return (
     <section>
       <div className="bg-white shadow sm:rounded-lg sm:overflow-hidden">
@@ -21,13 +24,17 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
           <div className="py-5 px-6">
             <div className="flex sm:items-center sm:justify-between px-5">
               <div className="flex items-center">
-                <UserAvatar user={order?.payer} />
+                <UserAvatar user={order.payer} />
                 <div className="ml-3">
                   <UserName
-                    user={order?.payer}
+                    user={order.payer}
                     fallbackValue="Wybierz płacącego"
                   >
-                    <Price priceCents={-3621} />
+                    <Price
+                      priceCents={
+                        -userDishesSummary.shipping - userDishesSummary.total
+                      }
+                    />
                   </UserName>
                 </div>
               </div>
@@ -45,7 +52,12 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
               <div className="flex items-center">
                 <div className="mr-3 text-right">
                   <UserName user={userDishesSummary.user}>
-                    <Price priceCents={-userDishesSummary.total} />
+                    <Price
+                      priceCents={
+                        userDishesSummary.shipping + userDishesSummary.total
+                      }
+                    />{' '}
+                    (dostawa <Price priceCents={userDishesSummary.shipping} />)
                   </UserName>
                 </div>
                 <UserAvatar user={userDishesSummary.user} />
@@ -58,4 +70,4 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
   );
 }
 
-export default OrderPayment;
+export default OrderSummaryPayment;

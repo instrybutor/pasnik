@@ -1,56 +1,61 @@
 import { useParams } from 'react-router-dom';
-import { Spinner } from '@pasnik/layout';
 import OrderHeader from './order-header/order-header';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
 import OrderDishes from './order-dishes/order-dishes';
 import OrderTimeline from './order-timeline/order-timeline';
 import { useOrderFacade } from './order-store/order.facade';
 import { useOrderStore } from './order-store/order.store';
 import { OrderStatus } from '@pasnik/api/data-transfer';
 import OrderSummary from './order-summary/order-summary';
-import OrderPayment from './order-payment/order-payment';
+import OrderHeaderLoading from './order-header-loading/order-header-loading';
+import OrderSectionLoading from './order-section-loading/order-section-loading';
 
 export interface PagesOrderProps {
   orderId: string;
 }
 
 export function PagesOrder() {
-  const [isLoading, setIsLoading] = useState(true);
+  const isOrderLoading = useOrderStore((state) => state.isOrderLoading);
+  const isDishesLoading = useOrderStore((state) => state.isDishesLoading);
   const order = useOrderStore((state) => state.order);
   const dishes = useOrderStore((state) => Object.values(state.dishes ?? {}));
   const { orderId } = useParams<PagesOrderProps>();
-  const { fetchOrder, fetchDishes } = useOrderFacade();
+  const { fetchOrder, fetchDishes, resetStore } = useOrderFacade();
 
   useEffect(() => {
-    fetchOrder(orderId).then((_order) => {
-      setIsLoading(false);
-    });
-    fetchDishes(orderId).then((_dishes) => {
-      setIsLoading(false);
-    });
+    fetchOrder(orderId).then();
+    fetchDishes(orderId).then();
+    return () => {
+      resetStore();
+    };
   }, []);
 
-  return isLoading ? (
-    <Spinner />
-  ) : (
+  return (
     <Fragment>
       <header className="bg-white shadow">
-        <OrderHeader order={order!} dishes={dishes} />
+        {isOrderLoading ? (
+          <OrderHeaderLoading />
+        ) : (
+          <OrderHeader order={order!} dishes={dishes} />
+        )}
       </header>
       <main className="flex-grow">
         <div className="mt-8">
           <div className="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
             <div className="space-y-6 lg:col-start-1 lg:col-span-2">
-              {order?.status !== OrderStatus.Delivered ? (
-                <OrderDishes order={order!} dishes={dishes!} />
+              {isDishesLoading ? (
+                <OrderSectionLoading className="h-52" />
+              ) : order?.status !== OrderStatus.Delivered ? (
+                <OrderDishes order={order} dishes={dishes!} />
               ) : (
-                <>
-                  <OrderPayment order={order!} />
-                  <OrderSummary order={order!} dishes={dishes} />
-                </>
+                <OrderSummary dishes={dishes!} order={order!} />
               )}
             </div>
-            <OrderTimeline actions={order?.actions} />
+            {isOrderLoading ? (
+              <OrderSectionLoading className="h-52" />
+            ) : (
+              <OrderTimeline actions={order?.actions} />
+            )}
           </div>
         </div>
       </main>

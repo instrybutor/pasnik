@@ -1,8 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { CalendarIcon, CashIcon, UserIcon } from '@heroicons/react/outline';
-import { OrderStatusBadge } from '@pasnik/pages/order';
-import { DateDistance, UserName } from '@pasnik/components';
+import { OrderStatusBadge, OrderTimestamp } from '@pasnik/pages/order';
+import { UserName } from '@pasnik/components';
 
 export interface OrderListProps {
   orders: OrderModel[];
@@ -39,9 +39,7 @@ export function OrderList({ orders }: OrderListProps) {
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                   <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <p>
-                    Utworzone <DateDistance date={order.createdAt} />
-                  </p>
+                  <OrderTimestamp order={order} />
                 </div>
               </div>
             </div>

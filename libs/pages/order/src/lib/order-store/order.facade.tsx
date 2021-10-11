@@ -12,6 +12,10 @@ import { useCallback } from 'react';
 export const useOrderFacade = () => {
   const store = useOrderStore();
 
+  const resetStore = useCallback(() => {
+    store.reset();
+  }, [store]);
+
   const addDish = useCallback(
     async (orderId: string, addDishDto: AddDishDto) => {
       const dish = await service.addDish(orderId, addDishDto);
@@ -107,5 +111,6 @@ export const useOrderFacade = () => {
     markAsDelivered,
     deleteDish,
     updateDish,
+    resetStore,
   };
 };

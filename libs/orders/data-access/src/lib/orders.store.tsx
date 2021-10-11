@@ -2,26 +2,21 @@ import create from 'zustand';
 
 import type { OrderModel } from '@pasnik/api/data-transfer';
 
-interface DashboardStore {
+interface OrdersState {
   entities: Record<string, OrderModel> | null;
   ids: string[];
-  isLoading: boolean;
 
   setOrders: (orders: OrderModel[]) => void;
+  addOrder: (order: OrderModel) => void;
 }
 
-export const useDashboardStore = create<DashboardStore>((set) => ({
-  entities: {},
+export const createOrdersStore = create<OrdersState>((set) => ({
+  entities: null,
   ids: [],
-  balance: 0,
-  orders: 0,
-  transfers: 0,
-  isLoading: true,
 
   setOrders: (orders: OrderModel[]) => {
     set((state) => ({
       ...state,
-      isLoading: false,
       ids: orders.map((order) => order.id),
       entities: orders.reduce(
         (collection, order) => ({
@@ -30,6 +25,16 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         }),
         {}
       ),
+    }));
+  },
+
+  addOrder: (order: OrderModel) => {
+    set((state) => ({
+      ids: [...state.ids, order.id],
+      entities: {
+        ...state.entities,
+        [order.id]: order,
+      },
     }));
   },
 }));

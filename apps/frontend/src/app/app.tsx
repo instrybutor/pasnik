@@ -8,6 +8,7 @@ import { PagesDashboard } from '@pasnik/pages/dashboard';
 import { PagesOrder } from '@pasnik/pages/order';
 import { Layout } from '@pasnik/layout';
 import { PagesOrders } from '@pasnik/pages/orders';
+import { CreateOrder } from '@pasnik/orders/create-order';
 
 export function App() {
   const version = process.env.NX_COMMIT_HASH;
@@ -20,6 +21,7 @@ export function App() {
 
           <Layout version={version}>
             <PrivateRoute exact path="/" component={PagesDashboard} />
+            <PrivateRoute path="/create-order" component={CreateOrder} />
             <PrivateRoute path="/history" component={PagesOrders} />
             <PrivateRoute path="/order/:orderId" component={PagesOrder} />
           </Layout>

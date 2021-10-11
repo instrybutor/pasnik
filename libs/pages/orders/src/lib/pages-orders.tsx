@@ -4,6 +4,7 @@ import { Spinner } from '@pasnik/layout';
 import OrdersHeader from './orders-header/orders-header';
 import OrderList from './order-list/order-list';
 import { useOrdersStore } from './orders-store/orders.store';
+import OrdersEmpty from './orders-empty/orders-empty';
 
 /* eslint-disable-next-line */
 export interface PagesOrdersProps {}
@@ -26,19 +27,20 @@ export function PagesOrders(_: PagesOrdersProps) {
         <OrdersHeader />
       </header>
       <main className="flex-grow flex-1">
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <div className="mt-8">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="bg-white shadow overflow-hidden sm:rounded-md">
-                <div className="border-b border-gray-200">
+        <div className="mt-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white relative shadow overflow-hidden sm:rounded-md">
+              <div className="border-b border-gray-200">
+                {isLoading && <Spinner />}
+                {orders.length ? (
                   <OrderList orders={orders} />
-                </div>
+                ) : (
+                  <OrdersEmpty />
+                )}
               </div>
             </div>
           </div>
-        )}
+        </div>
       </main>
     </Fragment>
   );
