@@ -12,6 +12,9 @@ interface DashboardStore {
 export const useDashboardStore = create<DashboardStore>((set) => ({
   entities: {},
   ids: [],
+  balance: 0,
+  orders: 0,
+  transfers: 0,
 
   setOrders: (orders: OrderModel[]) => {
     set((state) => ({

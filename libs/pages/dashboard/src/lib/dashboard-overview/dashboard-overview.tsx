@@ -16,20 +16,20 @@ export function DashboardOverview(props: DashboardOverviewProps) {
         <DashboardOverviewCard
           name="Twoje saldo"
           Icon={ScaleIcon}
-          amount="200kzł"
+          amount="0 zł"
           href="/balances"
         />
         <DashboardOverviewCard
           name="Twoje zamówienia"
           Icon={ShoppingCartIcon}
-          amount="33"
+          amount="0"
           href="/history"
         />
         <DashboardOverviewCard
           name="Oczekujące transfery"
           Icon={LoginIcon}
-          amount="455zł"
-          href="/history"
+          amount="0 zł"
+          href="/transfers"
         />
       </div>
     </>
