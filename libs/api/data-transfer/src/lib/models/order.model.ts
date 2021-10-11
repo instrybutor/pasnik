@@ -19,9 +19,11 @@ export interface OrderModel {
   createdAt: string;
   updatedAt: string;
   orderedAt: string;
+  deliveredAt: string;
   payer?: UserModel;
   dishes?: DishModel[];
   actions?: OrderActionModel[];
+  totalPrice: number;
 }
 
 export function getOrderStatus(order: OrderModel) {

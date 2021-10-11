@@ -32,7 +32,7 @@ export function PagesOrder() {
   ) : (
     <Fragment>
       <header className="bg-white shadow">
-        <OrderHeader order={order!} />
+        <OrderHeader order={order!} dishes={dishes} />
       </header>
       <main className="flex-grow">
         <div className="mt-8">
@@ -40,7 +40,7 @@ export function PagesOrder() {
             <div className="space-y-6 lg:col-start-1 lg:col-span-2">
               <OrderDishes order={order!} dishes={dishes!} />
             </div>
-            <OrderTimeline actions={order!.actions!} />
+            <OrderTimeline actions={order?.actions} />
           </div>
         </div>
       </main>

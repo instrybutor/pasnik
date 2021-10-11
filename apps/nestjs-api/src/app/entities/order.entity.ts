@@ -41,12 +41,18 @@ export class OrderEntity implements OrderModel {
   @UpdateDateColumn()
   updatedAt: string;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', nullable: true })
   orderedAt: string;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  deliveredAt: string;
 
   @OneToMany(() => DishEntity, (dish) => dish.order)
   dishes: DishEntity[];
 
   @OneToMany(() => OrderActionEntity, (action) => action.order)
   actions: OrderActionEntity[];
+
+  @Column({ default: 0})
+  totalPrice: number;
 }

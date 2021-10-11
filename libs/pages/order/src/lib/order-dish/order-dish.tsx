@@ -3,6 +3,7 @@ import { CheckIcon } from '@heroicons/react/outline';
 import { PencilIcon, TrashIcon, XIcon } from '@heroicons/react/solid';
 import { DishModel } from '@pasnik/api/data-transfer';
 import OrderDishUsers from '../order-dish-users/order-dish-user';
+import { Price } from '@pasnik/components';
 
 export interface OrderDishProps {
   inProgress: boolean;
@@ -10,12 +11,6 @@ export interface OrderDishProps {
   onDeleteDish: (dish: DishModel) => void;
   onEditClick: (dish: DishModel) => void;
 }
-
-const currencyFormatter = Intl.NumberFormat('pl-pl', {
-  currency: 'PLN',
-  style: 'currency',
-});
-
 export function OrderDish({
   dish,
   inProgress,
@@ -51,7 +46,7 @@ export function OrderDish({
         <OrderDishUsers userDishes={dish.usersDishes} />
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12">
-        {currencyFormatter.format(dish.priceCents / 100)}
+        <Price priceCents={dish.priceCents} />
       </td>
       {inProgress && (
         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium w-2/12 space-x-2">

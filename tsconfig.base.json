@@ -26,6 +26,7 @@
       "@pasnik/orders/create-order": ["libs/orders/create-order/src/index.ts"],
       "@pasnik/pages/dashboard": ["libs/pages/dashboard/src/index.ts"],
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
+      "@pasnik/pages/orders": ["libs/pages/orders/src/index.ts"],
       "@pasnik/shared/utils-auth": ["libs/shared/utils-auth/src/index.ts"]
     }
   },

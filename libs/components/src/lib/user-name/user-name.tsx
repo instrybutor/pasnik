@@ -24,7 +24,7 @@ export function UserName({
         'inline-flex': !children,
       })}
     >
-      <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+      <p className="text-gray-700 group-hover:text-gray-900">
         {initials ? formatInitials(user) : formatName(user)}
       </p>
       {children && (

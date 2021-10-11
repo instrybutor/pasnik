@@ -9,9 +9,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
-import { format } from 'date-fns';
-import { pl } from 'date-fns/locale';
-import { UserName } from '@pasnik/components';
+import { DateFormat, UserName } from '@pasnik/components';
 
 const typesMap = {
   [OrderAction.Created]: {
@@ -72,7 +70,7 @@ const typesMap = {
 
 /* eslint-disable-next-line */
 export interface OrderTimelineProps {
-  actions: OrderActionModel[];
+  actions?: OrderActionModel[] | null;
 }
 
 export function OrderTimeline({ actions }: OrderTimelineProps) {
@@ -88,7 +86,7 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
 
         <div className="mt-6 flow-root">
           <ul className="-mb-8">
-            {actions.map((item, itemIdx) => {
+            {actions?.map((item, itemIdx) => {
               const ActionIcon = typesMap[item.action]?.icon;
               const message = typesMap[item.action]?.text(item) ?? item.action;
               return (
@@ -123,15 +121,9 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
                         </span>
                       </div>
                       <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                        <div>
-                          <p className="text-sm text-gray-500">{message}</p>
-                        </div>
+                        <div className="text-sm text-gray-500">{message}</div>
                         <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                          <time dateTime={item.createdAt}>
-                            {format(new Date(item.createdAt), 'dd LLL', {
-                              locale: pl,
-                            })}
-                          </time>
+                          <DateFormat date={item.createdAt} format="dd LLL" />
                         </div>
                       </div>
                     </div>

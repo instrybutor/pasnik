@@ -1,4 +1,4 @@
-import { Fragment, useCallback } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import {
   BookOpenIcon,
   CalendarIcon,
@@ -12,17 +12,18 @@ import {
 } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
-import { formatDistance } from 'date-fns';
-import { pl } from 'date-fns/locale';
+import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
 import { useOrderFacade } from '../order-store/order.facade';
+import { DateDistance, Price } from '@pasnik/components';
 
 export interface OrderHeaderProps {
   order: OrderModel;
+  dishes: DishModel[];
 }
 
-export function OrderHeader({ order }: OrderHeaderProps) {
+export function OrderHeader({ order, dishes }: OrderHeaderProps) {
+  const [totalPrice, setTotalPrice] = useState(0);
   const { markAsClosed, markAsOpen, markAsOrdered, markAsDelivered } =
     useOrderFacade();
 
@@ -42,6 +43,10 @@ export function OrderHeader({ order }: OrderHeaderProps) {
     await markAsOrdered();
   }, []);
 
+  useEffect(() => {
+    setTotalPrice(dishes.reduce((acc, cur) => acc + cur.priceCents, 0));
+  }, [dishes]);
+
   return (
     <div className="bg-white shadow">
       <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
@@ -59,7 +64,7 @@ export function OrderHeader({ order }: OrderHeaderProps) {
                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
-                5zł
+                <Price priceCents={order.shippingCents} />
               </div>
               <div className="mt-2 flex items-center text-sm text-gray-500">
                 <BookOpenIcon
@@ -75,18 +80,14 @@ export function OrderHeader({ order }: OrderHeaderProps) {
                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
-                83zł
+                <Price priceCents={totalPrice} />
               </div>
               <div className="mt-2 flex items-center text-sm text-gray-500">
                 <CalendarIcon
                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
-                Utworzone&nbsp;
-                {formatDistance(new Date(order.createdAt), new Date(), {
-                  addSuffix: true,
-                  locale: pl,
-                })}
+                Utworzone <DateDistance date={order.createdAt} />
               </div>
             </div>
           </div>

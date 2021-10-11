@@ -7,7 +7,7 @@ import {
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
   MarkAsPaidDto,
-  OrderAction
+  OrderAction, OrderStatus
 } from '@pasnik/api/data-transfer';
 import { OrderActionsRepository } from '../repositories/order-actions.repository';
 import { Connection } from 'typeorm';
@@ -20,6 +20,21 @@ export class OrdersService {
     private ordersRepository: OrdersRepository,
     private connection: Connection
   ) {}
+
+  findActive() {
+    return this.ordersRepository.find({ where: [
+      { status: OrderStatus.InProgress },
+      { status: OrderStatus.Ordered }
+    ], relations: ['user']
+    });
+  }
+
+  findInactive() {
+    return this.ordersRepository.find({ where: [
+      { status: OrderStatus.Canceled },
+      { status: OrderStatus.Delivered }
+    ]});
+  }
 
   findAll() {
     return this.ordersRepository.find();
@@ -62,6 +77,8 @@ export class OrdersService {
       const order = await this.findOne(orderId);
       await ordersRepository.markAsDelivered(order, markAsDeliveredDto);
       await orderActionsRepository.createAction(user, order, OrderAction.Delivered);
+      order.totalPrice = order.dishes.reduce((acc, cur) => acc + cur.priceCents, 0);
+      await ordersRepository.save(order);
     });
     return this.findOne(orderId);
   }
