@@ -54,6 +54,9 @@
     "orders-data-access": {
       "tags": []
     },
+    "pages-create-order": {
+      "tags": []
+    },
     "pages-dashboard": {
       "tags": []
     },

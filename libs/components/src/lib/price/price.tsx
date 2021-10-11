@@ -9,6 +9,6 @@ const currencyFormatter = Intl.NumberFormat('pl-pl', {
 
 export function Price({ priceCents }: PriceProps) {
   return (
-    <>{priceCents ? currencyFormatter.format(+priceCents / 100) : '— zł'}</>
+    <>{priceCents ? currencyFormatter.format(+priceCents / 100) : '0 zł'}</>
   );
 }

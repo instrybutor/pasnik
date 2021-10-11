@@ -5,12 +5,14 @@ import classNames from 'classnames';
 export interface UserNameProps {
   user?: UserModel | null;
   initials?: boolean;
+  fallbackValue?: string;
 }
 
 export function UserName({
   user,
   children,
   initials,
+  fallbackValue,
 }: PropsWithChildren<UserNameProps>) {
   const formatName = ({ givenName, familyName, email }: UserModel) =>
     givenName && familyName ? `${givenName} ${familyName}` : email;
@@ -18,14 +20,18 @@ export function UserName({
   const formatInitials = ({ givenName, familyName, email }: UserModel) =>
     givenName && familyName ? `${givenName[0]}${familyName[0]}` : email[0];
 
-  return user ? (
+  return (
     <div
       className={classNames({
         'inline-flex': !children,
       })}
     >
       <p className="text-gray-700 group-hover:text-gray-900">
-        {initials ? formatInitials(user) : formatName(user)}
+        {user
+          ? initials
+            ? formatInitials(user)
+            : formatName(user)
+          : fallbackValue ?? ''}
       </p>
       {children && (
         <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
@@ -33,5 +39,5 @@ export function UserName({
         </p>
       )}
     </div>
-  ) : null;
+  );
 }

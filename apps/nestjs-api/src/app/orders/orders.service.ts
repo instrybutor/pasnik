@@ -74,7 +74,7 @@ export class OrdersService {
       const ordersRepository = manager.getCustomRepository(OrdersRepository);
       const orderActionsRepository = manager.getCustomRepository(OrderActionsRepository);
 
-      const order = await this.findOne(orderId);
+      const order = await ordersRepository.findOneOrFail(orderId, { relations: ['dishes'] });
       await ordersRepository.markAsDelivered(order, markAsDeliveredDto);
       await orderActionsRepository.createAction(user, order, OrderAction.Delivered);
       order.totalPrice = order.dishes.reduce((acc, cur) => acc + cur.priceCents, 0);

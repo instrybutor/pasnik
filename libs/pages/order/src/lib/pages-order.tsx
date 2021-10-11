@@ -6,6 +6,9 @@ import OrderDishes from './order-dishes/order-dishes';
 import OrderTimeline from './order-timeline/order-timeline';
 import { useOrderFacade } from './order-store/order.facade';
 import { useOrderStore } from './order-store/order.store';
+import { OrderStatus } from '@pasnik/api/data-transfer';
+import OrderSummary from './order-summary/order-summary';
+import OrderPayment from './order-payment/order-payment';
 
 export interface PagesOrderProps {
   orderId: string;
@@ -38,7 +41,14 @@ export function PagesOrder() {
         <div className="mt-8">
           <div className="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
             <div className="space-y-6 lg:col-start-1 lg:col-span-2">
-              <OrderDishes order={order!} dishes={dishes!} />
+              {order?.status !== OrderStatus.Delivered ? (
+                <OrderDishes order={order!} dishes={dishes!} />
+              ) : (
+                <>
+                  <OrderPayment order={order!} />
+                  <OrderSummary order={order!} dishes={dishes} />
+                </>
+              )}
             </div>
             <OrderTimeline actions={order?.actions} />
           </div>

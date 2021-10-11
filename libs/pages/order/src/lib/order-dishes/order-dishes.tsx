@@ -77,7 +77,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
         <div className="divide-y divide-gray-200">
           <div className="px-4 py-5 sm:px-6 sm:flex sm:items-center sm:justify-between">
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-              Dania
+              Zamówienie
             </h2>
             {inProgress && (
               <div className="mt-3 flex sm:mt-0 sm:ml-4">
