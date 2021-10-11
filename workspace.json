@@ -316,28 +316,6 @@
         }
       }
     },
-    "pages-create-order": {
-      "root": "libs/pages/create-order",
-      "sourceRoot": "libs/pages/create-order/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/pages/create-order/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/pages/create-order"],
-          "options": {
-            "jestConfig": "libs/pages/create-order/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "pages-dashboard": {
       "root": "libs/pages/dashboard",
       "sourceRoot": "libs/pages/dashboard/src",
