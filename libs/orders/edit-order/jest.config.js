@@ -1,9 +1,9 @@
 module.exports = {
-  displayName: 'orders-active-order',
+  displayName: 'orders-edit-order',
   preset: '../../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/libs/orders/active-order',
+  coverageDirectory: '../../../coverage/libs/orders/edit-order',
 };

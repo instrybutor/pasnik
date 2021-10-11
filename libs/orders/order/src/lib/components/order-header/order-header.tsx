@@ -17,30 +17,29 @@ import { formatDistance } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
 import { useOrderFacade } from '../order-store/order.facade';
+import { useHistory, useParams } from 'react-router';
 
 export interface OrderHeaderProps {
   order: OrderModel;
 }
 
 export function OrderHeader({ order }: OrderHeaderProps) {
+  const history = useHistory();
   const { markAsClosed, markAsOpen, markAsOrdered, markAsDelivered } =
     useOrderFacade();
+  const { orderId } = useParams<{ orderId: string }>();
 
-  const markAsDeliveredHandler = useCallback(async () => {
-    await markAsDelivered();
-  }, []);
+  const markAsDeliveredHandler = useCallback(
+    () => markAsDelivered(),
+    [markAsDelivered]
+  );
+  const closeOrderHandler = useCallback(() => markAsClosed(), [markAsClosed]);
+  const openOrderHandler = useCallback(() => markAsOpen(), [markAsOpen]);
+  const makeOrderHandler = useCallback(() => markAsOrdered(), [markAsOrdered]);
 
-  const closeOrderHandler = useCallback(async () => {
-    await markAsClosed();
-  }, []);
-
-  const openOrderHandler = useCallback(async () => {
-    await markAsOpen();
-  }, []);
-
-  const makeOrderHandler = useCallback(async () => {
-    await markAsOrdered();
-  }, []);
+  const handleEditOrder = useCallback(() => {
+    history.push(`/order/${orderId}/edit`);
+  }, [history, orderId]);
 
   return (
     <div className="bg-white shadow">
@@ -59,7 +58,7 @@ export function OrderHeader({ order }: OrderHeaderProps) {
                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
-                5zł
+                {order.shippingCents}zł
               </div>
               <div className="mt-2 flex items-center text-sm text-gray-500">
                 <BookOpenIcon
@@ -150,6 +149,7 @@ export function OrderHeader({ order }: OrderHeaderProps) {
               <span className="hidden sm:block sm:ml-3">
                 <button
                   type="button"
+                  onClick={handleEditOrder}
                   className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                 >
                   <PencilIcon

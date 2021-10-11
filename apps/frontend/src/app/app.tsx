@@ -6,7 +6,7 @@ import { SignIn } from '@pasnik/auth/sign-in';
 import { PrivateRoute } from './PrivateRoute';
 import { CreateOrder } from '@pasnik/orders/create-order';
 import { PagesDashboard } from '@pasnik/pages/dashboard';
-import { PagesOrder } from '@pasnik/pages/order';
+import { OrderShell } from '@pasnik/pages/order';
 import { Layout } from '@pasnik/layout';
 
 export function App() {
@@ -21,7 +21,8 @@ export function App() {
           <Layout version={version}>
             <PrivateRoute exact path="/" component={PagesDashboard} />
             <PrivateRoute path="/create-order" component={CreateOrder} />
-            <PrivateRoute path="/order/:orderId" component={PagesOrder} />
+
+            <PrivateRoute path="/order/:orderId" component={OrderShell} />
           </Layout>
 
           <Redirect to="/login" />

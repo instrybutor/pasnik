@@ -1,36 +1,34 @@
 import { useParams } from 'react-router-dom';
 import { Spinner } from '@pasnik/layout';
-import OrderHeader from './order-header/order-header';
-import { Fragment, useEffect, useState } from 'react';
-import OrderDishes from './order-dishes/order-dishes';
-import OrderTimeline from './order-timeline/order-timeline';
-import { useOrderFacade } from './order-store/order.facade';
-import { useOrderStore } from './order-store/order.store';
 
-export interface PagesOrderProps {
+import OrderHeader from './components/order-header/order-header';
+import { useEffect, useState } from 'react';
+import OrderDishes from './components/order-dishes/order-dishes';
+import OrderTimeline from './components/order-timeline/order-timeline';
+import { useOrderFacade } from './components/order-store/order.facade';
+import { useOrderStore } from './components/order-store/order.store';
+
+export interface OrderParams {
   orderId: string;
 }
 
-export function PagesOrder() {
+export function Order() {
   const [isLoading, setIsLoading] = useState(true);
   const order = useOrderStore((state) => state.order);
   const dishes = useOrderStore((state) => Object.values(state.dishes ?? {}));
-  const { orderId } = useParams<PagesOrderProps>();
+  const { orderId } = useParams<OrderParams>();
   const { fetchOrder, fetchDishes } = useOrderFacade();
 
   useEffect(() => {
-    fetchOrder(orderId).then((_order) => {
-      setIsLoading(false);
-    });
-    fetchDishes(orderId).then((_dishes) => {
-      setIsLoading(false);
-    });
-  }, []);
+    Promise.all([fetchOrder(orderId), fetchDishes(orderId)]).then(() =>
+      setIsLoading(false)
+    );
+  }, [fetchDishes, fetchOrder, orderId]);
 
   return isLoading ? (
     <Spinner />
   ) : (
-    <Fragment>
+    <>
       <header className="bg-white shadow">
         <OrderHeader order={order!} />
       </header>
@@ -44,8 +42,8 @@ export function PagesOrder() {
           </div>
         </div>
       </main>
-    </Fragment>
+    </>
   );
 }
 
-export default PagesOrder;
+export default Order;

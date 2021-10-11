@@ -19,7 +19,7 @@ export const useOrderFacade = () => {
 
       return dish;
     },
-    [store]
+    [store.addDish]
   );
 
   const fetchDishes = useCallback(
@@ -29,7 +29,7 @@ export const useOrderFacade = () => {
 
       return dishes;
     },
-    [store]
+    [store.setDishes]
   );
 
   const fetchOrder = useCallback(
@@ -39,7 +39,7 @@ export const useOrderFacade = () => {
 
       return order;
     },
-    [store]
+    [store.setOrder]
   );
 
   const markAsClosed = useCallback(async (): Promise<OrderModel> => {
@@ -47,21 +47,21 @@ export const useOrderFacade = () => {
     store.setOrder(order);
 
     return order;
-  }, [store]);
+  }, [store.setOrder, store.order?.id]);
 
   const markAsOpen = useCallback(async (): Promise<OrderModel> => {
     const order = await service.markAsOpen(store.order!.id);
     store.setOrder(order);
 
     return order;
-  }, [store]);
+  }, [store.setOrder, store.order?.id]);
 
   const markAsOrdered = useCallback(async (): Promise<OrderModel> => {
     const order = await service.markAsOrdered(store.order!.id);
     store.setOrder(order);
 
     return order;
-  }, [store]);
+  }, [store.setOrder, store.order?.id]);
 
   const markAsPaid = useCallback(
     async (payer: UserModel): Promise<OrderModel> => {
@@ -70,7 +70,7 @@ export const useOrderFacade = () => {
 
       return order;
     },
-    [store]
+    [store.setOrder, store.order?.id]
   );
 
   const markAsDelivered = useCallback(async (): Promise<OrderModel> => {
@@ -78,14 +78,14 @@ export const useOrderFacade = () => {
     store.setOrder(order);
 
     return order;
-  }, [store]);
+  }, [store.setOrder, store.order?.id]);
 
   const deleteDish = useCallback(
     async (dish: DishModel): Promise<void> => {
       await service.deleteDish(store.order!.id, dish.id);
       store.deleteDish(dish);
     },
-    [store]
+    [store.deleteDish, store.order?.id]
   );
 
   const updateDish = useCallback(
@@ -93,7 +93,7 @@ export const useOrderFacade = () => {
       const dish = await service.updateDish(store.order!.id, dishId, dto);
       store.updateDish(dish);
     },
-    [store]
+    [store.updateDish, store.order?.id]
   );
 
   return {

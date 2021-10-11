@@ -1,6 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { OrderEntity } from '../entities/order.entity';
-import { CreateOrderDto, MarkAsDeliveredDto, MarkAsOrderedDto, OrderStatus } from '@pasnik/api/data-transfer';
+import {
+  CreateOrderDto,
+  MarkAsDeliveredDto,
+  MarkAsOrderedDto,
+  OrderStatus,
+} from '@pasnik/api/data-transfer';
 import { UserEntity } from '../entities/user.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
@@ -19,7 +24,10 @@ export class OrdersRepository extends Repository<OrderEntity> {
 
   async markAsOrdered(order: OrderEntity, { shippingCents }: MarkAsOrderedDto) {
     if (order.status !== OrderStatus.InProgress) {
-      throw new HttpException('Status is not in progress', HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        'Status is not in progress',
+        HttpStatus.FORBIDDEN
+      );
     }
     if (shippingCents !== null && shippingCents !== undefined) {
       order.shippingCents = shippingCents;
@@ -29,7 +37,10 @@ export class OrdersRepository extends Repository<OrderEntity> {
     return await this.save(order);
   }
 
-  async markAsDelivered(order: OrderEntity, { shippingCents }: MarkAsDeliveredDto) {
+  async markAsDelivered(
+    order: OrderEntity,
+    { shippingCents }: MarkAsDeliveredDto
+  ) {
     if (order.status !== OrderStatus.Ordered) {
       throw new HttpException('Status is not ordered', HttpStatus.FORBIDDEN);
     }

@@ -23,11 +23,16 @@ export function authFetch<T extends unknown>(
   return fetch(input, {
     ...init,
     headers: newHeaders,
-  }).then((response) => {
-    if (response.status === 401) {
-      window.location.href = '/login';
-      throw new Error('Unauthorized');
-    }
-    return response.json();
-  });
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        window.location.href = '/login';
+        throw new Error('Unauthorized');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error(error);
+      throw new Error(error);
+    });
 }

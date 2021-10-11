@@ -240,30 +240,6 @@
         }
       }
     },
-    "orders-active-order": {
-      "root": "libs/orders/active-order",
-      "sourceRoot": "libs/orders/active-order/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": [
-              "libs/orders/active-order/**/*.{ts,tsx,js,jsx}"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/orders/active-order"],
-          "options": {
-            "jestConfig": "libs/orders/active-order/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "orders-create-order": {
       "root": "libs/orders/create-order",
       "sourceRoot": "libs/orders/create-order/src",
@@ -305,6 +281,50 @@
           "outputs": ["coverage/libs/orders/data-access"],
           "options": {
             "jestConfig": "libs/orders/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "orders-edit-order": {
+      "root": "libs/orders/edit-order",
+      "sourceRoot": "libs/orders/edit-order/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/orders/edit-order/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/orders/edit-order"],
+          "options": {
+            "jestConfig": "libs/orders/edit-order/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "orders-order": {
+      "root": "libs/orders/order",
+      "sourceRoot": "libs/orders/order/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/orders/order/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/orders/order"],
+          "options": {
+            "jestConfig": "libs/orders/order/jest.config.js",
             "passWithNoTests": true
           }
         }

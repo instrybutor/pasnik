@@ -22,8 +22,9 @@
       "@pasnik/components": ["libs/components/src/index.ts"],
       "@pasnik/layout": ["libs/layout/src/index.ts"],
       "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
-      "@pasnik/orders/active-order": ["libs/orders/active-order/src/index.ts"],
+      "@pasnik/orders/order": ["libs/orders/order/src/index.ts"],
       "@pasnik/orders/create-order": ["libs/orders/create-order/src/index.ts"],
+      "@pasnik/orders/edit-order": ["libs/orders/edit-order/src/index.ts"],
       "@pasnik/pages/dashboard": ["libs/pages/dashboard/src/index.ts"],
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
       "@pasnik/shared/utils-auth": ["libs/shared/utils-auth/src/index.ts"]

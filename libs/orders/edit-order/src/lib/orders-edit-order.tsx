@@ -1,9 +1,8 @@
 import { FC } from 'react';
+import { useEditOrder } from './orders-edit-order.hook';
 
-import { useCreateOrder } from './create-order.hook';
-
-export const CreateOrder: FC = () => {
-  const { error, handleSubmit, onSubmit, register, errors } = useCreateOrder();
+export const EditOrder: FC = () => {
+  const { error, handleSubmit, onSubmit, register, errors } = useEditOrder();
 
   return (
     <div className="w-2/4 mx-auto bg-white shadow overflow-hidden sm:rounded-md p-4 mt-8">

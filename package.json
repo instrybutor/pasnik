@@ -56,6 +56,7 @@
     "core-js": "^3.6.5",
     "date-fns": "^2.24.0",
     "google-auth-library": "^7.6.2",
+    "lodash": "^4.17.21",
     "passport": "^0.4.1",
     "passport-google-token": "^0.1.2",
     "passport-jwt": "^4.0.0",

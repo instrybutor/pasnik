@@ -17,18 +17,18 @@ const typesMap = {
   [OrderAction.Created]: {
     icon: PlusIcon,
     bgColorClass: 'bg-gray-400',
-    text: ({ user }: OrderActionModel) => (
+    text: ({ actionUser }: OrderActionModel) => (
       <>
-        Utworzone przez <UserName user={user} initials={true} />
+        Utworzone przez <UserName user={actionUser} initials={true} />
       </>
     ),
   },
   [OrderAction.Cancel]: {
     icon: XIcon,
     bgColorClass: 'bg-red-500',
-    text: ({ user }: OrderActionModel) => (
+    text: ({ actionUser }: OrderActionModel) => (
       <>
-        Anulowane przez <UserName user={user} initials={true} />
+        Anulowane przez <UserName user={actionUser} initials={true} />
       </>
     ),
   },
@@ -53,18 +53,18 @@ const typesMap = {
   [OrderAction.Open]: {
     icon: LockOpenIcon,
     bgColorClass: 'bg-green-500',
-    text: ({ user }: OrderActionModel) => (
+    text: ({ actionUser }: OrderActionModel) => (
       <>
-        Otwarte przez <UserName user={user} initials={true} />
+        Otwarte przez <UserName user={actionUser} initials={true} />
       </>
     ),
   },
   [OrderAction.Ordered]: {
     icon: LockClosedIcon,
     bgColorClass: 'bg-red-500',
-    text: ({ user }: OrderActionModel) => (
+    text: ({ actionUser }: OrderActionModel) => (
       <>
-        Zamówione przez <UserName user={user} initials={true} />
+        Zamówione przez <UserName user={actionUser} initials={true} />
       </>
     ),
   },
@@ -124,7 +124,7 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
                       </div>
                       <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                         <div>
-                          <p className="text-sm text-gray-500">{message}</p>
+                          <div className="text-sm text-gray-500">{message}</div>
                         </div>
                         <div className="text-right text-sm whitespace-nowrap text-gray-500">
                           <time dateTime={item.createdAt}>

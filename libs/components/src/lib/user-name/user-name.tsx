@@ -24,13 +24,13 @@ export function UserName({
         'inline-flex': !children,
       })}
     >
-      <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+      <div className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
         {initials ? formatInitials(user) : formatName(user)}
-      </p>
+      </div>
       {children && (
-        <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+        <div className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
           {children}
-        </p>
+        </div>
       )}
     </div>
   ) : null;

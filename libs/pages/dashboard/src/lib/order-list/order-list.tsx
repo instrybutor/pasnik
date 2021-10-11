@@ -3,7 +3,7 @@ import { OrderModel } from '@pasnik/api/data-transfer';
 import { CalendarIcon, CashIcon } from '@heroicons/react/outline';
 import { formatDistance } from 'date-fns';
 import { pl } from 'date-fns/locale';
-import { OrderStatusBadge } from '@pasnik/pages/order';
+import { OrderStatusBadge } from '@pasnik/orders/order';
 
 export interface OrderListProps {
   orders: OrderModel[];
