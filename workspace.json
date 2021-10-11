@@ -83,6 +83,12 @@
             "tsConfig": "apps/frontend/tsconfig.app.json",
             "assets": [
               "apps/frontend/src/favicon.ico",
+              "apps/frontend/src/favicon-16x16.png",
+              "apps/frontend/src/favicon-32x32.png",
+              "apps/frontend/src/apple-touch-icon.png",
+              "apps/frontend/src/android-chrome-192x192.png",
+              "apps/frontend/src/android-chrome-512x512.png",
+              "apps/frontend/src/site.webmanifest",
               "apps/frontend/src/assets"
             ],
             "styles": ["apps/frontend/src/styles.scss"],
