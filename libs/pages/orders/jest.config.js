@@ -1,9 +1,9 @@
 module.exports = {
-  displayName: 'orders-data-access',
+  displayName: 'pages-orders',
   preset: '../../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/libs/orders/data-access',
+  coverageDirectory: '../../../coverage/libs/pages/orders',
 };

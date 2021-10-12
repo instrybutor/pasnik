@@ -8,6 +8,16 @@ import { CreateOrderDto, MarkAsDeliveredDto, MarkAsOrderedDto, MarkAsPaidDto } f
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @Get('/active')
+  findActiveOrders() {
+    return this.ordersService.findActive();
+  }
+
+  @Get('/inactive')
+  findInactiveOrders() {
+    return this.ordersService.findInactive();
+  }
+
   @Get()
   findAll() {
     return this.ordersService.findAll();

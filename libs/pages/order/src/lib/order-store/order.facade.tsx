@@ -11,6 +11,11 @@ import { useCallback } from 'react';
 
 export const useOrderFacade = () => {
   const store = useOrderStore();
+  const orderId = useOrderStore((store) => store.order?.id);
+
+  const resetStore = useCallback(() => {
+    store.reset();
+  }, [store.reset]);
 
   const addDish = useCallback(
     async (orderId: string, addDishDto: AddDishDto) => {
@@ -19,7 +24,7 @@ export const useOrderFacade = () => {
 
       return dish;
     },
-    [store]
+    [store.addDish]
   );
 
   const fetchDishes = useCallback(
@@ -29,7 +34,7 @@ export const useOrderFacade = () => {
 
       return dishes;
     },
-    [store]
+    [store.setDishes]
   );
 
   const fetchOrder = useCallback(
@@ -39,61 +44,61 @@ export const useOrderFacade = () => {
 
       return order;
     },
-    [store]
+    [store.setOrder]
   );
 
   const markAsClosed = useCallback(async (): Promise<OrderModel> => {
-    const order = await service.markAsClosed(store.order!.id);
+    const order = await service.markAsClosed(orderId!);
     store.setOrder(order);
 
     return order;
-  }, [store]);
+  }, [store.setOrder, orderId]);
 
   const markAsOpen = useCallback(async (): Promise<OrderModel> => {
-    const order = await service.markAsOpen(store.order!.id);
+    const order = await service.markAsOpen(orderId!);
     store.setOrder(order);
 
     return order;
-  }, [store]);
+  }, [store.setOrder, orderId]);
 
   const markAsOrdered = useCallback(async (): Promise<OrderModel> => {
-    const order = await service.markAsOrdered(store.order!.id);
+    const order = await service.markAsOrdered(orderId!);
     store.setOrder(order);
 
     return order;
-  }, [store]);
+  }, [store.setOrder, orderId]);
 
   const markAsPaid = useCallback(
     async (payer: UserModel): Promise<OrderModel> => {
-      const order = await service.markAsPaid(store.order!.id, payer.id);
+      const order = await service.markAsPaid(orderId!, payer.id);
       store.setOrder(order);
 
       return order;
     },
-    [store]
+    [store.setOrder, orderId]
   );
 
   const markAsDelivered = useCallback(async (): Promise<OrderModel> => {
-    const order = await service.markAsDelivered(store.order!.id);
+    const order = await service.markAsDelivered(orderId!);
     store.setOrder(order);
 
     return order;
-  }, [store]);
+  }, [store.setOrder, orderId]);
 
   const deleteDish = useCallback(
     async (dish: DishModel): Promise<void> => {
-      await service.deleteDish(store.order!.id, dish.id);
+      await service.deleteDish(orderId!, dish.id);
       store.deleteDish(dish);
     },
-    [store]
+    [store.deleteDish, orderId]
   );
 
   const updateDish = useCallback(
     async (dishId, dto: AddDishDto): Promise<void> => {
-      const dish = await service.updateDish(store.order!.id, dishId, dto);
+      const dish = await service.updateDish(orderId!, dishId, dto);
       store.updateDish(dish);
     },
-    [store]
+    [store.updateDish, orderId]
   );
 
   return {
@@ -107,5 +112,6 @@ export const useOrderFacade = () => {
     markAsDelivered,
     deleteDish,
     updateDish,
+    resetStore,
   };
 };

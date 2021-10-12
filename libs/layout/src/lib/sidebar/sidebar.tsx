@@ -16,8 +16,8 @@ import {
 import classNames from 'classnames';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
-  { name: 'History', href: '/history', icon: ClockIcon },
+  { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
+  { name: 'Historia zamówień', href: '/history', icon: ClockIcon },
   { name: 'Balances', href: '/balances', icon: ScaleIcon },
   { name: 'Cards', href: '/cards', icon: CreditCardIcon },
   { name: 'Recipients', href: '/recipients', icon: UserGroupIcon },
@@ -38,7 +38,7 @@ export interface SidebarProps {
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
   const isCurrentRoute = useCallback((href: string) => {
-    return !!matchPath(window.location.pathname, { path: href });
+    return !!matchPath(window.location.pathname, { path: href, exact: true });
   }, []);
   return (
     <>
@@ -106,6 +106,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                     <NavLink
                       key={item.name}
                       to={item.href}
+                      exact={item.exact}
                       activeClassName="bg-cyan-800 text-white"
                       className={classNames(
                         isCurrentRoute(item.href)
@@ -180,6 +181,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                   <NavLink
                     key={item.name}
                     to={item.href}
+                    exact={item.exact}
                     className={classNames(
                       isCurrentRoute(item.href)
                         ? 'bg-cyan-800 text-white'

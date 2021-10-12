@@ -1,7 +1,7 @@
 import { UserModel } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
 
-export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg';
+export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg' | 'xxlg';
 
 export interface UserAvatarProps {
   user?: UserModel | null;
@@ -21,6 +21,7 @@ export function UserAvatar({ user, size }: UserAvatarProps) {
     'h-10 w-10': size === 'md' || !size,
     'h-12 w-12': size === 'lg',
     'h-14 w-14': size === 'xlg',
+    'h-16 w-16': size === 'xxlg',
   });
 
   return user?.avatarImg ? (

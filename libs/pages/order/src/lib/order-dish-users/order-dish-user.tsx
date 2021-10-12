@@ -24,7 +24,8 @@ export function OrderDishUsers({ userDishes }: OrderDishProps) {
           <Popover.Button
             className={classNames(
               open ? 'text-gray-900' : 'text-gray-500',
-              'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+              others.length > 0 ? 'rounded-md' : 'rounded-full h-6 w-6',
+              'group bg-white inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500'
             )}
           >
             <div className="flex items-center space-x-2">

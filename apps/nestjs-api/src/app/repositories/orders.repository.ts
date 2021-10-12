@@ -1,6 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { OrderEntity } from '../entities/order.entity';
-import { CreateOrderDto, MarkAsDeliveredDto, MarkAsOrderedDto, OrderStatus } from '@pasnik/api/data-transfer';
+import {
+  CreateOrderDto,
+  MarkAsDeliveredDto,
+  MarkAsOrderedDto,
+  OrderStatus,
+} from '@pasnik/api/data-transfer';
 import { UserEntity } from '../entities/user.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
@@ -9,7 +14,6 @@ export class OrdersRepository extends Repository<OrderEntity> {
   async createOrder(createOrderDto: CreateOrderDto, user: UserEntity) {
     const order = new OrderEntity();
 
-    order.orderedAt = createOrderDto.orderAt;
     order.user = user;
     order.from = createOrderDto.from;
     order.menuUrl = createOrderDto.menuUrl;
@@ -19,17 +23,24 @@ export class OrdersRepository extends Repository<OrderEntity> {
 
   async markAsOrdered(order: OrderEntity, { shippingCents }: MarkAsOrderedDto) {
     if (order.status !== OrderStatus.InProgress) {
-      throw new HttpException('Status is not in progress', HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        'Status is not in progress',
+        HttpStatus.FORBIDDEN
+      );
     }
     if (shippingCents !== null && shippingCents !== undefined) {
       order.shippingCents = shippingCents;
     }
     order.status = OrderStatus.Ordered;
+    order.orderedAt = 'NOW()';
 
     return await this.save(order);
   }
 
-  async markAsDelivered(order: OrderEntity, { shippingCents }: MarkAsDeliveredDto) {
+  async markAsDelivered(
+    order: OrderEntity,
+    { shippingCents }: MarkAsDeliveredDto
+  ) {
     if (order.status !== OrderStatus.Ordered) {
       throw new HttpException('Status is not ordered', HttpStatus.FORBIDDEN);
     }
@@ -37,6 +48,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
       order.shippingCents = shippingCents;
     }
     order.status = OrderStatus.Delivered;
+    order.deliveredAt = 'NOW()';
 
     return await this.save(order);
   }
@@ -54,6 +66,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
       throw new HttpException('Cannot open this order', HttpStatus.FORBIDDEN);
     }
     order.status = OrderStatus.InProgress;
+    order.orderedAt = null;
     return await this.save(order);
   }
 

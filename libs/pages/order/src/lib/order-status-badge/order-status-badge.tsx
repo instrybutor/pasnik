@@ -31,5 +31,3 @@ export function OrderStatusBadge({ order }: OrderStatusBadgeProps) {
     </p>
   );
 }
-
-export default OrderStatusBadge;

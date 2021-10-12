@@ -60,6 +60,9 @@
     "pages-order": {
       "tags": []
     },
+    "pages-orders": {
+      "tags": []
+    },
     "shared-utils-auth": {
       "tags": []
     }

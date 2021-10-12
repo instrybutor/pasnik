@@ -21,13 +21,13 @@ export const useGoogleLibLoader = () => {
       setGoogleAPI((window as any).google.accounts.id);
     };
 
+    script.addEventListener('load', onLoad);
+
     script.src = API_URL;
     script.async = true;
     script.defer = true;
 
     document.head.appendChild(script);
-
-    script.addEventListener('load', onLoad);
 
     return () => {
       script.removeEventListener('load', onLoad);

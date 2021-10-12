@@ -5,6 +5,7 @@ import { ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { useAuth } from '@pasnik/shared/utils-auth';
 import { UserAvatar, UserName } from '@pasnik/components';
+import { useHistory } from 'react-router-dom';
 
 export interface HeaderProps {
   sidebarOpen: boolean;
@@ -13,6 +14,8 @@ export interface HeaderProps {
 
 export function Header({ openSidebar }: HeaderProps) {
   const auth = useAuth();
+  const history = useHistory();
+
   const openSidebarHandler = useCallback(() => {
     openSidebar();
   }, [openSidebar]);
@@ -20,6 +23,10 @@ export function Header({ openSidebar }: HeaderProps) {
   const logoutClickHandler = useCallback(() => {
     auth.signOut();
   }, [auth]);
+
+  const createOrderHandler = useCallback(() => {
+    history.push('/create-order');
+  }, [history]);
 
   return (
     <div className="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:border-none">
@@ -31,12 +38,21 @@ export function Header({ openSidebar }: HeaderProps) {
         <span className="sr-only">Open sidebar</span>
         <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
       </button>
-      <div className="flex-1 px-4 flex justify-between sm:px-6 lg:px-8">
+      <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
         <div className="flex-1 flex" />
         <div className="ml-4 flex items-center md:ml-6">
+          <div className="flex space-x-3 md:ml-4">
+            <button
+              type="button"
+              onClick={createOrderHandler}
+              className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+            >
+              Utwórz zamówienie
+            </button>
+          </div>
           <button
             type="button"
-            className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+            className="ml-3 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
           >
             <span className="sr-only">View notifications</span>
             <BellIcon className="h-6 w-6" aria-hidden="true" />

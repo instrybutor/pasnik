@@ -37,10 +37,11 @@ export function AddDish({ onAdd }: AddDishProps) {
               placeholder="Nazwa"
               className={classNames(
                 {
-                  'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500':
+                  'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500':
                     errors.name,
+                  'focus:ring-cyan-500 focus:border-cyan-500': !errors.name,
                 },
-                'block w-full pr-10 sm:text-sm rounded-md border-gray-300'
+                'block w-full pr-10 sm:text-sm rounded-md border-gray-300 focus:outline-none'
               )}
               {...register('name')}
             />
@@ -72,10 +73,12 @@ export function AddDish({ onAdd }: AddDishProps) {
               id="price"
               className={classNames(
                 {
-                  'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500':
+                  'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500':
                     errors.priceCents,
+                  'focus:ring-cyan-500 focus:border-cyan-500':
+                    !errors.priceCents,
                 },
-                'block w-full pr-10 sm:text-sm rounded-md border-gray-300 pl-7 pr-12'
+                'block w-full pr-10 sm:text-sm rounded-md border-gray-300 pl-7 pr-12 focus:outline-none'
               )}
               placeholder="0.00"
               aria-describedby="price-currency"

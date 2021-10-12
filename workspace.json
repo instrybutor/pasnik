@@ -360,6 +360,28 @@
         }
       }
     },
+    "pages-orders": {
+      "root": "libs/pages/orders",
+      "sourceRoot": "libs/pages/orders/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/pages/orders/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/orders"],
+          "options": {
+            "jestConfig": "libs/pages/orders/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shared-utils-auth": {
       "root": "libs/shared/utils-auth",
       "sourceRoot": "libs/shared/utils-auth/src",

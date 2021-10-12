@@ -1,7 +1,9 @@
 export function Spinner() {
   return (
-    <div className="flex justify-center items-center h-full">
-      <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32" />
+    <div className="absolute h-full w-full flex flex-col gap-2 items-center justify-center bg-white">
+      <span role="img" aria-label="food" className="text-6xl animate-bounce">
+        🍔
+      </span>
     </div>
   );
 }

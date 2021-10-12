@@ -6,12 +6,15 @@ interface OrderState {
   order: OrderModel | null;
   dishes: Record<number, DishModel> | null;
   dishesIds: number[];
+  isOrderLoading: boolean;
+  isDishesLoading: boolean;
 
   addDish: (dish: DishModel) => void;
   setDishes: (dishes: DishModel[]) => void;
   setOrder: (order: OrderModel) => void;
   deleteDish: (dish: DishModel) => void;
   updateDish: (dish: DishModel) => void;
+  reset: () => void;
 }
 const removeKey = (
   key: number,
@@ -22,10 +25,23 @@ export const useOrderStore = create<OrderState>((set) => ({
   order: null,
   dishes: {},
   dishesIds: [],
+  isDishesLoading: true,
+  isOrderLoading: true,
+
+  reset: () => {
+    set((state) => ({
+      order: null,
+      dishes: {},
+      dishesIds: [],
+      isDishesLoading: true,
+      isOrderLoading: true,
+    }));
+  },
 
   setDishes: (dishes: DishModel[]) => {
     set((state) => ({
       ...state,
+      isDishesLoading: false,
       dishesIds: dishes.map((dish) => dish.id),
       dishes: dishes.reduce(
         (collection, dish) => ({
@@ -65,6 +81,7 @@ export const useOrderStore = create<OrderState>((set) => ({
   setOrder: (order: OrderModel) => {
     set((state) => ({
       ...state,
+      isOrderLoading: false,
       order,
     }));
   },
