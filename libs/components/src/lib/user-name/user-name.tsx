@@ -8,17 +8,25 @@ export interface UserNameProps {
   fallbackValue?: string;
 }
 
+const formatName = ({ givenName, familyName, email }: UserModel) =>
+  givenName && familyName ? `${givenName} ${familyName}` : email;
+
+const formatInitials = ({ givenName, familyName, email }: UserModel) =>
+  givenName && familyName ? `${givenName[0]}${familyName[0]}` : email[0];
+
 export function UserName({
   user,
   children,
   initials,
   fallbackValue,
 }: PropsWithChildren<UserNameProps>) {
-  const formatName = ({ givenName, familyName, email }: UserModel) =>
-    givenName && familyName ? `${givenName} ${familyName}` : email;
+  const formatUser = () => {
+    if (!user) {
+      return fallbackValue;
+    }
 
-  const formatInitials = ({ givenName, familyName, email }: UserModel) =>
-    givenName && familyName ? `${givenName[0]}${familyName[0]}` : email[0];
+    return initials ? formatInitials(user) : formatName(user);
+  };
 
   return (
     <div
@@ -26,13 +34,7 @@ export function UserName({
         'inline-flex': !children,
       })}
     >
-      <p className="text-gray-700 group-hover:text-gray-900">
-        {user
-          ? initials
-            ? formatInitials(user)
-            : formatName(user)
-          : fallbackValue ?? ''}
-      </p>
+      <p className="text-gray-700 group-hover:text-gray-900">{formatUser()}</p>
       {children && (
         <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
           {children}
