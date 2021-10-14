@@ -111,40 +111,6 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
               )
             )}
           </ul>
-          {/*<table className="min-w-full divide-y divide-gray-200">*/}
-          {/*  <tbody className="bg-white divide-y divide-gray-200">*/}
-          {/*    {dishes?.map((dish) =>*/}
-          {/*      updateId === dish.id ? (*/}
-          {/*        <UpdateDish*/}
-          {/*          key={dish.id}*/}
-          {/*          onUpdateDish={updateDishHandler}*/}
-          {/*          dish={dish}*/}
-          {/*          onCancelUpdate={cancelUpdateHandler}*/}
-          {/*        />*/}
-          {/*      ) : (*/}
-          {/*        <OrderDish*/}
-          {/*          inProgress={order?.status === OrderStatus.InProgress}*/}
-          {/*          key={dish.id}*/}
-          {/*          onDeleteDish={deleteDishHandler}*/}
-          {/*          dish={dish}*/}
-          {/*          onEditClick={editClickHandler}*/}
-          {/*        />*/}
-          {/*      )*/}
-          {/*    )}*/}
-          {/*    {!dishes?.length && (*/}
-          {/*      <tr>*/}
-          {/*        <td colSpan={4}>*/}
-          {/*          <div className="text-center bg-white px-4 py-12">*/}
-          {/*            <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />*/}
-          {/*            <h3 className="mt-2 text-sm font-medium text-gray-900">*/}
-          {/*              Brak dań*/}
-          {/*            </h3>*/}
-          {/*          </div>*/}
-          {/*        </td>*/}
-          {/*      </tr>*/}
-          {/*    )}*/}
-          {/*  </tbody>*/}
-          {/*</table>*/}
           {isAdding && <AddDish onAdd={addDishHandler} />}
         </div>
       </div>
