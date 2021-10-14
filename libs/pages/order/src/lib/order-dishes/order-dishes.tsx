@@ -6,10 +6,10 @@ import {
 } from '@pasnik/api/data-transfer';
 import OrderDish from '../order-dish/order-dish';
 import AddDish from '../add-dish/add-dish';
-import { BeakerIcon, PlusIcon } from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/outline';
 import { useCallback, useEffect, useState } from 'react';
 import { useOrderFacade } from '../order-store/order.facade';
-import { UpdateDish } from '../update-dish/update-dish';
+import UpdateDish from '../update-dish/update-dish';
 
 export interface OrderDishesProps {
   dishes: DishModel[] | null;
@@ -75,12 +75,12 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
     <section aria-labelledby="notes-title">
       <div className="bg-white shadow sm:rounded-lg sm:overflow-hidden">
         <div className="divide-y divide-gray-200">
-          <div className="px-4 py-5 sm:px-6 sm:flex sm:items-center sm:justify-between">
+          <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
               Zamówienie
             </h2>
             {inProgress && (
-              <div className="mt-3 flex sm:mt-0 sm:ml-4">
+              <div className="flex">
                 <button
                   onClick={addDishClickHandler}
                   type="button"
@@ -91,41 +91,27 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
               </div>
             )}
           </div>
-          <table className="min-w-full divide-y divide-gray-200">
-            <tbody className="bg-white divide-y divide-gray-200">
-              {dishes?.map((dish) =>
-                updateId === dish.id ? (
-                  <UpdateDish
-                    key={dish.id}
-                    onUpdateDish={updateDishHandler}
-                    dish={dish}
-                    onCancelUpdate={cancelUpdateHandler}
-                  />
-                ) : (
-                  <OrderDish
-                    inProgress={order?.status === OrderStatus.InProgress}
-                    key={dish.id}
-                    onDeleteDish={deleteDishHandler}
-                    dish={dish}
-                    onEditClick={editClickHandler}
-                  />
-                )
-              )}
-              {!dishes?.length && (
-                <tr>
-                  <td colSpan={4}>
-                    <div className="text-center bg-white px-4 py-12">
-                      <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
-                      <h3 className="mt-2 text-sm font-medium text-gray-900">
-                        Brak dań
-                      </h3>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {isAdding && <AddDish onAdd={addDishHandler} />}
-            </tbody>
-          </table>
+          <ul className="divide-y divide-gray-200">
+            {dishes?.map((dish) =>
+              updateId === dish.id ? (
+                <UpdateDish
+                  key={dish.id}
+                  onUpdateDish={updateDishHandler}
+                  dish={dish}
+                  onCancelUpdate={cancelUpdateHandler}
+                />
+              ) : (
+                <OrderDish
+                  inProgress={order?.status === OrderStatus.InProgress}
+                  key={dish.id}
+                  onDeleteDish={deleteDishHandler}
+                  dish={dish}
+                  onEditClick={editClickHandler}
+                />
+              )
+            )}
+          </ul>
+          {isAdding && <AddDish onAdd={addDishHandler} />}
         </div>
       </div>
     </section>

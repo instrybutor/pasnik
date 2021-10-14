@@ -21,8 +21,8 @@ export function AddDish({ onAdd }: AddDishProps) {
   );
 
   return (
-    <tr>
-      <td className="px-6 whitespace-nowrap text-sm text-gray-500 w-8/12">
+    <form className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
+      <div className="px-4 sm:px-6 whitespace-nowrap text-sm text-gray-500 flex-grow">
         <div>
           <label
             htmlFor="email"
@@ -41,7 +41,7 @@ export function AddDish({ onAdd }: AddDishProps) {
                     errors.name,
                   'focus:ring-cyan-500 focus:border-cyan-500': !errors.name,
                 },
-                'block w-full pr-10 sm:text-sm rounded-md border-gray-300 focus:outline-none'
+                'block w-full sm:text-sm rounded-md border-gray-300 focus:outline-none'
               )}
               {...register('name')}
             />
@@ -55,11 +55,8 @@ export function AddDish({ onAdd }: AddDishProps) {
             )}
           </div>
         </div>
-      </td>
-      <td
-        colSpan={2}
-        className="px-3 whitespace-nowrap text-sm text-gray-500 w-3/12"
-      >
+      </div>
+      <div className="px-3 whitespace-nowrap text-sm text-gray-500 w-36 sm:w-44 flex-shrink-0">
         <div>
           <label htmlFor="price" className="sr-only">
             Price
@@ -91,17 +88,16 @@ export function AddDish({ onAdd }: AddDishProps) {
             </div>
           </div>
         </div>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium w-1/12 space-x-2">
+      </div>
+      <div className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
         <button
-          onClick={handleSubmit(onSubmit)}
-          type="button"
+          type="submit"
           className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
         >
           <CheckIcon className="h-5 w-5" aria-hidden="true" />
         </button>
-      </td>
-    </tr>
+      </div>
+    </form>
   );
 }
 
