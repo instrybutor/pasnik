@@ -1,8 +1,8 @@
 import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
 import { useEffect } from 'react';
 import OrderSummaryDishes from '../order-summary-dishes/order-summary-dishes';
-import OrderSummaryPayment from '../order-summary-payment/order-summary-payment';
 import { useOrderSummary } from './order-summary.hook';
+import OrderPayment from '../order-payment/order-payment';
 
 export interface OrderDishesSummaryProps {
   dishes: DishModel[];
@@ -19,10 +19,7 @@ export function OrderSummary({ dishes, order }: OrderDishesSummaryProps) {
   return (
     <>
       {currentUserSummary && (
-        <OrderSummaryPayment
-          userDishesSummary={currentUserSummary}
-          order={order}
-        />
+        <OrderPayment userDishesSummary={currentUserSummary} order={order} />
       )}
       <OrderSummaryDishes userDishesSummaries={grouppedSummaries} />
     </>

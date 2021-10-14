@@ -25,7 +25,7 @@ export function authFetch<T extends unknown>(
     headers: newHeaders,
   }).then((response) => {
     if (response.status === 401) {
-      window.location.href = '/login';
+      redirectLogin();
       throw new Error('Unauthorized');
     }
     return response.json();

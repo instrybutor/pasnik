@@ -14,6 +14,7 @@ import { useGoogleLibLoader } from './useGoogleLibLoader';
 
 function useProvideAuth() {
   const [user, setUser] = useState<UserModel | null>(null);
+  const [users, setUsers] = useState<UserModel>([]);
   const [fetching, setFetching] = useState<boolean>(true);
   const history = useHistory();
 
@@ -60,6 +61,7 @@ function useProvideAuth() {
 
   return {
     user,
+    users,
     fetching,
     signIn,
     signOut,

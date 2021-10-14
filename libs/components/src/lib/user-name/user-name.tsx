@@ -34,7 +34,9 @@ export function UserName({
         'inline-flex': !children,
       })}
     >
-      <p className="text-gray-700 group-hover:text-gray-900">{formatUser()}</p>
+      <p className="text-gray-700 group-hover:text-gray-900 truncate">
+        {formatUser()}
+      </p>
       {children && (
         <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
           {children}

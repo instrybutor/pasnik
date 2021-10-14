@@ -1,7 +1,8 @@
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { Price, UserAvatar, UserName } from '@pasnik/components';
 import { SwitchHorizontalIcon } from '@heroicons/react/outline';
-import { UserDishesSummary } from '../order-summary/order-summary';
+import { UserDishesSummary } from '../order-summary/order-summary.hook';
+import OrderSelectPayer from '../order-select-payer/order-select-payer';
 
 export interface OrderPaymentProps {
   order: OrderModel;
@@ -20,17 +21,11 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
           </div>
           <div className="py-5 px-6">
             <div className="flex sm:items-center sm:justify-between px-5">
-              <div className="flex items-center">
-                <UserAvatar user={order?.payer} />
-                <div className="ml-3">
-                  <UserName
-                    user={order?.payer}
-                    fallbackValue="Wybierz płacącego"
-                  >
-                    <Price priceCents={-3621} />
-                  </UserName>
-                </div>
-              </div>
+              <OrderSelectPayer
+                payer={order.payer}
+                shippingCents={userDishesSummary.shipping}
+                totalCents={userDishesSummary.total}
+              />
               <div className="mt-3 flex sm:mt-0 sm:ml-4">
                 <button
                   type="button"
@@ -45,7 +40,12 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
               <div className="flex items-center">
                 <div className="mr-3 text-right">
                   <UserName user={userDishesSummary.user}>
-                    <Price priceCents={-userDishesSummary.total} />
+                    <Price
+                      priceCents={
+                        userDishesSummary.shipping + userDishesSummary.total
+                      }
+                    />{' '}
+                    (dostawa <Price priceCents={userDishesSummary.shipping} />)
                   </UserName>
                 </div>
                 <UserAvatar user={userDishesSummary.user} />

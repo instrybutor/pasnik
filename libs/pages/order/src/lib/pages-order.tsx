@@ -45,7 +45,7 @@ export function PagesOrder() {
             <div className="space-y-6 lg:col-start-1 lg:col-span-2">
               {isDishesLoading ? (
                 <OrderSectionLoading className="h-52" />
-              ) : order?.status !== OrderStatus.Delivered ? (
+              ) : order?.status === OrderStatus.InProgress ? (
                 <OrderDishes order={order} dishes={dishes!} />
               ) : (
                 <OrderSummary dishes={dishes!} order={order!} />

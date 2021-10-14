@@ -53,6 +53,6 @@ export class OrderEntity implements OrderModel {
   @OneToMany(() => OrderActionEntity, (action) => action.order)
   actions: OrderActionEntity[];
 
-  @Column({ default: 0})
+  @Column({ default: 0 })
   totalPrice: number;
 }

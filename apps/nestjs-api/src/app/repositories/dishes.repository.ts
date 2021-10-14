@@ -12,11 +12,7 @@ export class DishesRepository extends Repository<DishEntity> {
     dish.order = order;
     dish.name = addDishDto.name;
     dish.priceCents = addDishDto.priceCents;
-    dish.usersDishes = [{
-      user,
-      dish,
-      dishOwner: true,
-    }];
+    dish.user = user;
 
     return this.save(dish);
   }

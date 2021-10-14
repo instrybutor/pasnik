@@ -15,11 +15,11 @@ export class DishesService {
   ) {}
 
   findAll(orderId: string) {
-    return this.dishesRepository.find({ where: { orderId }, relations: ['usersDishes', 'usersDishes.user']});
+    return this.dishesRepository.find({ where: { orderId }, relations: ['user']});
   }
 
   findOne(orderId: string, id: number) {
-    return this.dishesRepository.findOneOrFail({ where: { orderId, id }, relations: ['usersDishes', 'usersDishes.user']})
+    return this.dishesRepository.findOneOrFail({ where: { orderId, id }, relations: ['user']})
   }
 
   async create(addDishDto: AddDishDto, orderId: string, user: UserEntity) {

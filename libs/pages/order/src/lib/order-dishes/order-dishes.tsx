@@ -6,7 +6,7 @@ import {
 } from '@pasnik/api/data-transfer';
 import OrderDish from '../order-dish/order-dish';
 import AddDish from '../add-dish/add-dish';
-import { PlusIcon } from '@heroicons/react/outline';
+import { BeakerIcon, PlusIcon } from '@heroicons/react/outline';
 import { useCallback, useEffect, useState } from 'react';
 import { useOrderFacade } from '../order-store/order.facade';
 import UpdateDish from '../update-dish/update-dish';
@@ -109,6 +109,16 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
                   onEditClick={editClickHandler}
                 />
               )
+            )}
+            {!dishes?.length && (
+              <li>
+                <div className="text-center bg-white px-4 py-12">
+                  <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
+                  <h3 className="mt-2 text-sm font-medium text-gray-900">
+                    Brak dań
+                  </h3>
+                </div>
+              </li>
             )}
           </ul>
           {isAdding && <AddDish onAdd={addDishHandler} />}
