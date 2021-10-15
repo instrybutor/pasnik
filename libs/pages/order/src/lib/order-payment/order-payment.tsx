@@ -3,6 +3,7 @@ import { Price, UserAvatar, UserName } from '@pasnik/components';
 import { SwitchHorizontalIcon } from '@heroicons/react/outline';
 import { UserDishesSummary } from '../order-summary/order-summary.hook';
 import OrderSelectPayer from '../order-select-payer/order-select-payer';
+import { useOrderFacade } from '../order-store/order.facade';
 
 export interface OrderPaymentProps {
   order: OrderModel;
@@ -10,9 +11,10 @@ export interface OrderPaymentProps {
 }
 
 export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
+  const { setPayer } = useOrderFacade();
   return (
     <section>
-      <div className="bg-white shadow sm:rounded-lg sm:overflow-hidden">
+      <div className="bg-white shadow sm:rounded-lg">
         <div className="divide-y divide-gray-200">
           <div className="px-4 py-5 sm:px-6 sm:flex sm:items-center sm:justify-between">
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
@@ -25,6 +27,7 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
                 payer={order.payer}
                 shippingCents={userDishesSummary.shipping}
                 totalCents={userDishesSummary.total}
+                setPayer={setPayer}
               />
               <div className="mt-3 flex sm:mt-0 sm:ml-4">
                 <button

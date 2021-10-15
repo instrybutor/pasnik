@@ -88,7 +88,9 @@ export class OrdersService {
         OrderActionsRepository
       );
 
-      const order = await this.findOne(orderId);
+      const order = await ordersRepository.findOneOrFail(orderId, {
+        relations: ['dishes']
+      });
       await ordersRepository.markAsOrdered(order, markAsOrderedDto);
       await orderActionsRepository.createAction(
         user,
@@ -160,7 +162,7 @@ export class OrdersService {
     return this.findOne(orderId);
   }
 
-  async markAsPaid(
+  async setPayer(
     orderId: string,
     { payerId }: MarkAsPaidDto,
     user: UserEntity
@@ -174,6 +176,11 @@ export class OrdersService {
 
       const payer = await usersRepository.findOneOrFail(payerId);
       const order = await this.findOne(orderId);
+
+      if (order.payer?.id === payer.id) {
+        return;
+      }
+
       await ordersRepository.markAsPaid(order, payer);
       await orderActionsRepository.createAction(
         user,

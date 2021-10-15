@@ -28,6 +28,9 @@ export class OrdersRepository extends Repository<OrderEntity> {
         HttpStatus.FORBIDDEN
       );
     }
+    if (order.dishes.length === 0) {
+      throw new HttpException('No dishes found', HttpStatus.FORBIDDEN);
+    }
     if (shippingCents !== null && shippingCents !== undefined) {
       order.shippingCents = shippingCents;
     }
@@ -43,6 +46,9 @@ export class OrdersRepository extends Repository<OrderEntity> {
   ) {
     if (order.status !== OrderStatus.Ordered) {
       throw new HttpException('Status is not ordered', HttpStatus.FORBIDDEN);
+    }
+    if (!order.payer) {
+      throw new HttpException('Payer not selected', HttpStatus.FORBIDDEN);
     }
     if (shippingCents !== null && shippingCents !== undefined) {
       order.shippingCents = shippingCents;
@@ -71,7 +77,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
   }
 
   async markAsPaid(order: OrderEntity, payer: UserEntity) {
-    if (![OrderStatus.Ordered].includes(order.status) || !!order.payer) {
+    if ([OrderStatus.Delivered].includes(order.status)) {
       throw new HttpException('Cannot mark as paid', HttpStatus.FORBIDDEN);
     }
     order.payer = payer;

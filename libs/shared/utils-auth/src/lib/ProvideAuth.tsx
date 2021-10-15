@@ -14,17 +14,27 @@ import { useGoogleLibLoader } from './useGoogleLibLoader';
 
 function useProvideAuth() {
   const [user, setUser] = useState<UserModel | null>(null);
-  const [users, setUsers] = useState<UserModel>([]);
+  const [users, setUsers] = useState<UserModel[]>([]);
   const [fetching, setFetching] = useState<boolean>(true);
   const history = useHistory();
 
   const fetchUser = useCallback((): Promise<UserModel> => {
     setFetching(true);
 
-    return authFetch<UserModel>('/api/auth/me').then((user) => {
+    return authFetch<UserModel>('/api/users/me').then((user) => {
       setUser(user);
       setFetching(false);
       return user;
+    });
+  }, []);
+
+  const fetchUsers = useCallback((): Promise<UserModel[]> => {
+    setFetching(true);
+
+    return authFetch<UserModel[]>('/api/users').then((users) => {
+      setUsers(users);
+      setFetching(false);
+      return users;
     });
   }, []);
 
@@ -54,10 +64,10 @@ function useProvideAuth() {
   }, [history]);
 
   React.useEffect(() => {
-    fetchUser().catch(() => {
+    Promise.all([fetchUsers(), fetchUser()]).catch(() => {
       setFetching(false);
     });
-  }, [fetchUser]);
+  }, [fetchUser, fetchUsers]);
 
   return {
     user,

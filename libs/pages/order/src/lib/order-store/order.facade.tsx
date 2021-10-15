@@ -101,6 +101,14 @@ export const useOrderFacade = () => {
     [store.updateDish, orderId]
   );
 
+  const setPayer = useCallback(
+    async (payer: UserModel): Promise<void> => {
+      const order = await service.setPayer(orderId!, { payerId: payer.id });
+      store.setOrder(order);
+    },
+    [store.setOrder, orderId]
+  );
+
   return {
     addDish,
     fetchDishes,
@@ -113,5 +121,6 @@ export const useOrderFacade = () => {
     deleteDish,
     updateDish,
     resetStore,
+    setPayer,
   };
 };
