@@ -45,7 +45,7 @@ export function OrderDish({
   }, [inProgress]);
 
   return (
-    <li className="flex items-center">
+    <li className="flex items-center relative">
       <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between pl-4 sm:pl-6 py-4 ">
         <div className="text-sm text-gray-500 min-w-0 flex-1">{dish.name}</div>
         <div className="flex items-center flex-row-reverse justify-end sm:flex-row sm:justify-start mt-2 sm:mt-0">
@@ -127,7 +127,7 @@ export function OrderDish({
               </Fragment>
             )}
           </div>
-          <Menu as="span" className="ml-3 sm:hidden">
+          <Menu as="span" className="ml-3 relative sm:hidden">
             <Menu.Button className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
               <DotsHorizontalIcon className="h-5 w-5" aria-hidden="true" />
             </Menu.Button>
