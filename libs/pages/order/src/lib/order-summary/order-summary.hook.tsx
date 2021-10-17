@@ -29,6 +29,9 @@ export const useOrderSummary = (order: OrderModel) => {
   const groupSummaries = useCallback(
     (dishes: DishModel[]) => {
       const summaries = dishes.reduce((acc, dish) => {
+        if (!dish.user) {
+          return acc;
+        }
         const userSummary: UserDishesSummary = acc[dish.user.id] || {
           user: dish.user,
           dishes: [],

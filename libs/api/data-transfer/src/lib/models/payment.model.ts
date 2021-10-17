@@ -1,4 +1,4 @@
-import { UserModel } from '@pasnik/api/data-transfer';
+import { UserModel } from './user.model';
 
 export interface PaymentModel {
   id: number;

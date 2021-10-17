@@ -1,10 +1,16 @@
 const { createGlobPatternsForDependencies } = require('@nrwl/react/tailwind');
 const colors = require('tailwindcss/colors')
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   purge: createGlobPatternsForDependencies(__dirname),
+
   darkMode: false, // or 'media' or 'class'
   theme: {
+    screens: {
+      xsm: '480px',
+      ...defaultTheme.screens
+    },
     extend: {
       colors: {
         cyan: colors.cyan,

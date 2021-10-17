@@ -7,15 +7,13 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
 import { useAuth } from '@pasnik/shared/utils-auth';
 
 export interface OrderPaymentProps {
-  payer?: UserModel | null;
-  shippingCents: number;
   totalCents: number;
   setPayer: (payer: UserModel) => void;
+  payer?: UserModel | null;
 }
 
 export function OrderSelectPayer({
   payer,
-  shippingCents,
   totalCents,
   setPayer,
 }: OrderPaymentProps) {
@@ -37,9 +35,9 @@ export function OrderSelectPayer({
           <Listbox.Button className="relative w-full bg-white rounded-md pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500">
             <div className="flex items-center">
               <UserAvatar user={payer} />
-              <div className="ml-3">
+              <div className="ml-3 truncate">
                 <UserName user={payer} fallbackValue="Wybierz płacącego">
-                  <Price priceCents={-shippingCents - totalCents} />
+                  <Price priceCents={totalCents} />
                 </UserName>
               </div>
             </div>

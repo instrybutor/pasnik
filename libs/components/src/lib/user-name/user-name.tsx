@@ -32,13 +32,14 @@ export function UserName({
     <div
       className={classNames({
         'inline-flex': !children,
+        'flex flex-col': children,
       })}
     >
       <p className="text-gray-700 group-hover:text-gray-900 truncate">
         {formatUser()}
       </p>
       {children && (
-        <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+        <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700 truncate">
           {children}
         </p>
       )}
