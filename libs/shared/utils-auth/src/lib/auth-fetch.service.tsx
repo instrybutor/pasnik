@@ -28,6 +28,11 @@ export function authFetch<T extends unknown>(
       redirectLogin();
       throw new Error('Unauthorized');
     }
+
+    if (!response.ok) {
+      throw new Error('Backend issue');
+    }
+
     return response.json();
   });
 }

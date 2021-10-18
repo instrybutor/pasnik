@@ -30,9 +30,7 @@
     "help": "nx help",
     "docker-compose": "docker-compose -f ./docker/docker-compose.yml",
     "prepare": "husky install",
-    "schema:drop": "typeorm schema:drop",
-    "migrate:create": "npm run typeorm -- migration:create -d db/migrations -n",
-    "typeorm": "typeorm --config ormconfig.json"
+    "typeorm": "ts-node --project tsconfig.typeorm.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ormconfig.ts"
   },
   "private": true,
   "dependencies": {

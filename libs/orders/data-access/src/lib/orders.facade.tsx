@@ -7,12 +7,16 @@ import { useCallback } from 'react';
 export const useOrdersFacade = () => {
   const store = createOrdersStore();
 
+  const fetchOrder = useCallback((orderId) => {
+    return service.fetchOrder(orderId);
+  }, []);
+
   const fetchOrders = useCallback(async (): Promise<OrderModel[]> => {
     const orders = await service.fetchOrders();
     store.setOrders(orders);
 
     return orders;
-  }, [store]);
+  }, [store.setOrders]);
 
   const createOrder = useCallback(
     async (payload: CreateOrderDto) => {
@@ -21,11 +25,23 @@ export const useOrdersFacade = () => {
 
       return order;
     },
-    [store]
+    [store.addOrder]
+  );
+
+  const updateOrder = useCallback(
+    async (orderId, payload: Partial<OrderModel>) => {
+      const order = await service.updateOrder(orderId, payload);
+      store.updateOrder(order);
+
+      return order;
+    },
+    [store.updateOrder]
   );
 
   return {
     createOrder,
+    updateOrder,
     fetchOrders,
+    fetchOrder,
   };
 };

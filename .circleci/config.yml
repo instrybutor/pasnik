@@ -91,7 +91,7 @@ jobs:
           <<: *npm_cache
       - run:
           name: Set commit hash as a build version
-          command: echo 'export NX_COMMIT_HASH="${CIRCLE_SHA1::7}"' >> $BASH_ENV
+          command: echo 'export NX_VERSION="${CIRCLE_SHA1::7}"' >> $BASH_ENV
       - run: npm run affected:build -- ${AFFECTED_ARGS} --parallel --configuration production --sourceMap false
       - save_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
@@ -137,29 +137,69 @@ jobs:
       - restore_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run: npm run affected -- --target deploy ${AFFECTED_ARGS} --user $FTP_USER --host $FTP_HOST --pass $FTP_PASS
-      - run: curl --fail $ENV_MANAGER_HOST/env/$CIRCLE_PROJECT_REPONAME?auth=$ENV_MANAGER_PASS
-      - run: git rev-parse HEAD > dist/last-deploy.txt
+      - run: curl --fail $ENV_MANAGER_HOST/env/$ENV_MANAGER_ENV?auth=$ENV_MANAGER_PASS
+      - run: git rev-parse HEAD > dist/last-$ENV_MANAGER_ENV-deploy.txt
       - save_cache:
           key: last-deploy-sha
           paths:
-            - dist/last-deploy.txt
+            - dist/last-$ENV_MANAGER_ENV-deploy.txt
 
 workflows:
   version: 2
   pr_check:
     jobs:
-      - install
+      - install:
+          filters:
+            branches:
+              ignore:
+                - master
       - lint:
           requires:
             - install
       - build:
           requires:
             - install
-      - deploy:
+
+  build-n-deploy-stage:
+    jobs:
+      - install:
           filters:
             branches:
               only:
                 - master
+      - lint:
+          requires:
+            - install
+      - build:
+          context: pasnik-stage
+          requires:
+            - install
+      - deploy:
+          context: pasnik-stage
+          requires:
+            - lint
+            - build
+
+  build-n-deploy-prod:
+    jobs:
+      - hold:
+          type: approval
+          filters:
+            branches:
+              only:
+                - /^release/
+      - install:
+          requires:
+            - hold
+      - lint:
+          requires:
+            - install
+      - build:
+          context: pasnik-prod
+          requires:
+            - install
+      - deploy:
+          context: pasnik-prod
           requires:
             - lint
             - build

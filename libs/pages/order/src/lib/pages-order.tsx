@@ -28,7 +28,7 @@ export function PagesOrder() {
     return () => {
       resetStore();
     };
-  }, []);
+  }, [fetchDishes, fetchOrder, orderId, resetStore]);
 
   return (
     <Fragment>
