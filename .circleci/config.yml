@@ -137,16 +137,16 @@ jobs:
       - restore_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run: npm run affected -- --target deploy ${AFFECTED_ARGS} --user $FTP_USER --host $FTP_HOST --pass $FTP_PASS
-      - run: curl --fail $ENV_MANAGER_HOST/env/$CIRCLE_PROJECT_REPONAME?auth=$ENV_MANAGER_PASS
-      - run: git rev-parse HEAD > dist/last-deploy.txt
+      - run: curl --fail $ENV_MANAGER_HOST/env/$ENV_MANAGER_ENV?auth=$ENV_MANAGER_PASS
+      - run: git rev-parse HEAD > dist/last-$ENV_MANAGER_ENV-deploy.txt
       - save_cache:
           key: last-deploy-sha
           paths:
-            - dist/last-deploy.txt
+            - dist/last-$ENV_MANAGER_ENV-deploy.txt
 
 workflows:
   version: 2
-  pr_check:
+  build-n-deploy:
     jobs:
       - install
       - lint:
@@ -155,11 +155,22 @@ workflows:
       - build:
           requires:
             - install
+#      - deploy:
+#          context: pasnik-stage
+#          filters:
+#            branches:
+#              only:
+#                - master
+#          requires:
+#            - lint
+#            - build
       - deploy:
-          filters:
-            branches:
-              only:
-                - master
+          type: approval
+          context: pasnik-prod
+#          filters:
+#            branches:
+#              only:
+#                - master
           requires:
             - lint
             - build
