@@ -9,6 +9,7 @@ import {
   MarkAsPaidDto,
   OrderAction,
   OrderStatus,
+  UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
 import { OrderActionsRepository } from '../repositories/order-actions.repository';
 import { Between, Connection } from 'typeorm';
@@ -56,6 +57,15 @@ export class OrdersService {
   findOne(id: string) {
     return this.ordersRepository.findOneOrFail(id, {
       relations: ['actions', 'actions.user', 'payer', 'actions.actionUser'],
+    });
+  }
+
+  async update(orderId: string, payload: UpdateOrderDto) {
+    const order = await this.ordersRepository.findOne(orderId);
+
+    return await this.ordersRepository.save({
+      ...order,
+      ...payload,
     });
   }
 

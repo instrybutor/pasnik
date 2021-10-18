@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 import {
   BookOpenIcon,
   CalendarIcon,
@@ -11,10 +12,11 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
+import { Price } from '@pasnik/components';
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
 import { useOrderFacade } from '../order-store/order.facade';
-import { Price } from '@pasnik/components';
 import { OrderTimestamp } from '../order-timestamp/order-timestamp';
 
 export interface OrderHeaderProps {
@@ -24,6 +26,7 @@ export interface OrderHeaderProps {
 
 export function OrderHeader({ order, dishes }: OrderHeaderProps) {
   const [totalPrice, setTotalPrice] = useState(0);
+  const { url } = useRouteMatch();
   const { markAsClosed, markAsOpen, markAsOrdered, markAsDelivered } =
     useOrderFacade();
 
@@ -154,8 +157,8 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
 
             {order.status === OrderStatus.InProgress && (
               <span className="hidden sm:block sm:ml-3">
-                <button
-                  type="button"
+                <Link
+                  to={`${url}/edit`}
                   className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                 >
                   <PencilIcon
@@ -163,7 +166,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                     aria-hidden="true"
                   />
                   Edytuj
-                </button>
+                </Link>
               </span>
             )}
 
