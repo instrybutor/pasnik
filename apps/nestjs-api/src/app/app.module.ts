@@ -12,7 +12,7 @@ import DatabaseConfig from './db/db.config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env.local.local'
+      envFilePath: '.env.local'
     }),
     TypeOrmModule.forRoot({
       ...DatabaseConfig,
