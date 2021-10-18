@@ -146,31 +146,22 @@ jobs:
 
 workflows:
   version: 2
-  build-n-deploy:
+  build-n-deploy-prod:
     jobs:
-      - install
+      - hold:
+          type: approval
+      - install:
+          requires:
+            - hold
       - lint:
           requires:
             - install
       - build:
+          context: pasnik-prod
           requires:
             - install
-#      - deploy:
-#          context: pasnik-stage
-#          filters:
-#            branches:
-#              only:
-#                - master
-#          requires:
-#            - lint
-#            - build
       - deploy:
-          type: approval
           context: pasnik-prod
-#          filters:
-#            branches:
-#              only:
-#                - master
           requires:
             - lint
             - build
