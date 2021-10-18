@@ -6,8 +6,8 @@ import {
 } from '@pasnik/api/data-transfer';
 import { authFetch } from '@pasnik/shared/utils-auth';
 
-export const fetchOrder = (id: string) =>
-  authFetch<OrderModel>(`/api/orders/${id}`);
+export const fetchOrder = (slug: string) =>
+  authFetch<OrderModel>(`/api/orders/${slug}`);
 
 export const fetchDishes = (id: string) =>
   authFetch<DishModel[]>(`/api/orders/${id}/dishes`);

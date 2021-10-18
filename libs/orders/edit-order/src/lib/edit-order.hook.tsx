@@ -25,13 +25,13 @@ export const useEditOrder = () => {
     resolver: yupResolver(orderValidator),
   });
   const { updateOrder, fetchOrder } = useOrdersFacade();
-  const { orderId } = useParams<{ orderId: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
   const [error, setError] = useState<string | null>(null);
   const history = useHistory();
 
   useEffect(() => {
-    fetchOrder(orderId).then((order: OrderModel) => {
+    fetchOrder(slug).then((order: OrderModel) => {
       reset({
         from: order.from,
         menuUrl: order.menuUrl,
@@ -40,19 +40,19 @@ export const useEditOrder = () => {
         }).toString(),
       });
     });
-  }, [fetchOrder, orderId, reset]);
+  }, [fetchOrder, slug, reset]);
 
   const onSubmit = useCallback(
     (data: FormData) => {
-      updateOrder(orderId, {
+      updateOrder(slug, {
         from: data.from,
         menuUrl: data.menuUrl,
         shippingCents: currency(data.shippingCents).multiply(100).value,
       })
-        .then((params: OrderModel) => history.push(`/order/${params.id}`))
+        .then((params: OrderModel) => history.push(`/order/${params.slug}`))
         .catch((err: Error) => setError(err.message));
     },
-    [history, orderId, updateOrder]
+    [history, slug, updateOrder]
   );
 
   return {

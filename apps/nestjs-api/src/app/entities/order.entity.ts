@@ -5,7 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { DishEntity } from './dish.entity';
@@ -16,6 +16,9 @@ import { OrderActionEntity } from './order-action.entity';
 export class OrderEntity implements OrderModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  slug: string;
 
   @ManyToOne(() => UserEntity)
   user: UserEntity;

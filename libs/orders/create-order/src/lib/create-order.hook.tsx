@@ -35,7 +35,7 @@ export const useCreateOrder = () => {
         orderAt: new Date().toISOString(),
         shippingCents: currency(data.shippingCents).multiply(100).value,
       })
-        .then((params: OrderModel) => history.push(`order/${params.id}`))
+        .then((params: OrderModel) => history.push(`/order/${params.slug}`))
         .catch((err: Error) => setError(err.message));
     },
     [createOrder, history]
