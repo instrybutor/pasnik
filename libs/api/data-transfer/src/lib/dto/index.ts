@@ -5,3 +5,4 @@ export * from './mark-as-ordered.dto';
 export * from './mark-as-paid.dto';
 export * from './mark-as-delivered.dto';
 export * from './find-order.dto';
+export * from './update-order.dto';

@@ -82,12 +82,6 @@
             "polyfills": "apps/frontend/src/polyfills.ts",
             "tsConfig": "apps/frontend/tsconfig.app.json",
             "assets": [
-              "apps/frontend/src/favicon.ico",
-              "apps/frontend/src/favicon-16x16.png",
-              "apps/frontend/src/favicon-32x32.png",
-              "apps/frontend/src/apple-touch-icon.png",
-              "apps/frontend/src/android-chrome-192x192.png",
-              "apps/frontend/src/android-chrome-512x512.png",
               "apps/frontend/src/site.webmanifest",
               "apps/frontend/src/assets"
             ],
@@ -311,6 +305,28 @@
           "outputs": ["coverage/libs/orders/data-access"],
           "options": {
             "jestConfig": "libs/orders/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "orders-edit-order": {
+      "root": "libs/orders/edit-order",
+      "sourceRoot": "libs/orders/edit-order/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/orders/edit-order/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/orders/edit-order"],
+          "options": {
+            "jestConfig": "libs/orders/edit-order/jest.config.js",
             "passWithNoTests": true
           }
         }
