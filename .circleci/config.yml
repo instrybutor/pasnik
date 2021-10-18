@@ -91,7 +91,7 @@ jobs:
           <<: *npm_cache
       - run:
           name: Set commit hash as a build version
-          command: echo 'export NX_COMMIT_HASH="${CIRCLE_SHA1::7}"' >> $BASH_ENV
+          command: echo 'export NX_VERSION="${CIRCLE_SHA1::7}"' >> $BASH_ENV
       - run: npm run affected:build -- ${AFFECTED_ARGS} --parallel --configuration production --sourceMap false
       - save_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
@@ -146,7 +146,51 @@ jobs:
 
 workflows:
   version: 2
+  pr_check:
+    triggers:
+      - schedule:
+          filters:
+            branches:
+              ignore:
+                - master
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
+
+  build-n-deploy-stage:
+    triggers:
+      - schedule:
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - build:
+          context: pasnik-stage
+          requires:
+            - install
+      - deploy:
+          context: pasnik-stage
+          requires:
+            - lint
+            - build
+
   build-n-deploy-prod:
+    triggers:
+      - schedule:
+          filters:
+            branches:
+              only:
+                - master
     jobs:
       - hold:
           type: approval

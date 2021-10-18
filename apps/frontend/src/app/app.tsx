@@ -11,7 +11,7 @@ import { PagesOrders } from '@pasnik/pages/orders';
 import { CreateOrder } from '@pasnik/orders/create-order';
 
 export function App() {
-  const version = process.env.NX_COMMIT_HASH;
+  const version = process.env.NX_VERSION;
 
   return (
     <BrowserRouter>
