@@ -13,7 +13,7 @@ import { EditOrder } from '@pasnik/orders/edit-order';
 import { PrivateRoute } from './PrivateRoute';
 
 export function App() {
-  const version = process.env.NX_COMMIT_HASH;
+  const version = process.env.NX_VERSION;
 
   return (
     <BrowserRouter>
