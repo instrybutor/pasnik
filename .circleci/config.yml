@@ -147,14 +147,12 @@ jobs:
 workflows:
   version: 2
   pr_check:
-    triggers:
-      - schedule:
+    jobs:
+      - install:
           filters:
             branches:
               ignore:
                 - master
-    jobs:
-      - install
       - lint:
           requires:
             - install
@@ -163,14 +161,12 @@ workflows:
             - install
 
   build-n-deploy-stage:
-    triggers:
-      - schedule:
+    jobs:
+      - install:
           filters:
             branches:
               only:
                 - master
-    jobs:
-      - install
       - lint:
           requires:
             - install
@@ -185,15 +181,13 @@ workflows:
             - build
 
   build-n-deploy-prod:
-    triggers:
-      - schedule:
+    jobs:
+      - hold:
+          type: approval
           filters:
             branches:
               only:
                 - master
-    jobs:
-      - hold:
-          type: approval
       - install:
           requires:
             - hold
