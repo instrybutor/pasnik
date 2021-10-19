@@ -136,7 +136,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                         key={item.name}
                         to={item.href}
                         className={classNames(
-                          'chuj group flex items-center px-2 py-2 text-base font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600',
+                          'group flex items-center px-2 py-2 text-base font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600',
                           {
                             hidden: true,
                           }
