@@ -14,17 +14,5 @@ export const orderValidator = yup.object({
 
       return false;
     }),
-  shippingCents: yup
-    .string()
-    .test(
-      'maxDigitsAfterDecimal',
-      'number field must have 2 digits after decimal or less',
-      (number: string | undefined) => {
-        if (number) {
-          return /^\d+(\.|,\d{1,2})?$/.test(number);
-        }
-
-        return true;
-      }
-    ),
+  shippingCents: yup.string(),
 });
