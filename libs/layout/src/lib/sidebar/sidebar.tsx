@@ -18,16 +18,16 @@ import classNames from 'classnames';
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
   { name: 'Historia zamówień', href: '/history', icon: ClockIcon },
-  { name: 'Balances', href: '/balances', icon: ScaleIcon },
-  { name: 'Cards', href: '/cards', icon: CreditCardIcon },
-  { name: 'Recipients', href: '/recipients', icon: UserGroupIcon },
-  { name: 'Reports', href: '/reports', icon: DocumentReportIcon },
+  { name: 'Balances', href: '/balances', icon: ScaleIcon, hide: true },
+  { name: 'Cards', href: '/cards', icon: CreditCardIcon, hide: true },
+  { name: 'Recipients', href: '/recipients', icon: UserGroupIcon, hide: true },
+  { name: 'Reports', href: '/reports', icon: DocumentReportIcon, hide: true },
 ];
 
 const secondaryNavigation = [
-  { name: 'Settings', href: '#', icon: CogIcon },
-  { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
-  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
+  { name: 'Settings', href: '#', icon: CogIcon, hide: true },
+  { name: 'Help', href: '#', icon: QuestionMarkCircleIcon, hide: true },
+  { name: 'Privacy', href: '#', icon: ShieldCheckIcon, hide: true },
 ];
 
 export interface SidebarProps {
@@ -109,10 +109,13 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                       exact={item.exact}
                       activeClassName="bg-cyan-800 text-white"
                       className={classNames(
-                        isCurrentRoute(item.href)
-                          ? 'bg-cyan-800 text-white'
-                          : 'text-cyan-100 hover:text-white hover:bg-cyan-600',
-                        'group flex items-center px-2 py-2 text-base font-medium rounded-md'
+                        'group flex items-center px-2 py-2 text-base font-medium rounded-md',
+                        {
+                          hidden: item.hide,
+                          'bg-cyan-800 text-white': isCurrentRoute(item.href),
+                          'text-cyan-100 hover:text-white hover:bg-cyan-600':
+                            !isCurrentRoute(item.href),
+                        }
                       )}
                       aria-current={
                         isCurrentRoute(item.href) ? 'page' : undefined
@@ -132,7 +135,12 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                       <NavLink
                         key={item.name}
                         to={item.href}
-                        className="group flex items-center px-2 py-2 text-base font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600"
+                        className={classNames(
+                          'group flex items-center px-2 py-2 text-base font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600',
+                          {
+                            hidden: true,
+                          }
+                        )}
                       >
                         <item.icon
                           className="mr-4 h-6 w-6 text-cyan-200"
@@ -183,10 +191,13 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                     to={item.href}
                     exact={item.exact}
                     className={classNames(
-                      isCurrentRoute(item.href)
-                        ? 'bg-cyan-800 text-white'
-                        : 'text-cyan-100 hover:text-white hover:bg-cyan-600',
-                      'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md'
+                      'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
+                      {
+                        hidden: item.hide,
+                        'bg-cyan-800 text-white': isCurrentRoute(item.href),
+                        'text-cyan-100 hover:text-white hover:bg-cyan-600':
+                          !isCurrentRoute(item.href),
+                      }
                     )}
                     aria-current={
                       isCurrentRoute(item.href) ? 'page' : undefined
@@ -206,7 +217,10 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                     <NavLink
                       key={item.name}
                       to={item.href}
-                      className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600"
+                      className={classNames(
+                        'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600',
+                        { hidden: item.hide }
+                      )}
                     >
                       <item.icon
                         className="mr-4 h-6 w-6 text-cyan-200"

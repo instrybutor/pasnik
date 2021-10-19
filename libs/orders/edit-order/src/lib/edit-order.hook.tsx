@@ -1,21 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import currency from 'currency.js';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useOrdersFacade } from '@pasnik/orders-data-access';
-import { orderValidator, OrderModel } from '@pasnik/api/data-transfer';
+import {
+  orderValidator,
+  OrderModel,
+  CreateOrderDto,
+} from '@pasnik/api/data-transfer';
 
-interface FormOrder {
-  from: string;
-  menuUrl: string;
-  shippingCents?: string;
+interface FormData extends Omit<CreateOrderDto, 'shippingCents'> {
+  shippingCents: string;
 }
-
-export const formatter = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
 
 export const useEditOrder = () => {
   const {
@@ -37,21 +35,19 @@ export const useEditOrder = () => {
       reset({
         from: order.from,
         menuUrl: order.menuUrl,
-        shippingCents: `${order.shippingCents}`,
+        shippingCents: currency(order.shippingCents ?? 0, {
+          fromCents: true,
+        }).toString(),
       });
     });
   }, [fetchOrder, orderId, reset]);
 
   const onSubmit = useCallback(
-    (data: FormOrder) => {
-      const newPrice = +formatter
-        .format(+(data.shippingCents ?? 0))
-        .replace(/,/, '.');
-
+    (data: FormData) => {
       updateOrder(orderId, {
         from: data.from,
         menuUrl: data.menuUrl,
-        shippingCents: newPrice * 100,
+        shippingCents: currency(data.shippingCents).multiply(100).value,
       })
         .then((params: OrderModel) => history.push(`/order/${params.id}`))
         .catch((err: Error) => setError(err.message));

@@ -30,7 +30,8 @@
     "help": "nx help",
     "docker-compose": "docker-compose -f ./docker/docker-compose.yml",
     "prepare": "husky install",
-    "typeorm": "ts-node --project tsconfig.typeorm.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ormconfig.ts"
+    "typeorm": "ts-node --transpile-only --project apps/nestjs-api/tsconfig.app.json -r tsconfig-paths/register ./node_modules/.bin/typeorm --config ormconfig.ts",
+    "build-migrations": "tsc --project tsconfig.typeorm.json"
   },
   "private": true,
   "dependencies": {
@@ -52,6 +53,7 @@
     "autoprefixer": "^10.3.4",
     "classnames": "^2.3.1",
     "core-js": "^3.6.5",
+    "currency.js": "^2.0.4",
     "date-fns": "^2.24.0",
     "google-auth-library": "^7.6.2",
     "passport": "^0.4.1",
@@ -71,7 +73,7 @@
     "styled-components": "^5.3.1",
     "tailwindcss": "^2.2.15",
     "tslib": "^2.0.0",
-    "typeorm": "^0.2.36",
+    "typeorm": "^0.2.38",
     "yup": "^0.32.9",
     "zustand": "^3.5.10"
   },
