@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 import { FrontendMiddleware } from './frontend.middleware';
 import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
-import DatabaseConfig from './db/db.config';
+import { DatabaseConfig } from './db.config';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import DatabaseConfig from './db/db.config';
     }),
     TypeOrmModule.forRoot({
       ...DatabaseConfig,
-      autoLoadEntities: true
+      autoLoadEntities: true,
     }),
     AuthModule,
     UsersModule,

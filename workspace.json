@@ -240,30 +240,6 @@
         }
       }
     },
-    "orders-active-order": {
-      "root": "libs/orders/active-order",
-      "sourceRoot": "libs/orders/active-order/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": [
-              "libs/orders/active-order/**/*.{ts,tsx,js,jsx}"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/orders/active-order"],
-          "options": {
-            "jestConfig": "libs/orders/active-order/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "orders-create-order": {
       "root": "libs/orders/create-order",
       "sourceRoot": "libs/orders/create-order/src",

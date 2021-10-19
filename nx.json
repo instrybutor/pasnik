@@ -45,9 +45,6 @@
     "nestjs-api": {
       "tags": []
     },
-    "orders-active-order": {
-      "tags": []
-    },
     "orders-create-order": {
       "tags": []
     },
