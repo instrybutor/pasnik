@@ -1,12 +1,14 @@
 {
   "extends": "./tsconfig.base.json",
   "files": [],
-  "include": [],
+  "include": ["apps/nestjs-api/src/app/migrations/*.ts"],
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist/apps/nestjs-api",
+    "rootDir": "./apps/nestjs-api/src/app/",
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "target": "es2015"
+    "target": "es2015",
+    "sourceMap": false
   }
 }
