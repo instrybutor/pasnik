@@ -23,9 +23,10 @@ export class DishEntity implements DishModel {
   orderId: string;
 
   @ManyToOne(() => UserEntity, {
-    cascade: true,
+    nullable: true,
+    onDelete: 'SET NULL'
   })
-  user: UserEntity;
+  user?: UserEntity;
 
   @CreateDateColumn()
   createdAt: string;
