@@ -9,7 +9,7 @@ export function Price({ priceCents }: PriceProps) {
     pattern: '# !',
   }).format({
     precision: 2,
-    symbol: 'PLN',
+    symbol: 'zł',
   });
 
   return <span>{price}</span>;
