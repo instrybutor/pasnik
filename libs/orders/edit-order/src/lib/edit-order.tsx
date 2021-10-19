@@ -52,7 +52,8 @@ export const EditOrder: FC = () => {
           <div className="flex flex-col">
             <label className="mb-2">Delivery Price (optional)</label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               placeholder="Put delivery price"
               className="border rounded border-gray-300 p-4"
               {...register('shippingCents')}

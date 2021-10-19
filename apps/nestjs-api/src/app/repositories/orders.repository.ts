@@ -16,6 +16,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
 
     order.user = user;
     order.from = createOrderDto.from;
+    order.shippingCents = createOrderDto.shippingCents;
     order.menuUrl = createOrderDto.menuUrl;
 
     return this.save(order);

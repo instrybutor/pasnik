@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import currency from 'currency.js';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useOrdersFacade } from '@pasnik/orders-data-access';
@@ -10,7 +11,9 @@ import {
   OrderModel,
 } from '@pasnik/api/data-transfer';
 
-import { formatter } from './create-order.utils';
+interface FormData extends Omit<CreateOrderDto, 'shippingCents'> {
+  shippingCents: string;
+}
 
 export const useCreateOrder = () => {
   const {
@@ -26,17 +29,13 @@ export const useCreateOrder = () => {
   const history = useHistory();
 
   const onSubmit = useCallback(
-    (data: CreateOrderDto) => {
-      const newPrice = data.shippingCents
-        ? +formatter.format(data.shippingCents).replace(/,/, '.')
-        : null;
-
+    (data: FormData) => {
       createOrder({
         ...data,
         orderAt: new Date().toISOString(),
-        shippingCents: newPrice ? newPrice * 100 : undefined,
+        shippingCents: currency(data.shippingCents).multiply(100).value,
       })
-        .then((params: OrderModel) => history.push(`order/` + params.id))
+        .then((params: OrderModel) => history.push(`order/${params.id}`))
         .catch((err: Error) => setError(err.message));
     },
     [createOrder, history]
