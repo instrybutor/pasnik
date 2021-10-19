@@ -4,13 +4,15 @@ export class RemoveUserDish1634654311660 implements MigrationInterface {
     name = 'RemoveUserDish1634654311660'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-      await queryRunner.addColumn("dish_entity", new TableColumn({
+      const dishTable = await queryRunner.getTable('dish_entity');
+
+      await queryRunner.addColumn(dishTable, new TableColumn({
         name: 'userId',
         type: "integer",
         isNullable: true,
       }));
 
-      await queryRunner.createForeignKey('dish_entity', new TableForeignKey({
+      await queryRunner.createForeignKey(dishTable, new TableForeignKey({
         columnNames: ['userId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'user_entity',
@@ -23,6 +25,11 @@ export class RemoveUserDish1634654311660 implements MigrationInterface {
         FROM user_dish_entity
         WHERE user_dish_entity."dishId" = dish_entity.id
       `);
+
+      const userIdColumn = dishTable.findColumnByName('userId');
+      const changedUserIdColumn = userIdColumn.clone();
+      changedUserIdColumn.isNullable = false;
+      await queryRunner.changeColumn('dish_entity', userIdColumn, changedUserIdColumn);
 
       await queryRunner.dropTable('user_dish_entity');
     }
@@ -76,9 +83,9 @@ export class RemoveUserDish1634654311660 implements MigrationInterface {
         )
       `)
 
-      const table = await queryRunner.getTable("dish_entity");
-      const foreignKey = table.foreignKeys.find(fk => fk.columnNames.indexOf("userId") !== -1);
-      await queryRunner.dropForeignKey('dish_entity', foreignKey)
-      await queryRunner.dropColumn('dish_entity', 'userId');
+      const dishTable = await queryRunner.getTable("dish_entity");
+      const foreignKey = dishTable.foreignKeys.find(fk => fk.columnNames.indexOf("userId") !== -1);
+      await queryRunner.dropForeignKey(dishTable, foreignKey);
+      await queryRunner.dropColumn(dishTable, 'userId');
     }
 }

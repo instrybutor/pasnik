@@ -22,11 +22,8 @@ export class DishEntity implements DishModel {
   @Column()
   orderId: string;
 
-  @ManyToOne(() => UserEntity, {
-    nullable: true,
-    onDelete: 'SET NULL'
-  })
-  user?: UserEntity;
+  @ManyToOne(() => UserEntity)
+  user: UserEntity;
 
   @CreateDateColumn()
   createdAt: string;
