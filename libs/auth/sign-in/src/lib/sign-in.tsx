@@ -12,9 +12,16 @@ export const SignIn: React.FC = () => {
   const onSuccess = useCallback(
     ({ credential }: google.accounts.IGoogleCallbackResponse) => {
       if (credential) {
-        auth.signIn(credential).then(() => {
-          history.push('/');
-        });
+        auth
+          .signIn(credential)
+          .then(() => {
+            history.push('/');
+          })
+          .catch((result) => {
+            // if (result.status === 403) {
+            //
+            // }
+          });
       }
     },
     [auth, history]

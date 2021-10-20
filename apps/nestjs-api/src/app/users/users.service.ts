@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Profile } from 'passport';
 import { UserEntity } from '../entities/user.entity';
+import { UsersRepository } from '../repositories/users.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>
+    @InjectRepository(UsersRepository)
+    private usersRepository: UsersRepository
   ) {}
 
   findAll(): Promise<UserEntity[]> {
@@ -24,16 +24,13 @@ export class UsersService {
   }
 
   async createUser(profile: Profile) {
-    const user =
-      (await this.usersRepository.findOne({
-        where: { googleId: profile.id },
-      })) ?? new UserEntity();
-    user.googleId = profile.id;
-    user.email = profile.emails[0].value;
-    user.avatarImg = profile.photos[0]?.value;
-    user.givenName = profile.name.givenName;
-    user.familyName = profile.name.familyName;
-    await this.usersRepository.save(user);
+    const existingUser = await this.usersRepository.findOne({
+      where: { googleId: profile.id },
+    });
+    if (!existingUser) {
+      const invitation = await
+    }
+    const user = await this.usersRepository.upsertGoogleUser(profile);
     return this.findOne(user.id);
   }
 }
