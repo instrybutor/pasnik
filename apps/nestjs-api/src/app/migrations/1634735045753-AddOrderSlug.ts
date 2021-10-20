@@ -17,9 +17,7 @@ export class AddOrderSlug1634735045753 implements MigrationInterface {
       `ALTER TABLE "dish_entity" ADD CONSTRAINT "FK_9706674ad9c7fc5160414903c46" FOREIGN KEY ("userId") REFERENCES "user_entity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
 
-    await queryRunner.query(
-      `UPDATE "order_entity" SET "slug" = "subquery"."id" FROM (SELECT "id" FROM "order_entity") as "subquery" WHERE "order_entity"."id" = "subquery"."id"`
-    );
+    await queryRunner.query(`UPDATE "order_entity" SET "slug" = "id"`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
