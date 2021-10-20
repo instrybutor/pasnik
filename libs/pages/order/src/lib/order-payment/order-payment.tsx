@@ -7,6 +7,7 @@ import {
 import { UserDishesSummary } from '../order-summary/order-summary.hook';
 import OrderSelectPayer from '../order-select-payer/order-select-payer';
 import { useOrderFacade } from '../order-store/order.facade';
+import currency from 'currency.js';
 
 export interface OrderPaymentProps {
   order: OrderModel;
@@ -30,7 +31,9 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
                 <OrderSelectPayer
                   payer={order.payer}
                   totalCents={
-                    -userDishesSummary.total - userDishesSummary.shipping
+                    currency(-userDishesSummary.total).subtract(
+                      userDishesSummary.shipping
+                    ).value
                   }
                   setPayer={setPayer}
                 />
@@ -55,7 +58,9 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
                   <UserName user={userDishesSummary.user}>
                     <Price
                       priceCents={
-                        userDishesSummary.shipping + userDishesSummary.total
+                        currency(userDishesSummary.shipping).add(
+                          userDishesSummary.total
+                        ).value
                       }
                     />{' '}
                     (dostawa <Price priceCents={userDishesSummary.shipping} />)

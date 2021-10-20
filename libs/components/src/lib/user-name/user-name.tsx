@@ -32,7 +32,7 @@ export function UserName({
     <div
       className={classNames({
         'inline-flex': !children,
-        'flex flex-col': children,
+        'flex flex-col': !!children,
       })}
     >
       <p className="text-gray-700 group-hover:text-gray-900 truncate">

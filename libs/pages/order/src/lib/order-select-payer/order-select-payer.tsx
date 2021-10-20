@@ -27,7 +27,6 @@ export function OrderSelectPayer({
     },
     [setPayer, payer]
   );
-
   return (
     <div className="flex items-center">
       <Listbox value={payer} onChange={setPayerHandler}>
