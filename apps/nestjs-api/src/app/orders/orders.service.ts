@@ -123,7 +123,7 @@ export class OrdersService {
       );
 
       const order = await ordersRepository.findOneOrFail(orderId, {
-        relations: ['dishes'],
+        relations: ['dishes', 'payer'],
       });
       await ordersRepository.markAsDelivered(order, markAsDeliveredDto);
       await orderActionsRepository.createAction(
