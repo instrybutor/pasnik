@@ -5,7 +5,7 @@ export class AddOrderSlug1634735045753 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE "order_entity" ADD "slug" character varying NOT NULL`
+      `ALTER TABLE "order_entity" ADD "slug" character varying`
     );
     await queryRunner.query(
       `ALTER TABLE "dish_entity" DROP CONSTRAINT "FK_9706674ad9c7fc5160414903c46"`
@@ -18,6 +18,9 @@ export class AddOrderSlug1634735045753 implements MigrationInterface {
     );
 
     await queryRunner.query(`UPDATE "order_entity" SET "slug" = "id"`);
+    await queryRunner.query(
+      `ALTER TABLE "order_entity" ALTER COLUMN "slug" SET NOT NULL`
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
