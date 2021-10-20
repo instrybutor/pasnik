@@ -1,79 +1,87 @@
-import { MigrationInterface, QueryRunner, Table, TableColumn, TableForeignKey } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableColumn,
+  TableForeignKey,
+} from 'typeorm';
 
 export class RemoveUserDish1634654311660 implements MigrationInterface {
-    name = 'RemoveUserDish1634654311660'
+  name = 'RemoveUserDish1634654311660';
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-      const dishTable = await queryRunner.getTable('dish_entity');
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    const dishTable = await queryRunner.getTable('dish_entity');
 
-      await queryRunner.addColumn(dishTable, new TableColumn({
+    await queryRunner.addColumn(
+      dishTable,
+      new TableColumn({
         name: 'userId',
-        type: "integer",
-        isNullable: true,
-      }));
+        type: 'integer',
+      })
+    );
 
-      await queryRunner.createForeignKey(dishTable, new TableForeignKey({
+    await queryRunner.createForeignKey(
+      dishTable,
+      new TableForeignKey({
         columnNames: ['userId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'user_entity',
-        onDelete: 'SET NULL'
-      }));
+        onDelete: 'SET NULL',
+      })
+    );
 
-      await queryRunner.query(`
+    await queryRunner.query(`
         UPDATE dish_entity
         SET "userId" = user_dish_entity."userId"
         FROM user_dish_entity
         WHERE user_dish_entity."dishId" = dish_entity.id
       `);
 
-      const userIdColumn = dishTable.findColumnByName('userId');
-      const changedUserIdColumn = userIdColumn.clone();
-      changedUserIdColumn.isNullable = false;
-      await queryRunner.changeColumn('dish_entity', userIdColumn, changedUserIdColumn);
+    await queryRunner.dropTable('user_dish_entity');
+  }
 
-      await queryRunner.dropTable('user_dish_entity');
-    }
-
-    public async down(queryRunner: QueryRunner): Promise<void> {
-      await queryRunner.createTable(new Table({
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.createTable(
+      new Table({
         name: 'user_dish_entity',
         columns: [
           {
             name: 'userId',
-            type: "integer",
+            type: 'integer',
             isNullable: false,
-            isPrimary: true
+            isPrimary: true,
           },
           {
             name: 'dishId',
-            type: "integer",
+            type: 'integer',
             isNullable: false,
-            isPrimary: true
+            isPrimary: true,
           },
           {
             name: 'dishOwner',
-            type: "boolean",
+            type: 'boolean',
             isNullable: false,
-            default: true
-          }
+            default: true,
+          },
         ],
         foreignKeys: [
           {
-            columnNames: ["userId"],
-            referencedColumnNames: ["id"],
-            referencedTableName: "user_entity",
-            onDelete: 'SET NULL'
+            columnNames: ['userId'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'user_entity',
+            onDelete: 'SET NULL',
           },
           {
-            columnNames: ["dishId"],
-            referencedColumnNames: ["id"],
-            referencedTableName: "dish_entity",
-            onDelete: 'CASCADE'
-          }
-        ]
-      }));
+            columnNames: ['dishId'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'dish_entity',
+            onDelete: 'CASCADE',
+          },
+        ],
+      })
+    );
 
-      await queryRunner.query(`
+    await queryRunner.query(`
         INSERT INTO user_dish_entity ("dishId", "userId", "dishOwner") (
           SELECT
             d.id,
@@ -81,11 +89,13 @@ export class RemoveUserDish1634654311660 implements MigrationInterface {
             'true'
           FROM dish_entity d
         )
-      `)
+      `);
 
-      const dishTable = await queryRunner.getTable("dish_entity");
-      const foreignKey = dishTable.foreignKeys.find(fk => fk.columnNames.indexOf("userId") !== -1);
-      await queryRunner.dropForeignKey(dishTable, foreignKey);
-      await queryRunner.dropColumn(dishTable, 'userId');
-    }
+    const dishTable = await queryRunner.getTable('dish_entity');
+    const foreignKey = dishTable.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf('userId') !== -1
+    );
+    await queryRunner.dropForeignKey(dishTable, foreignKey);
+    await queryRunner.dropColumn(dishTable, 'userId');
+  }
 }
