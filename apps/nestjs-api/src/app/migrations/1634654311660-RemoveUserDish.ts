@@ -17,6 +17,7 @@ export class RemoveUserDish1634654311660 implements MigrationInterface {
       new TableColumn({
         name: 'userId',
         type: 'integer',
+        isNullable: true,
       })
     );
 
