@@ -1,4 +1,9 @@
-import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import {
+  AddDishDto,
+  DishModel,
+  OrderModel,
+  SetPayerDto,
+} from '@pasnik/api/data-transfer';
 import { authFetch } from '@pasnik/shared/utils-auth';
 
 export const fetchOrder = (id: string) =>
@@ -12,6 +17,12 @@ export const markAsClosed = (id: string) =>
 
 export const markAsOpen = (id: string) =>
   authFetch<OrderModel>(`/api/orders/${id}/mark-as-open`, { method: 'POST' });
+
+export const setPayer = (id: string, setPayerDto: SetPayerDto) =>
+  authFetch<OrderModel>(`/api/orders/${id}/set-payer`, {
+    method: 'POST',
+    body: JSON.stringify(setPayerDto),
+  });
 
 export const markAsDelivered = (id: string) =>
   authFetch<OrderModel>(`/api/orders/${id}/mark-as-delivered`, {

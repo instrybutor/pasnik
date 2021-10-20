@@ -1,22 +1,14 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import { UserDishModel } from '@pasnik/api/data-transfer';
-import { UserInfo, UserAvatar } from '@pasnik/components';
+import { UserModel } from '@pasnik/api/data-transfer';
+import { UserAvatar, UserInfo } from '@pasnik/components';
 
 export interface OrderDishProps {
-  userDishes: UserDishModel[];
+  user: UserModel;
 }
 
-export function OrderDishUsers({ userDishes }: OrderDishProps) {
-  const dishOwner = useMemo(
-    () => userDishes.find((userDish) => userDish.dishOwner),
-    [userDishes]
-  );
-  const others = useMemo(
-    () => userDishes.filter((userDish) => !userDish.dishOwner),
-    [userDishes]
-  );
+export function OrderDishUser({ user }: OrderDishProps) {
   return (
     <Popover>
       {({ open }) => (
@@ -24,19 +16,13 @@ export function OrderDishUsers({ userDishes }: OrderDishProps) {
           <Popover.Button
             className={classNames(
               open ? 'text-gray-900' : 'text-gray-500',
-              others.length > 0 ? 'rounded-md' : 'rounded-full h-6 w-6',
-              'group block bg-white items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500'
+              'group block bg-white rounded-full h-6 w-6 items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500'
             )}
           >
             <div className="flex items-center space-x-2">
               <div className="flex flex-shrink-0 -space-x-1">
-                <UserAvatar size="xsm" user={dishOwner?.user} />
+                <UserAvatar size="xsm" user={user} />
               </div>
-              {others.length > 0 && (
-                <span className="flex-shrink-0 text-xs leading-5 font-medium">
-                  +{others.length}
-                </span>
-              )}
             </div>
           </Popover.Button>
 
@@ -52,9 +38,7 @@ export function OrderDishUsers({ userDishes }: OrderDishProps) {
             <Popover.Panel className="absolute z-10 left-1/2 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-xs sm:px-0">
               <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                 <div className="relative grid gap-6 bg-white px-4 py-2">
-                  {userDishes.map((item) => (
-                    <UserInfo key={item.user.id} user={item.user} size="sm" />
-                  ))}
+                  <UserInfo user={user} size="sm" />
                 </div>
               </div>
             </Popover.Panel>
@@ -65,4 +49,4 @@ export function OrderDishUsers({ userDishes }: OrderDishProps) {
   );
 }
 
-export default OrderDishUsers;
+export default OrderDishUser;

@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/outline';
 import { PencilIcon, TrashIcon, XIcon } from '@heroicons/react/solid';
 import { DishModel } from '@pasnik/api/data-transfer';
-import OrderDishUsers from '../order-dish-users/order-dish-user';
+import OrderDishUser from '../order-dish-users/order-dish-user';
 import { Price } from '@pasnik/components';
 import { Menu, Transition } from '@headlessui/react';
 
@@ -45,12 +45,12 @@ export function OrderDish({
   }, [inProgress]);
 
   return (
-    <li className="flex items-center relative">
+    <li className="flex items-center">
       <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between pl-4 sm:pl-6 py-4 ">
         <div className="text-sm text-gray-500 min-w-0 flex-1">{dish.name}</div>
         <div className="flex items-center flex-row-reverse justify-end sm:flex-row sm:justify-start mt-2 sm:mt-0">
           <div className="px-4 flex-shrink-0">
-            <OrderDishUsers userDishes={dish.usersDishes} />
+            <OrderDishUser user={dish.user} />
           </div>
           <div className="sm:px-4 whitespace-nowrap text-sm text-gray-500 flex-shrink-0">
             <Price priceCents={dish.priceCents} />

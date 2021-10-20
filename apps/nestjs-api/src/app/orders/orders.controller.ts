@@ -6,8 +6,8 @@ import {
   CreateOrderDto,
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
-  MarkAsPaidDto,
   UpdateOrderDto,
+  SetPayerDto
 } from '@pasnik/api/data-transfer';
 
 @Controller('api/orders')
@@ -66,13 +66,13 @@ export class OrdersController {
     return this.ordersService.markAsOpen(id, user);
   }
 
-  @Post(':id/mark-as-paid')
+  @Post(':id/set-payer')
   markAsPaid(
     @Param('id') id,
-    @Body() markAsPaidDto: MarkAsPaidDto,
-    @CurrentUser() user: UserEntity
+    @Body() setPayerDto: SetPayerDto,
+    @CurrentUser() user: UserEntity,
   ) {
-    return this.ordersService.markAsPaid(id, markAsPaidDto, user);
+    return this.ordersService.setPayer(id, setPayerDto, user);
   }
 
   @Post(':id/mark-as-delivered')

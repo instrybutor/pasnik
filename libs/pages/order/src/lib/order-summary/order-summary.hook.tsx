@@ -29,17 +29,18 @@ export const useOrderSummary = (order: OrderModel) => {
   const groupSummaries = useCallback(
     (dishes: DishModel[]) => {
       const summaries = dishes.reduce((acc, dish) => {
-        dish.usersDishes.forEach(({ user }) => {
-          const userSummary: UserDishesSummary = acc[user.id] || {
-            user,
-            dishes: [],
-            total: 0,
-            shipping: 0,
-          };
-          userSummary.dishes.push(dish);
-          userSummary.total += dish.priceCents;
-          acc[user.id] = userSummary;
-        });
+        if (!dish.user) {
+          return acc;
+        }
+        const userSummary: UserDishesSummary = acc[dish.user.id] || {
+          user: dish.user,
+          dishes: [],
+          total: 0,
+          shipping: 0,
+        };
+        userSummary.dishes.push(dish);
+        userSummary.total += dish.priceCents;
+        acc[dish.user.id] = userSummary;
         return acc;
       }, {} as Record<UserModel['id'], UserDishesSummary>);
       if (order.shippingCents) {

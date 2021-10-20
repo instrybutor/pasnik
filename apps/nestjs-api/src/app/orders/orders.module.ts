@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { DishEntity } from '../entities/dish.entity';
-import { UserDishEntity } from '../entities/user-dish.entity';
 import { OrdersRepository } from '../repositories/orders.repository';
 import { OrderActionEntity } from '../entities/order-action.entity';
 import { UsersRepository } from '../repositories/users.repository';
@@ -14,7 +13,6 @@ import { UsersRepository } from '../repositories/users.repository';
       OrdersRepository,
       OrderActionEntity,
       DishEntity,
-      UserDishEntity,
       UsersRepository
     ]),
   ],

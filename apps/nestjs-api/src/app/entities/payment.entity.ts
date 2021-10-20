@@ -7,9 +7,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { PaymentModel } from '@pasnik/api/data-transfer';
 
 @Entity()
-export class PaymentEntity {
+export class PaymentEntity implements PaymentModel {
   @PrimaryGeneratedColumn()
   id: number;
 

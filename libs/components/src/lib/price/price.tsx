@@ -7,6 +7,7 @@ export function Price({ priceCents }: PriceProps) {
   const price = currency(priceCents ?? 0, {
     fromCents: true,
     pattern: '# !',
+    negativePattern: '-# !',
   }).format({
     precision: 2,
     symbol: 'zł',
