@@ -24,6 +24,8 @@ function useProvideAuth() {
     return authFetch<UserModel>('/api/users/me').then((user) => {
       setUser(user);
       setFetching(false);
+
+      history.push('/');
       return user;
     });
   }, []);
