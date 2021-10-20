@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserEntity } from './user.entity';
 import { InvitationModel, InvitationStatus } from '@pasnik/api/data-transfer';
 
@@ -16,9 +23,9 @@ export class InvitationEntity implements InvitationModel {
   @Column({ type: 'varchar' })
   status: InvitationStatus;
 
-  @Column({ nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   acceptedBy?: UserEntity;
 
-  @Column({ nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   user?: UserEntity;
 }

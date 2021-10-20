@@ -42,13 +42,26 @@ function useProvideAuth() {
     (accessToken: string) => {
       return fetch(`/api/auth/google?access_token=${accessToken}`)
         .then((res) => {
+          if (res.status === 403) {
+            return res.json(); // invitation required
+          }
+
           if (!res.ok) {
             throw new Error(`${res.status}: ${res.statusText}`);
           }
 
           return res.json();
         })
-        .then(({ accessToken }) => {
+        .then(({ accessToken, requestToken }) => {
+          if (requestToken) {
+            history.push({
+              pathname: '/request-access',
+              state: {
+                requestToken,
+              },
+            });
+            return;
+          }
           localStorage.setItem('jwt', accessToken);
           return fetchUser();
         })
@@ -63,6 +76,10 @@ function useProvideAuth() {
     history.push('/login');
   }, [history]);
 
+  const requestAccess = useCallback(() => {
+    fetch('/api/auth/request-access', {});
+  }, []);
+
   React.useEffect(() => {
     Promise.all([fetchUsers(), fetchUser()]).catch(() => {
       setFetching(false);
@@ -75,6 +92,7 @@ function useProvideAuth() {
     fetching,
     signIn,
     signOut,
+    requestAccess,
   };
 }
 

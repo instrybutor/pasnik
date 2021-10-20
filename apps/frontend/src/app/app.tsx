@@ -11,6 +11,7 @@ import { CreateOrder } from '@pasnik/orders/create-order';
 import { EditOrder } from '@pasnik/orders/edit-order';
 
 import { PrivateRoute } from './PrivateRoute';
+import { RequestAccess } from './RequestAccess';
 
 export function App() {
   const version = process.env.NX_VERSION;
@@ -20,6 +21,7 @@ export function App() {
       <ProvideAuth>
         <Switch>
           <Route path="/login" component={SignIn} />
+          <Route path="/request-access" component={RequestAccess} />
 
           <Layout version={version}>
             <PrivateRoute exact path="/" component={PagesDashboard} />

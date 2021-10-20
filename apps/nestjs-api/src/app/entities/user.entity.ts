@@ -32,4 +32,7 @@ export class UserEntity implements UserModel {
 
   @Column({ nullable: true })
   avatarImg: string;
+
+  @Column({ default: false })
+  isAdmin: boolean;
 }
