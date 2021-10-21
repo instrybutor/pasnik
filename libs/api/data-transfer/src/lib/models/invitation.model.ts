@@ -2,7 +2,7 @@ import { UserModel } from '@pasnik/api/data-transfer';
 
 export enum InvitationStatus {
   REQUESTED = 'requested',
-  ACCEPTED = 'accepted',
+  APPROVED = 'approved',
 }
 
 export interface InvitationModel {

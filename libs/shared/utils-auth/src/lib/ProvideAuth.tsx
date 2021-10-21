@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 
 import { UserModel } from '@pasnik/api/data-transfer';
 
-import { AuthContext } from './authContext';
+import { AuthContext, SignInResult } from './authContext';
 import { authFetch } from './auth-fetch.service';
 import { useGoogleLibLoader } from './useGoogleLibLoader';
 
@@ -39,10 +39,10 @@ function useProvideAuth() {
   }, []);
 
   const signIn = useCallback(
-    (accessToken: string) => {
+    (accessToken: string): Promise<SignInResult> => {
       return fetch(`/api/auth/google?access_token=${accessToken}`)
         .then((res) => {
-          if (res.status === 403) {
+          if (res.status === 402) {
             return res.json(); // invitation required
           }
 
@@ -54,18 +54,15 @@ function useProvideAuth() {
         })
         .then(({ accessToken, requestToken }) => {
           if (requestToken) {
-            history.push({
-              pathname: '/request-access',
-              state: {
-                requestToken,
-              },
-            });
-            return;
+            return { requestToken, success: false };
           }
           localStorage.setItem('jwt', accessToken);
-          return fetchUser();
+          return fetchUser().then((user) => ({ success: true }));
         })
-        .catch(() => history.push('/login'));
+        .catch(() => {
+          history.push('/login');
+          return { success: false };
+        });
     },
     [fetchUser, history]
   );
@@ -76,8 +73,14 @@ function useProvideAuth() {
     history.push('/login');
   }, [history]);
 
-  const requestAccess = useCallback(() => {
-    fetch('/api/auth/request-access', {});
+  const requestAccess = useCallback((requestToken) => {
+    return fetch('/api/auth/request-access', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ requestToken }),
+    });
   }, []);
 
   React.useEffect(() => {

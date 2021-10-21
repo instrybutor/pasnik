@@ -24,12 +24,6 @@ export class UsersService {
   }
 
   async createUser(profile: Profile) {
-    const existingUser = await this.usersRepository.findOne({
-      where: { googleId: profile.id },
-    });
-    if (!existingUser) {
-      const invitation = await
-    }
     const user = await this.usersRepository.upsertGoogleUser(profile);
     return this.findOne(user.id);
   }

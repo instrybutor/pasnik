@@ -11,12 +11,12 @@ export const RequestAccess = () => {
   const { requestAccess } = useAuth();
 
   const requestAccessHandler = useCallback(() => {
-    requestAccess(history.location.state.requestToken).then();
-  }, []);
+    requestAccess(requestToken).then();
+  }, [requestAccess, requestToken]);
   return (
     <>
       You're not allowed to visit this page. Click here to{' '}
-      <button onClick={}>request access</button>
+      <button onClick={requestAccessHandler}>request access</button>
     </>
   );
 };

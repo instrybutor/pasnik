@@ -11,7 +11,7 @@ export interface GoogleIdTokenOptions {
 
 export type ValidateCallback = (
   profile: Profile,
-  done: (error: Error | null, user: UserEntity | null) => void
+  done: (error: Error | null, user: UserEntity | null, info: any) => void
 ) => Promise<UserEntity>;
 
 export class GoogleIdTokenStrategy extends Strategy {
@@ -30,18 +30,20 @@ export class GoogleIdTokenStrategy extends Strategy {
 
   async authenticate(req: Request) {
     const accessToken = req.query.access_token as string;
-
     const userProfile = await this.getUserProfile(accessToken);
 
-    await this.verify(userProfile, (error, user) => {
-      if (error) {
-        this.error(error);
-      } else if (user) {
-        this.success(user);
-      } else {
-        this.fail(401);
-      }
-    });
+    const verified = (err, user, info) => {
+      if (err) { return this.error(err); }
+      if (!user) { return this.fail(info); }
+      this.success(user, info);
+    }
+
+    try {
+      const user = await this.verify(userProfile, verified);
+      this.success(user);
+    } catch (e) {
+      return this.error(e);
+    }
   }
 
   private async getUserProfile(idToken: string): Promise<Profile> {

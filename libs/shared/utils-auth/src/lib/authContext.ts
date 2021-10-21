@@ -1,12 +1,17 @@
 import { createContext } from 'react';
 import { UserModel } from '@pasnik/api/data-transfer';
 
+export interface SignInResult {
+  success: boolean;
+  requestToken?: string;
+}
+
 export interface AuthContextProps {
   user: UserModel | null;
   users: UserModel[];
-  signIn: (accessToken: string) => Promise<UserModel | void>;
+  signIn: (accessToken: string) => Promise<SignInResult>;
   signOut: () => void;
-  requestAccess: () => void;
+  requestAccess: (requestToken: string) => Promise<Response>;
   gapi?: google.accounts.id;
 }
 

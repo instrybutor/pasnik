@@ -10,22 +10,22 @@ export class InvitationsRepository extends Repository<InvitationEntity> {
     return this.findOneOrFail({ where: { email }});
   }
 
-  async acceptUser(email: string, addedBy: UserEntity) {
+  async approveAccess(email: string, approvedBy: UserEntity) {
     const invitation = (await this.findOne({ where: { email }})) ?? new InvitationEntity();
     invitation.email = email;
-    invitation.acceptedBy = addedBy;
-    invitation.status = InvitationStatus.ACCEPTED;
-    return this.save(invitation);
+    invitation.approvedBy = approvedBy;
+    invitation.status = InvitationStatus.APPROVED;
+    return await this.save(invitation);
   }
 
   async requestAccess(email: string) {
-    const existingInvitation = this.findOne({ where: { email }});
+    const existingInvitation = await this.findOne({ where: { email }});
     if (existingInvitation) {
       throw new HttpException('Already requested', HttpStatus.NOT_MODIFIED);
     }
     const invitation = new InvitationEntity();
     invitation.email = email;
     invitation.status = InvitationStatus.REQUESTED;
-    return this.save(invitation);
+    return await this.save(invitation);
   }
 }

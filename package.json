@@ -32,7 +32,7 @@
     "prepare": "husky install",
     "typeorm": "ts-node --transpile-only --project apps/nestjs-api/tsconfig.app.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ormconfig.ts",
     "build-migrations": "tsc --project tsconfig.typeorm.json",
-    "invite": "ts-node --project tools/tsconfig.tools.json tools/scripts/invite",
+    "approve-user": "ts-node --project tools/tsconfig.tools.json tools/scripts/approve-user",
     "make-admin": "ts-node --project tools/tsconfig.tools.json tools/scripts/make-admin"
   },
   "private": true,
