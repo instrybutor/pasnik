@@ -14,8 +14,6 @@ export const useGoogleLibLoader = () => {
       return;
     }
 
-    setPending(true);
-
     const onLoad = () => {
       setPending(false);
       setGoogleAPI((window as any).google.accounts.id);
