@@ -1,16 +1,10 @@
-import React, {
-  PropsWithChildren,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import React, { PropsWithChildren, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { UserModel } from '@pasnik/api/data-transfer';
 
 import { AuthContext } from './authContext';
 import { authFetch } from './auth-fetch.service';
-import { useGoogleLibLoader } from './useGoogleLibLoader';
 
 function useProvideAuth() {
   const [user, setUser] = useState<UserModel | null>(null);
@@ -19,23 +13,16 @@ function useProvideAuth() {
   const history = useHistory();
 
   const fetchUser = useCallback((): Promise<UserModel> => {
-    setFetching(true);
-
     return authFetch<UserModel>('/api/users/me').then((user) => {
       setUser(user);
       setFetching(false);
-
-      history.push('/');
       return user;
     });
   }, []);
 
   const fetchUsers = useCallback((): Promise<UserModel[]> => {
-    setFetching(true);
-
     return authFetch<UserModel[]>('/api/users').then((users) => {
       setUsers(users);
-      setFetching(false);
       return users;
     });
   }, []);
@@ -53,10 +40,9 @@ function useProvideAuth() {
         .then(({ accessToken }) => {
           localStorage.setItem('jwt', accessToken);
           return fetchUser();
-        })
-        .catch(() => history.push('/login'));
+        });
     },
-    [fetchUser, history]
+    [fetchUser]
   );
 
   const signOut = useCallback(() => {
@@ -68,8 +54,9 @@ function useProvideAuth() {
   React.useEffect(() => {
     Promise.all([fetchUsers(), fetchUser()]).catch(() => {
       setFetching(false);
+      history.push('/login');
     });
-  }, [fetchUser, fetchUsers]);
+  }, [fetchUser, fetchUsers, history]);
 
   return {
     user,
@@ -82,14 +69,8 @@ function useProvideAuth() {
 
 export function ProvideAuth({ children }: PropsWithChildren<unknown>) {
   const { fetching, ...auth } = useProvideAuth();
-  const { pending, gapi } = useGoogleLibLoader();
 
-  const isAppLoaded = useMemo(
-    () => [pending, fetching].every((flag) => !flag),
-    [fetching, pending]
-  );
-
-  if (!isAppLoaded) {
+  if (fetching) {
     return (
       <div className="w-screen h-screen flex flex-col gap-2 items-center justify-center">
         <span role="img" aria-label="food" className="text-6xl animate-bounce">
@@ -100,8 +81,6 @@ export function ProvideAuth({ children }: PropsWithChildren<unknown>) {
   }
 
   return (
-    <AuthContext.Provider value={{ ...auth, gapi }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ ...auth }}>{children}</AuthContext.Provider>
   );
 }

@@ -1,3 +1,5 @@
+const REDIRECT_URL = '/login';
+
 export function authFetch<T extends unknown>(
   input: RequestInfo,
   init?: RequestInit
@@ -7,8 +9,8 @@ export function authFetch<T extends unknown>(
   const jwt = localStorage.getItem('jwt');
 
   function redirectLogin() {
-    if (window.location.pathname !== '/login') {
-      window.location.href = '/login';
+    if (window.location.pathname !== REDIRECT_URL) {
+      window.location.href = REDIRECT_URL;
     }
   }
 
