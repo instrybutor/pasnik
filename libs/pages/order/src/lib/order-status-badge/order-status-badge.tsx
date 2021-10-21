@@ -15,16 +15,13 @@ export function OrderStatusBadge({ order }: OrderStatusBadgeProps) {
       className={classNames(
         'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
         {
-          'bg-green-100 text-green-800':
-            order.status === OrderStatus.InProgress,
-        },
-        {
+          'bg-green-100 text-green-800': [
+            OrderStatus.InProgress,
+            OrderStatus.Delivered,
+          ].includes(order.status),
           'bg-yellow-100 text-yellow-800': order.status === OrderStatus.Ordered,
-        },
-        {
-          'bg-green-100 text-green-800': order.status === OrderStatus.Delivered,
-        },
-        { 'bg-red-100 text-red-800': order.status === OrderStatus.Canceled }
+          'bg-red-100 text-red-800': order.status === OrderStatus.Canceled,
+        }
       )}
     >
       {getOrderStatus(order)}

@@ -102,8 +102,10 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
                       <div>
                         <span
                           className={classNames(
-                            typesMap[item.action]?.bgColorClass ??
-                              'bg-black text-white',
+                            {
+                              'bg-black text-white':
+                                typesMap[item.action]?.bgColorClass,
+                            },
                             'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white'
                           )}
                         >

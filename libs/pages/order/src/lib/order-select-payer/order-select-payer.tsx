@@ -70,7 +70,10 @@ export function OrderSelectPayer({
                     <>
                       <div
                         className={classNames(
-                          selected ? 'font-semibold' : 'font-normal',
+                          {
+                            'font-semibold': selected,
+                            'font-normal': !selected,
+                          },
                           'flex items-center'
                         )}
                       >
@@ -80,7 +83,10 @@ export function OrderSelectPayer({
                       {selected ? (
                         <span
                           className={classNames(
-                            active ? 'text-white' : 'text-cyan-600',
+                            {
+                              'text-white': active,
+                              'text-cyan-600': !active,
+                            },
                             'absolute inset-y-0 right-0 flex items-center pr-4'
                           )}
                         >
