@@ -1,4 +1,4 @@
-export const InvitationsHeader = () => {
+export const AdminInvitationsHeader = () => {
   return (
     <header className="bg-white shadow">
       <div className="bg-white shadow">

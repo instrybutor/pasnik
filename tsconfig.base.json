@@ -24,9 +24,11 @@
       "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
       "@pasnik/orders/create-order": ["libs/orders/create-order/src/index.ts"],
       "@pasnik/orders/edit-order": ["libs/orders/edit-order/src/index.ts"],
+      "@pasnik/pages/admin-invitations": [
+        "libs/pages/admin-invitations/src/index.ts"
+      ],
       "@pasnik/pages/create-order": ["libs/pages/create-order/src/index.ts"],
       "@pasnik/pages/dashboard": ["libs/pages/dashboard/src/index.ts"],
-      "@pasnik/pages/invitations": ["libs/pages/invitations/src/index.ts"],
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
       "@pasnik/pages/orders": ["libs/pages/orders/src/index.ts"],
       "@pasnik/shared/utils-auth": ["libs/shared/utils-auth/src/index.ts"]

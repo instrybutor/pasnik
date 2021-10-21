@@ -54,10 +54,10 @@
     "orders-edit-order": {
       "tags": []
     },
-    "pages-dashboard": {
+    "pages-admin-invitations": {
       "tags": []
     },
-    "pages-invitations": {
+    "pages-dashboard": {
       "tags": []
     },
     "pages-order": {

@@ -8,10 +8,10 @@ import { PagesOrder } from '@pasnik/pages/order';
 import { Layout } from '@pasnik/layout';
 import { PagesOrders } from '@pasnik/pages/orders';
 import { CreateOrder } from '@pasnik/orders/create-order';
-import { EditOrder } from '@pasnik/orders/edit-order';
+import { PagesAdminInvitations } from '@pasnik/pages/admin-invitations';
 
+import { EditOrder } from '@pasnik/orders/edit-order';
 import { PrivateRoute } from './PrivateRoute';
-import { RequestAccess } from './RequestAccess';
 
 export function App() {
   const version = process.env.NX_VERSION;
@@ -21,7 +21,6 @@ export function App() {
       <ProvideAuth>
         <Switch>
           <Route path="/login" component={SignIn} />
-          <Route path="/request-access" component={RequestAccess} />
 
           <Layout version={version}>
             <PrivateRoute exact path="/" component={PagesDashboard} />
@@ -32,6 +31,11 @@ export function App() {
               exact
               path="/order/:orderId/edit"
               component={EditOrder}
+            />
+            <PrivateRoute
+              admin={true}
+              path="/admin/invitations"
+              component={PagesAdminInvitations}
             />
           </Layout>
 

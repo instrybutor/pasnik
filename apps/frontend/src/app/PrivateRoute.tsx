@@ -9,11 +9,21 @@ export interface PrivateRouteProps extends RouteProps {
 export function PrivateRoute({ children, admin, ...rest }: PrivateRouteProps) {
   const { user } = useAuth();
 
-  if (!user || (admin && !user.isAdmin)) {
+  if (!user) {
     return (
       <Redirect
         to={{
           pathname: '/login',
+        }}
+      />
+    );
+  }
+
+  if (admin && !user.isAdmin) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/',
         }}
       />
     );

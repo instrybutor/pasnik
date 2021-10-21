@@ -308,6 +308,30 @@
         }
       }
     },
+    "pages-admin-invitations": {
+      "root": "libs/pages/admin-invitations",
+      "sourceRoot": "libs/pages/admin-invitations/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/pages/admin-invitations/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/admin-invitations"],
+          "options": {
+            "jestConfig": "libs/pages/admin-invitations/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "pages-dashboard": {
       "root": "libs/pages/dashboard",
       "sourceRoot": "libs/pages/dashboard/src",
@@ -325,28 +349,6 @@
           "outputs": ["coverage/libs/pages/dashboard"],
           "options": {
             "jestConfig": "libs/pages/dashboard/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "pages-invitations": {
-      "root": "libs/pages/invitations",
-      "sourceRoot": "libs/pages/invitations/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/pages/invitations/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/pages/invitations"],
-          "options": {
-            "jestConfig": "libs/pages/invitations/jest.config.js",
             "passWithNoTests": true
           }
         }

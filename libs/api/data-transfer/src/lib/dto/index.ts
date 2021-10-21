@@ -5,6 +5,7 @@ export * from './mark-as-ordered.dto';
 export * from './mark-as-paid.dto';
 export * from './mark-as-delivered.dto';
 export * from './find-order.dto';
+export * from './change-invitation-status.dto';
 export * from './update-order.dto';
 export * from './set-payer.dto';
 export * from './request-access.dto';
