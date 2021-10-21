@@ -9,7 +9,7 @@ export interface SuccessModalProps {
   setOpen: (open: boolean) => void;
 }
 
-export default function SuccessModal({
+export function SuccessModal({
   children,
   title,
   buttonText,

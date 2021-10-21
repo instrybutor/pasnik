@@ -5,7 +5,7 @@ import { IGoogleOneTapLoginProps, useAuth } from '@pasnik/shared/utils-auth';
 
 import { GoogleButtonLogin } from './components/google-button-login';
 import { RequestAccessModal } from './components/request-access-modal/request-access-modal';
-import SuccessModal from '../../../../components/src/lib/success-modal/success-modal';
+import { SuccessModal } from '@pasnik/components';
 
 export const SignIn: React.FC = () => {
   const auth = useAuth();
