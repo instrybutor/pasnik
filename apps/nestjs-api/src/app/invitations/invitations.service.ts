@@ -29,14 +29,14 @@ export class InvitationsService {
 
   async findAll() {
     return await this.invitationsRepository.find({
-      relations: ['user', 'approvedBy'],
+      relations: ['user', 'changedBy'],
     });
   }
 
   async findOne(email: string) {
     return await this.invitationsRepository.findOneOrFail({
       where: { email },
-      relations: ['user', 'approvedBy'],
+      relations: ['user', 'changedBy'],
     });
   }
 
@@ -58,12 +58,12 @@ export class InvitationsService {
     return await this.invitationsRepository.requestAccess(email);
   }
 
-  async approveAccess(email: string, approvedBy: UserEntity) {
-    return await this.invitationsRepository.approveAccess(email, approvedBy);
+  async approveAccess(email: string, changedBy: UserEntity) {
+    return await this.invitationsRepository.approveAccess(email, changedBy);
   }
 
-  async rejectAccess(email: string, approvedBy: UserEntity) {
-    return await this.invitationsRepository.rejectAccess(email, approvedBy);
+  async rejectAccess(email: string, changedBy: UserEntity) {
+    return await this.invitationsRepository.rejectAccess(email, changedBy);
   }
 
   async setUser(user: UserEntity) {

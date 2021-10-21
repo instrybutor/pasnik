@@ -24,7 +24,7 @@ export class InvitationEntity implements InvitationModel {
   status: InvitationStatus;
 
   @ManyToOne(() => UserEntity, { nullable: true })
-  approvedBy?: UserEntity;
+  changedBy?: UserEntity;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   user?: UserEntity;

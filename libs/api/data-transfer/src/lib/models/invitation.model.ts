@@ -13,5 +13,5 @@ export interface InvitationModel {
   updatedAt: string;
   status: InvitationStatus;
   user?: UserModel;
-  approvedBy?: UserModel;
+  changedBy?: UserModel;
 }

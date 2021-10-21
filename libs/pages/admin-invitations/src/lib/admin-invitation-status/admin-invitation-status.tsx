@@ -15,7 +15,7 @@ export default function AdminInvitationStatus({
       case InvitationStatus.APPROVED:
         return (
           <span>
-            Zatwierdzone przez <UserName user={invitation.approvedBy} />
+            Zatwierdzone przez <UserName user={invitation.changedBy} />
           </span>
         );
       case InvitationStatus.PENDING:
@@ -23,7 +23,7 @@ export default function AdminInvitationStatus({
       case InvitationStatus.REJECTED:
         return (
           <span>
-            Odrzucone przez <UserName user={invitation.approvedBy} />
+            Odrzucone przez <UserName user={invitation.changedBy} />
           </span>
         );
       case InvitationStatus.REGISTERED:

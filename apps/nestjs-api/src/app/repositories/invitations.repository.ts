@@ -10,11 +10,11 @@ export class InvitationsRepository extends Repository<InvitationEntity> {
     return this.findOneOrFail({ where: { email } });
   }
 
-  async approveAccess(email: string, approvedBy: UserEntity) {
+  async approveAccess(email: string, changedBy: UserEntity) {
     const invitation =
       (await this.findOne({ where: { email } })) ?? new InvitationEntity();
     invitation.email = email;
-    invitation.approvedBy = approvedBy;
+    invitation.changedBy = changedBy;
     invitation.status = InvitationStatus.APPROVED;
     return await this.save(invitation);
   }
@@ -26,7 +26,7 @@ export class InvitationsRepository extends Repository<InvitationEntity> {
     );
   }
 
-  async rejectAccess(email: string, approvedBy: UserEntity) {
+  async rejectAccess(email: string, changedBy: UserEntity) {
     const invitation = await this.findOneOrFail({
       where: { email },
       relations: ['user'],
@@ -37,7 +37,7 @@ export class InvitationsRepository extends Repository<InvitationEntity> {
         HttpStatus.FORBIDDEN
       );
     }
-    invitation.approvedBy = approvedBy;
+    invitation.changedBy = changedBy;
     invitation.status = InvitationStatus.REJECTED;
     return await this.save(invitation);
   }
