@@ -26,10 +26,10 @@ export function App() {
             <PrivateRoute exact path="/" component={PagesDashboard} />
             <PrivateRoute path="/create-order" component={CreateOrder} />
             <PrivateRoute path="/history" component={PagesOrders} />
-            <PrivateRoute exact path="/order/:orderId" component={PagesOrder} />
+            <PrivateRoute path="/order/:slug" component={PagesOrder} />
             <PrivateRoute
               exact
-              path="/order/:orderId/edit"
+              path="/order/:slug/edit"
               component={EditOrder}
             />
             <PrivateRoute

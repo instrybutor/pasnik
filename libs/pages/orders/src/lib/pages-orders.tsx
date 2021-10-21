@@ -18,8 +18,7 @@ export function PagesOrders(_: PagesOrdersProps) {
     fetchOrders().then(() => {
       setIsLoading(false);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchOrders]);
 
   return (
     <Fragment>

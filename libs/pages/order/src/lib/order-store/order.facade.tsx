@@ -28,8 +28,8 @@ export const useOrderFacade = () => {
   );
 
   const fetchDishes = useCallback(
-    async (id: string): Promise<DishModel[]> => {
-      const dishes = await service.fetchDishes(id);
+    async (orderId: string): Promise<DishModel[]> => {
+      const dishes = await service.fetchDishes(orderId);
       store.setDishes(dishes);
 
       return dishes;
@@ -38,8 +38,8 @@ export const useOrderFacade = () => {
   );
 
   const fetchOrder = useCallback(
-    async (id: string): Promise<OrderModel> => {
-      const order = await service.fetchOrder(id);
+    async (slug: string): Promise<OrderModel> => {
+      const order = await service.fetchOrder(slug);
       store.setOrder(order);
 
       return order;

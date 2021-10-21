@@ -11,7 +11,7 @@ import OrderHeaderLoading from './order-header-loading/order-header-loading';
 import OrderSectionLoading from './order-section-loading/order-section-loading';
 
 export interface PagesOrderProps {
-  orderId: string;
+  slug: string;
 }
 
 export function PagesOrder() {
@@ -19,16 +19,15 @@ export function PagesOrder() {
   const isDishesLoading = useOrderStore((state) => state.isDishesLoading);
   const order = useOrderStore((state) => state.order);
   const dishes = useOrderStore((state) => Object.values(state.dishes ?? {}));
-  const { orderId } = useParams<PagesOrderProps>();
+  const { slug } = useParams<PagesOrderProps>();
   const { fetchOrder, fetchDishes, resetStore } = useOrderFacade();
 
   useEffect(() => {
-    fetchOrder(orderId).then();
-    fetchDishes(orderId).then();
+    fetchOrder(slug).then(({ id }) => fetchDishes(id));
     return () => {
       resetStore();
     };
-  }, [fetchDishes, fetchOrder, orderId, resetStore]);
+  }, [fetchDishes, fetchOrder, slug, resetStore]);
 
   return (
     <Fragment>

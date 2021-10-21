@@ -1,4 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { nanoid } from 'nanoid';
+import slugify from 'slugify';
+
 import { OrderEntity } from '../entities/order.entity';
 import {
   CreateOrderDto,
@@ -18,6 +21,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     order.from = createOrderDto.from;
     order.shippingCents = createOrderDto.shippingCents;
     order.menuUrl = createOrderDto.menuUrl;
+    order.slug = slugify([order.from, nanoid(6)].join(' '), { lower: true });
 
     return this.save(order);
   }
