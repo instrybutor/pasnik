@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+
 import { OrdersService } from './orders.service';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { UserEntity } from '../entities/user.entity';
@@ -29,14 +30,14 @@ export class OrdersController {
     return this.ordersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id) {
-    return this.ordersService.findOne(id);
+  @Get(':slug')
+  findOne(@Param('slug') slug) {
+    return this.ordersService.findOne(slug);
   }
 
-  @Put(':id')
-  update(@Param('id') id, @Body() payload: UpdateOrderDto) {
-    return this.ordersService.update(id, payload);
+  @Put(':slug')
+  update(@Param('slug') slug, @Body() payload: UpdateOrderDto) {
+    return this.ordersService.update(slug, payload);
   }
 
   @Post()

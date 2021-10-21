@@ -7,8 +7,8 @@ import { useCallback } from 'react';
 export const useOrdersFacade = () => {
   const store = createOrdersStore();
 
-  const fetchOrder = useCallback((orderId) => {
-    return service.fetchOrder(orderId);
+  const fetchOrder = useCallback((slug) => {
+    return service.fetchOrder(slug);
   }, []);
 
   const fetchOrders = useCallback(async (): Promise<OrderModel[]> => {
@@ -29,8 +29,8 @@ export const useOrdersFacade = () => {
   );
 
   const updateOrder = useCallback(
-    async (orderId, payload: Partial<OrderModel>) => {
-      const order = await service.updateOrder(orderId, payload);
+    async (slug, payload: Partial<OrderModel>) => {
+      const order = await service.updateOrder(slug, payload);
       store.updateOrder(order);
 
       return order;

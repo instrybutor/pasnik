@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { OrdersRepository } from '../repositories/orders.repository';
 import { UserEntity } from '../entities/user.entity';
 import {
@@ -54,14 +55,26 @@ export class OrdersService {
     return this.ordersRepository.find();
   }
 
-  findOne(id: string) {
-    return this.ordersRepository.findOneOrFail(id, {
-      relations: ['actions', 'actions.user', 'payer', 'actions.actionUser'],
-    });
+  findOne(slug: string) {
+    return this.ordersRepository.findOneOrFail(
+      { slug },
+      {
+        relations: ['actions', 'actions.user', 'payer', 'actions.actionUser'],
+      }
+    );
   }
 
-  async update(orderId: string, payload: UpdateOrderDto) {
-    const order = await this.ordersRepository.findOne(orderId);
+  findOneById(id: string) {
+    return this.ordersRepository.findOneOrFail(
+      { id },
+      {
+        relations: ['actions', 'actions.user', 'payer', 'actions.actionUser'],
+      }
+    );
+  }
+
+  async update(slug: string, payload: UpdateOrderDto) {
+    const order = await this.ordersRepository.findOne({ slug });
 
     return await this.ordersRepository.save({
       ...order,

@@ -10,11 +10,11 @@ export const createOrder = (payload: CreateOrderDto) => {
   });
 };
 
-export const fetchOrder = (id: string) =>
-  authFetch<OrderModel>(`/api/orders/${id}`);
+export const fetchOrder = (slug: string) =>
+  authFetch<OrderModel>(`/api/orders/${slug}`);
 
-export const updateOrder = (orderId: string, payload: Partial<OrderModel>) => {
-  return authFetch<OrderModel>(`/api/orders/${orderId}`, {
+export const updateOrder = (slug: string, payload: Partial<OrderModel>) => {
+  return authFetch<OrderModel>(`/api/orders/${slug}`, {
     method: 'PUT',
     body: JSON.stringify(payload),
   });
