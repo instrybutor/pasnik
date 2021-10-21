@@ -17,7 +17,7 @@ export class OrderEntity implements OrderModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'string' })
+  @Column()
   slug: string;
 
   @ManyToOne(() => UserEntity)
