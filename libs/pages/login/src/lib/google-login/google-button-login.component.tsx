@@ -2,11 +2,16 @@ import { FunctionComponent, useEffect, useRef } from 'react';
 
 import { useGoogleLibLoader } from '@pasnik/shared/utils-auth';
 
-import { GoogleButtonLoginProps } from './types';
+export interface GoogleButtonLoginProps
+  extends google.accounts.IUseGoogleOneTapLogin {
+  width?: string;
+  className?: string;
+}
 
 export const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({
   children = null,
   className,
+  width,
   ...props
 }) => {
   const ref = useRef(null);
@@ -25,9 +30,10 @@ export const GoogleButtonLogin: FunctionComponent<GoogleButtonLoginProps> = ({
         size: 'large',
         text: 'continue_with',
         shape: 'pill',
+        width,
       });
     }
-  }, [gapi, props.googleAccountConfigs, ref]);
+  }, [gapi, props.googleAccountConfigs, ref, width]);
 
   return <div className={className} ref={ref} />;
 };

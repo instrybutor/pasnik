@@ -30,7 +30,7 @@
     "api-data-transfer": {
       "tags": []
     },
-    "auth/sign-in": {
+    "axios": {
       "tags": []
     },
     "components": {
@@ -57,10 +57,16 @@
     "pages-dashboard": {
       "tags": []
     },
+    "pages-login": {
+      "tags": []
+    },
     "pages-order": {
       "tags": []
     },
     "pages-orders": {
+      "tags": []
+    },
+    "shared-utils": {
       "tags": []
     },
     "shared-utils-auth": {

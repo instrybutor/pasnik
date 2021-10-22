@@ -1,9 +1,9 @@
 module.exports = {
-  displayName: 'auth-sign-in',
+  displayName: 'shared-utils',
   preset: '../../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/libs/auth/sign-in',
+  coverageDirectory: '../../../coverage/libs/shared/utils',
 };

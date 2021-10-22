@@ -10,7 +10,11 @@ export function authFetch<T extends unknown>(
 
   function redirectLogin() {
     if (window.location.pathname !== REDIRECT_URL) {
-      window.location.href = REDIRECT_URL;
+      if (window.location.pathname !== '') {
+        window.location.href = `${REDIRECT_URL}?redirectTo=${window.location.pathname}`;
+      } else {
+        window.location.href = REDIRECT_URL;
+      }
     }
   }
 
@@ -27,6 +31,7 @@ export function authFetch<T extends unknown>(
     headers: newHeaders,
   }).then((response) => {
     if (response.status === 401) {
+      localStorage.removeItem('jwt');
       redirectLogin();
       throw new Error('Unauthorized');
     }

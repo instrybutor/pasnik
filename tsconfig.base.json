@@ -18,7 +18,7 @@
     "typeRoots": ["./custom_typings", "./node_modules/@types"],
     "paths": {
       "@pasnik/api/data-transfer": ["libs/api/data-transfer/src/index.ts"],
-      "@pasnik/auth/sign-in": ["libs/auth/sign-in/src/index.ts"],
+      "@pasnik/axios": ["libs/axios/src/index.ts"],
       "@pasnik/components": ["libs/components/src/index.ts"],
       "@pasnik/layout": ["libs/layout/src/index.ts"],
       "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
@@ -26,8 +26,10 @@
       "@pasnik/orders/edit-order": ["libs/orders/edit-order/src/index.ts"],
       "@pasnik/pages/create-order": ["libs/pages/create-order/src/index.ts"],
       "@pasnik/pages/dashboard": ["libs/pages/dashboard/src/index.ts"],
+      "@pasnik/pages/login": ["libs/pages/login/src/index.ts"],
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
       "@pasnik/pages/orders": ["libs/pages/orders/src/index.ts"],
+      "@pasnik/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@pasnik/shared/utils-auth": ["libs/shared/utils-auth/src/index.ts"]
     }
   },

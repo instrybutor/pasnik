@@ -27,24 +27,6 @@ function useProvideAuth() {
     });
   }, []);
 
-  const signIn = useCallback(
-    (accessToken: string) => {
-      return fetch(`/api/auth/google?access_token=${accessToken}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`${res.status}: ${res.statusText}`);
-          }
-
-          return res.json();
-        })
-        .then(({ accessToken }) => {
-          localStorage.setItem('jwt', accessToken);
-          return fetchUser();
-        });
-    },
-    [fetchUser]
-  );
-
   const signOut = useCallback(() => {
     localStorage.removeItem('jwt');
     setUser(null);
@@ -54,7 +36,6 @@ function useProvideAuth() {
   React.useEffect(() => {
     Promise.all([fetchUsers(), fetchUser()]).catch(() => {
       setFetching(false);
-      history.push('/login');
     });
   }, [fetchUser, fetchUsers, history]);
 
@@ -62,7 +43,7 @@ function useProvideAuth() {
     user,
     users,
     fetching,
-    signIn,
+    fetchUser,
     signOut,
   };
 }
