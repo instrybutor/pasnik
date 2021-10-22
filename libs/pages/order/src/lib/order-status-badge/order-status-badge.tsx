@@ -17,14 +17,10 @@ export function OrderStatusBadge({ order }: OrderStatusBadgeProps) {
         {
           'bg-green-100 text-green-800':
             order.status === OrderStatus.InProgress,
-        },
-        {
+          'bg-gray-200 text-gray-800': order.status === OrderStatus.Delivered,
           'bg-yellow-100 text-yellow-800': order.status === OrderStatus.Ordered,
-        },
-        {
-          'bg-green-100 text-green-800': order.status === OrderStatus.Delivered,
-        },
-        { 'bg-red-100 text-red-800': order.status === OrderStatus.Canceled }
+          'bg-red-100 text-red-800': order.status === OrderStatus.Canceled,
+        }
       )}
     >
       {getOrderStatus(order)}

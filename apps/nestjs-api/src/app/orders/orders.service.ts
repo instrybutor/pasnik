@@ -112,7 +112,7 @@ export class OrdersService {
       );
 
       const order = await ordersRepository.findOneOrFail(orderId, {
-        relations: ['dishes']
+        relations: ['dishes'],
       });
       await ordersRepository.markAsOrdered(order, markAsOrderedDto);
       await orderActionsRepository.createAction(
@@ -121,7 +121,7 @@ export class OrdersService {
         OrderAction.Ordered
       );
     });
-    return this.findOne(orderId);
+    return this.findOneById(orderId);
   }
 
   async markAsDelivered(
@@ -150,7 +150,7 @@ export class OrdersService {
       );
       await ordersRepository.save(order);
     });
-    return this.findOne(orderId);
+    return this.findOneById(orderId);
   }
 
   async markAsClosed(orderId: string, user: UserEntity) {
@@ -160,7 +160,7 @@ export class OrdersService {
         OrderActionsRepository
       );
 
-      const order = await this.findOne(orderId);
+      const order = await this.findOneById(orderId);
       await ordersRepository.markAsClosed(order);
       await orderActionsRepository.createAction(
         user,
@@ -168,7 +168,7 @@ export class OrdersService {
         OrderAction.Cancel
       );
     });
-    return this.findOne(orderId);
+    return this.findOneById(orderId);
   }
 
   async markAsOpen(orderId: string, user: UserEntity) {
@@ -178,11 +178,11 @@ export class OrdersService {
         OrderActionsRepository
       );
 
-      const order = await this.findOne(orderId);
+      const order = await this.findOneById(orderId);
       await ordersRepository.markAsOpen(order);
       await orderActionsRepository.createAction(user, order, OrderAction.Open);
     });
-    return this.findOne(orderId);
+    return this.findOneById(orderId);
   }
 
   async setPayer(
@@ -198,7 +198,7 @@ export class OrdersService {
       );
 
       const payer = await usersRepository.findOneOrFail(payerId);
-      const order = await this.findOne(orderId);
+      const order = await this.findOneById(orderId);
 
       if (order.payer?.id === payer.id) {
         return;
@@ -212,6 +212,6 @@ export class OrdersService {
         payer
       );
     });
-    return this.findOne(orderId);
+    return this.findOneById(orderId);
   }
 }

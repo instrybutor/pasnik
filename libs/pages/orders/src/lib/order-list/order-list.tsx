@@ -13,7 +13,10 @@ export function OrderList({ orders }: OrderListProps) {
     <ul className="divide-y divide-gray-200">
       {orders.map((order) => (
         <li key={order.id}>
-          <NavLink to={`/order/${order.id}`} className="block hover:bg-gray-50">
+          <NavLink
+            to={`/order/${order.slug}`}
+            className="block hover:bg-gray-50"
+          >
             <div className="px-4 py-4 sm:px-6">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-cyan-600 truncate">
