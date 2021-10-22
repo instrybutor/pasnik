@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from '@pasnik/shared/utils';
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { useAuth } from '@pasnik/auth';
 import { ErrorAlert } from './error-alert/error-alert';
 import { GoogleLogin } from './google-login/google-login';
-import { setAuthToken } from '@pasnik/axios';
+import { setAuthToken } from '@pasnik/axios'; /* eslint-disable-next-line */
 
 /* eslint-disable-next-line */
 export interface PagesLoginProps {}

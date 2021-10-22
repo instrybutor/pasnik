@@ -1,6 +1,6 @@
 import { Redirect, Route, RouteProps, useHistory } from 'react-router-dom';
 
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { useAuth } from '@pasnik/auth';
 
 export function PrivateRoute({ children, ...rest }: RouteProps) {
   const { user } = useAuth();
@@ -10,7 +10,8 @@ export function PrivateRoute({ children, ...rest }: RouteProps) {
     return (
       <Redirect
         to={{
-          pathname: `/login?redirectTo=${history.location.pathname}`,
+          pathname: '/login',
+          search: `redirectTo=${history.location.pathname}`,
         }}
       />
     );

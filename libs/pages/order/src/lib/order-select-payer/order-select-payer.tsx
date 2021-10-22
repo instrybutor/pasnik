@@ -4,7 +4,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import { Fragment, useCallback } from 'react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { useAuth } from '@pasnik/auth';
 
 export interface OrderPaymentProps {
   totalCents: number;

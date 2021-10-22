@@ -6,7 +6,7 @@ const axios = _axios.create();
 
 axios.interceptors.request.use(
   jwtInterceptor({
-    // disallowedRoutes: [/\/api\/auth\/google$/],
+    disallowedRoutes: [/\/api\/auth\/google$/],
   })
 );
 axios.interceptors.response.use(

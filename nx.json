@@ -30,6 +30,9 @@
     "api-data-transfer": {
       "tags": []
     },
+    "auth": {
+      "tags": []
+    },
     "axios": {
       "tags": []
     },
@@ -67,9 +70,6 @@
       "tags": []
     },
     "shared-utils": {
-      "tags": []
-    },
-    "shared-utils-auth": {
       "tags": []
     }
   }

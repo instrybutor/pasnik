@@ -1,6 +1,9 @@
 import { OfficeBuildingIcon } from '@heroicons/react/outline';
-import { useAuth } from '@pasnik/shared/utils-auth';
-import { UserAvatar, UserName } from '@pasnik/components';
+import { useAuth } from '@pasnik/auth';
+import {
+  UserAvatar,
+  UserName,
+} from '@pasnik/components'; /* eslint-disable-next-line */
 
 /* eslint-disable-next-line */
 export interface DashboardHeaderProps {}

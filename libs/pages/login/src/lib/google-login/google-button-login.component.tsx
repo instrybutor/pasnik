@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useRef } from 'react';
 
-import { useGoogleLibLoader } from '@pasnik/shared/utils-auth';
+import { useGoogleLibLoader } from './google-lib-loader';
 
 export interface GoogleButtonLoginProps
   extends google.accounts.IUseGoogleOneTapLogin {
