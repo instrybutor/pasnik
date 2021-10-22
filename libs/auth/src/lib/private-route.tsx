@@ -1,6 +1,6 @@
 import { Redirect, Route, RouteProps, useHistory } from 'react-router-dom';
 
-import { useAuth } from '@pasnik/auth';
+import { useAuth } from './auth';
 
 export function PrivateRoute({ children, ...rest }: RouteProps) {
   const { user } = useAuth();
