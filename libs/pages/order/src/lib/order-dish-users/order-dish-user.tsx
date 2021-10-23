@@ -15,7 +15,10 @@ export function OrderDishUser({ user }: OrderDishProps) {
         <>
           <Popover.Button
             className={classNames(
-              open ? 'text-gray-900' : 'text-gray-500',
+              {
+                'text-gray-900': open,
+                'text-gray-500': !open,
+              },
               'group block bg-white rounded-full h-6 w-6 items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500'
             )}
           >

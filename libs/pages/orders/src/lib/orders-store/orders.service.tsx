@@ -1,5 +1,5 @@
 import { OrderModel } from '@pasnik/api/data-transfer';
-import { authFetch } from '@pasnik/shared/utils-auth';
+import axios from '@pasnik/axios';
 
 export const fetchOrders = () =>
-  authFetch<OrderModel[]>(`/api/orders/inactive`);
+  axios.get<OrderModel[]>(`/api/orders/inactive`).then(({ data }) => data);

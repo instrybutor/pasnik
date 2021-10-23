@@ -72,7 +72,10 @@ export function OrderPaidButton({
                     key={user.id}
                     className={({ active }) =>
                       classNames(
-                        active ? 'text-white bg-yellow-500' : 'text-gray-900',
+                        {
+                          'text-white bg-yellow-500': active,
+                          'text-gray-900': !active,
+                        },
                         'cursor-default select-none relative p-4 text-sm'
                       )
                     }
@@ -82,17 +85,19 @@ export function OrderPaidButton({
                       <div className="flex flex-col">
                         <div className="flex justify-between">
                           <p
-                            className={
-                              selected ? 'font-semibold' : 'font-normal'
-                            }
+                            className={classNames({
+                              'font-semibold': selected,
+                              'font-normal': !selected,
+                            })}
                           >
                             {getName(user)}
                           </p>
                           {selected ? (
                             <span
-                              className={
-                                active ? 'text-white' : 'text-yellow-500'
-                              }
+                              className={classNames({
+                                'text-white': active,
+                                'text-yellow-500': !active,
+                              })}
                             >
                               <CheckIcon
                                 className="h-5 w-5"

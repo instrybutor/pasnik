@@ -32,19 +32,19 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
 
   const markAsDeliveredHandler = useCallback(async () => {
     await markAsDelivered();
-  }, []);
+  }, [markAsDelivered]);
 
   const closeOrderHandler = useCallback(async () => {
     await markAsClosed();
-  }, []);
+  }, [markAsClosed]);
 
   const openOrderHandler = useCallback(async () => {
     await markAsOpen();
-  }, []);
+  }, [markAsOpen]);
 
   const makeOrderHandler = useCallback(async () => {
     await markAsOrdered();
-  }, []);
+  }, [markAsOrdered]);
 
   useEffect(() => {
     setTotalPrice(dishes.reduce((acc, cur) => acc + cur.priceCents, 0));
@@ -95,7 +95,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
-                <OrderTimestamp order={order} />
+                <OrderTimestamp order={order} showLabel />
               </div>
             </div>
           </div>

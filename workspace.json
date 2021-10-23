@@ -23,23 +23,45 @@
         }
       }
     },
-    "auth/sign-in": {
-      "root": "libs/auth/sign-in",
-      "sourceRoot": "libs/auth/sign-in/src",
+    "auth": {
+      "root": "libs/auth",
+      "sourceRoot": "libs/auth/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["libs/auth/sign-in/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/auth/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/auth/sign-in"],
+          "outputs": ["coverage/libs/auth"],
           "options": {
-            "jestConfig": "libs/auth/sign-in/jest.config.js",
+            "jestConfig": "libs/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "axios": {
+      "root": "libs/axios",
+      "sourceRoot": "libs/axios/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/axios/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/axios"],
+          "options": {
+            "jestConfig": "libs/axios/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -354,6 +376,28 @@
         }
       }
     },
+    "pages-login": {
+      "root": "libs/pages/login",
+      "sourceRoot": "libs/pages/login/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/pages/login/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/login"],
+          "options": {
+            "jestConfig": "libs/pages/login/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "pages-order": {
       "root": "libs/pages/order",
       "sourceRoot": "libs/pages/order/src",
@@ -398,23 +442,23 @@
         }
       }
     },
-    "shared-utils-auth": {
-      "root": "libs/shared/utils-auth",
-      "sourceRoot": "libs/shared/utils-auth/src",
+    "shared-utils": {
+      "root": "libs/shared/utils",
+      "sourceRoot": "libs/shared/utils/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["libs/shared/utils-auth/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/shared/utils/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/utils-auth"],
+          "outputs": ["coverage/libs/shared/utils"],
           "options": {
-            "jestConfig": "libs/shared/utils-auth/jest.config.js",
+            "jestConfig": "libs/shared/utils/jest.config.js",
             "passWithNoTests": true
           }
         }

@@ -1,21 +1,20 @@
 import { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
-import { authFetch } from '@pasnik/shared/utils-auth';
+import axios from '@pasnik/axios';
 
-export const fetchOrders = () => authFetch<OrderModel[]>('/api/orders');
+export const fetchOrders = () =>
+  axios.get<OrderModel[]>('/api/orders').then(({ data }) => data);
 
 export const createOrder = (payload: CreateOrderDto) => {
-  return authFetch<OrderModel>('/api/orders', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  });
+  return axios
+    .post<OrderModel>('/api/orders', payload)
+    .then(({ data }) => data);
 };
 
 export const fetchOrder = (slug: string) =>
-  authFetch<OrderModel>(`/api/orders/${slug}`);
+  axios.get<OrderModel>(`/api/orders/${slug}`).then(({ data }) => data);
 
 export const updateOrder = (slug: string, payload: Partial<OrderModel>) => {
-  return authFetch<OrderModel>(`/api/orders/${slug}`, {
-    method: 'PUT',
-    body: JSON.stringify(payload),
-  });
+  return axios
+    .put<OrderModel>(`/api/orders/${slug}`, payload)
+    .then(({ data }) => data);
 };

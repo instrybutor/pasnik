@@ -32,7 +32,7 @@ export function UserName({
     <div
       className={classNames({
         'inline-flex': !children,
-        'flex flex-col': !!children,
+        'flex flex-col': Boolean(children),
       })}
     >
       <p className="truncate">{formatUser()}</p>

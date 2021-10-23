@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuAlt1Icon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { useAuth } from '@pasnik/auth';
 import { UserAvatar, UserName } from '@pasnik/components';
 import { useHistory } from 'react-router-dom';
 
@@ -88,7 +88,9 @@ export function Header({ openSidebar }: HeaderProps) {
                   {({ active }) => (
                     <div
                       className={classNames(
-                        active ? 'bg-gray-100' : '',
+                        {
+                          'bg-gray-100': active,
+                        },
                         'block px-4 py-2 text-sm text-gray-700'
                       )}
                     >
@@ -100,7 +102,9 @@ export function Header({ openSidebar }: HeaderProps) {
                   {({ active }) => (
                     <div
                       className={classNames(
-                        active ? 'bg-gray-100' : '',
+                        {
+                          'bg-gray-100': active,
+                        },
                         'block px-4 py-2 text-sm text-gray-700'
                       )}
                     >
@@ -113,8 +117,8 @@ export function Header({ openSidebar }: HeaderProps) {
                     <button
                       onClick={logoutClickHandler}
                       className={classNames(
+                        { 'bg-gray-100': active },
                         'text-left w-full',
-                        active ? 'bg-gray-100' : '',
                         'block px-4 py-2 text-sm text-gray-700'
                       )}
                     >

@@ -53,6 +53,7 @@
     "@tailwindcss/forms": "^0.3.4",
     "@types/passport-google-oauth": "^1.0.42",
     "autoprefixer": "^10.3.4",
+    "axios": "^0.23.0",
     "classnames": "^2.3.1",
     "core-js": "^3.6.5",
     "currency.js": "^2.0.4",

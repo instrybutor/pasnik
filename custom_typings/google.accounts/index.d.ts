@@ -1,4 +1,23 @@
 declare namespace google.accounts {
+  export interface IUseGoogleOneTapLogin {
+    disabled?: boolean;
+    googleAccountConfigs: google.accounts.IGoogleOneTapLoginProps;
+  }
+
+  export interface IGoogleOneTapLoginProps {
+    nonce?: string;
+    context?: string;
+    client_id: string;
+    auto_select?: boolean;
+    prompt_parent_id?: string;
+    state_cookie_domain?: string;
+    cancel_on_tap_outside?: boolean;
+    callback?: (response: google.accounts.IGoogleCallbackResponse) => void;
+    native_callback?: (
+      response: google.accounts.IGoogleCallbackResponse
+    ) => void;
+  }
+
   interface RevocationResponse {
     successful: boolean;
     error?: string;
@@ -32,7 +51,7 @@ declare namespace google.accounts {
   }
 
   export interface IGoogleCallbackResponse {
-    credential?: string;
+    credential: string;
   }
 
   export class id {
@@ -42,8 +61,9 @@ declare namespace google.accounts {
       options?: GsiButtonConfiguration,
       clickHandler?: () => void
     ): void;
-    revoke(hint?: string, callback?: (response: RevocationResponse) => void): void;
+    revoke(
+      hint?: string,
+      callback?: (response: RevocationResponse) => void
+    ): void;
   }
 }
-
-

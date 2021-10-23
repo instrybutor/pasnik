@@ -22,6 +22,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     order.shippingCents = createOrderDto.shippingCents;
     order.menuUrl = createOrderDto.menuUrl;
     order.slug = slugify([order.from, nanoid(6)].join(' '), { lower: true });
+    order.payer = user;
 
     return this.save(order);
   }

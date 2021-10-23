@@ -14,7 +14,6 @@
     "**/*.js",
     "**/*.jsx",
     "**/*.ts",
-    "**/*.tsx",
-    "../../libs/shared/utils-auth/src/lib/refreshToken.ts",
+    "**/*.tsx"
   ]
 }

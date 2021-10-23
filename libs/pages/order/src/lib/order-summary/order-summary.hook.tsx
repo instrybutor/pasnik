@@ -1,5 +1,5 @@
 import { DishModel, OrderModel, UserModel } from '@pasnik/api/data-transfer';
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { useAuth } from '@pasnik/auth';
 import { useCallback, useState } from 'react';
 
 export interface UserDishesSummary {
