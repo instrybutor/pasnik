@@ -14,12 +14,12 @@ export const fetchDishes = (id: string) =>
 
 export const markAsClosed = (id: string) =>
   axios
-    .get<OrderModel>(`/api/orders/${id}/mark-as-closed`, { method: 'POST' })
+    .post<OrderModel>(`/api/orders/${id}/mark-as-closed`)
     .then(({ data }) => data);
 
 export const markAsOpen = (id: string) =>
   axios
-    .get<OrderModel>(`/api/orders/${id}/mark-as-open`, { method: 'POST' })
+    .post<OrderModel>(`/api/orders/${id}/mark-as-open`)
     .then(({ data }) => data);
 
 export const setPayer = (id: string, setPayerDto: SetPayerDto) =>
@@ -36,9 +36,7 @@ export const markAsDelivered = (id: string) =>
 
 export const markAsOrdered = (id: string) =>
   axios
-    .get<OrderModel>(`/api/orders/${id}/mark-as-ordered`, {
-      method: 'POST',
-    })
+    .post<OrderModel>(`/api/orders/${id}/mark-as-ordered`)
     .then(({ data }) => data);
 export const markAsPaid = (id: string, payerId: number) =>
   axios
