@@ -4,60 +4,64 @@ import {
   OrderModel,
   SetPayerDto,
 } from '@pasnik/api/data-transfer';
-import { authFetch } from '@pasnik/shared/utils-auth';
+import axios from '@pasnik/axios';
 
 export const fetchOrder = (slug: string) =>
-  authFetch<OrderModel>(`/api/orders/${slug}`);
+  axios.get<OrderModel>(`/api/orders/${slug}`).then(({ data }) => data);
 
 export const fetchDishes = (id: string) =>
-  authFetch<DishModel[]>(`/api/orders/${id}/dishes`);
+  axios.get<DishModel[]>(`/api/orders/${id}/dishes`).then(({ data }) => data);
 
 export const markAsClosed = (id: string) =>
-  authFetch<OrderModel>(`/api/orders/${id}/mark-as-closed`, { method: 'POST' });
+  axios
+    .get<OrderModel>(`/api/orders/${id}/mark-as-closed`, { method: 'POST' })
+    .then(({ data }) => data);
 
 export const markAsOpen = (id: string) =>
-  authFetch<OrderModel>(`/api/orders/${id}/mark-as-open`, { method: 'POST' });
+  axios
+    .get<OrderModel>(`/api/orders/${id}/mark-as-open`, { method: 'POST' })
+    .then(({ data }) => data);
 
 export const setPayer = (id: string, setPayerDto: SetPayerDto) =>
-  authFetch<OrderModel>(`/api/orders/${id}/set-payer`, {
-    method: 'POST',
-    body: JSON.stringify(setPayerDto),
-  });
+  axios
+    .post<OrderModel>(`/api/orders/${id}/set-payer`, {
+      data: setPayerDto,
+    })
+    .then(({ data }) => data);
 
 export const markAsDelivered = (id: string) =>
-  authFetch<OrderModel>(`/api/orders/${id}/mark-as-delivered`, {
-    method: 'POST',
-  });
+  axios
+    .post<OrderModel>(`/api/orders/${id}/mark-as-delivered`)
+    .then(({ data }) => data);
 
 export const markAsOrdered = (id: string) =>
-  authFetch<OrderModel>(`/api/orders/${id}/mark-as-ordered`, {
-    method: 'POST',
-  });
+  axios
+    .get<OrderModel>(`/api/orders/${id}/mark-as-ordered`, {
+      method: 'POST',
+    })
+    .then(({ data }) => data);
 export const markAsPaid = (id: string, payerId: number) =>
-  authFetch<OrderModel>(`/api/orders/${id}/mark-as-paid`, {
-    method: 'POST',
-    body: JSON.stringify({
+  axios
+    .post<OrderModel>(`/api/orders/${id}/mark-as-paid`, {
       payerId,
-    }),
-  });
+    })
+    .then(({ data }) => data);
 
 export const addDish = (orderId: string, addDishDto: AddDishDto) =>
-  authFetch<DishModel>(`/api/orders/${orderId}/dishes`, {
-    method: 'POST',
-    body: JSON.stringify(addDishDto),
-  });
+  axios
+    .post<DishModel>(`/api/orders/${orderId}/dishes`, addDishDto)
+    .then(({ data }) => data);
 
 export const deleteDish = (orderId: string, dishId: number) =>
-  authFetch<DishModel>(`/api/orders/${orderId}/dishes/${dishId}`, {
-    method: 'DELETE',
-  });
+  axios
+    .delete<DishModel>(`/api/orders/${orderId}/dishes/${dishId}`)
+    .then(({ data }) => data);
 
 export const updateDish = (
   orderId: string,
   dishId: number,
   addDishDto: AddDishDto
 ) =>
-  authFetch<DishModel>(`/api/orders/${orderId}/dishes/${dishId}`, {
-    method: 'PUT',
-    body: JSON.stringify(addDishDto),
-  });
+  axios
+    .put<DishModel>(`/api/orders/${orderId}/dishes/${dishId}`, addDishDto)
+    .then(({ data }) => data);

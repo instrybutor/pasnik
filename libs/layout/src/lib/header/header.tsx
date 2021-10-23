@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuAlt1Icon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { useAuth } from '@pasnik/auth';
 import { UserAvatar, UserName } from '@pasnik/components';
 import { useHistory } from 'react-router-dom';
 
