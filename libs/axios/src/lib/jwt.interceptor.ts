@@ -14,11 +14,8 @@ export const setAuthToken = (accessToken: Token): void =>
 
 export const clearAuthToken = (): void => localStorage.removeItem(STORAGE_KEY);
 
-export const getAccessToken = (): Token | undefined => {
-  const accessToken = localStorage.getItem(STORAGE_KEY);
-  if (!accessToken) return;
-
-  return accessToken ?? undefined;
+export const getAccessToken = (): Token | null => {
+  return localStorage.getItem(STORAGE_KEY);
 };
 
 export interface IAuthTokenInterceptorConfig {
