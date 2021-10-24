@@ -83,7 +83,7 @@ export class InvitationsService {
         where: { email },
       })
       .then((invitation) => ({
-        status: invitation?.status ?? null,
+        status: invitation?.status ?? InvitationStatus.NO_INVITATION,
       }));
   }
 }

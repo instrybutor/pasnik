@@ -12,6 +12,8 @@ export default function AdminInvitationStatus({
 }: AdminInvitationStatusProps) {
   const formatStatus = useCallback(() => {
     switch (invitation.status) {
+      case InvitationStatus.NO_INVITATION:
+        throw new Error('Should not happen');
       case InvitationStatus.APPROVED:
         return (
           <span>

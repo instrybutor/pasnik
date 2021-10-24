@@ -30,11 +30,13 @@ export class GoogleStrategy extends PassportStrategy(
     const email = profile.emails[0].value;
     const { status } = await this.invitationService.canAccess(email);
 
-    if (status === null) {
+    if (status === InvitationStatus.NO_INVITATION) {
       const requestToken = this.authService.generateAccessToken(email);
       throw new HttpException({ requestToken }, HttpStatus.PAYMENT_REQUIRED);
     } else if (status === InvitationStatus.REJECTED) {
       throw new HttpException('Rejected', HttpStatus.FORBIDDEN);
+    } else if (status === InvitationStatus.PENDING) {
+      throw new HttpException('Pending', HttpStatus.NOT_MODIFIED);
     }
 
     const user = await this.usersService.createUser(profile);

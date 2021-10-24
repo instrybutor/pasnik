@@ -14,7 +14,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import { useAuth } from '@pasnik/shared/utils-auth';
+import { useAuth } from '@pasnik/auth';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
@@ -28,7 +28,7 @@ const navigation = [
 const adminNavigation = [
   {
     name: 'Zaproszenia',
-    href: '/admin/invitations',
+    href: '/admin/invitation',
     icon: UserGroupIcon,
     exact: true,
   },

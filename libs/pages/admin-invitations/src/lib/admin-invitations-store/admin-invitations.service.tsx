@@ -2,16 +2,20 @@ import {
   ChangeInvitationStatusDto,
   InvitationModel,
 } from '@pasnik/api/data-transfer';
-import { authFetch } from '@pasnik/shared/utils-auth';
+import axios from '@pasnik/axios';
 
 export const fetchInvitations = () =>
-  authFetch<InvitationModel[]>(`/api/admin/invitations`);
+  axios
+    .get<InvitationModel[]>('/api/admin/invitations')
+    .then(({ data }) => data);
 
 export const changeInvitationStatus = (
   email: string,
   changeInvitationStatusDto: ChangeInvitationStatusDto
 ) =>
-  authFetch<InvitationModel>(`/api/admin/invitations/${email}/change-status`, {
-    method: 'POST',
-    body: JSON.stringify(changeInvitationStatusDto),
-  });
+  axios
+    .post<InvitationModel>(
+      `/api/admin/invitations/${email}/change-status`,
+      changeInvitationStatusDto
+    )
+    .then(({ data }) => data);
