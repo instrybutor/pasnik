@@ -22,13 +22,13 @@ export default function AdminInvitationList({
               <div className="flex items-center px-6 py-4">
                 <div className="min-w-0 flex-1 flex items-center">
                   <div className="min-w-0 flex-1 px-2 md:grid md:grid-cols-2 md:gap-4">
-                    <p className="flex items-center text-sm text-gray-500">
+                    <div className="flex items-center text-sm text-gray-500">
                       <MailIcon
                         className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                         aria-hidden="true"
                       />
                       <span className="truncate">{invitation.email}</span>
-                    </p>
+                    </div>
                     <div className="hidden md:block">
                       <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                         <CalendarIcon

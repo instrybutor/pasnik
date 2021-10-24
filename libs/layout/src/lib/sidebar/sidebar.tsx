@@ -30,7 +30,7 @@ const adminNavigation = [
     name: 'Zaproszenia',
     href: '/admin/invitations',
     icon: UserGroupIcon,
-    exact: true,
+    exact: false,
   },
 ];
 
@@ -48,8 +48,8 @@ export interface SidebarProps {
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
   const { user } = useAuth();
-  const isCurrentRoute = useCallback((href: string) => {
-    return !!matchPath(window.location.pathname, { path: href, exact: true });
+  const isCurrentRoute = useCallback((href: string, exact?: boolean) => {
+    return !!matchPath(window.location.pathname, { path: href, exact: exact });
   }, []);
   return (
     <>
@@ -123,13 +123,18 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                         'group flex items-center px-2 py-2 text-base font-medium rounded-md',
                         {
                           hidden: item.hide,
-                          'bg-cyan-800 text-white': isCurrentRoute(item.href),
+                          'bg-cyan-800 text-white': isCurrentRoute(
+                            item.href,
+                            item.exact
+                          ),
                           'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                            !isCurrentRoute(item.href),
+                            !isCurrentRoute(item.href, item.exact),
                         }
                       )}
                       aria-current={
-                        isCurrentRoute(item.href) ? 'page' : undefined
+                        isCurrentRoute(item.href, item.exact)
+                          ? 'page'
+                          : undefined
                       }
                     >
                       <item.icon
@@ -147,14 +152,16 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                         <NavLink
                           key={item.name}
                           to={item.href}
+                          exact={item.exact}
                           className={classNames(
                             'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
                             {
                               'bg-cyan-800 text-white': isCurrentRoute(
-                                item.href
+                                item.href,
+                                item.exact
                               ),
                               'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                                !isCurrentRoute(item.href),
+                                !isCurrentRoute(item.href, item.exact),
                             }
                           )}
                         >
@@ -233,13 +240,16 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                       'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
                       {
                         hidden: item.hide,
-                        'bg-cyan-800 text-white': isCurrentRoute(item.href),
+                        'bg-cyan-800 text-white': isCurrentRoute(
+                          item.href,
+                          item.exact
+                        ),
                         'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                          !isCurrentRoute(item.href),
+                          !isCurrentRoute(item.href, item.exact),
                       }
                     )}
                     aria-current={
-                      isCurrentRoute(item.href) ? 'page' : undefined
+                      isCurrentRoute(item.href, item.exact) ? 'page' : undefined
                     }
                   >
                     <item.icon
