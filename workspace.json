@@ -362,7 +362,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "pages-dashboard": {
       "root": "libs/pages/dashboard",
