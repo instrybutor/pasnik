@@ -1,6 +1,6 @@
 import { executeSqlQuery } from './execute-sql-query';
 
-const email = process.argv.slice(2)[0];
+const [email] = process.argv.slice(2);
 
 if (!email) {
   console.log('Usage: npm run make-admin <email>');

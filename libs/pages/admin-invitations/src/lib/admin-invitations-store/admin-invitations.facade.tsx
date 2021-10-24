@@ -5,14 +5,14 @@ import * as service from './admin-invitations.service';
 import { useCallback } from 'react';
 
 export const useAdminInvitationsFacade = () => {
-  const store = useAdminInvitationsStore();
+  const { setInvitations, setInvitation } = useAdminInvitationsStore();
 
   const fetchInvitations = useCallback(async (): Promise<InvitationModel[]> => {
     const invitations = await service.fetchInvitations();
-    store.setInvitations(invitations);
+    setInvitations(invitations);
 
     return invitations;
-  }, [store]);
+  }, [setInvitations]);
 
   const changeInvitationStatus = useCallback(
     async (
@@ -22,10 +22,10 @@ export const useAdminInvitationsFacade = () => {
       const invitation = await service.changeInvitationStatus(email, {
         status,
       });
-      store.setInvitation(invitation);
+      setInvitation(invitation);
       return invitation;
     },
-    [store]
+    [setInvitation]
   );
   return {
     fetchInvitations,

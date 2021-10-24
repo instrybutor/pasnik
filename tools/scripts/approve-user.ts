@@ -1,10 +1,10 @@
 import { InvitationStatus } from '../../libs/api/data-transfer/src';
 import { executeSqlQuery } from './execute-sql-query';
 
-const email = process.argv.slice(2)[0];
+const [email] = process.argv.slice(2);
 
 if (!email) {
-  console.log("Usage: npm run approve-user <email>");
+  console.log('Usage: npm run approve-user <email>');
   process.exit(255);
 }
 

@@ -5,7 +5,7 @@ import { ChangeInvitationStatusDto } from '@pasnik/api/data-transfer';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { UserEntity } from '../entities/user.entity';
 
-@Controller('api/admin/invitation')
+@Controller('api/admin/invitations')
 @UseGuards(IsAdminGuard)
 export class InvitationsController {
   constructor(private readonly invitationsService: InvitationsService) {}

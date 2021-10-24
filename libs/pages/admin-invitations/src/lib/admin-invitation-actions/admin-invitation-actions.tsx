@@ -13,12 +13,11 @@ export default function AdminInvitationActions({
   changeStatus,
   email,
 }: AdminInvitationActionsProps) {
-  const approveInvitation = useCallback(
-    () => changeStatus(email, InvitationStatus.APPROVED),
-    [changeStatus, email]
-  );
-  const rejectInvitation = useCallback(
-    () => changeStatus(email, InvitationStatus.REJECTED),
+  const changeStatusHandler = useCallback(
+    (event) => {
+      const newStatus = event.currentTarget.value;
+      changeStatus(email, newStatus);
+    },
     [changeStatus, email]
   );
 
@@ -44,7 +43,8 @@ export default function AdminInvitationActions({
           <div className="py-1">
             <Menu.Item>
               <button
-                onClick={approveInvitation}
+                onClick={changeStatusHandler}
+                value={InvitationStatus.APPROVED}
                 className="inline-flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
               >
                 <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
@@ -53,7 +53,8 @@ export default function AdminInvitationActions({
             </Menu.Item>
             <Menu.Item>
               <button
-                onClick={rejectInvitation}
+                onClick={changeStatusHandler}
+                value={InvitationStatus.REJECTED}
                 className="inline-flex items-center w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-500"
               >
                 <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
