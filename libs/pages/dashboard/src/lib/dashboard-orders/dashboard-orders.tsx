@@ -51,7 +51,7 @@ export function DashboardOrders(props: DashboardOrdersProps) {
         </div>
       </div>
 
-      {archivedOrders.length && (
+      {archivedOrders.length !== 0 && (
         <>
           <h2 className="max-w-6xl mx-auto mt-8 text-lg leading-6 font-medium text-gray-900">
             Zamkniete zamówienia

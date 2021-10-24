@@ -21,7 +21,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "auth": {
       "root": "libs/auth",
@@ -43,7 +44,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "axios": {
       "root": "libs/axios",
@@ -65,7 +67,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "components": {
       "root": "libs/components",
@@ -87,7 +90,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "frontend": {
       "root": "apps/frontend",
@@ -175,7 +179,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": []
     },
     "layout": {
       "root": "libs/layout",
@@ -197,7 +202,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "nestjs-api": {
       "root": "apps/nestjs-api",
@@ -260,7 +266,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": []
     },
     "orders-create-order": {
       "root": "libs/orders/create-order",
@@ -284,7 +291,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "orders-data-access": {
       "root": "libs/orders/data-access",
@@ -306,7 +314,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "orders-edit-order": {
       "root": "libs/orders/edit-order",
@@ -328,7 +337,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "pages-admin-invitations": {
       "root": "libs/pages/admin-invitations",
@@ -374,7 +384,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "pages-login": {
       "root": "libs/pages/login",
@@ -396,7 +407,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "pages-order": {
       "root": "libs/pages/order",
@@ -418,7 +430,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "pages-orders": {
       "root": "libs/pages/orders",
@@ -440,7 +453,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "shared-utils": {
       "root": "libs/shared/utils",
@@ -462,27 +476,8 @@
             "passWithNoTests": true
           }
         }
-      }
-    }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/react"
-  },
-  "generators": {
-    "@nrwl/react": {
-      "application": {
-        "style": "scss",
-        "linter": "eslint",
-        "babel": true
       },
-      "component": {
-        "style": "scss"
-      },
-      "library": {
-        "style": "scss",
-        "linter": "eslint"
-      }
+      "tags": []
     }
-  },
-  "defaultProject": "frontend"
+  }
 }

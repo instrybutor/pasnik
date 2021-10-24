@@ -26,54 +26,24 @@
       }
     ]
   },
-  "projects": {
-    "api-data-transfer": {
-      "tags": []
-    },
-    "auth": {
-      "tags": []
-    },
-    "axios": {
-      "tags": []
-    },
-    "components": {
-      "tags": []
-    },
-    "frontend": {
-      "tags": []
-    },
-    "layout": {
-      "tags": []
-    },
-    "nestjs-api": {
-      "tags": []
-    },
-    "orders-create-order": {
-      "tags": []
-    },
-    "orders-data-access": {
-      "tags": []
-    },
-    "orders-edit-order": {
-      "tags": []
-    },
-    "pages-admin-invitations": {
-      "tags": []
-    },
-    "pages-dashboard": {
-      "tags": []
-    },
-    "pages-login": {
-      "tags": []
-    },
-    "pages-order": {
-      "tags": []
-    },
-    "pages-orders": {
-      "tags": []
-    },
-    "shared-utils": {
-      "tags": []
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "scss"
+      },
+      "library": {
+        "style": "scss",
+        "linter": "eslint"
+      }
     }
-  }
+  },
+  "defaultProject": "frontend"
 }
