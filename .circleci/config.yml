@@ -21,11 +21,11 @@ set_env: &set_env
       echo 'export AFFECTED_ARGS="--base ${CIRCLE_PR_BASE_SHA}"' >> $BASH_ENV
     else
       echo 'Fetching Base Commit from Deploy Cache'
-      if [[ ! -f dist/last-${ENV_MANAGER_ENV}-deploy.txt ]]
+      if [[ ! -f dist/last-deploy.txt ]]
       then
-        mkdir dist && git rev-parse HEAD~1 > dist/last-${ENV_MANAGER_ENV}-deploy.txt
+        mkdir dist && git rev-parse HEAD~1 > dist/last-deploy.txt
       fi
-      echo 'export AFFECTED_ARGS="--base $(cat dist/last-${ENV_MANAGER_ENV}-deploy.txt)"' >> $BASH_ENV
+      echo 'export AFFECTED_ARGS="--base $(cat dist/last-deploy.txt)"' >> $BASH_ENV
     fi
     source $BASH_ENV
     echo $AFFECTED_ARGS
@@ -36,7 +36,7 @@ npm_cache: &npm_cache
     - v1-dependencies-
 
 deploy_cache: &deploy_cache
-  key: last-deploy-sha
+  key: last-deploy-sha-{{ .Environment.CIRCLE_WORKFLOW_ID }}
 
 npm_install: &npm_install
   name: Install Dependencies
@@ -141,9 +141,9 @@ jobs:
       - run: curl --fail $ENV_MANAGER_HOST/env/$ENV_MANAGER_ENV?auth=$ENV_MANAGER_PASS
       - run: git rev-parse HEAD > dist/last-$ENV_MANAGER_ENV-deploy.txt
       - save_cache:
-          key: last-deploy-sha
+          key: last-deploy-sha-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
-            - dist/last-$ENV_MANAGER_ENV-deploy.txt
+            - dist/last-deploy.txt
 
 workflows:
   version: 2
