@@ -161,7 +161,7 @@ workflows:
           requires:
             - install
 
-  build-n-deploy-stage:
+  build-n-deploy-dev:
     jobs:
       - install:
           filters:
@@ -172,11 +172,11 @@ workflows:
           requires:
             - install
       - build:
-          context: pasnik-stage
+          context: pasnik-dev
           requires:
             - install
       - deploy:
-          context: pasnik-stage
+          context: pasnik-dev
           requires:
             - lint
             - build
