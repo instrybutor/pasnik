@@ -5,13 +5,11 @@ import { Profile } from 'passport';
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
   findByGoogleId(googleId: string) {
-    return this.createQueryBuilder('user').where('uer.googleId = :googleId', {
-      googleId,
-    });
+    return this.findOne({ where: { googleId }});
   }
 
-  async createUser({ id, emails, photos, name }: Profile) {
-    const user = (await this.findByGoogleId(id).getOne()) ?? new UserEntity();
+  async upsertGoogleUser({ id, emails, photos, name }: Profile) {
+    const user = (await this.findByGoogleId(id)) ?? new UserEntity();
     user.googleId = id;
     user.avatarImg = photos[0]?.value;
     user.email = emails[0].value;

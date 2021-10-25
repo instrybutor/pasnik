@@ -6,12 +6,22 @@ export interface DateFormatProps {
   format: string;
 }
 
+const formatStrMap: Record<string, string> = {
+  LT: 'HH:ss',
+  LTS: 'HH:mm:ss',
+  L: 'dd/MM/yyyy',
+  LL: 'd MMMM yyyy',
+  LLL: 'd MMMM yyyy HH:mm',
+  LLLL: 'd MMMM yyyy HH:mm',
+};
+
 export function DateFormat({ date, format }: DateFormatProps) {
   const dateObj = date ? new Date(date) : undefined;
+  const formatStr = formatStrMap[format] ?? format;
   return (
     <time dateTime={dateObj?.toISOString()}>
       {dateObj
-        ? formatDate(new Date(dateObj), format, {
+        ? formatDate(dateObj, formatStr, {
             locale: pl,
           })
         : '??-??-????'}

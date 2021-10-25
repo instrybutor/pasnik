@@ -2,7 +2,11 @@ import { Redirect, Route, RouteProps, useHistory } from 'react-router-dom';
 
 import { useAuth } from './auth';
 
-export function PrivateRoute({ children, ...rest }: RouteProps) {
+export interface PrivateRouteProps extends RouteProps {
+  admin?: boolean;
+}
+
+export function PrivateRoute({ children, admin, ...rest }: PrivateRouteProps) {
   const { user } = useAuth();
   const history = useHistory();
 
@@ -12,6 +16,16 @@ export function PrivateRoute({ children, ...rest }: RouteProps) {
         to={{
           pathname: '/login',
           search: `redirectTo=${history.location.pathname}`,
+        }}
+      />
+    );
+  }
+
+  if (admin && !user.isAdmin) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/',
         }}
       />
     );

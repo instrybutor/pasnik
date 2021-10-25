@@ -30,6 +30,12 @@ export function useAuthFacade() {
     history.push('/login');
   }, [history]);
 
+  const requestAccess = useCallback((requestToken) => {
+    return axios
+      .post('/api/auth/request-access', { requestToken })
+      .then(() => undefined);
+  }, []);
+
   React.useEffect(() => {
     Promise.all([fetchUsers(), fetchUser()]).catch(() => {
       setFetching(false);
@@ -41,6 +47,7 @@ export function useAuthFacade() {
     users,
     fetching,
     fetchUser,
+    requestAccess,
     signOut,
   };
 }

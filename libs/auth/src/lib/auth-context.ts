@@ -6,6 +6,7 @@ export interface AuthContextProps {
   users: UserModel[];
   fetchUser: () => Promise<UserModel>;
   signOut: () => void;
+  requestAccess: (requestToken: string) => Promise<void>;
   gapi?: google.accounts.id;
 }
 
@@ -14,6 +15,7 @@ export const AuthContext = createContext<AuthContextProps>({
   users: [],
   fetchUser: () => Promise.reject(),
   signOut: () => undefined,
+  requestAccess: () => Promise.reject(),
   gapi: {
     initialize: () => undefined,
     renderButton: () => undefined,

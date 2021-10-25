@@ -14,6 +14,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import classNames from 'classnames';
+import { useAuth } from '@pasnik/auth';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
@@ -22,6 +23,15 @@ const navigation = [
   { name: 'Cards', href: '/cards', icon: CreditCardIcon, hide: true },
   { name: 'Recipients', href: '/recipients', icon: UserGroupIcon, hide: true },
   { name: 'Reports', href: '/reports', icon: DocumentReportIcon, hide: true },
+];
+
+const adminNavigation = [
+  {
+    name: 'Zaproszenia',
+    href: '/admin/invitations',
+    icon: UserGroupIcon,
+    exact: false,
+  },
 ];
 
 const secondaryNavigation = [
@@ -37,8 +47,9 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
-  const isCurrentRoute = useCallback((href: string) => {
-    return !!matchPath(window.location.pathname, { path: href, exact: true });
+  const { user } = useAuth();
+  const isCurrentRoute = useCallback((href: string, exact?: boolean) => {
+    return !!matchPath(window.location.pathname, { path: href, exact: exact });
   }, []);
   return (
     <>
@@ -112,13 +123,18 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                         'group flex items-center px-2 py-2 text-base font-medium rounded-md',
                         {
                           hidden: item.hide,
-                          'bg-cyan-800 text-white': isCurrentRoute(item.href),
+                          'bg-cyan-800 text-white': isCurrentRoute(
+                            item.href,
+                            item.exact
+                          ),
                           'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                            !isCurrentRoute(item.href),
+                            !isCurrentRoute(item.href, item.exact),
                         }
                       )}
                       aria-current={
-                        isCurrentRoute(item.href) ? 'page' : undefined
+                        isCurrentRoute(item.href, item.exact)
+                          ? 'page'
+                          : undefined
                       }
                     >
                       <item.icon
@@ -129,6 +145,36 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                     </NavLink>
                   ))}
                 </div>
+                {user?.isAdmin && (
+                  <div className="mt-6 pt-6">
+                    <div className="px-2 space-y-1">
+                      {adminNavigation.map((item) => (
+                        <NavLink
+                          key={item.name}
+                          to={item.href}
+                          exact={item.exact}
+                          className={classNames(
+                            'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
+                            {
+                              'bg-cyan-800 text-white': isCurrentRoute(
+                                item.href,
+                                item.exact
+                              ),
+                              'text-cyan-100 hover:text-white hover:bg-cyan-600':
+                                !isCurrentRoute(item.href, item.exact),
+                            }
+                          )}
+                        >
+                          <item.icon
+                            className="mr-4 h-6 w-6 text-cyan-200"
+                            aria-hidden="true"
+                          />
+                          {item.name}
+                        </NavLink>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="mt-6 pt-6">
                   <div className="px-2 space-y-1">
                     {secondaryNavigation.map((item) => (
@@ -194,13 +240,16 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                       'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
                       {
                         hidden: item.hide,
-                        'bg-cyan-800 text-white': isCurrentRoute(item.href),
+                        'bg-cyan-800 text-white': isCurrentRoute(
+                          item.href,
+                          item.exact
+                        ),
                         'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                          !isCurrentRoute(item.href),
+                          !isCurrentRoute(item.href, item.exact),
                       }
                     )}
                     aria-current={
-                      isCurrentRoute(item.href) ? 'page' : undefined
+                      isCurrentRoute(item.href, item.exact) ? 'page' : undefined
                     }
                   >
                     <item.icon
@@ -211,6 +260,32 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                   </NavLink>
                 ))}
               </div>
+              {user?.isAdmin && (
+                <div className="mt-6 pt-6">
+                  <div className="px-2 space-y-1">
+                    {adminNavigation.map((item) => (
+                      <NavLink
+                        key={item.name}
+                        to={item.href}
+                        className={classNames(
+                          'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
+                          {
+                            'bg-cyan-800 text-white': isCurrentRoute(item.href),
+                            'text-cyan-100 hover:text-white hover:bg-cyan-600':
+                              !isCurrentRoute(item.href),
+                          }
+                        )}
+                      >
+                        <item.icon
+                          className="mr-4 h-6 w-6 text-cyan-200"
+                          aria-hidden="true"
+                        />
+                        {item.name}
+                      </NavLink>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="mt-6 pt-6 flex-grow">
                 <div className="px-2 space-y-1">
                   {secondaryNavigation.map((item) => (

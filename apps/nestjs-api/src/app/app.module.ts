@@ -7,6 +7,7 @@ import { FrontendMiddleware } from './frontend.middleware';
 import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
 import { DatabaseConfig } from './db.config';
+import { InvitationsModule } from './invitations/invitations.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { DatabaseConfig } from './db.config';
     AuthModule,
     UsersModule,
     OrdersModule,
-    DishesModule
+    DishesModule,
+    InvitationsModule
   ],
   controllers: [],
   providers: [],

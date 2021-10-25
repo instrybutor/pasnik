@@ -4,15 +4,15 @@ import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtAuthGuard } from './jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { InvitationsModule } from '../invitations/invitations.module';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
     ConfigModule,
-    UsersModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -20,6 +20,8 @@ import { APP_GUARD } from '@nestjs/core';
       }),
       inject: [ConfigService],
     }),
+    InvitationsModule,
+    UsersModule,
   ],
   controllers: [AuthController],
   providers: [

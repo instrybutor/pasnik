@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 import { useGoogleLogin } from './google-login.hook';
 import { GoogleButtonLogin } from './google-button-login.component';
+import { AxiosError } from 'axios';
 
 export interface GoogleLoginProps {
-  onSuccess: (jwt: string) => void;
-  onError: (response: Response) => void;
+  onSuccess: (accessToken: string) => void;
+  onError: (response: AxiosError) => void;
 }
 
 export const GoogleLogin = ({ onSuccess, onError }: GoogleLoginProps) => {

@@ -340,6 +340,31 @@
       },
       "tags": []
     },
+    "pages-admin-invitations": {
+      "root": "libs/pages/admin-invitations",
+      "sourceRoot": "libs/pages/admin-invitations/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/pages/admin-invitations/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/admin-invitations"],
+          "options": {
+            "jestConfig": "libs/pages/admin-invitations/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
     "pages-dashboard": {
       "root": "libs/pages/dashboard",
       "sourceRoot": "libs/pages/dashboard/src",
