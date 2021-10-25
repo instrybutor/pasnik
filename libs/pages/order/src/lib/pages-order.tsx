@@ -20,14 +20,13 @@ export function PagesOrder() {
   const order = useOrderStore((state) => state.order);
   const dishes = useOrderStore((state) => Object.values(state.dishes ?? {}));
   const { slug } = useParams<PagesOrderProps>();
-  const { fetchOrder, fetchDishes, resetStore } = useOrderFacade();
+  const { fetchOrder, fetchDishes, reset } = useOrderFacade();
 
   useEffect(() => {
-    fetchOrder(slug).then(({ id }) => fetchDishes(id));
-    return () => {
-      resetStore();
-    };
-  }, [fetchDishes, fetchOrder, slug, resetStore]);
+    fetchOrder(slug).then(fetchDishes);
+
+    return () => reset();
+  }, [fetchDishes, fetchOrder, slug, reset]);
 
   return (
     <Fragment>

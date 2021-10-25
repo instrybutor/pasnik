@@ -4,14 +4,13 @@ import DashboardOverview from './dashboard-overview/dashboard-overview';
 import DashboardOrders from './dashboard-orders/dashboard-orders';
 import { useDashboardFacade } from './dashboard-store/dashboard.facade';
 
-/* eslint-disable-next-line */
-export interface PagesDashboardProps {}
-
-export function PagesDashboard(_: PagesDashboardProps) {
+export function PagesDashboard() {
   const { fetchActiveOrders } = useDashboardFacade();
+
   useEffect(() => {
-    fetchActiveOrders().then();
-  }, []);
+    fetchActiveOrders();
+  }, [fetchActiveOrders]);
+
   return (
     <Fragment>
       <header className="bg-white shadow">

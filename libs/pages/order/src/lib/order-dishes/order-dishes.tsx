@@ -28,7 +28,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
 
   const addDishHandler = useCallback(
     async (data: AddDishDto) => {
-      const dish = await addDish(order!.id, {
+      const dish = await addDish({
         ...data,
         priceCents: data.priceCents * 100,
       });
@@ -37,12 +37,12 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
 
       return dish;
     },
-    [addDish, order]
+    [addDish]
   );
 
   const deleteDishHandler = useCallback(
     async (dish: DishModel) => {
-      await deleteDish(dish);
+      await deleteDish(dish.id);
     },
     [deleteDish]
   );

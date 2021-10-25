@@ -29,7 +29,7 @@ export function DashboardOrders(props: DashboardOrdersProps) {
     activeOrders: getActiveOrder(Object.values(state.entities ?? {})),
     archivedOrders: getArchivedOrders(Object.values(state.entities ?? {})),
   }));
-  const isLoading = useDashboardStore((state) => state.isLoading);
+  const isFetching = useDashboardStore((state) => state.isFetching);
   return (
     <>
       <h2 className="max-w-6xl mx-auto mt-8 text-lg leading-6 font-medium text-gray-900">
@@ -37,7 +37,7 @@ export function DashboardOrders(props: DashboardOrdersProps) {
       </h2>
       <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">
         <div className="border-b border-gray-200">
-          {isLoading ? (
+          {isFetching ? (
             <Spinner />
           ) : activeOrders.length ? (
             <ul className="divide-y divide-gray-200">

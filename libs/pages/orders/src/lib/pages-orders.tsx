@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useOrdersFacade } from './orders-store/orders.facade';
 import { Spinner } from '@pasnik/layout';
 import OrdersHeader from './orders-header/orders-header';
@@ -6,18 +6,12 @@ import OrderList from './order-list/order-list';
 import { useOrdersStore } from './orders-store/orders.store';
 import OrdersEmpty from './orders-empty/orders-empty';
 
-/* eslint-disable-next-line */
-export interface PagesOrdersProps {}
-
-export function PagesOrders(_: PagesOrdersProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const { fetchOrders } = useOrdersFacade();
+export const PagesOrders: React.FC = () => {
+  const { fetchOrders, isFetching } = useOrdersFacade();
   const orders = useOrdersStore((state) => Object.values(state.entities!));
 
   useEffect(() => {
-    fetchOrders().then(() => {
-      setIsLoading(false);
-    });
+    fetchOrders();
   }, [fetchOrders]);
 
   return (
@@ -30,7 +24,7 @@ export function PagesOrders(_: PagesOrdersProps) {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white relative shadow overflow-hidden sm:rounded-md">
               <div className="border-b border-gray-200">
-                {isLoading && <Spinner />}
+                {isFetching && <Spinner />}
                 {orders.length ? (
                   <OrderList orders={orders} />
                 ) : (
@@ -43,6 +37,6 @@ export function PagesOrders(_: PagesOrdersProps) {
       </main>
     </Fragment>
   );
-}
+};
 
 export default PagesOrders;
