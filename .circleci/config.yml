@@ -21,11 +21,11 @@ set_env: &set_env
       echo 'export AFFECTED_ARGS="--base ${CIRCLE_PR_BASE_SHA}"' >> $BASH_ENV
     else
       echo 'Fetching Base Commit from Deploy Cache'
-      if [[ ! -f dist/last-${$ENV_MANAGER_ENV}-deploy.txt ]]
+      if [[ ! -f dist/last-${ENV_MANAGER_ENV}-deploy.txt ]]
       then
-        mkdir dist && git rev-parse HEAD~1 > dist/last-${$ENV_MANAGER_ENV}-deploy.txt
+        mkdir dist && git rev-parse HEAD~1 > dist/last-${ENV_MANAGER_ENV}-deploy.txt
       fi
-      echo 'export AFFECTED_ARGS="--base $(cat dist/last-${$ENV_MANAGER_ENV}-deploy.txt)"' >> $BASH_ENV
+      echo 'export AFFECTED_ARGS="--base $(cat dist/last-${ENV_MANAGER_ENV}-deploy.txt)"' >> $BASH_ENV
     fi
     source $BASH_ENV
     echo $AFFECTED_ARGS
