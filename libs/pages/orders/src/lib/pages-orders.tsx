@@ -6,7 +6,7 @@ import OrderList from './order-list/order-list';
 import { useOrdersStore } from './orders-store/orders.store';
 import OrdersEmpty from './orders-empty/orders-empty';
 
-export const PagesOrders: React.FC = () => {
+export function PagesOrders() {
   const { fetchOrders, isFetching } = useOrdersFacade();
   const orders = useOrdersStore((state) => Object.values(state.entities!));
 
@@ -37,6 +37,6 @@ export const PagesOrders: React.FC = () => {
       </main>
     </Fragment>
   );
-};
+}
 
 export default PagesOrders;

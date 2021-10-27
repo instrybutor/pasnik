@@ -210,8 +210,8 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   <Menu.Items className="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <Menu.Item>
                       {({ active }) => (
-                        <button
-                          type="button"
+                        <Link
+                          to={`${url}/edit`}
                           className="inline-flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full"
                         >
                           <PencilIcon
@@ -219,7 +219,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                             aria-hidden="true"
                           />
                           Edytuj
-                        </button>
+                        </Link>
                       )}
                     </Menu.Item>
                     <Menu.Item>
