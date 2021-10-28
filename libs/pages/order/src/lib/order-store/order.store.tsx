@@ -1,6 +1,12 @@
 import create from 'zustand';
 
-import type { DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import type {
+  AddDishDto,
+  DishModel,
+  OrderModel,
+} from '@pasnik/api/data-transfer';
+
+import * as service from './order.service';
 
 interface OrderState {
   order: OrderModel | null;
@@ -9,11 +15,17 @@ interface OrderState {
   isOrderLoading: boolean;
   isDishesLoading: boolean;
 
-  addDish: (dish: DishModel) => void;
-  setDishes: (dishes: DishModel[]) => void;
-  setOrder: (order: OrderModel) => void;
-  deleteDish: (dish: DishModel) => void;
-  updateDish: (dish: DishModel) => void;
+  addDish: (payload: AddDishDto) => Promise<DishModel>;
+  fetchDishes: () => Promise<DishModel[]>;
+  fetchOrder: (slug: string) => Promise<OrderModel>;
+  deleteDish: (dishId: number) => Promise<void>;
+  setPayer: (payerId: number) => Promise<OrderModel>;
+  markAsClosed: () => Promise<OrderModel>;
+  markAsOpen: () => Promise<OrderModel>;
+  markAsOrdered: () => Promise<OrderModel>;
+  markAsPaid: (payerId: number) => Promise<OrderModel>;
+  markAsDelivered: () => Promise<OrderModel>;
+  updateDish: (dishId: number, payload: AddDishDto) => Promise<DishModel>;
   reset: () => void;
 }
 const removeKey = (
@@ -21,24 +33,26 @@ const removeKey = (
   { [key]: _, ...rest }: Record<number, DishModel>
 ) => rest;
 
-export const useOrderStore = create<OrderState>((set) => ({
+const initialState = {
   order: null,
   dishes: {},
   dishesIds: [],
   isDishesLoading: true,
   isOrderLoading: true,
+};
 
-  reset: () => {
-    set((state) => ({
-      order: null,
-      dishes: {},
-      dishesIds: [],
-      isDishesLoading: true,
-      isOrderLoading: true,
-    }));
-  },
+export const useOrderStore = create<OrderState>((set, getState) => ({
+  ...initialState,
 
-  setDishes: (dishes: DishModel[]) => {
+  reset: () => set(initialState),
+
+  fetchDishes: async () => {
+    const { order } = getState();
+
+    set({ isDishesLoading: true });
+
+    const dishes = await service.fetchDishes(order!.id);
+
     set((state) => ({
       ...state,
       isDishesLoading: false,
@@ -51,8 +65,15 @@ export const useOrderStore = create<OrderState>((set) => ({
         {}
       ),
     }));
+
+    return dishes;
   },
-  addDish: (dish: DishModel) => {
+
+  addDish: async (payload: AddDishDto) => {
+    const { order } = getState();
+
+    const dish = await service.addDish(order!.id, payload);
+
     set((state) => ({
       ...state,
       dishesIds: [...state.dishesIds, dish.id],
@@ -61,28 +82,134 @@ export const useOrderStore = create<OrderState>((set) => ({
         [dish.id]: dish,
       },
     }));
+
+    return dish;
   },
-  deleteDish: (dish: DishModel) => {
+  deleteDish: async (dishId: number) => {
+    const { order } = getState();
+    await service.deleteDish(order!.id, dishId);
+
     set((state) => ({
       ...state,
-      dishesIds: state.dishesIds.filter((id) => id !== dish.id),
-      dishes: removeKey(dish.id, state.dishes ?? {}),
+      dishesIds: state.dishesIds.filter((id) => id !== dishId),
+      dishes: removeKey(dishId, state.dishes ?? {}),
     }));
   },
-  updateDish: (dish: DishModel) => {
+  updateDish: async (dishId: number, payload: AddDishDto) => {
+    const { order } = getState();
+
+    const dish = await service.updateDish(order!.id, dishId, payload);
+
     set((state) => ({
       ...state,
       dishes: {
         ...state.dishes,
-        [dish.id]: dish,
+        [dishId]: dish,
       },
     }));
+
+    return dish;
   },
-  setOrder: (order: OrderModel) => {
+  fetchOrder: async (slug: string) => {
+    set({ isOrderLoading: true });
+
+    const order = await service.fetchOrder(slug);
+
     set((state) => ({
       ...state,
       isOrderLoading: false,
       order,
     }));
+
+    return order;
+  },
+  markAsClosed: async () => {
+    const { order } = getState();
+    set({ isOrderLoading: true });
+
+    const newOrder = await service.markAsClosed(order!.id);
+
+    set((state) => ({
+      ...state,
+      isOrderLoading: false,
+      order: newOrder,
+    }));
+
+    return newOrder;
+  },
+  markAsOpen: async () => {
+    const { order } = getState();
+
+    set({ isOrderLoading: true });
+
+    const newOrder = await service.markAsOpen(order!.id);
+
+    set((state) => ({
+      ...state,
+      isOrderLoading: false,
+      order: newOrder,
+    }));
+
+    return newOrder;
+  },
+  markAsOrdered: async () => {
+    const { order } = getState();
+
+    set({ isOrderLoading: true });
+
+    const newOrder = await service.markAsOrdered(order!.id);
+
+    set((state) => ({
+      ...state,
+      isOrderLoading: false,
+      order: newOrder,
+    }));
+
+    return newOrder;
+  },
+  markAsPaid: async (payerId: number) => {
+    const { order } = getState();
+
+    set({ isOrderLoading: true });
+
+    const newOrder = await service.markAsPaid(order!.id, payerId);
+
+    set((state) => ({
+      ...state,
+      isOrderLoading: false,
+      order: newOrder,
+    }));
+
+    return newOrder;
+  },
+  markAsDelivered: async () => {
+    const { order } = getState();
+
+    set({ isOrderLoading: true });
+
+    const newOrder = await service.markAsDelivered(order!.id);
+
+    set((state) => ({
+      ...state,
+      isOrderLoading: false,
+      order: newOrder,
+    }));
+
+    return newOrder;
+  },
+  setPayer: async (payerId: number) => {
+    const { order } = getState();
+
+    set({ isOrderLoading: true });
+
+    const newOrder = await service.setPayer(order!.id, { payerId });
+
+    set((state) => ({
+      ...state,
+      isOrderLoading: false,
+      order: newOrder,
+    }));
+
+    return newOrder;
   },
 }));

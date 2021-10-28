@@ -1,13 +1,20 @@
 import create from 'zustand';
 
-import type { InvitationModel } from '@pasnik/api/data-transfer';
+import type {
+  InvitationModel,
+  InvitationStatus,
+} from '@pasnik/api/data-transfer';
+import * as service from './admin-invitations.service';
 
 interface AdminInvitationsState {
   entities: Record<string, InvitationModel>;
   ids: string[];
 
-  setInvitations: (invitations: InvitationModel[]) => void;
-  setInvitation: (invitation: InvitationModel) => void;
+  fetchInvitations: () => Promise<InvitationModel[]>;
+  updateInvitation: (
+    email: string,
+    status: InvitationStatus
+  ) => Promise<InvitationModel>;
 }
 
 export const useAdminInvitationsStore = create<AdminInvitationsState>(
@@ -15,17 +22,9 @@ export const useAdminInvitationsStore = create<AdminInvitationsState>(
     entities: {},
     ids: [],
 
-    setInvitation: (invitation: InvitationModel) => {
-      set((state) => ({
-        ...state,
-        ids: [...state.ids, invitation.email],
-        entities: {
-          ...state.entities,
-          [invitation.email]: invitation,
-        },
-      }));
-    },
-    setInvitations: (invitations: InvitationModel[]) => {
+    fetchInvitations: async () => {
+      const invitations = await service.fetchInvitations();
+
       set((state) => ({
         ...state,
         ids: invitations.map((invitation) => invitation.email),
@@ -37,6 +36,25 @@ export const useAdminInvitationsStore = create<AdminInvitationsState>(
           {}
         ),
       }));
+
+      return invitations;
+    },
+
+    updateInvitation: async (email: string, status: InvitationStatus) => {
+      const invitation = await service.changeInvitationStatus(email, {
+        status,
+      });
+
+      set((state) => ({
+        ...state,
+        ids: [...state.ids, invitation.email],
+        entities: {
+          ...state.entities,
+          [invitation.email]: invitation,
+        },
+      }));
+
+      return invitation;
     },
   })
 );

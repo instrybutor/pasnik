@@ -1,23 +1,37 @@
 import create from 'zustand';
 
-import type { OrderModel } from '@pasnik/api/data-transfer';
+import type {
+  CreateOrderDto,
+  OrderModel,
+  UpdateOrderDto,
+} from '@pasnik/api/data-transfer';
+
+import * as service from './orders.service';
 
 interface OrdersState {
   entities: Record<string, OrderModel> | null;
   ids: string[];
+  isFetching: boolean;
 
-  setOrders: (orders: OrderModel[]) => void;
-  addOrder: (order: OrderModel) => void;
-  updateOrder: (order: OrderModel) => void;
+  fetchOrders: () => Promise<OrderModel[]>;
+  fetchOrder: (slug: string) => Promise<OrderModel>;
+  updateOrder: (slug: string, payload: UpdateOrderDto) => Promise<OrderModel>;
+  createOrder: (payload: CreateOrderDto) => Promise<OrderModel>;
 }
 
 export const createOrdersStore = create<OrdersState>((set) => ({
   entities: null,
   ids: [],
+  isFetching: false,
 
-  setOrders: (orders: OrderModel[]) => {
+  fetchOrders: async () => {
+    set({ isFetching: true });
+
+    const orders = await service.fetchOrders();
+
     set((state) => ({
       ...state,
+      isFetching: false,
       ids: orders.map((order) => order.id),
       entities: orders.reduce(
         (collection, order) => ({
@@ -27,19 +41,43 @@ export const createOrdersStore = create<OrdersState>((set) => ({
         {}
       ),
     }));
+
+    return orders;
   },
 
-  addOrder: (order: OrderModel) => {
+  fetchOrder: async (slug: string) => {
+    const order = await service.fetchOrder(slug);
+
     set((state) => ({
-      ids: [...state.ids, order.id],
+      ...state,
+      ids: [...new Set([...state.ids, order.id])],
+      entities: {
+        [order.id]: order,
+      },
+    }));
+
+    return order;
+  },
+
+  createOrder: async (payload: CreateOrderDto) => {
+    const order = await service.createOrder(payload);
+
+    set((state) => ({
+      ...state,
+      isFetching: false,
+      ids: [...new Set([...state.ids, order.id])],
       entities: {
         ...state.entities,
         [order.id]: order,
       },
     }));
+
+    return order;
   },
 
-  updateOrder: (order: OrderModel) => {
+  updateOrder: async (slug: string, payload: UpdateOrderDto) => {
+    const order = await service.updateOrder(slug, payload);
+
     set((state) => ({
       ...state,
       entities: {
@@ -47,5 +85,7 @@ export const createOrdersStore = create<OrdersState>((set) => ({
         [order.id]: order,
       },
     }));
+
+    return order;
   },
 }));

@@ -8,7 +8,7 @@
     "start:api": "nx serve nestjs-api",
     "start:database": "npm run docker-compose up",
     "start:database:detached": "npm run docker-compose up -- -d",
-    "dev": "run-p start start:api start:database",
+    "dev": "run-p start start:database start:api",
     "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",

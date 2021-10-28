@@ -8,7 +8,7 @@ import { useAuth } from '@pasnik/auth';
 
 export interface OrderPaymentProps {
   totalCents: number;
-  setPayer: (payer: UserModel) => void;
+  setPayer: (payerId: number) => void;
   payer?: UserModel | null;
 }
 
@@ -22,7 +22,7 @@ export function OrderSelectPayer({
   const setPayerHandler = useCallback(
     (newPayer: UserModel) => {
       if (newPayer.id !== payer?.id) {
-        setPayer(newPayer);
+        setPayer(newPayer.id);
       }
     },
     [setPayer, payer]

@@ -1,15 +1,13 @@
-import { FC } from 'react';
-
 import { OrderHeader } from './components/order-header';
 import { useEditOrder } from './edit-order.hook';
 
-export const EditOrder: FC = () => {
+export function EditOrder() {
   const { error, handleSubmit, onSubmit, register, errors } = useEditOrder();
 
   return (
     <>
       <OrderHeader />
-      <div className="w-2/4 mx-auto bg-white shadow overflow-hidden sm:rounded-md p-4 mt-8">
+      <div className="w-full md:w-2/4 mx-auto bg-white shadow overflow-hidden sm:rounded-md p-4 mt-8">
         {error && (
           <div className="bg-red-100 border border-red-400 p-2">
             Request Failed!
@@ -75,4 +73,4 @@ export const EditOrder: FC = () => {
       </div>
     </>
   );
-};
+}

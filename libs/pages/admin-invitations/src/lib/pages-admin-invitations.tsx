@@ -11,8 +11,7 @@ export function PagesAdminInvitations(props: PagesAdminInvitationsProps) {
   const invitations = useAdminInvitationsStore((state) =>
     Object.values(state.entities)
   );
-  const { fetchInvitations, changeInvitationStatus } =
-    useAdminInvitationsFacade();
+  const { fetchInvitations, updateInvitation } = useAdminInvitationsFacade();
 
   useEffect(() => {
     fetchInvitations();
@@ -28,7 +27,7 @@ export function PagesAdminInvitations(props: PagesAdminInvitationsProps) {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <AdminInvitationList
               invitations={invitations}
-              changeStatus={changeInvitationStatus}
+              changeStatus={updateInvitation}
             />
           </div>
         </div>

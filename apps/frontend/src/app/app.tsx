@@ -21,16 +21,24 @@ export function App() {
           <Route path="/login" component={PagesLogin} />
 
           <Layout version={version}>
-            <PrivateRoute exact path="/" component={PagesDashboard} />
-            <PrivateRoute path="/create-order" component={CreateOrder} />
-            <PrivateRoute path="/history" component={PagesOrders} />
-            <PrivateRoute path="/order/:slug" component={PagesOrder} />
-            <PrivateRoute path="/order/:slug/edit" component={EditOrder} />
-            <PrivateRoute
-              admin={true}
-              path="/admin/invitations"
-              component={PagesAdminInvitations}
-            />
+            <PrivateRoute exact path="/">
+              <PagesDashboard />
+            </PrivateRoute>
+            <PrivateRoute path="/create-order">
+              <CreateOrder />
+            </PrivateRoute>
+            <PrivateRoute path="/history">
+              <PagesOrders />
+            </PrivateRoute>
+            <PrivateRoute exact path="/order/:slug">
+              <PagesOrder />
+            </PrivateRoute>
+            <PrivateRoute exact path="/order/:slug/edit">
+              <EditOrder />
+            </PrivateRoute>
+            <PrivateRoute admin={true} path="/admin/invitations">
+              <PagesAdminInvitations />
+            </PrivateRoute>
           </Layout>
 
           <Redirect to="/login" />
