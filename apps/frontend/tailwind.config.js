@@ -1,15 +1,18 @@
 const { createGlobPatternsForDependencies } = require('@nrwl/react/tailwind');
-const colors = require('tailwindcss/colors')
-const defaultTheme = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   purge: createGlobPatternsForDependencies(__dirname),
 
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontFamily: {
+      sans: ['Open Sans', 'sans-serif'],
+    },
     screens: {
       xsm: '480px',
-      ...defaultTheme.screens
+      ...defaultTheme.screens,
     },
     extend: {
       colors: {
@@ -19,10 +22,8 @@ module.exports = {
   },
   variants: {
     extend: {
-      opacity: ['disabled']
+      opacity: ['disabled'],
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('@tailwindcss/forms')],
 };
