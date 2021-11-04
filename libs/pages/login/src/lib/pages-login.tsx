@@ -1,77 +1,42 @@
-import { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useQuery } from '@pasnik/shared/utils';
-import { useAuth } from '@pasnik/auth';
 import { ErrorAlert } from './error-alert/error-alert';
 import { GoogleLogin } from './google-login/google-login';
-import { setAuthToken } from '@pasnik/axios';
 import { Invitation } from './invitation/invitation';
-import { AxiosError } from 'axios';
 import { InvitationPendingAlert } from './invitation-pending-alert/invitation-pending-alert';
+import { usePageLogin } from './use-page-login';
 
-/* eslint-disable-next-line */
-export interface PagesLoginProps {}
+export function PagesLogin() {
+  const { requestToken, onError, invitationPending, hasError, onSuccess } =
+    usePageLogin();
 
-interface LoginError402 {
-  requestToken: string;
-}
-
-export function PagesLogin(props: PagesLoginProps) {
-  const history = useHistory();
-  const query = useQuery();
-  const { fetchUser } = useAuth();
-  const [requestToken, setRequestToken] = useState<string | null>(null);
-  const [hasError, setHasError] = useState(false);
-  const [invitationPending, setInvitationPending] = useState(false);
-
-  const onError = useCallback(
-    (error: AxiosError) => {
-      if (error.response?.status === 402) {
-        const { requestToken } = error.response.data as LoginError402;
-        setRequestToken(requestToken);
-      } else if (error.response?.status === 304) {
-        setInvitationPending(true);
-      } else {
-        setHasError(true);
-      }
-    },
-    [setRequestToken]
-  );
-
-  const onSuccess = useCallback(
-    (accessToken: string) => {
-      setAuthToken(accessToken);
-      setHasError(false);
-      setInvitationPending(false);
-
-      fetchUser()
-        .then(() => {
-          const redirectTo = query.get('redirectTo');
-          if (redirectTo) {
-            history.push(decodeURIComponent(redirectTo));
-          } else {
-            history.push('/');
-          }
-        })
-        .catch(onError);
-    },
-    [fetchUser, onError, history, query]
-  );
   return (
     <>
       <Invitation requestToken={requestToken} onError={onError} />
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h1 className="text-4xl text-center">
+      <div
+        className="min-h-screen bg-gray-50 flex flex-col justify-center"
+        style={{
+          background:
+            'url(https://source.unsplash.com/1200x800?food,meal) no-repeat center center',
+          backgroundSize: 'cover',
+        }}
+      >
+        <div
+          className="absolute top-0 right-0 w-screen md:w-1/3 h-screen bg-white flex flex-col shadow-lg py-16 gap-8"
+          style={{ boxShadow: '-2px 1px 10px rgb(0 0 0 / 15%)' }}
+        >
+          <h1 className="text-4xl text-center font-semibold flex flex-col">
             <span role="img" aria-label="food">
-              🍔
-            </span>{' '}
-            Paśnik
+              🍔 Paśnik
+            </span>
+            <small className="text-xs text-gray-400">
+              Grupowe zamawianie szamy!
+            </small>
           </h1>
-        </div>
 
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <div className="border-b border-b-gray-100 w-full" />
+
+          <span className="mx-auto">Zaloguj się aby korzystać z serwisu!</span>
+
+          <div>
             {invitationPending && (
               <div className="mb-6">
                 <InvitationPendingAlert />
