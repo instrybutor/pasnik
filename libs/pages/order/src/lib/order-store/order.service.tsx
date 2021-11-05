@@ -9,8 +9,10 @@ import axios from '@pasnik/axios';
 export const fetchOrder = (slug: string) =>
   axios.get<OrderModel>(`/api/orders/${slug}`).then(({ data }) => data);
 
-export const fetchDishes = (id: string) =>
-  axios.get<DishModel[]>(`/api/orders/${id}/dishes`).then(({ data }) => data);
+export const fetchDishes = (orderId: string) =>
+  axios
+    .get<DishModel[]>(`/api/orders/${orderId}/dishes`)
+    .then(({ data }) => data);
 
 export const markAsClosed = (id: string) =>
   axios
@@ -22,16 +24,16 @@ export const markAsOpen = (id: string) =>
     .post<OrderModel>(`/api/orders/${id}/mark-as-open`)
     .then(({ data }) => data);
 
-export const setPayer = (id: string, setPayerDto: SetPayerDto) =>
+export const setPayer = (orderId: string, setPayerDto: SetPayerDto) =>
   axios
-    .post<OrderModel>(`/api/orders/${id}/set-payer`, {
+    .post<OrderModel>(`/api/orders/${orderId}/set-payer`, {
       data: setPayerDto,
     })
     .then(({ data }) => data);
 
-export const markAsDelivered = (id: string) =>
+export const markAsDelivered = (orderId: string) =>
   axios
-    .post<OrderModel>(`/api/orders/${id}/mark-as-delivered`)
+    .post<OrderModel>(`/api/orders/${orderId}/mark-as-delivered`)
     .then(({ data }) => data);
 
 export const markAsOrdered = (id: string) =>

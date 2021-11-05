@@ -8,3 +8,9 @@ export interface DishModel {
   updatedAt: string;
   user: UserModel;
 }
+
+export interface DishPurgatoryModal {
+  name: string;
+  priceCents: number;
+  createdAt: string;
+}
