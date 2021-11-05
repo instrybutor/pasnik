@@ -9,7 +9,6 @@ import OrderSummary from './order-summary/order-summary';
 import OrderHeaderLoading from './order-header-loading/order-header-loading';
 import OrderSectionLoading from './order-section-loading/order-section-loading';
 
-// import * as service from './order-store/order.service';
 import { useOrderFacade } from './order-store/order.facade';
 
 export interface PagesOrderProps {
