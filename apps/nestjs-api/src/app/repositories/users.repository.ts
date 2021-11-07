@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '@pasnik/nestjs/entities';
 import { Profile } from 'passport';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
   findByGoogleId(googleId: string) {
-    return this.findOne({ where: { googleId }});
+    return this.findOne({ where: { googleId } });
   }
 
   async upsertGoogleUser({ id, emails, photos, name }: Profile) {

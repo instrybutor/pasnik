@@ -2,13 +2,13 @@ import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 
 import { OrdersService } from './orders.service';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '@pasnik/nestjs/entities';
 import {
   CreateOrderDto,
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
+  SetPayerDto,
   UpdateOrderDto,
-  SetPayerDto
 } from '@pasnik/api/data-transfer';
 
 @Controller('api/orders')
@@ -71,7 +71,7 @@ export class OrdersController {
   markAsPaid(
     @Param('id') id,
     @Body() setPayerDto: SetPayerDto,
-    @CurrentUser() user: UserEntity,
+    @CurrentUser() user: UserEntity
   ) {
     return this.ordersService.setPayer(id, setPayerDto, user);
   }

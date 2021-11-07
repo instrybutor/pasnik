@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { Public } from './public.route';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '@pasnik/nestjs/entities';
 import { CurrentUser } from './current-user.decorator';
 import { RequestAccessDto } from '@pasnik/api/data-transfer';
 import { InvitationsService } from '../invitations/invitations.service';
@@ -11,7 +11,7 @@ import { InvitationsService } from '../invitations/invitations.service';
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private invitationService: InvitationsService,
+    private invitationService: InvitationsService
   ) {}
 
   @Public()
@@ -26,6 +26,13 @@ export class AuthController {
   @UseGuards(AuthGuard('google-token'))
   @Get('/google')
   googleLogin(@CurrentUser() user: UserEntity) {
+    return this.authService.login(user);
+  }
+
+  @Public()
+  @UseGuards(AuthGuard('oidc'))
+  @Get('/slack')
+  slackLogin(@CurrentUser() user: UserEntity) {
     return this.authService.login(user);
   }
 

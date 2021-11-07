@@ -1,7 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { DishesService } from './dishes.service';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '@pasnik/nestjs/entities';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
 @Controller('api/orders/:orderId/dishes')
@@ -14,9 +22,7 @@ export class DishesController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('orderId') orderId: string,
-    @Param('id') id: string) {
+  findOne(@Param('orderId') orderId: string, @Param('id') id: string) {
     return this.dishesService.findOne(orderId, +id);
   }
 
@@ -30,10 +36,7 @@ export class DishesController {
   }
 
   @Delete(':id')
-  delete(
-    @Param('orderId') orderId: string,
-    @Param('id') id: string,
-  ) {
+  delete(@Param('orderId') orderId: string, @Param('id') id: string) {
     return this.dishesService.delete(orderId, +id);
   }
 
@@ -41,7 +44,7 @@ export class DishesController {
   update(
     @Param('orderId') orderId: string,
     @Body() addDishDto: AddDishDto,
-    @Param('id') id: string,
+    @Param('id') id: string
   ) {
     return this.dishesService.update(orderId, +id, addDishDto);
   }

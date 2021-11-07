@@ -2,7 +2,7 @@ import { Strategy } from 'passport-strategy';
 import { OAuth2Client } from 'google-auth-library';
 import { Request } from 'express';
 import { Profile } from 'passport';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '@pasnik/nestjs/entities';
 
 export interface GoogleIdTokenOptions {
   clientID: string;
@@ -33,10 +33,14 @@ export class GoogleIdTokenStrategy extends Strategy {
     const userProfile = await this.getUserProfile(accessToken);
 
     const verified = (err, user, info) => {
-      if (err) { return this.error(err); }
-      if (!user) { return this.fail(info); }
+      if (err) {
+        return this.error(err);
+      }
+      if (!user) {
+        return this.fail(info);
+      }
       this.success(user, info);
-    }
+    };
 
     try {
       const user = await this.verify(userProfile, verified);
@@ -64,9 +68,11 @@ export class GoogleIdTokenStrategy extends Strategy {
         familyName: payload.family_name,
         givenName: payload.given_name,
       },
-      photos: [{
-        value: payload.picture
-      }],
+      photos: [
+        {
+          value: payload.picture,
+        },
+      ],
       id: payload.sub,
     };
   }

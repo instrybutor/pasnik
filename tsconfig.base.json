@@ -22,6 +22,8 @@
       "@pasnik/axios": ["libs/axios/src/index.ts"],
       "@pasnik/components": ["libs/components/src/index.ts"],
       "@pasnik/layout": ["libs/layout/src/index.ts"],
+      "@pasnik/nestjs/auth": ["libs/nestjs/auth/src/index.ts"],
+      "@pasnik/nestjs/entities": ["libs/nestjs/entities/src/index.ts"],
       "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
       "@pasnik/orders/create-order": ["libs/orders/create-order/src/index.ts"],
       "@pasnik/orders/edit-order": ["libs/orders/edit-order/src/index.ts"],

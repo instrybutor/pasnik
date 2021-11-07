@@ -1,8 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { OrderEntity } from '../entities/order.entity';
+import { DishEntity, OrderEntity, UserEntity } from '@pasnik/nestjs/entities';
 import { AddDishDto } from '@pasnik/api/data-transfer';
-import { UserEntity } from '../entities/user.entity';
-import { DishEntity } from '../entities/dish.entity';
 
 @EntityRepository(DishEntity)
 export class DishesRepository extends Repository<DishEntity> {

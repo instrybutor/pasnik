@@ -2,14 +2,13 @@ import { EntityRepository, Repository } from 'typeorm';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
 
-import { OrderEntity } from '../entities/order.entity';
+import { OrderEntity, UserEntity } from '@pasnik/nestjs/entities';
 import {
   CreateOrderDto,
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
   OrderStatus,
 } from '@pasnik/api/data-transfer';
-import { UserEntity } from '../entities/user.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 @EntityRepository(OrderEntity)

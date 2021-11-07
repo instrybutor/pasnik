@@ -1,12 +1,19 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { OrderAction } from '@pasnik/api/data-transfer';
-import { UserEntity } from '../entities/user.entity';
-import { OrderActionEntity } from '../entities/order-action.entity';
-import { OrderEntity } from '../entities/order.entity';
+import {
+  OrderActionEntity,
+  OrderEntity,
+  UserEntity,
+} from '@pasnik/nestjs/entities';
 
 @EntityRepository(OrderActionEntity)
 export class OrderActionsRepository extends Repository<OrderActionEntity> {
-  createAction(user: UserEntity, order: OrderEntity, action: OrderAction, actionUser?: UserEntity) {
+  createAction(
+    user: UserEntity,
+    order: OrderEntity,
+    action: OrderAction,
+    actionUser?: UserEntity
+  ) {
     const orderAction = new OrderActionEntity();
 
     orderAction.order = order;

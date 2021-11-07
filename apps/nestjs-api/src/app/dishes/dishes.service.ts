@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrdersRepository } from '../repositories/orders.repository';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '@pasnik/nestjs/entities';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 import { DishesRepository } from '../repositories/dishes.repository';
 

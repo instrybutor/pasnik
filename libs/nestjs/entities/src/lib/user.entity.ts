@@ -28,6 +28,10 @@ export class UserEntity implements UserModel {
   googleId: string;
 
   @Column()
+  @Exclude
+  slackId: string;
+
+  @Column()
   email: string;
 
   @Column({ nullable: true })

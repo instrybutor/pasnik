@@ -145,7 +145,8 @@
           "options": {
             "buildTarget": "frontend:build",
             "hmr": true,
-            "proxyConfig": "apps/frontend/src/proxy.conf.json"
+            "proxyConfig": "apps/frontend/src/proxy.conf.json",
+            "allowedHosts": "046c-109-231-46-142.ngrok.io,localhost"
           },
           "configurations": {
             "production": {
@@ -264,6 +265,104 @@
                 "command": "mv ./dist/apps/nestjs-api/main.js ./dist/apps/nestjs-api/app.js && npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-api"
               }
             ]
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-auth": {
+      "root": "libs/nestjs/auth",
+      "sourceRoot": "libs/nestjs/auth/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/auth/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nestjs/auth"],
+          "options": {
+            "jestConfig": "libs/nestjs/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-bff": {
+      "root": "apps/nestjs-bff",
+      "sourceRoot": "apps/nestjs-bff/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/nestjs-bff",
+            "main": "apps/nestjs-bff/src/main.ts",
+            "tsConfig": "apps/nestjs-bff/tsconfig.app.json",
+            "assets": ["apps/nestjs-bff/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/nestjs-bff/src/environments/environment.ts",
+                  "with": "apps/nestjs-bff/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "nestjs-bff:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/nestjs-bff/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/nestjs-bff"],
+          "options": {
+            "jestConfig": "apps/nestjs-bff/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-entities": {
+      "root": "libs/nestjs/entities",
+      "sourceRoot": "libs/nestjs/entities/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/entities/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nestjs/entities"],
+          "options": {
+            "jestConfig": "libs/nestjs/entities/jest.config.js",
+            "passWithNoTests": true
           }
         }
       },
