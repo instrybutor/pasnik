@@ -1,21 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InvitationsRepository } from '../repositories/invitations.repository';
-import { UserEntity } from '@pasnik/nestjs/database';
+import {
+  InvitationsRepository,
+  UserEntity,
+  UsersRepository,
+} from '@pasnik/nestjs/database';
 import {
   ChangeInvitationStatusDto,
   InvitationStatus,
 } from '@pasnik/api/data-transfer';
 import { ConfigService } from '@nestjs/config';
-import { UsersRepository } from '../repositories/users.repository';
 
 export interface CanAccessState {
   status: InvitationStatus | null;
+  requestToken?: string;
 }
 
 @Injectable()
 export class InvitationsService {
   private readonly invitationsEnabled;
+
   constructor(
     @InjectRepository(InvitationsRepository)
     private invitationsRepository: InvitationsRepository,

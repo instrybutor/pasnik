@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersRepository } from '../repositories/users.repository';
 import { InvitationsService } from './invitations.service';
-import { InvitationsRepository } from '../repositories/invitations.repository';
 import { InvitationsController } from './invitations.controller';
+import {
+  InvitationsRepository,
+  UsersRepository,
+} from '@pasnik/nestjs/database';
 
 @Module({
   imports: [TypeOrmModule.forFeature([InvitationsRepository, UsersRepository])],

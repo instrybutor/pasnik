@@ -4,7 +4,7 @@ import { UsersModule } from './users/users.module';
 import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
 import { NestJsDatabaseModule } from '@pasnik/nestjs/database';
-import { InvitationsModule } from './invitations/invitations.module';
+import { InvitationsModule } from '../../../nestjs-bff/src/app/invitations/invitations.module';
 import { NestJsCoreModule } from '@pasnik/nestjs/core';
 
 @Module({

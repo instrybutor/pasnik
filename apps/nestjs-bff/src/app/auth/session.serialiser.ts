@@ -1,6 +1,6 @@
 import { PassportSerializer } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from './users/users.service';
+import { UsersService } from '../users/users.service';
 import { UserEntity } from '@pasnik/nestjs/database';
 
 @Injectable()

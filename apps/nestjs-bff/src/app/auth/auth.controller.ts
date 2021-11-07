@@ -1,14 +1,14 @@
 import { Controller, Get, Req, Res, Session, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { GoogleGuard } from './strategies/google.guard';
-import { SlackGuard } from './strategies/slack.guard';
+import { GoogleGuard } from '../strategies/google.guard';
+import { SlackGuard } from '../strategies/slack.guard';
 import { CookieAuthenticationGuard } from './cookie-authentication.guard';
-import { CurrentUser } from './current-user.decorator';
+import { CurrentUser } from '../current-user.decorator';
 import { UserEntity } from '@pasnik/nestjs/database';
 import { UnauthenticatedGuard } from './unauthenticated.guard';
 
 @Controller('auth')
-export class AppController {
+export class AuthController {
   @UseGuards(CookieAuthenticationGuard)
   @Get('/success')
   success(@Res() res: Response) {

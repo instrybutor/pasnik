@@ -3,11 +3,9 @@ import { PassportModule } from '@nestjs/passport';
 
 import { NestJsDatabaseModule, UsersRepository } from '@pasnik/nestjs/database';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { SlackStrategyFactory } from './strategies/slack-strategy.factory';
-import { GoogleStrategyFactory } from './strategies/google-strategy.factory';
-import { SessionSerializer } from './session.serialiser';
+import { GoogleStrategyOptionsFactory } from './strategies/google-strategy.factory';
+import { SessionSerializer } from './auth/session.serialiser';
 import { ReverseProxyMiddleware } from './reverse-proxy.middleware';
 import { FrontendMiddleware } from './frontend.middleware';
 import { UsersService } from './users/users.service';
@@ -32,13 +30,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     PassportModule.register({ session: true }),
     TypeOrmModule.forFeature([UsersRepository]),
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     UsersService,
     SessionSerializer,
     SlackStrategyFactory,
-    GoogleStrategyFactory,
+    GoogleStrategyOptionsFactory,
   ],
 })
 export class AppModule {

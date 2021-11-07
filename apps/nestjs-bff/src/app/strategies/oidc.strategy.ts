@@ -1,6 +1,10 @@
-import { UnauthorizedException } from '@nestjs/common';
 import {
-  Client,
+  HttpException,
+  HttpStatus,
+  mixin,
+  UnauthorizedException,
+} from '@nestjs/common';
+import {
   Issuer,
   Strategy,
   StrategyOptions,
@@ -8,8 +12,10 @@ import {
   UserinfoResponse,
 } from 'openid-client';
 import { PassportStrategy } from '@nestjs/passport';
-import { UsersService } from '../users/users.service';
 import { UserEntity } from '@pasnik/nestjs/database';
+import { InvitationStatus } from '@pasnik/api/data-transfer';
+import { InvitationsService } from '../invitations/invitations.service';
+import { UsersService } from '../users/users.service';
 
 export interface OidcResponse {
   accessToken: string;
@@ -30,31 +36,50 @@ export const buildOpenIdClient = async ({ issuer, clientId, clientSecret }) => {
 
 export function CreateOidcStrategy(
   name: 'slack' | 'google',
-  params: StrategyOptions,
-  usersService: UsersService
+  { client, ...rest }: StrategyOptions
 ) {
   class OidcStrategy extends PassportStrategy(Strategy, name) {
-    client: Client;
-
-    constructor({ client, ...rest }: StrategyOptions) {
+    constructor(
+      private readonly invitationService: InvitationsService,
+      private readonly usersService: UsersService
+    ) {
       super({
         client,
         ...rest,
       });
-
-      this.client = client;
     }
 
     async validate(tokenSet: TokenSet): Promise<UserEntity> {
-      const userInfo: UserinfoResponse = await this.client.userinfo(tokenSet);
+      const userInfo: UserinfoResponse = await client.userinfo(tokenSet);
 
       try {
-        return await usersService.upsertOidcUser(userInfo, name);
+        const email = userInfo.email;
+        const { status } = await this.invitationService.canAccess(email);
+
+        if (status === InvitationStatus.NO_INVITATION) {
+          // const requestToken = this.authService.generateAccessToken(email);
+          // throw new HttpException(
+          //   { requestToken },
+          //   HttpStatus.PAYMENT_REQUIRED
+          // );
+        } else if (status === InvitationStatus.REJECTED) {
+          throw new HttpException('Rejected', HttpStatus.FORBIDDEN);
+        } else if (status === InvitationStatus.PENDING) {
+          throw new HttpException('Pending', HttpStatus.NOT_MODIFIED);
+        }
+
+        const user = await this.usersService.upsertOidcUser(userInfo, name);
+
+        if (status === InvitationStatus.APPROVED) {
+          await this.invitationService.setUser(user);
+        }
+
+        return user;
       } catch (err) {
         throw new UnauthorizedException();
       }
     }
   }
 
-  return new OidcStrategy(params);
+  return mixin(OidcStrategy);
 }

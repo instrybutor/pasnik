@@ -1,27 +1,22 @@
-import { buildOpenIdClient, CreateOidcStrategy } from './oidc.strategy';
-import { UsersService } from '../users/users.service';
+import { buildOpenIdClient } from './oidc.strategy';
+import { Provider } from '@nestjs/common';
 
-export const GoogleStrategy = 'GoogleStrategy';
+export const GoogleStrategyOptions = 'GoogleStrategyOptions';
 
-export const GoogleStrategyFactory = {
-  provide: GoogleStrategy,
-  inject: [UsersService],
-  useFactory: async (usersService: UsersService) => {
+export const GoogleStrategyOptionsFactory: Provider = {
+  provide: GoogleStrategyOptions,
+  useFactory: async () => {
     const client = await buildOpenIdClient({
       clientId: process.env.NX_GOOGLE_CLIENT_ID,
       clientSecret: process.env.NX_GOOGLE_SECRET,
       issuer: 'https://accounts.google.com',
     });
-    return CreateOidcStrategy(
-      'google',
-      {
-        client,
-        params: {
-          redirect_uri: 'http://localhost:3334/auth/google',
-          scope: 'openid profile email',
-        },
+    return {
+      client,
+      params: {
+        redirect_uri: 'http://localhost:3334/auth/google',
+        scope: 'openid profile email',
       },
-      usersService
-    );
+    };
   },
 };
