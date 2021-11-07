@@ -3,7 +3,7 @@ import { IsAdminGuard } from '../auth/is-admin.guard';
 import { InvitationsService } from './invitations.service';
 import { ChangeInvitationStatusDto } from '@pasnik/api/data-transfer';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { UserEntity } from '@pasnik/nestjs/entities';
+import { UserEntity } from '@pasnik/nestjs/database';
 
 @Controller('api/admin/invitations')
 @UseGuards(IsAdminGuard)

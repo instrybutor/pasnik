@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { OrdersRepository } from '../repositories/orders.repository';
-import { UserEntity } from '@pasnik/nestjs/entities';
+import { UserEntity } from '@pasnik/nestjs/database';
 import {
   CreateOrderDto,
   MarkAsDeliveredDto,

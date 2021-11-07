@@ -2,7 +2,7 @@ import { Strategy } from 'passport-strategy';
 import { OAuth2Client } from 'google-auth-library';
 import { Request } from 'express';
 import { Profile } from 'passport';
-import { UserEntity } from '@pasnik/nestjs/entities';
+import { UserEntity } from '@pasnik/nestjs/database';
 
 export interface GoogleIdTokenOptions {
   clientID: string;

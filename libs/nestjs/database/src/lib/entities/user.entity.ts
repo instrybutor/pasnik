@@ -24,12 +24,11 @@ export class UserEntity implements UserModel {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
-  googleId: string;
+  @Column({ nullable: true })
+  googleId?: string | null;
 
-  @Column()
-  @Exclude
-  slackId: string;
+  @Column({ nullable: true })
+  slackId?: string | null;
 
   @Column()
   email: string;

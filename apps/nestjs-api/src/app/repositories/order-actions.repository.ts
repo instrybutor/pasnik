@@ -4,7 +4,7 @@ import {
   OrderActionEntity,
   OrderEntity,
   UserEntity,
-} from '@pasnik/nestjs/entities';
+} from '@pasnik/nestjs/database';
 
 @EntityRepository(OrderActionEntity)
 export class OrderActionsRepository extends Repository<OrderActionEntity> {

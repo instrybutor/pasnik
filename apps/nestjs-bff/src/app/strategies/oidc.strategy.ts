@@ -8,6 +8,15 @@ import {
   UserinfoResponse,
 } from 'openid-client';
 import { PassportStrategy } from '@nestjs/passport';
+import { UsersService } from '../users/users.service';
+import { UserEntity } from '@pasnik/nestjs/database';
+
+export interface OidcResponse {
+  accessToken: string;
+  refreshToken: string;
+  idToken: string;
+  userInfo: UserinfoResponse;
+}
 
 export const buildOpenIdClient = async ({ issuer, clientId, clientSecret }) => {
   const TrustIssuer = await Issuer.discover(
@@ -19,7 +28,11 @@ export const buildOpenIdClient = async ({ issuer, clientId, clientSecret }) => {
   });
 };
 
-export function CreateOidcStrategy(name: string, params: StrategyOptions) {
+export function CreateOidcStrategy(
+  name: 'slack' | 'google',
+  params: StrategyOptions,
+  usersService: UsersService
+) {
   class OidcStrategy extends PassportStrategy(Strategy, name) {
     client: Client;
 
@@ -32,23 +45,16 @@ export function CreateOidcStrategy(name: string, params: StrategyOptions) {
       this.client = client;
     }
 
-    async validate(tokenset: TokenSet): Promise<any> {
-      const userinfo: UserinfoResponse = await this.client.userinfo(tokenset);
+    async validate(tokenSet: TokenSet): Promise<UserEntity> {
+      const userInfo: UserinfoResponse = await this.client.userinfo(tokenSet);
 
       try {
-        const id_token = tokenset.id_token;
-        const access_token = tokenset.access_token;
-        const refresh_token = tokenset.refresh_token;
-        return {
-          id_token,
-          access_token,
-          refresh_token,
-          userinfo,
-        };
+        return await usersService.upsertOidcUser(userInfo, name);
       } catch (err) {
         throw new UnauthorizedException();
       }
     }
   }
+
   return new OidcStrategy(params);
 }

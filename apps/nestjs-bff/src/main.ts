@@ -3,26 +3,38 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import * as redis from 'redis';
 import * as connectRedis from 'connect-redis';
 import { AppModule } from './app/app.module';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = process.env.PORT || 3334;
+  const configService = app.get(ConfigService);
+
+  const port = configService.get<number>('PORT', 3334);
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
+  const redisClient = redis.createClient({
+    host: configService.get<string>('REDIS_HOST', 'localhost'),
+    port: configService.get<number>('REDIS_PORT', 6379),
+  });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    })
+  );
 
   app.use(
     session({
       store: new RedisStore({ client: redisClient }),
-      secret: 'my-secret',
-      resave: false, // will default to false in near future: https://github.com/expressjs/session#resave
-      saveUninitialized: false, // will default to false in near future: https://github.com/expressjs/session#saveuninitialized
+      secret: configService.get('NX_SESSION_SECRET'),
+      resave: false,
+      saveUninitialized: false,
       rolling: true, // keep session alive
       cookie: {
         maxAge: 30 * 60 * 1000, // session expires in 1hr, refreshed by `rolling: true` option.

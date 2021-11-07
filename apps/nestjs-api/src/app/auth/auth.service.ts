@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDtoSuccess } from '@pasnik/api/data-transfer';
 import { JwtModel } from './jwt.model';
-import { UserEntity } from '@pasnik/nestjs/entities';
+import { UserEntity } from '@pasnik/nestjs/database';
 import { InvitationModel } from './invitation.model';
 
 @Injectable()

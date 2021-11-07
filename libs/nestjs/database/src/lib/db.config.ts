@@ -25,7 +25,7 @@ export const DatabaseConfig: ConnectionOptions = {
   // We are using migrations, synchronize should be set to false.
   synchronize: false,
 
-  migrationsRun: true,
+  migrationsRun: false,
   migrationsTableName: 'migrations',
 
   migrations: [getPath('/migrations/**/*{.ts,.js}')],

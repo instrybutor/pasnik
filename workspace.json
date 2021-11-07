@@ -270,29 +270,6 @@
       },
       "tags": []
     },
-    "nestjs-auth": {
-      "root": "libs/nestjs/auth",
-      "sourceRoot": "libs/nestjs/auth/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/nestjs/auth/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/nestjs/auth"],
-          "options": {
-            "jestConfig": "libs/nestjs/auth/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      },
-      "tags": []
-    },
     "nestjs-bff": {
       "root": "apps/nestjs-bff",
       "sourceRoot": "apps/nestjs-bff/src",
@@ -345,23 +322,46 @@
       },
       "tags": []
     },
-    "nestjs-entities": {
-      "root": "libs/nestjs/entities",
-      "sourceRoot": "libs/nestjs/entities/src",
+    "nestjs-core": {
+      "root": "libs/nestjs/core",
+      "sourceRoot": "libs/nestjs/core/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["libs/nestjs/entities/**/*.ts"]
+            "lintFilePatterns": ["libs/nestjs/core/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/nestjs/entities"],
+          "outputs": ["coverage/libs/nestjs/core"],
           "options": {
-            "jestConfig": "libs/nestjs/entities/jest.config.js",
+            "jestConfig": "libs/nestjs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-database": {
+      "root": "libs/nestjs/database",
+      "sourceRoot": "libs/nestjs/database/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/database/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nestjs/database"],
+          "options": {
+            "jestConfig": "libs/nestjs/database/jest.config.js",
             "passWithNoTests": true
           }
         }

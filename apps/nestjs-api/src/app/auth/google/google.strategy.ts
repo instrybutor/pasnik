@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Profile } from 'passport';
 import { UsersService } from '../../users/users.service';
 import { GoogleIdTokenStrategy } from './google-id-token.strategy';
-import { UserEntity } from '@pasnik/nestjs/entities';
+import { UserEntity } from '@pasnik/nestjs/database';
 import { InvitationsService } from '../../invitations/invitations.service';
 import { AuthService } from '../auth.service';
 import { InvitationStatus } from '@pasnik/api/data-transfer';

@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { DishEntity, OrderEntity, UserEntity } from '@pasnik/nestjs/entities';
+import { DishEntity, OrderEntity, UserEntity } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
 @EntityRepository(DishEntity)

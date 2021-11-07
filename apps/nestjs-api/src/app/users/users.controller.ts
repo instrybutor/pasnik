@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { UserEntity } from '@pasnik/nestjs/entities';
+import { UserEntity } from '@pasnik/nestjs/database';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { UsersService } from './users.service';
 

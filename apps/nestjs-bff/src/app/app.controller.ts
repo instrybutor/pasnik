@@ -2,29 +2,45 @@ import { Controller, Get, Req, Res, Session, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { GoogleGuard } from './strategies/google.guard';
 import { SlackGuard } from './strategies/slack.guard';
-import { CurrentUser } from '@pasnik/nestjs/auth';
+import { CookieAuthenticationGuard } from './cookie-authentication.guard';
+import { CurrentUser } from './current-user.decorator';
+import { UserEntity } from '@pasnik/nestjs/database';
+import { UnauthenticatedGuard } from './unauthenticated.guard';
 
-@Controller()
+@Controller('auth')
 export class AppController {
+  @UseGuards(CookieAuthenticationGuard)
+  @Get('/success')
+  success(@Res() res: Response) {
+    res.send(`
+      <script>
+        window.postMessage('success', '*');
+      </script>
+    `);
+  }
+
   @UseGuards(SlackGuard)
   @Get('/slack')
-  slackLogin(@CurrentUser() user?: any) {
-    return user;
-  }
-  @UseGuards(GoogleGuard)
-  @Get('/google')
-  googleLogin(@CurrentUser() user: any) {
-    return user;
+  slackLogin(@Res() response: Response) {
+    response.redirect('/auth/me');
   }
 
+  @UseGuards(UnauthenticatedGuard, GoogleGuard, CookieAuthenticationGuard)
+  @Get('/google')
+  googleCallback(@Res() response: Response) {
+    response.redirect('/auth/me');
+  }
+
+  @UseGuards(CookieAuthenticationGuard)
   @Get('/me')
-  me(@CurrentUser() user: any, @Session() session: Record<string, any>) {
+  me(@CurrentUser() user: UserEntity, @Session() session: any) {
     return session;
   }
 
+  @UseGuards(CookieAuthenticationGuard)
   @Get('/logout')
-  logout(@Req() req: Request, @Res() res: Response) {
+  logout(@Req() req: Request) {
     req.logout();
-    res.redirect('/');
+    req.session.cookie.maxAge = 0;
   }
 }

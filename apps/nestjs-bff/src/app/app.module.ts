@@ -1,14 +1,19 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
+
+import { NestJsDatabaseModule, UsersRepository } from '@pasnik/nestjs/database';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SlackStrategyFactory } from './strategies/slack-strategy.factory';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GoogleStrategyFactory } from './strategies/google-strategy.factory';
-import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './session.serialiser';
 import { ReverseProxyMiddleware } from './reverse-proxy.middleware';
+import { FrontendMiddleware } from './frontend.middleware';
+import { UsersService } from './users/users.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -23,11 +28,14 @@ import { ReverseProxyMiddleware } from './reverse-proxy.middleware';
       }),
       inject: [ConfigService],
     }),
+    NestJsDatabaseModule,
     PassportModule.register({ session: true }),
+    TypeOrmModule.forFeature([UsersRepository]),
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    UsersService,
     SessionSerializer,
     SlackStrategyFactory,
     GoogleStrategyFactory,
@@ -38,5 +46,12 @@ export class AppModule {
     consumer
       .apply(ReverseProxyMiddleware)
       .forRoutes({ path: 'api', method: RequestMethod.ALL });
+    consumer
+      .apply(FrontendMiddleware)
+      .exclude('api/(.*)', 'auth/(.*)')
+      .forRoutes({
+        path: '/**',
+        method: RequestMethod.ALL,
+      });
   }
 }

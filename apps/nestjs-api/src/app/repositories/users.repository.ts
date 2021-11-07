@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from '@pasnik/nestjs/entities';
+import { UserEntity } from '@pasnik/nestjs/database';
 import { Profile } from 'passport';
 
 @EntityRepository(UserEntity)

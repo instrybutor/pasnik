@@ -1,24 +1,36 @@
-import { NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { JwtService } from '@nestjs/jwt';
+import { UserEntity } from '@pasnik/nestjs/database';
+import { ConfigService } from '@nestjs/config';
+import { RequestHandler } from '@nestjs/common/interfaces';
 
+@Injectable()
 export class ReverseProxyMiddleware implements NestMiddleware {
-  private proxy = createProxyMiddleware('/api', {
-    target: 'http://localhost:3333/api',
-    secure: false,
-    onProxyReq: (proxyReq, req: Request, res: Response) => {
-      const session = req.session as any;
-      const token = session.passport?.user?.id_token;
-      if (token) {
-        proxyReq.setHeader('Authorization', `Bearer ${token}`);
-        console.log(
-          `[NestMiddleware]: Proxying ${req.method} request originally made to '${req.originalUrl}'...`
-        );
-      } else {
-        res.sendStatus(401);
-      }
-    },
-  });
+  private readonly proxy: RequestHandler;
+
+  constructor(
+    readonly jwtService: JwtService,
+    readonly configService: ConfigService
+  ) {
+    this.proxy = createProxyMiddleware('/api', {
+      target: configService.get('API_URI'),
+      secure: false,
+      onProxyReq: (proxyReq, req: Request, res: Response) => {
+        if (req.user) {
+          const { id } = req.user as UserEntity;
+          const token = jwtService.sign({ id });
+          proxyReq.setHeader('Authorization', `Bearer ${token}`);
+          console.log(
+            `[NestMiddleware]: Proxying ${req.method} request originally made to '${req.originalUrl}'...`
+          );
+        } else {
+          res.sendStatus(401);
+        }
+      },
+    });
+  }
 
   use(req: Request, res: Response, next: () => void) {
     this.proxy(req, res, next);

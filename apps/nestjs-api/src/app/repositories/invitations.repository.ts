@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { InvitationEntity, UserEntity } from '@pasnik/nestjs/entities';
+import { InvitationEntity, UserEntity } from '@pasnik/nestjs/database';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { HttpException, HttpStatus } from '@nestjs/common';
 

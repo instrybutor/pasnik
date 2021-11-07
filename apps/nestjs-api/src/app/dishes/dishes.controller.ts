@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { DishesService } from './dishes.service';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { UserEntity } from '@pasnik/nestjs/entities';
+import { UserEntity } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
 @Controller('api/orders/:orderId/dishes')
