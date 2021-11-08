@@ -1,26 +1,35 @@
+import { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import {
   AddDishDto,
   DishModel,
-  DishPurgatoryModal,
+  OrderModel,
+  OrderStatus,
 } from '@pasnik/api/data-transfer';
 
 import * as service from '../order-store/order.service';
 import { PagesOrderProps } from '../pages-order';
 
+const REFETCH_INTERVAL = 5000;
+
 export const useOrderFacade = () => {
   const { slug } = useParams<PagesOrderProps>();
   const queryClient = useQueryClient();
 
-  const orderKey = ['fetch', 'order', slug];
+  const orderKey = useMemo(() => ['fetch', 'order', slug], [slug]);
 
   const orderQuery = useQuery(orderKey, () => service.fetchOrder(slug), {
     enabled: Boolean(slug),
+    refetchOnMount: false,
+    refetchInterval: REFETCH_INTERVAL,
   });
 
-  const orderDishesKey = ['fetch', 'order', orderQuery?.data?.id, 'dishes'];
+  const orderDishesKey = useMemo(
+    () => ['fetch', 'order', orderQuery?.data?.id, 'dishes'],
+    [orderQuery?.data?.id]
+  );
 
   const dishesQuery = useQuery(
     orderDishesKey,
@@ -30,22 +39,47 @@ export const useOrderFacade = () => {
       return service.fetchDishes(orderId!);
     },
     {
-      refetchInterval: 5000,
       enabled: Boolean(slug) && Boolean(orderQuery?.data?.id),
+      refetchOnMount: false,
+      refetchInterval: REFETCH_INTERVAL,
     }
   );
 
-  const markAsDeliveredMutation = useMutation((orderId: string) =>
-    service.markAsDelivered(orderId)
+  const optimisticOrderStatusUpdate = useCallback(
+    (status: OrderStatus) => ({
+      onMutate: async () => {
+        await queryClient.cancelQueries(orderKey);
+
+        const prevOrder = queryClient.getQueryData<OrderModel>(orderKey);
+        queryClient.setQueryData<OrderModel>(orderKey, (order) => ({
+          ...order!,
+          status,
+        }));
+
+        return { prevOrder };
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(orderKey);
+      },
+    }),
+    [orderKey, queryClient]
   );
-  const markAsOrderedMutation = useMutation((orderId: string) =>
-    service.markAsOrdered(orderId)
+
+  const markAsDeliveredMutation = useMutation(
+    (orderId: string) => service.markAsDelivered(orderId),
+    optimisticOrderStatusUpdate(OrderStatus.Delivered)
   );
-  const markAsOpenMutation = useMutation((orderId: string) =>
-    service.markAsOpen(orderId)
+  const markAsOrderedMutation = useMutation(
+    (orderId: string) => service.markAsOrdered(orderId),
+    optimisticOrderStatusUpdate(OrderStatus.Ordered)
   );
-  const markAsClosedMutation = useMutation((orderId: string) =>
-    service.markAsClosed(orderId)
+  const markAsOpenMutation = useMutation(
+    (orderId: string) => service.markAsOpen(orderId),
+    optimisticOrderStatusUpdate(OrderStatus.InProgress)
+  );
+  const markAsClosedMutation = useMutation(
+    (orderId: string) => service.markAsClosed(orderId),
+    optimisticOrderStatusUpdate(OrderStatus.Canceled)
   );
 
   const dishUpdate = useMutation(
@@ -94,11 +128,9 @@ export const useOrderFacade = () => {
 
         const prevDishes =
           queryClient.getQueryData<DishModel[]>(orderDishesKey);
-        queryClient.setQueryData<DishModel[]>(orderDishesKey, (prev = []) => {
-          const index = prev?.findIndex((item) => item.id === dishId);
-
-          return [...prev.slice(0, index), ...prev.slice(index + 1)];
-        });
+        queryClient.setQueryData<DishModel[]>(orderDishesKey, (prev = []) =>
+          prev.filter((item) => item.id !== dishId)
+        );
 
         return { prevDishes };
       },
@@ -116,13 +148,14 @@ export const useOrderFacade = () => {
         await queryClient.cancelQueries(orderDishesKey);
 
         const prevDishes =
-          queryClient.getQueryData<DishPurgatoryModal[]>(orderDishesKey);
-        queryClient.setQueryData<DishPurgatoryModal[]>(
+          queryClient.getQueryData<Partial<AddDishDto>[]>(orderDishesKey);
+        queryClient.setQueryData<Partial<AddDishDto>[]>(
           orderDishesKey,
           (prev = []) => [
             ...prev,
             {
               ...payload,
+              id: new Date().getTime(),
               createdAt: new Date().toISOString(),
             },
           ]
