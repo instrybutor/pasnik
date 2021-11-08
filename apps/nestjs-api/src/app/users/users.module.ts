@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { UsersRepository } from '../repositories/users.repository';
+import { UsersRepository } from '@pasnik/nestjs/database';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsersRepository])],

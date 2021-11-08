@@ -32,7 +32,7 @@ async function bootstrap() {
   app.use(
     session({
       store: new RedisStore({ client: redisClient }),
-      secret: configService.get('NX_SESSION_SECRET'),
+      secret: configService.get('SESSION_SECRET'),
       resave: false,
       saveUninitialized: false,
       rolling: true, // keep session alive
