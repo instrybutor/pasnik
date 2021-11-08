@@ -47,9 +47,11 @@ export function OrderDish({
   }, [inProgress]);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setShown(true);
     }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
