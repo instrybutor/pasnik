@@ -68,7 +68,6 @@ const typesMap = {
   },
 };
 
-/* eslint-disable-next-line */
 export interface OrderTimelineProps {
   actions?: OrderActionModel[] | null;
 }
@@ -89,6 +88,7 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
             {actions?.map((item, itemIdx) => {
               const ActionIcon = typesMap[item.action]?.icon;
               const message = typesMap[item.action]?.text(item) ?? item.action;
+
               return (
                 <li key={item.id}>
                   <div className="relative pb-8">
@@ -102,10 +102,8 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
                       <div>
                         <span
                           className={classNames(
-                            {
-                              'bg-black text-white':
-                                typesMap[item.action]?.bgColorClass,
-                            },
+                            typesMap[item.action]?.bgColorClass ??
+                              'bg-black text-white',
                             'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white'
                           )}
                         >
@@ -125,7 +123,10 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
                       <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                         <div className="text-sm text-gray-500">{message}</div>
                         <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                          <DateFormat date={item.createdAt} format="dd LLL" />
+                          <DateFormat
+                            date={item.createdAt}
+                            format="HH:mm dd LLL"
+                          />
                         </div>
                       </div>
                     </div>

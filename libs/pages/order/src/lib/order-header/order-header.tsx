@@ -16,8 +16,8 @@ import { Price } from '@pasnik/components';
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
-import { useOrderFacade } from '../order-store/order.facade';
 import { OrderTimestamp } from '../order-timestamp/order-timestamp';
+import { useOrderFacade } from '../order-store/order.facade';
 
 export interface OrderHeaderProps {
   order: OrderModel;
@@ -26,25 +26,33 @@ export interface OrderHeaderProps {
 
 export function OrderHeader({ order, dishes }: OrderHeaderProps) {
   const [totalPrice, setTotalPrice] = useState(0);
+  const {
+    markAsClosedMutation,
+    markAsDeliveredMutation,
+    markAsOpenMutation,
+    markAsOrderedMutation,
+  } = useOrderFacade();
   const { url } = useRouteMatch();
-  const { markAsClosed, markAsOpen, markAsOrdered, markAsDelivered } =
-    useOrderFacade();
 
-  const markAsDeliveredHandler = useCallback(async () => {
-    await markAsDelivered();
-  }, [markAsDelivered]);
+  const markAsDeliveredHandler = useCallback(
+    () => markAsDeliveredMutation.mutateAsync(order.id),
+    [markAsDeliveredMutation, order.id]
+  );
 
-  const closeOrderHandler = useCallback(async () => {
-    await markAsClosed();
-  }, [markAsClosed]);
+  const closeOrderHandler = useCallback(
+    () => markAsClosedMutation.mutateAsync(order.id),
+    [markAsClosedMutation, order.id]
+  );
 
-  const openOrderHandler = useCallback(async () => {
-    await markAsOpen();
-  }, [markAsOpen]);
+  const openOrderHandler = useCallback(
+    () => markAsOpenMutation.mutateAsync(order.id),
+    [markAsOpenMutation, order.id]
+  );
 
-  const makeOrderHandler = useCallback(async () => {
-    await markAsOrdered();
-  }, [markAsOrdered]);
+  const makeOrderHandler = useCallback(
+    () => markAsOrderedMutation.mutateAsync(order.id),
+    [markAsOrderedMutation, order.id]
+  );
 
   useEffect(() => {
     setTotalPrice(dishes.reduce((acc, cur) => acc + cur.priceCents, 0));
@@ -55,7 +63,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
       <div className="px-4 sm:px-6 lg:max-w-6xl md:mx-auto lg:px-8">
         <div className="py-6 xl:flex xl:items-center lg:justify-between lg:border-t lg:border-gray-200">
           <div className="flex-1 min-w-0 ml-3">
-            <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate flex items-center">
+            <h1 className="text-2xl font-semibold leading-7 text-gray-900 sm:leading-9 sm:truncate flex items-center">
               {order.from}
               <div className="inline-flex ml-4">
                 <OrderStatusBadge order={order} />
@@ -130,14 +138,6 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                 </button>
               </span>
             )}
-
-            {/*{[OrderStatus.Ordered, OrderStatus.Delivered].includes(*/}
-            {/*  order.status*/}
-            {/*) && (*/}
-            {/*  <span className="hidden sm:block sm:ml-3">*/}
-            {/*    <OrderPaidButton users={users} onClick={payHandler} />*/}
-            {/*  </span>*/}
-            {/*)}*/}
 
             {[OrderStatus.Ordered].includes(order.status) && (
               <span className="ml-3">

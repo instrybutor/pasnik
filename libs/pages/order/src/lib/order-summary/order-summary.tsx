@@ -10,18 +10,18 @@ export interface OrderDishesSummaryProps {
 }
 
 export function OrderSummary({ dishes, order }: OrderDishesSummaryProps) {
-  const { currentUserSummary, grouppedSummaries, setDishes } =
+  const { currentUserSummary, groupedSummaries, setDishes } =
     useOrderSummary(order);
   useEffect(() => {
     setDishes(dishes);
-  }, [dishes]);
+  }, [dishes, setDishes]);
 
   return (
     <>
       {currentUserSummary && (
         <OrderPayment userDishesSummary={currentUserSummary} order={order} />
       )}
-      <OrderSummaryDishes userDishesSummaries={grouppedSummaries} />
+      <OrderSummaryDishes userDishesSummaries={groupedSummaries} />
     </>
   );
 }
