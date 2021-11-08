@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Client, StrategyOptions, UserinfoResponse } from 'openid-client';
 import { GoogleStrategyOptions } from './google-strategy.factory';
 import { CreateOidcStrategy } from './oidc-strategy';
-import { InvitationsService } from '../invitations/invitations.service';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../services/auth.service';
+import { InvitationsService } from '../services/invitations.service';
 
 @Injectable()
 export class GoogleStrategy extends CreateOidcStrategy('google') {

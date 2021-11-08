@@ -1,7 +1,7 @@
 import { Controller, Get, Req, Res, Session, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { GoogleGuard } from '../strategies/google.guard';
-import { SlackGuard } from '../strategies/slack.guard';
+import { GoogleGuard } from '../guards/google.guard';
+import { SlackGuard } from '../guards/slack.guard';
 import { CookieAuthenticationGuard } from '../guards/cookie-authentication.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { UserEntity } from '@pasnik/nestjs/database';

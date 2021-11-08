@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { InvitationsService } from './invitations.service';
 import { ChangeInvitationStatusDto } from '@pasnik/api/data-transfer';
 import { UserEntity } from '@pasnik/nestjs/database';
-import { CurrentUser } from '../auth/current-user.decorator';
-import { IsAdminGuard } from '../auth/is-admin.guard';
+import { InvitationsService } from '../services/invitations.service';
+import { IsAdminGuard } from '../guards/is-admin.guard';
+import { CurrentUser } from '../decorators/current-user.decorator';
 
-@Controller('api/admin/invitations')
+@Controller('auth/invitations')
 @UseGuards(IsAdminGuard)
 export class InvitationsController {
   constructor(private readonly invitationsService: InvitationsService) {}

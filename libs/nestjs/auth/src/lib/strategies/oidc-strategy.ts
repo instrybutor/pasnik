@@ -9,8 +9,8 @@ import {
 } from 'openid-client';
 import { UserEntity } from '@pasnik/nestjs/database';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
-import { CanAccessState } from '../invitations/invitations.service';
 import { PassportStrategy } from '@nestjs/passport';
+import { CanAccessState } from '../services/invitations.service';
 
 export const buildOpenIdClient = async ({ issuer, clientId, clientSecret }) => {
   const TrustIssuer = await Issuer.discover(
