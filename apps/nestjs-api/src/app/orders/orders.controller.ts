@@ -1,7 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 
-import { OrdersService } from './orders.service';
-import { CurrentUser } from '../auth/current-user.decorator';
 import { UserEntity } from '@pasnik/nestjs/database';
 import {
   CreateOrderDto,
@@ -10,6 +8,9 @@ import {
   SetPayerDto,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
+import { CurrentUser } from '@pasnik/nestjs/auth';
+
+import { OrdersService } from './orders.service';
 
 @Controller('api/orders')
 export class OrdersController {

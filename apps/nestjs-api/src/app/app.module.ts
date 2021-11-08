@@ -1,23 +1,28 @@
+import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+
+import { NestJsDatabaseModule } from '@pasnik/nestjs/database';
+import { NestJsCoreModule } from '@pasnik/nestjs/core';
+import { JwtAuthGuard } from '@pasnik/nestjs/auth';
+
+import { UsersModule } from './users';
 import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
-import { NestJsDatabaseModule } from '@pasnik/nestjs/database';
-import { InvitationsModule } from '../../../nestjs-bff/src/app/invitations/invitations.module';
-import { NestJsCoreModule } from '@pasnik/nestjs/core';
 
 @Module({
   imports: [
     NestJsCoreModule,
     NestJsDatabaseModule,
-    AuthModule,
     UsersModule,
     OrdersModule,
     DishesModule,
-    InvitationsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

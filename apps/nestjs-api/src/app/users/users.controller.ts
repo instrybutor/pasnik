@@ -1,6 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
+
 import { UserEntity } from '@pasnik/nestjs/database';
-import { CurrentUser } from '../auth/current-user.decorator';
+import { CurrentUser } from '@pasnik/nestjs/auth';
+
 import { UsersService } from './users.service';
 
 @Controller('api/users')

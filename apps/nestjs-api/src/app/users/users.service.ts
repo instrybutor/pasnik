@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { Profile } from 'passport';
-import { UserEntity, UsersRepository } from '@pasnik/nestjs/database';
+
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { UserEntity, UsersRepository } from '@pasnik/nestjs/database';
 
 @Injectable()
 export class UsersService {

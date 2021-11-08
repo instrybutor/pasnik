@@ -1,10 +1,11 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from '@pasnik/nestjs/database';
 import { ConfigService } from '@nestjs/config';
 import { RequestHandler } from '@nestjs/common/interfaces';
+import { JwtModel } from '@pasnik/api/data-transfer';
 
 @Injectable()
 export class ReverseProxyMiddleware implements NestMiddleware {
@@ -20,7 +21,8 @@ export class ReverseProxyMiddleware implements NestMiddleware {
       onProxyReq: (proxyReq, req: Request, res: Response) => {
         if (req.user) {
           const { id } = req.user as UserEntity;
-          const token = jwtService.sign({ id });
+          const jwtModel: JwtModel = { userId: id };
+          const token = jwtService.sign(jwtModel);
           proxyReq.setHeader('Authorization', `Bearer ${token}`);
           console.log(
             `[NestMiddleware]: Proxying ${req.method} request originally made to '${req.originalUrl}'...`
@@ -28,6 +30,10 @@ export class ReverseProxyMiddleware implements NestMiddleware {
         } else {
           res.sendStatus(401);
         }
+      },
+      onError: (err, req, res: Response, target) => {
+        console.error(err.message);
+        res.sendStatus(HttpStatus.SERVICE_UNAVAILABLE);
       },
     });
   }
