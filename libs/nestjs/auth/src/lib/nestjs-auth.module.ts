@@ -16,9 +16,11 @@ import { InvitationsController } from './controllers/invitations.controller';
 import { AuthService } from './services/auth.service';
 import { SessionSerializer } from './serialisers/session.serialiser';
 import { InvitationsService } from './services/invitations.service';
+import { NestJsCommonModule } from '@pasnik/nestjs/common';
 
 @Module({
   imports: [
+    NestJsCommonModule,
     PassportModule.register({ session: true }),
     TypeOrmModule.forFeature([UsersRepository, InvitationsRepository]),
   ],
@@ -32,4 +34,4 @@ import { InvitationsService } from './services/invitations.service';
     GoogleStrategy,
   ],
 })
-export class NestjsAuthModule {}
+export class NestJsAuthModule {}

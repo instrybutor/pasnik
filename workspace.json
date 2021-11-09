@@ -345,6 +345,29 @@
       },
       "tags": []
     },
+    "nestjs-common": {
+      "root": "libs/nestjs/common",
+      "sourceRoot": "libs/nestjs/common/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/common/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nestjs/common"],
+          "options": {
+            "jestConfig": "libs/nestjs/common/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
     "nestjs-core": {
       "root": "libs/nestjs/core",
       "sourceRoot": "libs/nestjs/core/src",

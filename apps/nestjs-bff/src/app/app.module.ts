@@ -2,13 +2,13 @@ import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 
 import { NestJsDatabaseModule } from '@pasnik/nestjs/database';
 import { NestJsCoreModule } from '@pasnik/nestjs/core';
-import { NestjsAuthModule } from '@pasnik/nestjs/auth';
+import { NestJsAuthModule } from '@pasnik/nestjs/auth';
 
 import { ReverseProxyMiddleware } from './reverse-proxy.middleware';
 import { FrontendMiddleware } from './frontend.middleware';
 
 @Module({
-  imports: [NestJsCoreModule, NestJsDatabaseModule, NestjsAuthModule],
+  imports: [NestJsCoreModule, NestJsDatabaseModule, NestJsAuthModule],
   controllers: [],
   providers: [],
 })

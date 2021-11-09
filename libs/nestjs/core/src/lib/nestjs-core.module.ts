@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
+import { NestJsCommonModule } from '@pasnik/nestjs/common';
 
 @Module({
   imports: [
@@ -8,14 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
       isGlobal: true,
       envFilePath: '.env.local',
     }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('NX_JWT_SECRET'),
-      }),
-      inject: [ConfigService],
-    }),
+    NestJsCommonModule,
   ],
-  exports: [JwtModule],
+  exports: [NestJsCommonModule],
 })
 export class NestJsCoreModule {}

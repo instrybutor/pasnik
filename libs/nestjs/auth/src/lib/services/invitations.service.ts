@@ -10,6 +10,7 @@ import {
   InvitationStatus,
 } from '@pasnik/api/data-transfer';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 export interface CanAccessState {
   status: InvitationStatus | null;
@@ -25,7 +26,8 @@ export class InvitationsService {
     private invitationsRepository: InvitationsRepository,
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
-    configService: ConfigService
+    configService: ConfigService,
+    private jwtService: JwtService
   ) {
     this.invitationsEnabled =
       configService.get('ENABLE_INVITATIONS', 'false') === 'true';
@@ -86,8 +88,21 @@ export class InvitationsService {
       .findOne({
         where: { email },
       })
-      .then((invitation) => ({
-        status: invitation?.status ?? InvitationStatus.NO_INVITATION,
-      }));
+      .then((invitation) => {
+        const status = invitation?.status ?? InvitationStatus.NO_INVITATION;
+        const requestToken =
+          status === InvitationStatus.NO_INVITATION
+            ? this.generateAccessToken(email)
+            : null;
+        return {
+          status,
+          requestToken,
+        };
+      });
+  }
+
+  private generateAccessToken(email: string): string {
+    const invitationModel = { email };
+    return this.jwtService.sign(invitationModel);
   }
 }
