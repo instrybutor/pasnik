@@ -1,4 +1,12 @@
-import { Controller, Get, Req, Res, Session, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Req,
+  Res,
+  Session,
+  UseFilters,
+  UseGuards,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { GoogleGuard } from '../guards/google.guard';
 import { SlackGuard } from '../guards/slack.guard';
@@ -6,15 +14,20 @@ import { CookieAuthenticationGuard } from '../guards/cookie-authentication.guard
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { UserEntity } from '@pasnik/nestjs/database';
 import { UnauthenticatedGuard } from '../guards/unauthenticated.guard';
+import { InvitationRequiredExceptionFilter } from '../filters/invitation-required-exception.filter';
 
 @Controller('auth')
+@UseFilters(InvitationRequiredExceptionFilter)
 export class AuthController {
   @UseGuards(CookieAuthenticationGuard)
   @Get('/success')
   success(@Res() res: Response) {
     res.send(`
       <script>
-        window.postMessage('success', '*');
+        if (window.opener) {
+          window.opener.postMessage({ status: 'success' }, '*');
+          window.close();
+        }
       </script>
     `);
   }

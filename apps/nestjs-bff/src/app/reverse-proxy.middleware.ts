@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { JwtService } from '@nestjs/jwt';
@@ -31,10 +31,10 @@ export class ReverseProxyMiddleware implements NestMiddleware {
           res.sendStatus(401);
         }
       },
-      onError: (err, req, res: Response, target) => {
-        console.error(err.message);
-        res.sendStatus(HttpStatus.SERVICE_UNAVAILABLE);
-      },
+      // onError: (err, req, res: Response, target) => {
+      //   console.error(err.message);
+      //   res.sendStatus(HttpStatus.SERVICE_UNAVAILABLE);
+      // },
     });
   }
 

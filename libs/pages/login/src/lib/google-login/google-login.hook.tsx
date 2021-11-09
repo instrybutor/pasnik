@@ -6,7 +6,7 @@ export function useGoogleLogin() {
   const signInUsingGoogle = useCallback(
     (accessToken: string) =>
       axios
-        .get<LoginGoogleDto>('/api/auth/google', {
+        .get<LoginGoogleDto>('/auth/google', {
           params: { access_token: accessToken },
         })
         .then(({ data }) => data.accessToken),

@@ -1,4 +1,3 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
 import {
   Client,
   Issuer,
@@ -11,6 +10,7 @@ import { UserEntity } from '@pasnik/nestjs/database';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PassportStrategy } from '@nestjs/passport';
 import { CanAccessState } from '../services/invitations.service';
+import { InvitationRequiredException } from '../exceptions/invitation-required.exception';
 
 export const buildOpenIdClient = async ({ issuer, clientId, clientSecret }) => {
   const TrustIssuer = await Issuer.discover(
@@ -41,12 +41,12 @@ export function CreateOidcStrategy(name: 'slack' | 'google') {
 
       const { status, requestToken } = await this.canAccess(userInfo);
 
-      if (status === InvitationStatus.NO_INVITATION) {
-        throw new HttpException({ requestToken }, HttpStatus.PAYMENT_REQUIRED);
-      } else if (status === InvitationStatus.REJECTED) {
-        throw new HttpException('Rejected', HttpStatus.FORBIDDEN);
-      } else if (status === InvitationStatus.PENDING) {
-        throw new HttpException('Pending', HttpStatus.NOT_MODIFIED);
+      if (
+        ![InvitationStatus.APPROVED, InvitationStatus.REGISTERED].includes(
+          status
+        )
+      ) {
+        throw new InvitationRequiredException(status, requestToken);
       }
 
       return this.createUser(userInfo);

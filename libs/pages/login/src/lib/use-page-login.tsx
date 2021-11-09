@@ -3,12 +3,8 @@ import { useHistory } from 'react-router-dom';
 
 import { useAuth } from '@pasnik/auth';
 import { useQuery } from '@pasnik/shared/utils';
-import { AxiosError } from 'axios';
-import { setAuthToken } from '@pasnik/axios';
-
-interface LoginError402 {
-  requestToken: string;
-}
+import { LoginError } from './login.error';
+import { InvitationStatus } from '@pasnik/api/data-transfer';
 
 export const usePageLogin = () => {
   const history = useHistory();
@@ -19,12 +15,18 @@ export const usePageLogin = () => {
   const [invitationPending, setInvitationPending] = useState(false);
 
   const onError = useCallback(
-    (error: AxiosError) => {
-      if (error.response?.status === 402) {
-        const { requestToken } = error.response.data as LoginError402;
-        setRequestToken(requestToken);
-      } else if (error.response?.status === 304) {
-        setInvitationPending(true);
+    (error: Error) => {
+      if (error instanceof LoginError) {
+        if (
+          error.status === InvitationStatus.NO_INVITATION &&
+          error.requestToken
+        ) {
+          setRequestToken(error.requestToken);
+        } else if (error.status === InvitationStatus.PENDING) {
+          setInvitationPending(true);
+        } else {
+          setHasError(true);
+        }
       } else {
         setHasError(true);
       }
@@ -32,25 +34,21 @@ export const usePageLogin = () => {
     [setRequestToken]
   );
 
-  const onSuccess = useCallback(
-    (accessToken: string) => {
-      setAuthToken(accessToken);
-      setHasError(false);
-      setInvitationPending(false);
+  const onSuccess = useCallback(() => {
+    setHasError(false);
+    setInvitationPending(false);
 
-      fetchUser()
-        .then(() => {
-          const redirectTo = query.get('redirectTo');
-          if (redirectTo) {
-            history.push(decodeURIComponent(redirectTo));
-          } else {
-            history.push('/');
-          }
-        })
-        .catch(onError);
-    },
-    [fetchUser, onError, history, query]
-  );
+    fetchUser()
+      .then(() => {
+        const redirectTo = query.get('redirectTo');
+        if (redirectTo) {
+          history.push(decodeURIComponent(redirectTo));
+        } else {
+          history.push('/');
+        }
+      })
+      .catch(onError);
+  }, [fetchUser, onError, history, query]);
 
   return {
     requestToken,

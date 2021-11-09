@@ -3,7 +3,6 @@ import { GoogleLogin } from './google-login/google-login';
 import { Invitation } from './invitation/invitation';
 import { InvitationPendingAlert } from './invitation-pending-alert/invitation-pending-alert';
 import { usePageLogin } from './use-page-login';
-import { SlackLogin } from './slack-login/slack-login';
 
 export function PagesLogin() {
   const { requestToken, onError, invitationPending, hasError, onSuccess } =
@@ -51,7 +50,6 @@ export function PagesLogin() {
 
             <div className="flex justify-center flex-col items-center gap-6">
               <GoogleLogin onSuccess={onSuccess} onError={onError} />
-              <SlackLogin onSuccess={onSuccess} onError={onError} />
             </div>
           </div>
         </div>

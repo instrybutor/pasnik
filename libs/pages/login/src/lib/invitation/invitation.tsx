@@ -2,11 +2,10 @@ import { RequestAccessModal } from '../request-access-modal/request-access-modal
 import { SuccessModal } from '@pasnik/components';
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@pasnik/auth';
-import { AxiosError } from 'axios';
 
 export interface InvitationsProps {
   requestToken: string | null;
-  onError: (error: AxiosError) => void;
+  onError: (error: Error) => void;
 }
 
 export function Invitation({ requestToken, onError }: InvitationsProps) {

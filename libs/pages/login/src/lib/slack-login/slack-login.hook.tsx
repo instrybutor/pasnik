@@ -6,7 +6,7 @@ export function useSlackLogin() {
   const signInUsingSlack = useCallback(
     (accessToken: string) =>
       axios
-        .get<LoginGoogleDto>('/api/auth/slack', {
+        .get<LoginGoogleDto>('/auth/slack', {
           params: { access_token: accessToken },
         })
         .then(({ data }) => data.accessToken),

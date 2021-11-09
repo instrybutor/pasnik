@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { UserModel } from '@pasnik/api/data-transfer';
 import { useHistory } from 'react-router-dom';
-import axios, { clearAuthToken } from '@pasnik/axios';
+import axios from '@pasnik/axios';
 
 export function useAuthFacade() {
   const [user, setUser] = useState<UserModel | null>(null);
@@ -10,7 +10,7 @@ export function useAuthFacade() {
   const history = useHistory();
 
   const fetchUser = useCallback((): Promise<UserModel> => {
-    return axios.get<UserModel>('/api/users/me').then(({ data }) => {
+    return axios.get<UserModel>('/auth/me').then(({ data }) => {
       setUser(data);
       setFetching(false);
       return data;
@@ -24,15 +24,15 @@ export function useAuthFacade() {
     });
   }, []);
 
-  const signOut = useCallback(() => {
-    clearAuthToken();
+  const signOut = useCallback(async () => {
+    await axios.post('/auth/logout');
     setUser(null);
     history.push('/login');
   }, [history]);
 
   const requestAccess = useCallback((requestToken) => {
     return axios
-      .post('/api/auth/request-access', { requestToken })
+      .post('/auth/request-access', { requestToken })
       .then(() => undefined);
   }, []);
 
