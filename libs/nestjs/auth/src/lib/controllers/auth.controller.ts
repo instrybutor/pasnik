@@ -1,6 +1,8 @@
 import {
+  Body,
   Controller,
   Get,
+  Post,
   Req,
   Res,
   Session,
@@ -8,24 +10,30 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+
+import { RequestAccessDto } from '@pasnik/api/data-transfer';
+import { UserEntity } from '@pasnik/nestjs/database';
+
 import { GoogleGuard } from '../guards/google.guard';
 import { SlackGuard } from '../guards/slack.guard';
 import { CookieAuthenticationGuard } from '../guards/cookie-authentication.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';
-import { UserEntity } from '@pasnik/nestjs/database';
 import { UnauthenticatedGuard } from '../guards/unauthenticated.guard';
 import { InvitationRequiredExceptionFilter } from '../filters/invitation-required-exception.filter';
+import { InvitationsService } from '../services/invitations.service';
 
 @Controller('auth')
 @UseFilters(InvitationRequiredExceptionFilter)
 export class AuthController {
+  constructor(private readonly invitationsService: InvitationsService) {}
+
   @UseGuards(CookieAuthenticationGuard)
   @Get('/success')
   success(@Res() res: Response) {
     res.send(`
       <script>
         if (window.opener) {
-          window.opener.postMessage({ status: 'success' }, '*');
+          window.opener.postMessage({ status: 'success' }, location.origin);
           window.close();
         }
       </script>
@@ -51,9 +59,14 @@ export class AuthController {
   }
 
   @UseGuards(CookieAuthenticationGuard)
-  @Get('/logout')
+  @Post('/logout')
   logout(@Req() req: Request) {
     req.logout();
     req.session.cookie.maxAge = 0;
+  }
+
+  @Post('/request-access')
+  requestAccess(@Body() { requestToken }: RequestAccessDto) {
+    return this.invitationsService.requestAccess(requestToken);
   }
 }

@@ -16,7 +16,7 @@ export class ReverseProxyMiddleware implements NestMiddleware {
     readonly configService: ConfigService
   ) {
     this.proxy = createProxyMiddleware('/api', {
-      target: configService.get('API_URI'),
+      target: configService.get('API_URL'),
       secure: false,
       onProxyReq: (proxyReq, req: Request, res: Response) => {
         if (req.user) {

@@ -3,8 +3,9 @@ import { useHistory } from 'react-router-dom';
 
 import { useAuth } from '@pasnik/auth';
 import { useQuery } from '@pasnik/shared/utils';
-import { LoginError } from './login.error';
+import { LoginError } from './auth-popup/login.error';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
+import { PopupClosedError } from './auth-popup/popup-closed.error';
 
 export const usePageLogin = () => {
   const history = useHistory();
@@ -27,7 +28,7 @@ export const usePageLogin = () => {
         } else {
           setHasError(true);
         }
-      } else if (error) {
+      } else if (!(error instanceof PopupClosedError)) {
         setHasError(true);
       }
     },

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserEntity, UsersRepository } from '@pasnik/nestjs/database';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserinfoResponse } from 'openid-client';
@@ -18,27 +18,38 @@ export class AuthService {
     return this.usersRepository.findByEmail(email, fail);
   }
 
-  upsertOidcUser(
-    {
-      sub,
+  async upsertSlackUser({
+    sub,
+    email,
+    family_name,
+    given_name,
+    picture,
+  }: UserinfoResponse) {
+    const currentUser = await this.usersRepository.findOne({
+      where: { email },
+    });
+    return this.usersRepository.upsertUser({
       email,
-      family_name,
-      given_name,
-      picture,
-      email_verified,
-    }: UserinfoResponse,
-    integration: 'slack' | 'google'
-  ): Promise<UserEntity> {
-    if (!email_verified) {
-      throw new HttpException('Email is not verified', HttpStatus.UNAUTHORIZED);
-    }
+      avatarImg: currentUser.avatarImg ?? picture,
+      givenName: currentUser.givenName ?? given_name,
+      familyName: currentUser.familyName ?? family_name,
+      slackId: sub,
+    });
+  }
+
+  upsertGoogleUser({
+    sub,
+    email,
+    family_name,
+    given_name,
+    picture,
+  }: UserinfoResponse): Promise<UserEntity> {
     return this.usersRepository.upsertUser({
       email,
       avatarImg: picture,
       givenName: given_name,
       familyName: family_name,
-      googleId: integration === 'google' ? sub : null,
-      slackId: integration === 'slack' ? sub : null,
+      googleId: sub,
     });
   }
 }

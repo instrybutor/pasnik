@@ -1,16 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Client, StrategyOptions, UserinfoResponse } from 'openid-client';
-import { GoogleStrategyOptions } from './google-strategy-options.factory';
 import { CreateOidcStrategy } from './oidc-strategy';
 import { AuthService } from '../services/auth.service';
 import { InvitationsService } from '../services/invitations.service';
+import { SlackStrategyOptions } from './slack-strategy-options.factory';
 
 @Injectable()
-export class GoogleStrategy extends CreateOidcStrategy('google') {
+export class SlackStrategy extends CreateOidcStrategy('slack') {
   client: Client;
 
   constructor(
-    @Inject(GoogleStrategyOptions) readonly options: StrategyOptions,
+    @Inject(SlackStrategyOptions) readonly options: StrategyOptions,
     private readonly invitationsService: InvitationsService,
     private readonly authService: AuthService
   ) {
@@ -19,7 +19,7 @@ export class GoogleStrategy extends CreateOidcStrategy('google') {
   }
 
   createUser(userInfo: UserinfoResponse) {
-    return this.authService.upsertGoogleUser(userInfo);
+    return this.authService.upsertSlackUser(userInfo);
   }
 
   canAccess({ email }: UserinfoResponse) {

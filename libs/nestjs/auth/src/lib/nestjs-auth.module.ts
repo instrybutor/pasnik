@@ -8,15 +8,15 @@ import {
   UsersRepository,
 } from '@pasnik/nestjs/database';
 
-import { SlackStrategyFactory } from './strategies/slack-strategy.factory';
-import { GoogleStrategyOptionsFactory } from './strategies/google-strategy.factory';
+import { SlackStrategyOptionsFactory } from './strategies/slack-strategy-options.factory';
+import { GoogleStrategyOptionsFactory } from './strategies/google-strategy-options.factory';
 import { GoogleStrategy } from './strategies/google-strategy';
 import { AuthController } from './controllers/auth.controller';
-import { InvitationsController } from './controllers/invitations.controller';
 import { AuthService } from './services/auth.service';
 import { SessionSerializer } from './serialisers/session.serialiser';
 import { InvitationsService } from './services/invitations.service';
 import { NestJsCommonModule } from '@pasnik/nestjs/common';
+import { SlackStrategy } from './strategies/slack-strategy';
 
 @Module({
   imports: [
@@ -24,14 +24,15 @@ import { NestJsCommonModule } from '@pasnik/nestjs/common';
     PassportModule.register({ session: true }),
     TypeOrmModule.forFeature([UsersRepository, InvitationsRepository]),
   ],
-  controllers: [AuthController, InvitationsController],
+  controllers: [AuthController],
   providers: [
     AuthService,
     InvitationsService,
     SessionSerializer,
-    SlackStrategyFactory,
+    SlackStrategyOptionsFactory,
     GoogleStrategyOptionsFactory,
     GoogleStrategy,
+    SlackStrategy,
   ],
 })
 export class NestJsAuthModule {}

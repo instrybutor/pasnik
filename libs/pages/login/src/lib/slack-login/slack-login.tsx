@@ -1,13 +1,23 @@
-import { AxiosError } from 'axios';
+import { useAuthPopup } from '../auth-popup/auth-popup';
+import { useCallback } from 'react';
+import { LoginError } from '../auth-popup/login.error';
 
 export interface SlackLoginProps {
-  onSuccess: (accessToken: string) => void;
-  onError: (error: AxiosError) => void;
+  onSuccess: () => void;
+  onError: (error: LoginError) => void;
 }
 
 export const SlackLogin = ({ onSuccess, onError }: SlackLoginProps) => {
+  const { openSignInWindow } = useAuthPopup();
+  const buttonClick = useCallback(() => {
+    openSignInWindow('/auth/slack').then(onSuccess).catch(onError);
+  }, [openSignInWindow, onSuccess, onError]);
+
   return (
-    <button className="items-center border-gray-300 border w-64 justify-center h-12 font-bold inline-flex rounded-full hover:bg-gray-100">
+    <button
+      onClick={buttonClick}
+      className="items-center border-gray-300 border w-64 justify-center h-12 font-bold inline-flex rounded-md hover:bg-gray-100"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="w-6 h-6 mr-3"

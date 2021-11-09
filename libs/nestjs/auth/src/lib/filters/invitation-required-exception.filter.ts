@@ -17,9 +17,11 @@ export class InvitationRequiredExceptionFilter implements ExceptionFilter {
       <script>
         if (window.opener) {
           window.opener.postMessage({
-            status: "${exception.getStatus()}",
-            requestToken: "${exception.getRequestToken()}"
-          }, '*');
+            error: {
+              status: "${exception.getStatus()}",
+              requestToken: "${exception.getRequestToken()}"
+            }
+          }, location.origin);
           window.close();
         }
       </script>

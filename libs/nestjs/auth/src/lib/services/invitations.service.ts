@@ -5,16 +5,17 @@ import {
   UserEntity,
   UsersRepository,
 } from '@pasnik/nestjs/database';
-import {
-  ChangeInvitationStatusDto,
-  InvitationStatus,
-} from '@pasnik/api/data-transfer';
+import { InvitationModel, InvitationStatus } from '@pasnik/api/data-transfer';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 export interface CanAccessState {
   status: InvitationStatus | null;
   requestToken?: string;
+}
+
+interface RequestTokenModel {
+  email: string;
 }
 
 @Injectable()
@@ -46,30 +47,10 @@ export class InvitationsService {
     });
   }
 
-  async changeStatus(
-    email: string,
-    { status }: ChangeInvitationStatusDto,
-    user: UserEntity
-  ) {
-    if (status === InvitationStatus.APPROVED) {
-      await this.approveAccess(email, user);
-    } else if (status === InvitationStatus.REJECTED) {
-      await this.rejectAccess(email, user);
-    }
-
-    return this.findOne(email);
-  }
-
-  async requestAccess(email: string) {
+  async requestAccess(requestToken: string) {
+    const { email } = this.decodeRequestToken(requestToken);
+    console.log(requestToken);
     return await this.invitationsRepository.requestAccess(email);
-  }
-
-  async approveAccess(email: string, changedBy: UserEntity) {
-    return await this.invitationsRepository.approveAccess(email, changedBy);
-  }
-
-  async rejectAccess(email: string, changedBy: UserEntity) {
-    return await this.invitationsRepository.rejectAccess(email, changedBy);
   }
 
   async setUser(user: UserEntity) {
@@ -92,7 +73,7 @@ export class InvitationsService {
         const status = invitation?.status ?? InvitationStatus.NO_INVITATION;
         const requestToken =
           status === InvitationStatus.NO_INVITATION
-            ? this.generateAccessToken(email)
+            ? this.generateAccessToken({ email })
             : null;
         return {
           status,
@@ -101,8 +82,11 @@ export class InvitationsService {
       });
   }
 
-  private generateAccessToken(email: string): string {
-    const invitationModel = { email };
-    return this.jwtService.sign(invitationModel);
+  private decodeRequestToken(requestToken: string) {
+    return this.jwtService.decode(requestToken) as InvitationModel;
+  }
+
+  private generateAccessToken(model: RequestTokenModel): string {
+    return this.jwtService.sign(model);
   }
 }
