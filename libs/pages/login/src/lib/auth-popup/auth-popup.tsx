@@ -11,14 +11,50 @@ export const useAuthPopup = () => {
     ((event: MessageEvent<any>) => void) | null
   >(null);
 
+  const cleanUp = useCallback(() => {
+    if (receiveMessageFn) {
+      window.removeEventListener('message', receiveMessageFn);
+      setReceiveMessageFn(null);
+    }
+
+    if (rejectPromise) {
+      rejectPromise();
+      setRejectPromise(null);
+    }
+  }, [setReceiveMessageFn, setRejectPromise, rejectPromise, receiveMessageFn]);
+
+  const openPopup = useCallback(
+    (url, name) => {
+      // window features
+      const strWindowFeatures =
+        'toolbar=no, menubar=no, width=600, height=700, top=100, left=100';
+
+      if (windowRef === null || windowRef.closed) {
+        /* if the pointer to the window object in memory does not exist
+       or if such pointer exists but the window was closed */
+        setWindowRef(window.open(url, name, strWindowFeatures));
+      } else if (previousUrl !== url) {
+        /* if the resource to load is different,
+       then we load it in the already opened secondary window and then
+       we bring such window back on top/in front of its parent window. */
+        setWindowRef(window.open(url, name, strWindowFeatures));
+        windowRef.focus();
+      } else {
+        /* else the window reference must exist and the window
+       is not closed; therefore, we can bring it back on top of any other
+       window with the focus() method. There would be no need to re-create
+       the window or to reload the referenced resource. */
+        windowRef.focus();
+      }
+      // assign the previous URL
+      setPreviousUrl(url);
+    },
+    [windowRef, setWindowRef, previousUrl, setPreviousUrl]
+  );
+
   const openSignInWindow = useCallback(
     (url, name) => {
-      if (receiveMessageFn) {
-        rejectPromise!();
-        window.removeEventListener('message', receiveMessageFn!);
-        setRejectPromise(null);
-        setReceiveMessageFn(null);
-      }
+      cleanUp();
 
       return new Promise((resolve, reject) => {
         setRejectPromise(() => reject);
@@ -36,6 +72,8 @@ export const useAuthPopup = () => {
           } else {
             reject(new LoginError(data.status, data.requestToken));
           }
+          setRejectPromise(null);
+          window.removeEventListener('message', receiveMessageFn!);
         });
 
         // window features
@@ -74,6 +112,7 @@ export const useAuthPopup = () => {
       rejectPromise,
       receiveMessageFn,
       setReceiveMessageFn,
+      cleanUp,
     ]
   );
 

@@ -15,7 +15,7 @@ export const usePageLogin = () => {
   const [invitationPending, setInvitationPending] = useState(false);
 
   const onError = useCallback(
-    (error: Error) => {
+    (error?: Error) => {
       if (error instanceof LoginError) {
         if (
           error.status === InvitationStatus.NO_INVITATION &&
@@ -27,7 +27,7 @@ export const usePageLogin = () => {
         } else {
           setHasError(true);
         }
-      } else {
+      } else if (error) {
         setHasError(true);
       }
     },
