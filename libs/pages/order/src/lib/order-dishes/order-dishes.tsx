@@ -1,15 +1,11 @@
-import {
-  AddDishDto,
-  DishModel,
-  OrderModel,
-  OrderStatus,
-} from '@pasnik/api/data-transfer';
+import { PlusIcon } from '@heroicons/react/outline';
+import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+
 import OrderDish from '../order-dish/order-dish';
 import AddDish from '../add-dish/add-dish';
-import { PlusIcon } from '@heroicons/react/outline';
-import { useCallback, useEffect, useState } from 'react';
-import { useOrderFacade } from '../order-store/order.facade';
+
 import UpdateDish from '../update-dish/update-dish';
+import { useOrderDishes } from './use-order-dishes';
 
 export interface OrderDishesProps {
   dishes: DishModel[] | null;
@@ -17,59 +13,18 @@ export interface OrderDishesProps {
 }
 
 export function OrderDishes({ dishes, order }: OrderDishesProps) {
-  const [isAdding, setIsAdding] = useState(false);
-  const [updateId, setUpdateId] = useState<number | null>(null);
-  const { addDish, deleteDish, updateDish } = useOrderFacade();
-  const inProgress = order?.status === OrderStatus.InProgress;
+  const {
+    isAdding,
+    inProgress,
+    updateId,
 
-  const addDishClickHandler = useCallback(() => {
-    setIsAdding(true);
-  }, []);
-
-  const addDishHandler = useCallback(
-    async (data: AddDishDto) => {
-      const dish = await addDish({
-        ...data,
-        priceCents: data.priceCents * 100,
-      });
-
-      setIsAdding(false);
-
-      return dish;
-    },
-    [addDish]
-  );
-
-  const deleteDishHandler = useCallback(
-    async (dish: DishModel) => {
-      await deleteDish(dish.id);
-    },
-    [deleteDish]
-  );
-
-  const updateDishHandler = useCallback(
-    async (dishDto: AddDishDto, dish: DishModel) => {
-      await updateDish(dish.id, {
-        ...dishDto,
-        priceCents: dishDto.priceCents * 100,
-      });
-      setUpdateId(null);
-    },
-    [updateDish]
-  );
-
-  const editClickHandler = useCallback(async (dish: DishModel) => {
-    setUpdateId(dish.id);
-  }, []);
-
-  const cancelUpdateHandler = useCallback(() => {
-    setUpdateId(null);
-  }, []);
-
-  useEffect(() => {
-    setUpdateId(null);
-    setIsAdding(false);
-  }, [inProgress]);
+    addDishClickHandler,
+    addDishHandler,
+    cancelUpdateHandler,
+    deleteDishHandler,
+    editClickHandler,
+    updateDishHandler,
+  } = useOrderDishes({ order });
 
   return (
     <section aria-labelledby="notes-title">

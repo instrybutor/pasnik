@@ -18,6 +18,9 @@ export class DishesService {
     return this.dishesRepository.find({
       where: { orderId },
       relations: ['user'],
+      order: {
+        createdAt: 'ASC',
+      },
     });
   }
 

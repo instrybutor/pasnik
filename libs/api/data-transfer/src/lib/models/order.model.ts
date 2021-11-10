@@ -37,6 +37,7 @@ export function getOrderStatus(order: OrderModel) {
       return 'Dostarczone';
     case OrderStatus.Canceled:
       return 'Anulowane';
+    default:
+      return 'Nieznany';
   }
-  return 'Nieznany';
 }

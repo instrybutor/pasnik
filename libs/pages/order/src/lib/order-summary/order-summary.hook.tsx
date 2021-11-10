@@ -11,9 +11,9 @@ export interface UserDishesSummary {
 
 export const useOrderSummary = (order: OrderModel) => {
   const { user } = useAuth();
-  const [grouppedSummaries, setGrouppedSummaries] = useState<
-    UserDishesSummary[]
-  >([]);
+  const [groupedSummaries, setGroupedSummaries] = useState<UserDishesSummary[]>(
+    []
+  );
   const [currentUserSummary, setCurrentUserSummary] =
     useState<UserDishesSummary | null>(null);
 
@@ -67,14 +67,14 @@ export const useOrderSummary = (order: OrderModel) => {
     (dishes: DishModel[]) => {
       const { userDishesSummaries, currentUserSummary } =
         groupSummaries(dishes);
-      setGrouppedSummaries(sortSummaries(userDishesSummaries));
+      setGroupedSummaries(sortSummaries(userDishesSummaries));
       setCurrentUserSummary(currentUserSummary);
     },
-    [groupSummaries, setGrouppedSummaries, setCurrentUserSummary]
+    [groupSummaries, sortSummaries]
   );
 
   return {
-    grouppedSummaries,
+    groupedSummaries,
     currentUserSummary,
     setDishes,
   };

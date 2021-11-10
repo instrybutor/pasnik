@@ -1,13 +1,18 @@
+import { useCallback } from 'react';
+import { useMutation } from 'react-query';
+import currency from 'currency.js';
+
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { Price, UserAvatar, UserName } from '@pasnik/components';
 import {
   SwitchHorizontalIcon,
   SwitchVerticalIcon,
 } from '@heroicons/react/outline';
+
 import { UserDishesSummary } from '../order-summary/order-summary.hook';
 import OrderSelectPayer from '../order-select-payer/order-select-payer';
+import * as service from '../order-store/order.service';
 import { useOrderFacade } from '../order-store/order.facade';
-import currency from 'currency.js';
 
 export interface OrderPaymentProps {
   order: OrderModel;
@@ -15,7 +20,21 @@ export interface OrderPaymentProps {
 }
 
 export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
-  const { setPayer } = useOrderFacade();
+  const { orderQuery } = useOrderFacade();
+  const payerUpdate = useMutation((payerId: number) =>
+    service.setPayer(order.id, {
+      payerId,
+    })
+  );
+
+  const setPayer = useCallback(
+    async (payerId) => {
+      await payerUpdate.mutateAsync(payerId);
+      orderQuery.refetch();
+    },
+    [orderQuery, payerUpdate]
+  );
+
   return (
     <section>
       <div className="bg-white shadow sm:rounded-lg">
