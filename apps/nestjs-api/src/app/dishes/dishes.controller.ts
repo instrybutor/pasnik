@@ -7,10 +7,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { DishesService } from './dishes.service';
-import { CurrentUser } from '../auth/current-user.decorator';
+
+import { CurrentUser } from '@pasnik/nestjs/auth';
 import { UserEntity } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
+
+import { DishesService } from './dishes.service';
 
 @Controller('api/orders/:orderId/dishes')
 export class DishesController {

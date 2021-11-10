@@ -1,5 +1,3 @@
-import { Profile } from 'passport';
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -22,10 +20,5 @@ export class UsersService {
 
   async removeUser(id: string): Promise<void> {
     await this.usersRepository.delete(id);
-  }
-
-  async createUser(profile: Profile) {
-    const user = await this.usersRepository.upsertGoogleUser(profile);
-    return this.findOne(user.id);
   }
 }

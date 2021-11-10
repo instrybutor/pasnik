@@ -27,7 +27,7 @@ services:
       - DB_USERNAME=pasnik
       - DB_PASSWORD=pasnik
       - DB_DATABASE=pasnik
-      - DB_PORT=5433
+      - DB_PORT=5432
       - DB_MIGRATIONS=false
       - JWT_SECRET=$JWT_SECRET
     volumes:
