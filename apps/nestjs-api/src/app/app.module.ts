@@ -8,6 +8,8 @@ import { JwtAuthGuard } from '@pasnik/nestjs/auth';
 import { UsersModule } from './users';
 import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
+import { InvitationsModule } from './invitations';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -16,9 +18,10 @@ import { DishesModule } from './dishes';
     UsersModule,
     OrdersModule,
     DishesModule,
+    InvitationsModule,
   ],
-  controllers: [],
   providers: [
+    JwtStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

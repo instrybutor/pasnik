@@ -6,6 +6,7 @@ import { NestJsAuthModule } from '@pasnik/nestjs/auth';
 
 import { ReverseProxyMiddleware } from './reverse-proxy.middleware';
 import { FrontendMiddleware } from './frontend.middleware';
+import { BodyParserMiddleware } from './body-parser.middleware';
 
 @Module({
   imports: [NestJsCoreModule, NestJsDatabaseModule, NestJsAuthModule],
@@ -16,8 +17,12 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ReverseProxyMiddleware)
-      .forRoutes({ path: 'api', method: RequestMethod.ALL });
-    consumer
+      .forRoutes({ path: 'api', method: RequestMethod.ALL })
+      .apply(BodyParserMiddleware)
+      .forRoutes({
+        path: '/auth/**',
+        method: RequestMethod.ALL,
+      })
       .apply(FrontendMiddleware)
       .exclude('api/(.*)', 'auth/(.*)')
       .forRoutes({

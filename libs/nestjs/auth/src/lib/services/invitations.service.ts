@@ -49,7 +49,6 @@ export class InvitationsService {
 
   async requestAccess(requestToken: string) {
     const { email } = this.decodeRequestToken(requestToken);
-    console.log(requestToken);
     return await this.invitationsRepository.requestAccess(email);
   }
 
@@ -59,7 +58,7 @@ export class InvitationsService {
 
   async canAccess(email: string): Promise<CanAccessState> {
     if (!this.invitationsEnabled) {
-      return { status: InvitationStatus.REGISTERED };
+      return { status: InvitationStatus.APPROVED };
     }
     const user = await this.usersRepository.findOne({ where: { email } });
     if (user) {
@@ -70,9 +69,10 @@ export class InvitationsService {
         where: { email },
       })
       .then((invitation) => {
-        const status = invitation?.status ?? InvitationStatus.NO_INVITATION;
+        const status =
+          invitation?.status ?? InvitationStatus.INVITATION_REQUIRED;
         const requestToken =
-          status === InvitationStatus.NO_INVITATION
+          status === InvitationStatus.INVITATION_REQUIRED
             ? this.generateAccessToken({ email })
             : null;
         return {

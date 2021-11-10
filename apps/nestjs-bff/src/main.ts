@@ -13,9 +13,10 @@ import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bodyParser: false,
+  });
   const configService = app.get(ConfigService);
-
   const port = configService.get<number>('PORT', 3334);
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({

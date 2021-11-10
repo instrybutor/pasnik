@@ -14,7 +14,7 @@ import { AddDishDto } from '@pasnik/api/data-transfer';
 
 import { DishesService } from './dishes.service';
 
-@Controller('api/orders/:orderId/dishes')
+@Controller('orders/:orderId/dishes')
 export class DishesController {
   constructor(private readonly dishesService: DishesService) {}
 

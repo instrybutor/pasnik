@@ -12,7 +12,7 @@ import { CurrentUser } from '@pasnik/nestjs/auth';
 
 import { OrdersService } from './orders.service';
 
-@Controller('api/orders')
+@Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 

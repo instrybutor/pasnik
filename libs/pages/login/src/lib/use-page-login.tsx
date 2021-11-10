@@ -19,7 +19,7 @@ export const usePageLogin = () => {
     (error?: Error) => {
       if (error instanceof LoginError) {
         if (
-          error.status === InvitationStatus.NO_INVITATION &&
+          error.status === InvitationStatus.INVITATION_REQUIRED &&
           error.requestToken
         ) {
           setRequestToken(error.requestToken);

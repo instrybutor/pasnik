@@ -1,7 +1,8 @@
 import { UserModel } from './user.model';
 
 export enum InvitationStatus {
-  NO_INVITATION = 'no-invitation',
+  CAN_REGISTER = 'can-register',
+  INVITATION_REQUIRED = 'invitation-required',
   PENDING = 'pending',
   APPROVED = 'approved',
   REJECTED = 'rejected',

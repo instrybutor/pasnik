@@ -15,9 +15,10 @@ export class ReverseProxyMiddleware implements NestMiddleware {
     readonly jwtService: JwtService,
     readonly configService: ConfigService
   ) {
+    const target = new URL(configService.get('API_URL')).href;
     this.proxy = createProxyMiddleware('/api', {
-      target: configService.get('API_URL'),
-      secure: false,
+      target,
+      changeOrigin: true,
       onProxyReq: (proxyReq, req: Request, res: Response) => {
         if (req.user) {
           const { id } = req.user as UserEntity;
@@ -31,14 +32,10 @@ export class ReverseProxyMiddleware implements NestMiddleware {
           res.sendStatus(401);
         }
       },
-      // onError: (err, req, res: Response, target) => {
-      //   console.error(err.message);
-      //   res.sendStatus(HttpStatus.SERVICE_UNAVAILABLE);
-      // },
     });
   }
 
-  use(req: Request, res: Response, next: () => void) {
+  use(req: Request, res: Response, next: CallableFunction) {
     this.proxy(req, res, next);
   }
 }
