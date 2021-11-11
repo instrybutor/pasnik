@@ -8,10 +8,15 @@ export interface OrderListProps {
   orders: OrderModel[];
 }
 
+const sortByCreateAt = (order: OrderModel, nextOrder: OrderModel) =>
+  new Date(order.createdAt).getTime() > new Date(nextOrder.createdAt).getTime()
+    ? -1
+    : 1;
+
 export function OrderList({ orders }: OrderListProps) {
   return (
     <ul className="divide-y divide-gray-200">
-      {orders.map((order) => (
+      {orders.sort(sortByCreateAt).map((order) => (
         <li key={order.id}>
           <NavLink
             to={`/order/${order.slug}`}

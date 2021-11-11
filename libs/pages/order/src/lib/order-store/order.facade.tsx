@@ -163,6 +163,9 @@ export const useOrderFacade = () => {
 
         return { prevDishes };
       },
+      onSuccess: () => {
+        dishesQuery.refetch();
+      },
       onSettled: () => {
         queryClient.invalidateQueries(orderDishesKey);
       },

@@ -24,6 +24,8 @@ export const useOrderDishes = ({ order }: Props) => {
     setIsAdding(true);
   }, []);
 
+  const onAddCancel = useCallback(() => setIsAdding(false), []);
+
   const addDishHandler = useCallback(
     async (data: AddDishDto) => {
       if (!order) {
@@ -39,6 +41,20 @@ export const useOrderDishes = ({ order }: Props) => {
       });
 
       setIsAdding(false);
+    },
+    [dishAdd, order]
+  );
+
+  const duplicateDish = useCallback(
+    async (payload: DishModel) => {
+      if (!order) {
+        return;
+      }
+
+      await dishAdd.mutateAsync({
+        orderId: order?.id,
+        payload,
+      });
     },
     [dishAdd, order]
   );
@@ -91,6 +107,8 @@ export const useOrderDishes = ({ order }: Props) => {
     inProgress,
     isAdding,
     updateId,
+    duplicateDish,
+    onAddCancel,
     cancelUpdateHandler,
     editClickHandler,
     updateDishHandler,
