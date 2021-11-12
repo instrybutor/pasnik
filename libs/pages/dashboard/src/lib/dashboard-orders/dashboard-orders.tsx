@@ -7,8 +7,10 @@ import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 /* eslint-disable-next-line */
 export interface DashboardOrdersProps {}
 
-const sortOrder = (a: OrderModel, b: OrderModel) =>
-  new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+const sortOrder = (order: OrderModel, nextOrder: OrderModel) =>
+  new Date(order.createdAt).getTime() > new Date(nextOrder.createdAt).getTime()
+    ? -1
+    : 1;
 
 const getActiveOrder = (orders: OrderModel[]) =>
   orders

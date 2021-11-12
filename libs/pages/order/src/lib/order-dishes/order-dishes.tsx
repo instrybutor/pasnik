@@ -1,4 +1,6 @@
 import { PlusIcon } from '@heroicons/react/outline';
+import { Transition } from '@headlessui/react';
+
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 
 import OrderDish from '../order-dish/order-dish';
@@ -12,12 +14,19 @@ export interface OrderDishesProps {
   order: OrderModel | null;
 }
 
+const sortByCreateAt = (dish: DishModel, nextDish: DishModel) =>
+  new Date(dish.createdAt).getTime() > new Date(nextDish.createdAt).getTime()
+    ? 1
+    : -1;
+
 export function OrderDishes({ dishes, order }: OrderDishesProps) {
   const {
     isAdding,
     inProgress,
     updateId,
 
+    onAddCancel,
+    duplicateDish,
     addDishClickHandler,
     addDishHandler,
     cancelUpdateHandler,
@@ -47,26 +56,41 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
             )}
           </div>
           <ul className="divide-y divide-gray-200">
-            {dishes?.map((dish) =>
-              updateId === dish.id ? (
-                <UpdateDish
-                  key={dish.id}
-                  onUpdateDish={updateDishHandler}
-                  dish={dish}
-                  onCancelUpdate={cancelUpdateHandler}
-                />
-              ) : (
-                <OrderDish
-                  inProgress={order?.status === OrderStatus.InProgress}
-                  key={dish.id}
-                  onDeleteDish={deleteDishHandler}
-                  dish={dish}
-                  onEditClick={editClickHandler}
-                />
-              )
-            )}
+            {dishes?.sort(sortByCreateAt).map((dish) => (
+              <Transition
+                as="li"
+                show
+                className="flex items-center gap-4 px-6"
+                enter="transition ease-out duration-[1000ms]"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-[1000ms]"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                {updateId === dish.id ? (
+                  <UpdateDish
+                    key={dish.id}
+                    onUpdateDish={updateDishHandler}
+                    dish={dish}
+                    onCancelUpdate={cancelUpdateHandler}
+                  />
+                ) : (
+                  <OrderDish
+                    inProgress={order?.status === OrderStatus.InProgress}
+                    key={dish.id}
+                    dish={dish}
+                    onDelete={deleteDishHandler}
+                    onDuplicate={duplicateDish}
+                    onEdit={editClickHandler}
+                  />
+                )}
+              </Transition>
+            ))}
           </ul>
-          {isAdding && <AddDish onAdd={addDishHandler} />}
+          {isAdding && (
+            <AddDish onAdd={addDishHandler} onCancel={onAddCancel} />
+          )}
         </div>
       </div>
     </section>
