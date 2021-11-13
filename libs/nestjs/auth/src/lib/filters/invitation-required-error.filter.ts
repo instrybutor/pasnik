@@ -18,8 +18,8 @@ export class InvitationRequiredErrorFilter implements ExceptionFilter {
         if (window.opener) {
           window.opener.postMessage({
             error: {
-              status: "${exception.getStatus()}",
-              requestToken: "${exception.getRequestToken()}"
+              status: "${exception.status}",
+              requestToken: "${exception.requestToken}"
             }
           }, location.origin);
           window.close();
