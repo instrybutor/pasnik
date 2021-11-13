@@ -346,9 +346,9 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "commands": [
-                "mv ./dist/apps/nestjs-bff/main.js ./dist/apps/nestjs-bff/app.js",
-                "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-bff --remoteRoot nestjs-bff",
-                "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-bff?auth=$ENV_MANAGER_PASS"
+              "mv ./dist/apps/nestjs-bff/main.js ./dist/apps/nestjs-bff/app.js",
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-bff --remoteRoot nestjs-bff",
+              "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-bff?auth=$ENV_MANAGER_PASS"
             ]
           }
         }
@@ -419,6 +419,40 @@
           "options": {
             "jestConfig": "libs/nestjs/database/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-migrations": {
+      "root": "libs/nestjs/migrations",
+      "sourceRoot": "libs/nestjs/migrations/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/nestjs/migrations",
+            "tsConfig": "libs/nestjs/migrations/tsconfig.lib.json",
+            "packageJson": "libs/nestjs/migrations/package.json",
+            "main": "libs/nestjs/migrations/src/index.ts"
+          }
+        },
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --type library --appName nestjs-migrations --remoteRoot nestjs-migrations",
+              "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-migrations?auth=$ENV_MANAGER_PASS"
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/migrations/**/*.ts"]
           }
         }
       },

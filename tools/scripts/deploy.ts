@@ -7,7 +7,12 @@ const ftpDeploy = new FtpDeploy();
 
 const argv = minimist(process.argv.slice(2));
 const root = join(__dirname, '../..');
-const outDir = join(root, 'dist/apps', argv.appName);
+const outDir = join(
+  root,
+  'dist',
+  argv.type === 'library' ? 'libs' : 'apps',
+  argv.appName
+);
 const remoteRoot = argv.remoteRoot ?? '/public_nodejs/';
 
 if (!existsSync(outDir)) {

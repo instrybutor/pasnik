@@ -27,6 +27,7 @@
       "@pasnik/nestjs/core": ["libs/nestjs/core/src/index.ts"],
       "@pasnik/nestjs/database": ["libs/nestjs/database/src/index.ts"],
       "@pasnik/nestjs/entities": ["libs/nestjs/entities/src/index.ts"],
+      "@pasnik/nestjs/migrations": ["libs/nestjs/migrations/src/index.ts"],
       "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
       "@pasnik/orders/create-order": ["libs/orders/create-order/src/index.ts"],
       "@pasnik/orders/edit-order": ["libs/orders/edit-order/src/index.ts"],

@@ -10,10 +10,10 @@ if (result.error) {
   /* do nothing */
 }
 
-const getPath = (directory) =>
+const getPath = (library, directory) =>
   path.relative(
     process.cwd(),
-    path.join('libs', 'nestjs', 'database', 'src', 'lib', directory)
+    path.join('libs', 'nestjs', library, 'src', directory)
   );
 
 export const DatabaseConfig: ConnectionOptions = {
@@ -23,7 +23,7 @@ export const DatabaseConfig: ConnectionOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [getPath('/entities/*.entity{.ts,.js}')],
+  entities: [getPath('database', 'lib/entities/*.entity{.ts,.js}')],
 
   // We are using migrations, synchronize should be set to false.
   synchronize: false,
@@ -31,10 +31,10 @@ export const DatabaseConfig: ConnectionOptions = {
   migrationsRun: process.env.DB_MIGRATIONS === 'true',
   migrationsTableName: 'migrations',
 
-  migrations: [getPath('/migrations/**/*{.ts,.js}')],
+  migrations: [getPath('migrations', '/**/*{.ts,.js}')],
   cli: {
-    migrationsDir: getPath('/migrations'),
-    entitiesDir: getPath('/entities'),
+    migrationsDir: getPath('migrations', '/'),
+    entitiesDir: getPath('database', 'lib/entities'),
   },
 };
 
