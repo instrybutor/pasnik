@@ -1,11 +1,11 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from '@pasnik/nestjs/database';
-import { ConfigService } from '@nestjs/config';
 import { RequestHandler } from '@nestjs/common/interfaces';
 import { JwtModel } from '@pasnik/api/data-transfer';
+import { BASE_URL } from '@pasnik/nestjs/auth';
 
 @Injectable()
 export class ReverseProxyMiddleware implements NestMiddleware {
@@ -13,9 +13,9 @@ export class ReverseProxyMiddleware implements NestMiddleware {
 
   constructor(
     readonly jwtService: JwtService,
-    readonly configService: ConfigService
+    @Inject(BASE_URL) readonly baseUrl: string
   ) {
-    const target = new URL(configService.get('API_URL')).href;
+    const target = new URL(baseUrl).href;
     this.proxy = createProxyMiddleware('/api', {
       target,
       changeOrigin: true,

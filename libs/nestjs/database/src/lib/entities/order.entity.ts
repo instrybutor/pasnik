@@ -9,8 +9,9 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { DishEntity } from './dish.entity';
-import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { OrderActionEntity } from './order-action.entity';
+
+import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 
 @Entity()
 export class OrderEntity implements OrderModel {

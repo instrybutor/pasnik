@@ -1,7 +1,14 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { OrderEntity } from './order.entity';
-import { DishModel } from '@pasnik/api/data-transfer';
 import { UserEntity } from './user.entity';
+import { DishModel } from '@pasnik/api/data-transfer';
 
 @Entity()
 export class DishEntity implements DishModel {

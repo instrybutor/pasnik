@@ -17,6 +17,7 @@ import { SessionSerializer } from './serialisers/session.serialiser';
 import { InvitationsService } from './services/invitations.service';
 import { NestJsCommonModule } from '@pasnik/nestjs/common';
 import { SlackStrategy } from './strategies/slack-strategy';
+import { BASE_URL, baseUrlProvider } from './utils/baseUrl.provider';
 
 @Module({
   imports: [
@@ -33,6 +34,8 @@ import { SlackStrategy } from './strategies/slack-strategy';
     GoogleStrategyOptionsFactory,
     GoogleStrategy,
     SlackStrategy,
+    baseUrlProvider,
   ],
+  exports: [BASE_URL],
 })
 export class NestJsAuthModule {}

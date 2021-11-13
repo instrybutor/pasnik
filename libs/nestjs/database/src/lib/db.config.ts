@@ -11,7 +11,10 @@ if (result.error) {
 }
 
 const getPath = (directory) =>
-  path.relative(process.cwd(), path.join(__dirname, directory));
+  path.relative(
+    process.cwd(),
+    path.join('libs', 'nestjs', 'database', 'src', 'lib', directory)
+  );
 
 export const DatabaseConfig: ConnectionOptions = {
   type: 'postgres',
@@ -25,7 +28,7 @@ export const DatabaseConfig: ConnectionOptions = {
   // We are using migrations, synchronize should be set to false.
   synchronize: false,
 
-  migrationsRun: false,
+  migrationsRun: process.env.DB_MIGRATIONS === 'true',
   migrationsTableName: 'migrations',
 
   migrations: [getPath('/migrations/**/*{.ts,.js}')],

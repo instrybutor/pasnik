@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "files": [],
-  "include": ["./src/app/migrations/*.ts"],
+  "include": ["../../libs/nestjs/database/src/lib/migrations/*.ts"],
   "references": [
     {
       "path": "./tsconfig.app.json"
