@@ -12,7 +12,7 @@ if (result.error) {
 
 const getPath = (library, directory) =>
   path.relative(
-    process.cwd(),
+    __dirname,
     path.join('libs', 'nestjs', library, 'src', directory)
   );
 

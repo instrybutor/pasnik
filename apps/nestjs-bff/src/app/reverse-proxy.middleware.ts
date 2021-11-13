@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from '@pasnik/nestjs/database';
 import { RequestHandler } from '@nestjs/common/interfaces';
 import { JwtModel } from '@pasnik/api/data-transfer';
-import { BASE_URL } from '@pasnik/nestjs/auth';
+import { API_URL } from '@pasnik/nestjs/auth';
 
 @Injectable()
 export class ReverseProxyMiddleware implements NestMiddleware {
@@ -13,9 +13,9 @@ export class ReverseProxyMiddleware implements NestMiddleware {
 
   constructor(
     readonly jwtService: JwtService,
-    @Inject(BASE_URL) readonly baseUrl: string
+    @Inject(API_URL) readonly apiUrl: string
   ) {
-    const target = new URL(baseUrl).href;
+    const target = new URL(apiUrl).href;
     this.proxy = createProxyMiddleware('/api', {
       target,
       changeOrigin: true,

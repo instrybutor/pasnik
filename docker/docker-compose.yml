@@ -36,6 +36,8 @@ services:
     depends_on:
       - postgres
       - redis
+    expose:
+      - 3334
   bff:
     build:
       context: ../

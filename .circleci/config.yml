@@ -93,7 +93,6 @@ jobs:
           name: Set commit hash as a build version
           command: echo 'export NX_VERSION="${CIRCLE_SHA1::7}"' >> $BASH_ENV
       - run: npm run affected:build -- ${AFFECTED_ARGS} --parallel --configuration production --sourceMap false
-      - run: npm run build-migrations
       - save_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
