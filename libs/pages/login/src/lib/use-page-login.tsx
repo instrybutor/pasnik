@@ -2,8 +2,7 @@ import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useAuth } from '@pasnik/auth';
-import { useQuery } from '@pasnik/shared/utils';
-import { LoginError } from './auth-popup/login.error';
+import { InvitationRequiredError, useQuery } from '@pasnik/shared/utils';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PopupClosedError } from './auth-popup/popup-closed.error';
 
@@ -17,7 +16,7 @@ export const usePageLogin = () => {
 
   const onError = useCallback(
     (error?: Error) => {
-      if (error instanceof LoginError) {
+      if (error instanceof InvitationRequiredError) {
         if (
           error.status === InvitationStatus.INVITATION_REQUIRED &&
           error.requestToken

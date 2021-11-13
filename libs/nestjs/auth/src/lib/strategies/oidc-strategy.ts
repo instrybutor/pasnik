@@ -10,7 +10,7 @@ import { UserEntity } from '@pasnik/nestjs/database';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PassportStrategy } from '@nestjs/passport';
 import { CanAccessState } from '../services/invitations.service';
-import { InvitationRequiredException } from '../exceptions/invitation-required.exception';
+import { InvitationRequiredError } from '../../../../../shared/utils/src/lib/invitation-required.error';
 
 export const buildOpenIdClient = async ({ issuer, clientId, clientSecret }) => {
   const TrustIssuer = await Issuer.discover(
@@ -46,7 +46,7 @@ export function CreateOidcStrategy(name: 'slack' | 'google') {
           status
         )
       ) {
-        throw new InvitationRequiredException(status, requestToken);
+        throw new InvitationRequiredError(status, requestToken);
       }
 
       return this.createUser(userInfo);

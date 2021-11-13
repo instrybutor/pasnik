@@ -1,10 +1,10 @@
 import { useAuthPopup } from '../auth-popup/auth-popup';
 import { useCallback } from 'react';
-import { LoginError } from '../auth-popup/login.error';
+import { InvitationRequiredError } from '@pasnik/shared/utils';
 
 export interface SlackLoginProps {
   onSuccess: () => void;
-  onError: (error: LoginError) => void;
+  onError: (error: InvitationRequiredError) => void;
 }
 
 export const SlackLogin = ({ onSuccess, onError }: SlackLoginProps) => {

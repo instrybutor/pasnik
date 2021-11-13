@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { LoginError } from '../auth-popup/login.error';
 import { useAuthPopup } from '../auth-popup/auth-popup';
+import { InvitationRequiredError } from '@pasnik/shared/utils';
 
 export interface GoogleLoginProps {
   onSuccess: () => void;
-  onError: (error: LoginError) => void;
+  onError: (error: InvitationRequiredError) => void;
 }
 
 export const GoogleLogin = ({ onSuccess, onError }: GoogleLoginProps) => {

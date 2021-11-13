@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { LoginError } from './login.error';
 import PromiseWindow from 'promise-window';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PopupClosedError } from './popup-closed.error';
+import { InvitationRequiredError } from '@pasnik/shared/utils';
 
 interface AuthErrorResponse {
   status: InvitationStatus;
@@ -18,7 +18,7 @@ export const useAuthPopup = () => {
     }).catch((value: AuthErrorResponse | string) => {
       const authErrorResponse = value as AuthErrorResponse;
       if (authErrorResponse.status) {
-        throw new LoginError(
+        throw new InvitationRequiredError(
           authErrorResponse.status,
           authErrorResponse.requestToken
         );

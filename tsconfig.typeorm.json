@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "files": [],
-  "include": ["apps/nestjs-api/src/app/migrations/*.ts"],
+  "include": [],
   "compilerOptions": {
     "outDir": "./dist/apps/nestjs-api",
     "rootDir": "./apps/nestjs-api/src/app/",

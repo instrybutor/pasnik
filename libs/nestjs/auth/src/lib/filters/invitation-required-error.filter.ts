@@ -5,11 +5,11 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { InvitationRequiredException } from '../exceptions/invitation-required.exception';
+import { InvitationRequiredError } from '@pasnik/shared/utils';
 
-@Catch(InvitationRequiredException)
-export class InvitationRequiredExceptionFilter implements ExceptionFilter {
-  catch(exception: InvitationRequiredException, host: ArgumentsHost) {
+@Catch(InvitationRequiredError)
+export class InvitationRequiredErrorFilter implements ExceptionFilter {
+  catch(exception: InvitationRequiredError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 

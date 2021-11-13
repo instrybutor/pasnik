@@ -8,7 +8,6 @@
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
     "../../node_modules/@nrwl/react/typings/image.d.ts",
     "../../custom_typings/google.accounts/index.d.ts",
-    "../../custom_typings/react-simple-oauth2-login/index.d.ts",
     "../../custom_typings/promise-window/index.d.ts"
   ],
   "exclude": ["**/*.spec.ts", "**/*.spec.tsx"],

@@ -1,6 +1,6 @@
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 
-export class InvitationRequiredException extends Error {
+export class InvitationRequiredError extends Error {
   constructor(
     private readonly status: InvitationStatus,
     private readonly requestToken?: string

@@ -19,11 +19,11 @@ import { SlackGuard } from '../guards/slack.guard';
 import { CookieAuthenticationGuard } from '../guards/cookie-authentication.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { UnauthenticatedGuard } from '../guards/unauthenticated.guard';
-import { InvitationRequiredExceptionFilter } from '../filters/invitation-required-exception.filter';
+import { InvitationRequiredErrorFilter } from '../filters/invitation-required-error.filter';
 import { InvitationsService } from '../services/invitations.service';
 
 @Controller('auth')
-@UseFilters(InvitationRequiredExceptionFilter)
+@UseFilters(InvitationRequiredErrorFilter)
 export class AuthController {
   constructor(private readonly invitationsService: InvitationsService) {}
 

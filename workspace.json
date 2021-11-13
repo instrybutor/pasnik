@@ -145,8 +145,7 @@
           "options": {
             "buildTarget": "frontend:build",
             "hmr": true,
-            "proxyConfig": "apps/frontend/src/proxy.conf.json",
-            "allowedHosts": "6ce5-109-231-46-142.ngrok.io,localhost"
+            "proxyConfig": "apps/frontend/src/proxy.conf.json"
           },
           "configurations": {
             "production": {
