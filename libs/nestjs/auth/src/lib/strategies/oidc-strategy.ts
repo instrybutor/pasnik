@@ -10,7 +10,7 @@ import { UserEntity } from '@pasnik/nestjs/database';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PassportStrategy } from '@nestjs/passport';
 import { CanAccessState } from '../services/invitations.service';
-import { InvitationRequiredError } from '../../../../../shared/utils/src/lib/invitation-required.error';
+import { InvitationRequiredError } from '@pasnik/shared/utils';
 
 export const buildOpenIdClient = async ({ issuer, clientId, clientSecret }) => {
   const TrustIssuer = await Issuer.discover(
