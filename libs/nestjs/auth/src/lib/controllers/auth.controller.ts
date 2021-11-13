@@ -5,7 +5,6 @@ import {
   Post,
   Req,
   Res,
-  Session,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
@@ -54,7 +53,7 @@ export class AuthController {
 
   @UseGuards(CookieAuthenticationGuard)
   @Get('/me')
-  me(@CurrentUser() user: UserEntity, @Session() session: any) {
+  me(@CurrentUser() user: UserEntity) {
     return user;
   }
 
