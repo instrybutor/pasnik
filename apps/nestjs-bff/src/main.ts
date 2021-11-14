@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import * as passport from 'passport';
@@ -20,15 +20,10 @@ async function bootstrap() {
   const port = configService.get<number>('PORT', 3334);
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({
-    host: configService.get<string>('REDIS_HOST', 'localhost'),
-    port: configService.get<number>('REDIS_PORT', 6379),
+    host: configService.get<string>('REDIS_HOST'),
+    port: configService.get<number>('REDIS_PORT'),
+    path: configService.get<string>('REDIS_PATH'),
   });
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-    })
-  );
 
   app.use(
     session({
