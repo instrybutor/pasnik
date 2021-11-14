@@ -1,10 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { DishesService } from './dishes.service';
-import { CurrentUser } from '../auth/current-user.decorator';
-import { UserEntity } from '../entities/user.entity';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+
+import { CurrentUser } from '@pasnik/nestjs/auth';
+import { UserEntity } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
-@Controller('api/orders/:orderId/dishes')
+import { DishesService } from './dishes.service';
+
+@Controller('orders/:orderId/dishes')
 export class DishesController {
   constructor(private readonly dishesService: DishesService) {}
 
@@ -14,9 +24,7 @@ export class DishesController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('orderId') orderId: string,
-    @Param('id') id: string) {
+  findOne(@Param('orderId') orderId: string, @Param('id') id: string) {
     return this.dishesService.findOne(orderId, +id);
   }
 
@@ -30,10 +38,7 @@ export class DishesController {
   }
 
   @Delete(':id')
-  delete(
-    @Param('orderId') orderId: string,
-    @Param('id') id: string,
-  ) {
+  delete(@Param('orderId') orderId: string, @Param('id') id: string) {
     return this.dishesService.delete(orderId, +id);
   }
 
@@ -41,7 +46,7 @@ export class DishesController {
   update(
     @Param('orderId') orderId: string,
     @Body() addDishDto: AddDishDto,
-    @Param('id') id: string,
+    @Param('id') id: string
   ) {
     return this.dishesService.update(orderId, +id, addDishDto);
   }

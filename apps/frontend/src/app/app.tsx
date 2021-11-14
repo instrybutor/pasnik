@@ -1,5 +1,5 @@
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import { PrivateRoute, ProvideAuth } from '@pasnik/auth';
+import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import { PrivateRoute, ProvideAuth, PublicOnlyRoute } from '@pasnik/auth';
 
 import { PagesLogin } from '@pasnik/pages/login';
 import { PagesDashboard } from '@pasnik/pages/dashboard';
@@ -18,7 +18,9 @@ export function App() {
     <BrowserRouter>
       <ProvideAuth>
         <Switch>
-          <Route path="/login" component={PagesLogin} />
+          <PublicOnlyRoute path="/login">
+            <PagesLogin />
+          </PublicOnlyRoute>
 
           <Layout version={version}>
             <PrivateRoute exact path="/">

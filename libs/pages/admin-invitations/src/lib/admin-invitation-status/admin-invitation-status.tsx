@@ -7,13 +7,9 @@ export interface AdminInvitationStatusProps {
   invitation: InvitationModel;
 }
 
-const statusMap: Record<
-  InvitationStatus,
-  (invitation: InvitationModel) => ReactNode
+const statusMap: Partial<
+  Record<InvitationStatus, (invitation: InvitationModel) => ReactNode>
 > = {
-  [InvitationStatus.NO_INVITATION]: () => {
-    throw new Error('Should not happen');
-  },
   [InvitationStatus.PENDING]: () => 'Oczekujące',
   [InvitationStatus.APPROVED]: (invitation: InvitationModel) => (
     <span>
@@ -32,8 +28,8 @@ const statusMap: Record<
   ),
 };
 
-const colorMap: Record<InvitationStatus, string> = {
-  [InvitationStatus.NO_INVITATION]: 'bg-gray-100 text-black',
+const colorMap: Partial<Record<InvitationStatus, string>> = {
+  [InvitationStatus.INVITATION_REQUIRED]: 'bg-gray-100 text-black',
   [InvitationStatus.PENDING]: 'bg-yellow-100 text-yellow-800',
   [InvitationStatus.REJECTED]: 'bg-red-100 text-red-800',
   [InvitationStatus.APPROVED]: 'bg-green-100 text-green-800',
@@ -43,10 +39,13 @@ const colorMap: Record<InvitationStatus, string> = {
 export default function AdminInvitationStatus({
   invitation,
 }: AdminInvitationStatusProps) {
-  const formattedStatus = useMemo(
-    () => statusMap[invitation.status](invitation),
-    [invitation]
-  );
+  const formattedStatus = useMemo(() => {
+    const status = statusMap[invitation.status];
+    if (!status) {
+      throw new Error(`Wrong status=${invitation.status}`);
+    }
+    return status(invitation);
+  }, [invitation]);
 
   const color = useMemo(() => colorMap[invitation.status], [invitation]);
 

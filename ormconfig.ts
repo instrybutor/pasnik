@@ -1,3 +1,3 @@
-import DatabaseConfig from './apps/nestjs-api/src/app/db.config';
+import DatabaseConfig from './libs/nestjs/database/src/lib/db.config';
 
 export default DatabaseConfig;

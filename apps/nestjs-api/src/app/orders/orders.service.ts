@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { sub } from 'date-fns';
+import { Between, Connection } from 'typeorm';
 
-import { OrdersRepository } from '../repositories/orders.repository';
-import { UserEntity } from '../entities/user.entity';
+import { Injectable } from '@nestjs/common';
+
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity, UsersRepository } from '@pasnik/nestjs/database';
 import {
   CreateOrderDto,
   MarkAsDeliveredDto,
@@ -12,10 +14,9 @@ import {
   OrderStatus,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
+
+import { OrdersRepository } from '../repositories/orders.repository';
 import { OrderActionsRepository } from '../repositories/order-actions.repository';
-import { Between, Connection } from 'typeorm';
-import { UsersRepository } from '../repositories/users.repository';
-import { sub } from 'date-fns';
 
 @Injectable()
 export class OrdersService {

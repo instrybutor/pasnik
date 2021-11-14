@@ -6,12 +6,71 @@ services:
     container_name: pasnik-postgres
     volumes:
       - pasnik-data:/var/lib/postgresql/data
+    expose:
+      - 5432
     ports:
-      - 5433:5432
+      - "5432:5432"
     environment:
       - POSTGRES_DB=pasnik
       - POSTGRES_USER=pasnik
       - POSTGRES_PASSWORD=pasnik
+  redis:
+    image: redis:alpine
+    container_name: redis
+    expose:
+      - 6379
+  api:
+    build:
+      context: ../
+      dockerfile: ./docker/serve.DockerFile
+    environment:
+      - APP_NAME=nestjs-api
+      - DB_HOST=postgres
+      - DB_USERNAME=pasnik
+      - DB_PASSWORD=pasnik
+      - DB_DATABASE=pasnik
+      - DB_PORT=5432
+      - DB_MIGRATIONS=true
+      - JWT_SECRET=$JWT_SECRET
+    volumes:
+      - node-modules:/app/node_modules
+      - ../:/app
+    depends_on:
+      - postgres
+      - redis
+    expose:
+      - 3334
+  bff:
+    build:
+      context: ../
+      dockerfile: ./docker/serve.DockerFile
+    ports:
+      - "3334:3334"
+    environment:
+      - APP_NAME=nestjs-bff
+      - DB_HOST=postgres
+      - DB_USERNAME=pasnik
+      - DB_PASSWORD=pasnik
+      - DB_DATABASE=pasnik
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=$JWT_SECRET
+      - SESSION_SECRET=$SESSION_SECRET
+      - API_URL=api:3333
+      - BASE_URL=localhost:4200
+      - ENABLE_INVITATIONS=$ENABLE_INVITATIONS
+      - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+      - GOOGLE_SECRET=$GOOGLE_SECRET
+      - SLACK_CLIENT_ID=$SLACK_CLIENT_ID
+      - SLACK_SECRET=$SLACK_SECRET
+    volumes:
+      - node-modules:/app/node_modules
+      - ../:/app
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   pasnik-data:
+  node-modules:

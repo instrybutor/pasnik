@@ -1,3 +1,4 @@
+export * from './jwt.model';
 export * from './order.model';
 export * from './order-action.model';
 export * from './dish.model';

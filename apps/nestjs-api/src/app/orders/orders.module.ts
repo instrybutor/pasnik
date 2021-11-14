@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  DishEntity,
+  OrderActionEntity,
+  UsersRepository,
+} from '@pasnik/nestjs/database';
+
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
-import { DishEntity } from '../entities/dish.entity';
 import { OrdersRepository } from '../repositories/orders.repository';
-import { OrderActionEntity } from '../entities/order-action.entity';
-import { UsersRepository } from '../repositories/users.repository';
 
 @Module({
   imports: [
@@ -13,7 +16,7 @@ import { UsersRepository } from '../repositories/users.repository';
       OrdersRepository,
       OrderActionEntity,
       DishEntity,
-      UsersRepository
+      UsersRepository,
     ]),
   ],
   controllers: [OrdersController],

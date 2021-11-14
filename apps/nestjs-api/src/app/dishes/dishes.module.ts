@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { UsersRepository } from '@pasnik/nestjs/database';
+
 import { DishesController } from './dishes.controller';
 import { DishesService } from './dishes.service';
 import { OrdersRepository } from '../repositories/orders.repository';
-import { UsersRepository } from '../repositories/users.repository';
 import { DishesRepository } from '../repositories/dishes.repository';
 
 @Module({
@@ -11,7 +13,7 @@ import { DishesRepository } from '../repositories/dishes.repository';
     TypeOrmModule.forFeature([
       OrdersRepository,
       DishesRepository,
-      UsersRepository
+      UsersRepository,
     ]),
   ],
   controllers: [DishesController],

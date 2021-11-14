@@ -15,7 +15,7 @@ export default function AdminInvitationList({
 }: AdminInvitationListProps) {
   return (
     <div className="bg-white shadow sm:rounded-md">
-      <ul role="list" className="divide-y divide-gray-200">
+      <ul className="divide-y divide-gray-200">
         {invitations.map((invitation) => (
           <li key={invitation.email}>
             <div className="block hover:bg-gray-50">

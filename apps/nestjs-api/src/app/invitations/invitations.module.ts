@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersRepository } from '../repositories/users.repository';
+import {
+  InvitationsRepository,
+  UsersRepository,
+} from '@pasnik/nestjs/database';
+
 import { InvitationsService } from './invitations.service';
-import { InvitationsRepository } from '../repositories/invitations.repository';
 import { InvitationsController } from './invitations.controller';
 
 @Module({

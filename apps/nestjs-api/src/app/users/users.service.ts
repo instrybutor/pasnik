@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Profile } from 'passport';
-import { UserEntity } from '../entities/user.entity';
-import { UsersRepository } from '../repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { UserEntity, UsersRepository } from '@pasnik/nestjs/database';
 
 @Injectable()
 export class UsersService {
@@ -21,10 +20,5 @@ export class UsersService {
 
   async removeUser(id: string): Promise<void> {
     await this.usersRepository.delete(id);
-  }
-
-  async createUser(profile: Profile) {
-    const user = await this.usersRepository.upsertGoogleUser(profile);
-    return this.findOne(user.id);
   }
 }

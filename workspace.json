@@ -174,7 +174,7 @@
           "options": {
             "commands": [
               {
-                "command": "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName frontend --remoteRoot /public_nodejs/public/"
+                "command": "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName frontend"
               }
             ]
           }
@@ -260,10 +260,198 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "commands": [
-              {
-                "command": "mv ./dist/apps/nestjs-api/main.js ./dist/apps/nestjs-api/app.js && npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-api"
-              }
+              "mv ./dist/apps/nestjs-api/main.js ./dist/apps/nestjs-api/app.js",
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-api-api",
+              "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-api?auth=$ENV_MANAGER_PASS"
             ]
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-auth": {
+      "root": "libs/nestjs/auth",
+      "sourceRoot": "libs/nestjs/auth/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/auth/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nestjs/auth"],
+          "options": {
+            "jestConfig": "libs/nestjs/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-bff": {
+      "root": "apps/nestjs-bff",
+      "sourceRoot": "apps/nestjs-bff/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/nestjs-bff",
+            "main": "apps/nestjs-bff/src/main.ts",
+            "tsConfig": "apps/nestjs-bff/tsconfig.app.json",
+            "assets": ["apps/nestjs-bff/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/nestjs-bff/src/environments/environment.ts",
+                  "with": "apps/nestjs-bff/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "nestjs-bff:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/nestjs-bff/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/nestjs-bff"],
+          "options": {
+            "jestConfig": "apps/nestjs-bff/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "mv ./dist/apps/nestjs-bff/main.js ./dist/apps/nestjs-bff/app.js",
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-bff-bff",
+              "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-bff?auth=$ENV_MANAGER_PASS"
+            ]
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-common": {
+      "root": "libs/nestjs/common",
+      "sourceRoot": "libs/nestjs/common/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/common/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nestjs/common"],
+          "options": {
+            "jestConfig": "libs/nestjs/common/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-core": {
+      "root": "libs/nestjs/core",
+      "sourceRoot": "libs/nestjs/core/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/core/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nestjs/core"],
+          "options": {
+            "jestConfig": "libs/nestjs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-database": {
+      "root": "libs/nestjs/database",
+      "sourceRoot": "libs/nestjs/database/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/database/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nestjs/database"],
+          "options": {
+            "jestConfig": "libs/nestjs/database/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "nestjs-migrations": {
+      "root": "libs/nestjs/migrations",
+      "sourceRoot": "libs/nestjs/migrations/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/nestjs/migrations",
+            "tsConfig": "libs/nestjs/migrations/tsconfig.lib.json",
+            "packageJson": "libs/nestjs/migrations/package.json",
+            "main": "libs/nestjs/migrations/src/index.ts"
+          }
+        },
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --type library --appName nestjs-migrations-migrations",
+              "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-migrations?auth=$ENV_MANAGER_PASS"
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nestjs/migrations/**/*.ts"]
           }
         }
       },

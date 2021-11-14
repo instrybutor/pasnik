@@ -3,9 +3,12 @@ import { GoogleLogin } from './google-login/google-login';
 import { Invitation } from './invitation/invitation';
 import { InvitationPendingAlert } from './invitation-pending-alert/invitation-pending-alert';
 import { usePageLogin } from './use-page-login';
+import { SlackLogin } from './slack-login/slack-login';
+import { InvitationStatus } from '@pasnik/api/data-transfer';
+import { InvitationRejectedAlert } from './invitation-rejected-alert/invitation-pending-alert';
 
 export function PagesLogin() {
-  const { requestToken, onError, invitationPending, hasError, onSuccess } =
+  const { requestToken, onError, invitationStatus, hasError, onSuccess } =
     usePageLogin();
 
   return (
@@ -37,19 +40,25 @@ export function PagesLogin() {
           <span className="mx-auto">Zaloguj się aby korzystać z serwisu!</span>
 
           <div>
-            {invitationPending && (
-              <div className="mb-6">
+            {invitationStatus === InvitationStatus.PENDING && (
+              <div className="mb-8">
                 <InvitationPendingAlert />
               </div>
             )}
+            {invitationStatus === InvitationStatus.REJECTED && (
+              <div className="mb-8">
+                <InvitationRejectedAlert />
+              </div>
+            )}
             {hasError && (
-              <div className="mb-6">
+              <div className="mb-8">
                 <ErrorAlert />
               </div>
             )}
 
-            <div className="flex justify-center">
+            <div className="flex justify-center flex-col items-center gap-6">
               <GoogleLogin onSuccess={onSuccess} onError={onError} />
+              <SlackLogin onSuccess={onSuccess} onError={onError} />
             </div>
           </div>
         </div>

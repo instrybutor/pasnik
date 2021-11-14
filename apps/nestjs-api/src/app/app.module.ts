@@ -1,38 +1,31 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { FrontendMiddleware } from './frontend.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { Module } from '@nestjs/common';
+
+import { NestJsDatabaseModule } from '@pasnik/nestjs/database';
+import { NestJsCoreModule } from '@pasnik/nestjs/core';
+import { JwtAuthGuard } from '@pasnik/nestjs/auth';
+
+import { UsersModule } from './users';
 import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
-import { DatabaseConfig } from './db.config';
-import { InvitationsModule } from './invitations/invitations.module';
+import { InvitationsModule } from './invitations';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env.local'
-    }),
-    TypeOrmModule.forRoot({
-      ...DatabaseConfig,
-      autoLoadEntities: true,
-    }),
-    AuthModule,
+    NestJsCoreModule,
+    NestJsDatabaseModule,
     UsersModule,
     OrdersModule,
     DishesModule,
-    InvitationsModule
+    InvitationsModule,
   ],
-  controllers: [],
-  providers: [],
+  providers: [
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(FrontendMiddleware).exclude('api/(.*)').forRoutes({
-      path: '/**',
-      method: RequestMethod.ALL,
-    });
-  }
-}
+export class AppModule {}
