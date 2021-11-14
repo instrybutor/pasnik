@@ -23,9 +23,10 @@ set_env: &set_env
       echo 'Fetching Base Commit from Deploy Cache'
       if [[ ! -f dist/last-deploy.txt ]]
       then
-        mkdir dist && git rev-parse HEAD~1 > dist/last-deploy.txt
+        echo 'export AFFECTED_ARGS="--all"' >> $BASH_ENV
+      else
+        echo 'export AFFECTED_ARGS="--base $(cat dist/last-deploy.txt)"' >> $BASH_ENV
       fi
-      echo 'export AFFECTED_ARGS="--base $(cat dist/last-deploy.txt)"' >> $BASH_ENV
     fi
     source $BASH_ENV
     echo $AFFECTED_ARGS
