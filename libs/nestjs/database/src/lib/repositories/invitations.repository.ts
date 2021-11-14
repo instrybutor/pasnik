@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Not, Repository } from 'typeorm';
 import { InvitationEntity, UserEntity } from '../entities';
 
 @EntityRepository(InvitationEntity)
@@ -20,7 +20,7 @@ export class InvitationsRepository extends Repository<InvitationEntity> {
 
   async setUser(email: string, user: UserEntity) {
     return await this.update(
-      { email },
+      { email, status: Not(InvitationStatus.REGISTERED) },
       { user, status: InvitationStatus.REGISTERED }
     );
   }

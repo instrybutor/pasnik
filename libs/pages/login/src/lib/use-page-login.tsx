@@ -12,7 +12,9 @@ export const usePageLogin = () => {
   const { fetchUser } = useAuth();
   const [requestToken, setRequestToken] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
-  const [invitationPending, setInvitationPending] = useState(false);
+  const [invitationStatus, setInvitationStatus] = useState<
+    InvitationStatus | undefined
+  >();
 
   const onError = useCallback(
     (error?: Error) => {
@@ -22,10 +24,8 @@ export const usePageLogin = () => {
           error.requestToken
         ) {
           setRequestToken(error.requestToken);
-        } else if (error.status === InvitationStatus.PENDING) {
-          setInvitationPending(true);
         } else {
-          setHasError(true);
+          setInvitationStatus(error.status);
         }
       } else if (!(error instanceof PopupClosedError)) {
         setHasError(true);
@@ -36,7 +36,7 @@ export const usePageLogin = () => {
 
   const onSuccess = useCallback(() => {
     setHasError(false);
-    setInvitationPending(false);
+    setInvitationStatus(undefined);
 
     fetchUser()
       .then(() => {
@@ -52,7 +52,7 @@ export const usePageLogin = () => {
 
   return {
     requestToken,
-    invitationPending,
+    invitationStatus,
     hasError,
     onSuccess,
     onError,

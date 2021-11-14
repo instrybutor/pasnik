@@ -10,11 +10,12 @@ if (result.error) {
   /* do nothing */
 }
 
-const getPath = (library, directory) =>
-  path.relative(
-    __dirname,
-    path.join('libs', 'nestjs', library, 'src', directory)
-  );
+const getPath = (library, directory) => {
+  const relativePath = path.relative(process.cwd(), __dirname);
+  const isDist = relativePath.startsWith('dist');
+  const basePath = path.relative(process.cwd(), isDist ? 'dist' : '');
+  return path.join(basePath, 'libs', 'nestjs', library, 'src', directory);
+};
 
 export const DatabaseConfig: ConnectionOptions = {
   type: 'postgres',

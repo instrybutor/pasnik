@@ -11,18 +11,13 @@ export class SlackStrategy extends CreateOidcStrategy('slack') {
 
   constructor(
     @Inject(SlackStrategyOptions) readonly options: StrategyOptions,
-    private readonly invitationsService: InvitationsService,
+    readonly invitationsService: InvitationsService,
     private readonly authService: AuthService
   ) {
-    super(options);
-    this.client = options.client;
+    super(options, invitationsService);
   }
 
   createUser(userInfo: UserinfoResponse) {
     return this.authService.upsertSlackUser(userInfo);
-  }
-
-  canAccess({ email }: UserinfoResponse) {
-    return this.invitationsService.canAccess(email);
   }
 }

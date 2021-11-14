@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from '../entities';
 
 @EntityRepository(UserEntity)
-export class UsersRepository extends Repository<UserEntity> {
+export class UsersRepository extends Repository<UserEntity | undefined> {
   findByEmail(email: string, fail?: boolean) {
     if (fail) {
       return this.findOneOrFail({ where: { email } });

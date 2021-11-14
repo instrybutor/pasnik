@@ -58,28 +58,30 @@ export class InvitationsService {
 
   async canAccess(email: string): Promise<CanAccessState> {
     if (!this.invitationsEnabled) {
-      return { status: InvitationStatus.APPROVED };
+      return { status: InvitationStatus.INVITATION_DISABLED };
     }
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findByEmail(email);
     if (user) {
-      return { status: InvitationStatus.REGISTERED };
+      return {
+        status: InvitationStatus.REGISTERED,
+      };
     }
-    return await this.invitationsRepository
-      .findOne({
-        where: { email },
-      })
-      .then((invitation) => {
-        const status =
-          invitation?.status ?? InvitationStatus.INVITATION_REQUIRED;
-        const requestToken =
-          status === InvitationStatus.INVITATION_REQUIRED
-            ? this.generateAccessToken({ email })
-            : null;
-        return {
-          status,
-          requestToken,
-        };
-      });
+
+    const status = await this.invitationsRepository
+      .findOne({ where: { email } })
+      .then(
+        (invitation) =>
+          invitation?.status ?? InvitationStatus.INVITATION_REQUIRED
+      );
+
+    const requestToken =
+      status === InvitationStatus.INVITATION_REQUIRED
+        ? this.generateAccessToken({ email })
+        : null;
+    return {
+      status,
+      requestToken,
+    };
   }
 
   private decodeRequestToken(requestToken: string) {

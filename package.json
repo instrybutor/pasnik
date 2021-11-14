@@ -28,7 +28,7 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "docker-compose": "docker-compose -f ./docker/docker-compose.yml --env-file .env.local",
-    "typeorm": "ts-node --transpile-only --project tsconfig.typeorm.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ormconfig.ts",
+    "typeorm": "ts-node --transpile-only --project libs/nestjs/migrations/tsconfig.lib.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ormconfig.ts",
     "approve-user": "ts-node --project tools/tsconfig.tools.json tools/scripts/approve-user",
     "make-admin": "ts-node --project tools/tsconfig.tools.json tools/scripts/make-admin"
   },

@@ -9,7 +9,7 @@ import {
 import { UserEntity } from '@pasnik/nestjs/database';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PassportStrategy } from '@nestjs/passport';
-import { CanAccessState } from '../services/invitations.service';
+import { InvitationsService } from '../services/invitations.service';
 import { InvitationRequiredError } from '@pasnik/shared/utils';
 
 export const buildOpenIdClient = async ({ issuer, clientId, clientSecret }) => {
@@ -26,11 +26,12 @@ export function CreateOidcStrategy(name: 'slack' | 'google') {
   abstract class OidcStrategy extends PassportStrategy(Strategy, name) {
     abstract createUser(userInfo: UserinfoResponse): Promise<UserEntity>;
 
-    abstract canAccess(userInfo: UserinfoResponse): Promise<CanAccessState>;
-
     client: Client;
 
-    protected constructor({ client, ...rest }: StrategyOptions) {
+    protected constructor(
+      { client, ...rest }: StrategyOptions,
+      private readonly invitationService: InvitationsService
+    ) {
       super({ client, ...rest });
 
       this.client = client;
@@ -39,17 +40,26 @@ export function CreateOidcStrategy(name: 'slack' | 'google') {
     async validate(tokenSet: TokenSet): Promise<UserEntity> {
       const userInfo: UserinfoResponse = await this.client.userinfo(tokenSet);
 
-      const { status, requestToken } = await this.canAccess(userInfo);
+      const { status, requestToken } = await this.invitationService.canAccess(
+        userInfo.email
+      );
 
       if (
-        ![InvitationStatus.APPROVED, InvitationStatus.REGISTERED].includes(
-          status
-        )
+        ![
+          InvitationStatus.INVITATION_DISABLED,
+          InvitationStatus.APPROVED,
+          InvitationStatus.REGISTERED,
+        ].includes(status)
       ) {
         throw new InvitationRequiredError(status, requestToken);
       }
 
-      return this.createUser(userInfo);
+      return this.createUser(userInfo).then(async (user) => {
+        if (status === InvitationStatus.APPROVED) {
+          await this.invitationService.setUser(user);
+        }
+        return user;
+      });
     }
   }
 
