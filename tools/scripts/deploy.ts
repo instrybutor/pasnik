@@ -11,7 +11,7 @@ const outDir = join(
   root,
   'dist',
   argv.type === 'library' ? 'libs' : 'apps',
-  argv.appName
+  argv.outDir ?? argv.appName
 );
 const remoteRoot = argv.remoteRoot ?? argv.appName;
 

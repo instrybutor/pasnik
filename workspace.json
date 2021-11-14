@@ -435,14 +435,15 @@
             "outputPath": "dist/libs/nestjs/migrations",
             "tsConfig": "libs/nestjs/migrations/tsconfig.lib.json",
             "packageJson": "libs/nestjs/migrations/package.json",
-            "main": "libs/nestjs/migrations/src/index.ts"
+            "main": "libs/nestjs/migrations/src/index.ts",
+            "sourceMap": false
           }
         },
         "deploy": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "commands": [
-              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --type library --appName nestjs-migrations",
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --type library --appName nestjs-migrations --outDir \"nestjs/migrations\"",
               "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-migrations?auth=$ENV_MANAGER_PASS"
             ]
           }
