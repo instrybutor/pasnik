@@ -1,7 +1,9 @@
 {
-  "name": "@pasnik/nestjs/migrations",
   "version": "0.0.1",
   "scripts": {
     "typeorm": "typeorm"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0"
   }
 }
