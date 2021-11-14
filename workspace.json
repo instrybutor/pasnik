@@ -261,7 +261,7 @@
           "options": {
             "commands": [
               "mv ./dist/apps/nestjs-api/main.js ./dist/apps/nestjs-api/app.js",
-              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-api-api",
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-api",
               "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-api?auth=$ENV_MANAGER_PASS"
             ]
           }
