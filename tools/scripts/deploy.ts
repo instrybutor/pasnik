@@ -13,17 +13,17 @@ const outDir = join(
   argv.type === 'library' ? 'libs' : 'apps',
   argv.appName
 );
-const remoteRoot = argv.remoteRoot ?? '/public_nodejs/';
+const remoteRoot = argv.remoteRoot ?? argv.appName;
 
 if (!existsSync(outDir)) {
   throw new Error(`${outDir} does not exist`);
 }
 
 const config = {
-  user: argv.user,
-  password: argv.pass,
-  host: argv.host,
-  port: argv.port ?? 21,
+  user: process.env.FTP_USER,
+  password: process.env.FTP_PASS,
+  host: process.env.FTP_HOST,
+  port: process.env.FTP_PORT ?? 21,
   localRoot: outDir,
   remoteRoot: remoteRoot,
   include: ['*'],

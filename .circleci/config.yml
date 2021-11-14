@@ -135,7 +135,7 @@ jobs:
           <<: *npm_cache
       - restore_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
-      - run: npm run affected -- --target deploy ${AFFECTED_ARGS} --user $FTP_USER --host $FTP_HOST --pass $FTP_PASS
+      - run: npm run affected -- --target deploy ${AFFECTED_ARGS}
       - run: git rev-parse HEAD > dist/last-$ENV_MANAGER_ENV-deploy.txt
       - save_cache:
           key: last-deploy-sha-{{ .Environment.CIRCLE_WORKFLOW_ID }}
