@@ -346,7 +346,7 @@
           "options": {
             "commands": [
               "mv ./dist/apps/nestjs-bff/main.js ./dist/apps/nestjs-bff/app.js",
-              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-bff-bff",
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --appName nestjs-bff",
               "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-bff?auth=$ENV_MANAGER_PASS"
             ]
           }
@@ -442,7 +442,7 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "commands": [
-              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --type library --appName nestjs-migrations-migrations",
+              "npx ts-node --project tools/tsconfig.tools.json tools/scripts/deploy --type library --appName nestjs-migrations",
               "curl --fail $ENV_MANAGER_HOST/deploy/$FTP_USER/nestjs-migrations?auth=$ENV_MANAGER_PASS"
             ]
           }
