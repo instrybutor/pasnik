@@ -1,7 +1,7 @@
 import { buildOpenIdClient } from './oidc-strategy';
 import { Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BASE_URL } from '../utils/baseUrl.provider';
+import { BASE_URL } from '@pasnik/nestjs/common';
 
 export const GoogleStrategyOptions = 'GoogleStrategyOptions';
 

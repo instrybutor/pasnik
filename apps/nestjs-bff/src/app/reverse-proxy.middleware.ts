@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from '@pasnik/nestjs/database';
 import { RequestHandler } from '@nestjs/common/interfaces';
 import { JwtModel } from '@pasnik/api/data-transfer';
-import { API_URL } from '@pasnik/nestjs/auth';
+import { API_URL } from '@pasnik/nestjs/common';
 
 @Injectable()
 export class ReverseProxyMiddleware implements NestMiddleware {
