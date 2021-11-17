@@ -1,5 +1,5 @@
 import { Fragment, useCallback } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import { matchPath, NavLink } from 'react-router-dom';
 import {
   ClockIcon,
@@ -7,8 +7,10 @@ import {
   CreditCardIcon,
   DocumentReportIcon,
   HomeIcon,
+  OfficeBuildingIcon,
   QuestionMarkCircleIcon,
   ScaleIcon,
+  SelectorIcon,
   ShieldCheckIcon,
   UserGroupIcon,
   XIcon,
@@ -230,6 +232,133 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
               className="mt-5 flex-1 flex flex-col divide-y divide-cyan-800 overflow-y-auto"
               aria-label="Sidebar"
             >
+              <Menu
+                as="div"
+                className="px-2 my-3 relative inline-block text-left"
+              >
+                <div>
+                  <Menu.Button className="group w-full bg-cyan-700 rounded-md px-3.5 py-2 text-sm text-left font-medium text-gray-700 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-cyan-500">
+                    <span className="flex w-full justify-between items-center">
+                      <span className="flex min-w-0 items-center justify-between space-x-3">
+                        <OfficeBuildingIcon
+                          className="flex-shrink-0 h-7 w-7 text-gray-200"
+                          aria-hidden="true"
+                        />
+                        <span className="text-gray-200 text-lg font-medium truncate">
+                          Instrybutor
+                        </span>
+                      </span>
+                      <SelectorIcon
+                        className="flex-shrink-0 h-5 w-5 text-gray-200 "
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </Menu.Button>
+                </div>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items className="z-10 mx-3 origin-top absolute right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
+                    <div className="py-1">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            className={classNames(
+                              active
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            View profile
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            className={classNames(
+                              active
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            Settings
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            className={classNames(
+                              active
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            Notifications
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </div>
+                    <div className="py-1">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            className={classNames(
+                              active
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            Get desktop app
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            className={classNames(
+                              active
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            Support
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </div>
+                    <div className="py-1">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            className={classNames(
+                              active
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            Logout
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </div>
+                  </Menu.Items>
+                </Transition>
+              </Menu>
+
               <div className="px-2 space-y-1">
                 {navigation.map((item) => (
                   <NavLink
