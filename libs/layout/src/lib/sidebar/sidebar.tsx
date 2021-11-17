@@ -1,13 +1,13 @@
 import { Fragment, useCallback } from 'react';
-import { Dialog, Menu, Transition } from '@headlessui/react';
+import { Dialog, Listbox, Transition } from '@headlessui/react';
 import { matchPath, NavLink } from 'react-router-dom';
 import {
+  CheckIcon,
   ClockIcon,
   CogIcon,
   CreditCardIcon,
   DocumentReportIcon,
   HomeIcon,
-  OfficeBuildingIcon,
   QuestionMarkCircleIcon,
   ScaleIcon,
   SelectorIcon,
@@ -25,6 +25,19 @@ const navigation = [
   { name: 'Cards', href: '/cards', icon: CreditCardIcon, hide: true },
   { name: 'Recipients', href: '/recipients', icon: UserGroupIcon, hide: true },
   { name: 'Reports', href: '/reports', icon: DocumentReportIcon, hide: true },
+];
+
+const people = [
+  { id: 1, name: 'Wade Cooper' },
+  { id: 2, name: 'Arlene Mccoy' },
+  { id: 3, name: 'Devon Webb' },
+  { id: 4, name: 'Tom Cook' },
+  { id: 5, name: 'Tanya Fox' },
+  { id: 6, name: 'Hellen Schmidt' },
+  { id: 7, name: 'Caroline Schultz' },
+  { id: 8, name: 'Mason Heaney' },
+  { id: 9, name: 'Claudie Smitham' },
+  { id: 10, name: 'Emil Schaefer' },
 ];
 
 const adminNavigation = [
@@ -232,134 +245,97 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
               className="mt-5 flex-1 flex flex-col divide-y divide-cyan-800 overflow-y-auto"
               aria-label="Sidebar"
             >
-              <Menu
-                as="div"
-                className="px-2 my-3 relative inline-block text-left"
-              >
-                <div>
-                  <Menu.Button className="group w-full bg-cyan-700 rounded-md px-3.5 py-2 text-sm text-left font-medium text-gray-700 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-cyan-500">
-                    <span className="flex w-full justify-between items-center">
-                      <span className="flex min-w-0 items-center justify-between space-x-3">
-                        <OfficeBuildingIcon
-                          className="flex-shrink-0 h-7 w-7 text-gray-200"
-                          aria-hidden="true"
-                        />
-                        <span className="text-gray-200 text-lg font-medium truncate">
-                          Instrybutor
-                        </span>
-                      </span>
-                      <SelectorIcon
-                        className="flex-shrink-0 h-5 w-5 text-gray-200 "
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </Menu.Button>
-                </div>
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
+              <div className="px-2">
+                <Listbox
+                  onChange={() => {
+                    console.log();
+                  }}
+                  value={'1'}
                 >
-                  <Menu.Items className="z-10 mx-3 origin-top absolute right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
-                    <div className="py-1">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            className={classNames(
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block px-4 py-2 text-sm'
-                            )}
-                          >
-                            View profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            className={classNames(
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block px-4 py-2 text-sm'
-                            )}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            className={classNames(
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block px-4 py-2 text-sm'
-                            )}
-                          >
-                            Notifications
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </div>
-                    <div className="py-1">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            className={classNames(
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block px-4 py-2 text-sm'
-                            )}
-                          >
-                            Get desktop app
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            className={classNames(
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block px-4 py-2 text-sm'
-                            )}
-                          >
-                            Support
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </div>
-                    <div className="py-1">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            className={classNames(
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block px-4 py-2 text-sm'
-                            )}
-                          >
-                            Logout
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
+                  {({ open }) => (
+                    <>
+                      <Listbox.Label className="flex justify-between w-full text-sm font-medium text-white pl-3 pr-2">
+                        Przestrzenie
+                        <div className="self-end">
+                          <CogIcon
+                            className="h-5 w-5 text-gray-200"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      </Listbox.Label>
+                      <div className="mt-1 relative">
+                        <Listbox.Button className="bg-white relative w-full bg-cyan-800 rounded-md pl-3 pr-10 py-3 text-left text-white hover:bg-cyan-800 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                          <span className="block truncate">Instrybutor</span>
+                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                            <SelectorIcon
+                              className="h-5 w-5 text-gray-200"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </Listbox.Button>
 
-              <div className="px-2 space-y-1">
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          leave="transition ease-in duration-100"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                            {people.map((person) => (
+                              <Listbox.Option
+                                key={person.id}
+                                className={({ active }) =>
+                                  classNames(
+                                    active
+                                      ? 'text-white bg-indigo-600'
+                                      : 'text-gray-900',
+                                    'cursor-default select-none relative py-2 pl-3 pr-9'
+                                  )
+                                }
+                                value={person}
+                              >
+                                {({ selected, active }) => (
+                                  <>
+                                    <span
+                                      className={classNames(
+                                        selected
+                                          ? 'font-semibold'
+                                          : 'font-normal',
+                                        'block truncate'
+                                      )}
+                                    >
+                                      {person.name}
+                                    </span>
+
+                                    {selected ? (
+                                      <span
+                                        className={classNames(
+                                          active
+                                            ? 'text-white'
+                                            : 'text-indigo-600',
+                                          'absolute inset-y-0 right-0 flex items-center pr-4'
+                                        )}
+                                      >
+                                        <CheckIcon
+                                          className="h-5 w-5"
+                                          aria-hidden="true"
+                                        />
+                                      </span>
+                                    ) : null}
+                                  </>
+                                )}
+                              </Listbox.Option>
+                            ))}
+                          </Listbox.Options>
+                        </Transition>
+                      </div>
+                    </>
+                  )}
+                </Listbox>
+              </div>
+
+              <div className="px-2 space-y-1 mt-6 pt-6">
                 {navigation.map((item) => (
                   <NavLink
                     key={item.name}
