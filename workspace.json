@@ -436,7 +436,7 @@
             "outputPath": "dist/libs/nestjs/migrations",
             "tsConfig": "libs/nestjs/migrations/tsconfig.lib.json",
             "packageJson": "libs/nestjs/migrations/package.json",
-            "main": "libs/nestjs/migrations/src/index.ts",
+            "main": "libs/nestjs/migrations/index.ts",
             "sourceMap": false
           }
         },

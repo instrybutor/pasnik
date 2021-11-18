@@ -12,8 +12,9 @@ if (result.error) {
 
 const getPath = (library, directory) => {
   const relativePath = path.relative(process.cwd(), __dirname);
+  console.log(relativePath, process.cwd(), __dirname);
   const isDist = relativePath.startsWith('dist');
-  const basePath = path.relative(process.cwd(), isDist ? 'dist' : '');
+  const basePath = path.resolve(process.cwd(), isDist ? 'dist' : '');
   return path.join(basePath, 'libs', 'nestjs', library, 'src', directory);
 };
 

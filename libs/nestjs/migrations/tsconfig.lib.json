@@ -6,6 +6,8 @@
     "declaration": true,
     "types": ["node"]
   },
-  "exclude": ["src/index.ts"],
+  "exclude": [
+    "index.ts"
+  ],
   "include": ["src/*.ts"]
 }
