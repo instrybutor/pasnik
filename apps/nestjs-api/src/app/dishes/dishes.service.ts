@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrdersRepository } from '../repositories/orders.repository';
-import { UserEntity } from '@pasnik/nestjs/database';
+import {
+  DishesRepository,
+  OrdersRepository,
+  UserEntity,
+} from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
-import { DishesRepository } from '../repositories/dishes.repository';
 
 @Injectable()
 export class DishesService {

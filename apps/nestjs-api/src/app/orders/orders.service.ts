@@ -4,7 +4,12 @@ import { Between, Connection } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity, UsersRepository } from '@pasnik/nestjs/database';
+import {
+  OrderActionsRepository,
+  OrdersRepository,
+  UserEntity,
+  UsersRepository,
+} from '@pasnik/nestjs/database';
 import {
   CreateOrderDto,
   MarkAsDeliveredDto,
@@ -14,9 +19,6 @@ import {
   OrderStatus,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
-
-import { OrdersRepository } from '../repositories/orders.repository';
-import { OrderActionsRepository } from '../repositories/order-actions.repository';
 
 @Injectable()
 export class OrdersService {

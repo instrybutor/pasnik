@@ -3,12 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   DishEntity,
   OrderActionEntity,
+  OrdersRepository,
   UsersRepository,
 } from '@pasnik/nestjs/database';
 
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
-import { OrdersRepository } from '../repositories/orders.repository';
 
 @Module({
   imports: [
