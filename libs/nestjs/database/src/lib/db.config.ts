@@ -12,10 +12,15 @@ if (result.error) {
 
 const getPath = (library, directory) => {
   const relativePath = path.relative(process.cwd(), __dirname);
-  console.log(relativePath, process.cwd(), __dirname);
   const isDist = relativePath.startsWith('dist');
-  const basePath = path.resolve(process.cwd(), isDist ? 'dist' : '');
-  return path.join(basePath, 'libs', 'nestjs', library, 'src', directory);
+  return path.join(
+    isDist ? 'dist' : '',
+    'libs',
+    'nestjs',
+    library,
+    'src',
+    directory
+  );
 };
 
 export const DatabaseConfig: ConnectionOptions = {
@@ -33,7 +38,7 @@ export const DatabaseConfig: ConnectionOptions = {
   migrationsRun: process.env.DB_MIGRATIONS === 'true',
   migrationsTableName: 'migrations',
 
-  migrations: [getPath('migrations', '/**/*{.ts,.js}')],
+  migrations: [getPath('migrations', '/*{.ts,.js}')],
   cli: {
     migrationsDir: getPath('migrations', '/'),
     entitiesDir: getPath('database', 'lib/entities'),

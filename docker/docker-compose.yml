@@ -9,7 +9,7 @@ services:
     expose:
       - 5432
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_DB=pasnik
       - POSTGRES_USER=pasnik
@@ -59,7 +59,7 @@ services:
       - SESSION_SECRET=$SESSION_SECRET
       - API_URL=api:3333
       - BASE_URL=localhost:4200
-      - ENABLE_INVITATIONS=$ENABLE_INVITATIONS
+      - ENABLE_INVITATIONS=false
       - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
       - GOOGLE_SECRET=$GOOGLE_SECRET
       - SLACK_CLIENT_ID=$SLACK_CLIENT_ID

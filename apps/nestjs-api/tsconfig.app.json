@@ -3,7 +3,10 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "types": ["node", "@types/express-session"],
+    "types": [
+      "node",
+      "@types/express-session"
+    ],
     "emitDecoratorMetadata": true,
     "target": "es2015"
   },
@@ -11,7 +14,6 @@
     "**/*.spec.ts"
   ],
   "include": [
-    "**/*.ts",
-    "../../libs/nestjs/migrations/src/*.ts"
+    "**/*.ts"
   ]
 }
