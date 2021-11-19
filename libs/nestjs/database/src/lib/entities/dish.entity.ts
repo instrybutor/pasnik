@@ -37,7 +37,4 @@ export class DishEntity implements DishModel {
 
   @UpdateDateColumn()
   updatedAt: string;
-
-  @Column()
-  elo: string;
 }
