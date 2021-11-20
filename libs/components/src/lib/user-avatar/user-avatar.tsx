@@ -6,9 +6,10 @@ export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg' | 'xxlg';
 export interface UserAvatarProps {
   user?: UserModel | null;
   size?: UserAvatarSize;
+  className?: string;
 }
 
-export function UserAvatar({ user, size }: UserAvatarProps) {
+export function UserAvatar({ user, size, className }: UserAvatarProps) {
   const formatInitials = ({ givenName, familyName }: UserModel) =>
     `${givenName![0]}${familyName![0]}`;
 
@@ -26,7 +27,11 @@ export function UserAvatar({ user, size }: UserAvatarProps) {
 
   return user?.avatarImg ? (
     <img
-      className={classNames(sizeClasses, 'inline-block rounded-full')}
+      className={classNames(
+        sizeClasses,
+        'inline-block rounded-full',
+        className
+      )}
       src={user.avatarImg}
       alt={formatName(user)}
     />
@@ -34,7 +39,8 @@ export function UserAvatar({ user, size }: UserAvatarProps) {
     <span
       className={classNames(
         sizeClasses,
-        'inline-flex items-center justify-center rounded-full bg-gray-500'
+        'inline-flex items-center justify-center rounded-full bg-gray-500',
+        className
       )}
     >
       <span className="text-sm font-medium leading-none text-white">
@@ -45,7 +51,8 @@ export function UserAvatar({ user, size }: UserAvatarProps) {
     <span
       className={classNames(
         sizeClasses,
-        'inline-block rounded-full overflow-hidden bg-gray-100'
+        'inline-block rounded-full overflow-hidden bg-gray-100',
+        className
       )}
     >
       <svg
