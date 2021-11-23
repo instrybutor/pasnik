@@ -1,34 +1,24 @@
-import React, { useCallback, useState } from 'react';
-import { UserModel } from '@pasnik/api/data-transfer';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from '@pasnik/axios';
+import { useUserStore } from '@pasnik/store';
 
 export function useAuthFacade() {
-  const [user, setUser] = useState<UserModel | null>(null);
-  const [users, setUsers] = useState<UserModel[]>([]);
-  const [fetching, setFetching] = useState<boolean>(true);
   const history = useHistory();
+  const { fetchUsers, fetchMe, resetState } = useUserStore();
+  const isLoggedIn = useUserStore(({ user }) => !!user);
 
-  const fetchUser = useCallback((): Promise<UserModel> => {
-    return axios.get<UserModel>('/auth/me').then(({ data }) => {
-      setUser(data);
-      setFetching(false);
-      return data;
-    });
-  }, []);
-
-  const fetchUsers = useCallback((): Promise<UserModel[]> => {
-    return axios.get<UserModel[]>('/api/users').then(({ data }) => {
-      setUsers(data);
-      return data;
-    });
-  }, []);
+  const signIn = useCallback(() => {
+    return fetchMe()
+      .then(fetchUsers)
+      .then(() => undefined);
+  }, [fetchUsers, fetchMe]);
 
   const signOut = useCallback(async () => {
     await axios.post('/auth/logout');
-    setUser(null);
+    resetState();
     history.push('/login');
-  }, [history]);
+  }, [history, resetState]);
 
   const requestAccess = useCallback((requestToken) => {
     return axios
@@ -37,17 +27,15 @@ export function useAuthFacade() {
   }, []);
 
   React.useEffect(() => {
-    Promise.all([fetchUsers(), fetchUser()]).catch(() => {
-      setFetching(false);
+    signIn().catch(() => {
+      // redirect to login is made in axios interceptor
     });
-  }, [fetchUser, fetchUsers, history]);
+  }, [signIn]);
 
   return {
-    user,
-    users,
-    fetching,
-    fetchUser,
     requestAccess,
     signOut,
+    signIn,
+    isLoggedIn,
   };
 }

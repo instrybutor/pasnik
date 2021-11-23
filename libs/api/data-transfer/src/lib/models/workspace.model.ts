@@ -1,7 +1,7 @@
 import { WorkspaceUserModel } from './workspace-user.model';
 
 export interface WorkspaceModel {
-  id: string;
+  id: number;
   createdAt: string;
   updatedAt: string;
   name: string;

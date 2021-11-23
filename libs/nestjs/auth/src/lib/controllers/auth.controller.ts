@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Req,
   Res,
@@ -20,11 +21,15 @@ import { CurrentUser } from '../decorators/current-user.decorator';
 import { UnauthenticatedGuard } from '../guards/unauthenticated.guard';
 import { InvitationRequiredErrorFilter } from '../filters/invitation-required-error.filter';
 import { InvitationsService } from '../services/invitations.service';
+import { AuthService } from '../services/auth.service';
 
 @Controller('auth')
 @UseFilters(InvitationRequiredErrorFilter)
 export class AuthController {
-  constructor(private readonly invitationsService: InvitationsService) {}
+  constructor(
+    private readonly invitationsService: InvitationsService,
+    private readonly authService: AuthService
+  ) {}
 
   @UseGuards(CookieAuthenticationGuard)
   @Get('/success')
@@ -67,5 +72,14 @@ export class AuthController {
   @Post('/request-access')
   requestAccess(@Body() { requestToken }: RequestAccessDto) {
     return this.invitationsService.requestAccess(requestToken);
+  }
+
+  @UseGuards(CookieAuthenticationGuard)
+  @Post('/set-default-workspace/:workspaceId')
+  setDefaultWorkspace(
+    @Param('workspaceId') workspaceId: string,
+    @CurrentUser() user: UserEntity
+  ) {
+    return this.authService.setDefaultWorkspace(user, +workspaceId);
   }
 }

@@ -1,8 +1,7 @@
 import { Fragment, useCallback } from 'react';
-import { Dialog, Listbox, Transition } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import { matchPath, NavLink } from 'react-router-dom';
 import {
-  CheckIcon,
   ClockIcon,
   CogIcon,
   CreditCardIcon,
@@ -10,13 +9,15 @@ import {
   HomeIcon,
   QuestionMarkCircleIcon,
   ScaleIcon,
-  SelectorIcon,
   ShieldCheckIcon,
   UserGroupIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import { useAuth } from '@pasnik/auth';
+import { useUserStore } from '@pasnik/store';
+import { SelectWorkspace } from '../select-workspace/select-workspace';
+import { useLayoutStore } from '../layout.store';
+import { AddWorkspaceModal } from '../add-workspace-modal/add-workspace-modal';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
@@ -25,19 +26,6 @@ const navigation = [
   { name: 'Cards', href: '/cards', icon: CreditCardIcon, hide: true },
   { name: 'Recipients', href: '/recipients', icon: UserGroupIcon, hide: true },
   { name: 'Reports', href: '/reports', icon: DocumentReportIcon, hide: true },
-];
-
-const people = [
-  { id: 1, name: 'Wade Cooper' },
-  { id: 2, name: 'Arlene Mccoy' },
-  { id: 3, name: 'Devon Webb' },
-  { id: 4, name: 'Tom Cook' },
-  { id: 5, name: 'Tanya Fox' },
-  { id: 6, name: 'Hellen Schmidt' },
-  { id: 7, name: 'Caroline Schultz' },
-  { id: 8, name: 'Mason Heaney' },
-  { id: 9, name: 'Claudie Smitham' },
-  { id: 10, name: 'Emil Schaefer' },
 ];
 
 const adminNavigation = [
@@ -62,10 +50,12 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
-  const { user } = useAuth();
+  const { showAddWorkspaceModal } = useLayoutStore();
+  const { user } = useUserStore();
   const isCurrentRoute = useCallback((href: string, exact?: boolean) => {
     return !!matchPath(window.location.pathname, { path: href, exact: exact });
   }, []);
+
   return (
     <>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -246,93 +236,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
               aria-label="Sidebar"
             >
               <div className="px-2">
-                <Listbox
-                  onChange={() => {
-                    console.log();
-                  }}
-                  value={'1'}
-                >
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className="flex justify-between w-full text-sm font-medium text-white pl-3 pr-2">
-                        Przestrzenie
-                        <div className="self-end">
-                          <CogIcon
-                            className="h-5 w-5 text-gray-200"
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </Listbox.Label>
-                      <div className="mt-1 relative">
-                        <Listbox.Button className="bg-white relative w-full bg-cyan-800 rounded-md pl-3 pr-10 py-3 text-left text-white hover:bg-cyan-800 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
-                          <span className="block truncate">Instrybutor</span>
-                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <SelectorIcon
-                              className="h-5 w-5 text-gray-200"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
-
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                            {people.map((person) => (
-                              <Listbox.Option
-                                key={person.id}
-                                className={({ active }) =>
-                                  classNames(
-                                    active
-                                      ? 'text-white bg-indigo-600'
-                                      : 'text-gray-900',
-                                    'cursor-default select-none relative py-2 pl-3 pr-9'
-                                  )
-                                }
-                                value={person}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <span
-                                      className={classNames(
-                                        selected
-                                          ? 'font-semibold'
-                                          : 'font-normal',
-                                        'block truncate'
-                                      )}
-                                    >
-                                      {person.name}
-                                    </span>
-
-                                    {selected ? (
-                                      <span
-                                        className={classNames(
-                                          active
-                                            ? 'text-white'
-                                            : 'text-indigo-600',
-                                          'absolute inset-y-0 right-0 flex items-center pr-4'
-                                        )}
-                                      >
-                                        <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
+                <SelectWorkspace onAddClick={showAddWorkspaceModal} />
               </div>
 
               <div className="px-2 space-y-1 mt-6 pt-6">
@@ -423,6 +327,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
           </div>
         </div>
       </div>
+      <AddWorkspaceModal />
     </>
   );
 }

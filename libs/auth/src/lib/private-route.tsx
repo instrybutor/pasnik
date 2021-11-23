@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-
-import { useAuth } from './auth';
+import { useUserStore } from '@pasnik/store';
 
 export interface PrivateRouteProps
   extends Pick<RouteProps, 'path' | 'exact' | 'children'> {
@@ -9,7 +8,7 @@ export interface PrivateRouteProps
 }
 
 export function PrivateRoute({ children, admin, ...rest }: PrivateRouteProps) {
-  const { user } = useAuth();
+  const { user } = useUserStore();
 
   const renderer = useCallback(
     ({ location }) => {

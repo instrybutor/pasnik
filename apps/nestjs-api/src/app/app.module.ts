@@ -10,6 +10,7 @@ import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
 import { InvitationsModule } from './invitations';
 import { JwtStrategy } from './jwt.strategy';
+import { WorkspacesModule } from './workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtStrategy } from './jwt.strategy';
     OrdersModule,
     DishesModule,
     InvitationsModule,
+    WorkspacesModule,
   ],
   providers: [
     JwtStrategy,

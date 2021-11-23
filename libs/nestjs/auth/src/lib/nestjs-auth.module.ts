@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   InvitationsRepository,
   UsersRepository,
+  WorkspacesRepository,
+  WorkspaceUsersRepository,
 } from '@pasnik/nestjs/database';
 
 import { SlackStrategyOptionsFactory } from './strategies/slack-strategy-options.factory';
@@ -22,7 +24,12 @@ import { SlackStrategy } from './strategies/slack-strategy';
   imports: [
     NestJsCommonModule,
     PassportModule.register({ session: true }),
-    TypeOrmModule.forFeature([UsersRepository, InvitationsRepository]),
+    TypeOrmModule.forFeature([
+      UsersRepository,
+      InvitationsRepository,
+      WorkspaceUsersRepository,
+      WorkspacesRepository,
+    ]),
   ],
   controllers: [AuthController],
   providers: [

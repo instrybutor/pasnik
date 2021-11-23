@@ -1,13 +1,12 @@
 import { useCallback } from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-
-import { useAuth } from './auth';
+import { useUserStore } from '@pasnik/store';
 
 export function PublicOnlyRoute({
   children,
   ...rest
 }: Pick<RouteProps, 'path' | 'exact' | 'children'>) {
-  const { user } = useAuth();
+  const { user } = useUserStore();
 
   const renderer = useCallback(() => {
     if (user) {

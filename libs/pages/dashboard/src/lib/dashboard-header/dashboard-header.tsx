@@ -1,12 +1,12 @@
 import { OfficeBuildingIcon } from '@heroicons/react/outline';
-import { useAuth } from '@pasnik/auth';
+import { useUserStore } from '@pasnik/store';
 import { UserAvatar, UserName } from '@pasnik/components';
 
 /* eslint-disable-next-line */
 export interface DashboardHeaderProps {}
 
 export function DashboardHeader(props: DashboardHeaderProps) {
-  const { user } = useAuth();
+  const { user } = useUserStore();
 
   return (
     <div className="bg-white shadow">

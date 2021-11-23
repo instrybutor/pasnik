@@ -12,7 +12,7 @@ import { WorkspaceUserEntity } from './workspace-user.entity';
 @Entity()
 export class WorkspaceEntity implements WorkspaceModel {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @CreateDateColumn()
   createdAt: string;
@@ -23,6 +23,8 @@ export class WorkspaceEntity implements WorkspaceModel {
   @Column()
   name: string;
 
-  @OneToMany(() => WorkspaceUserEntity, ({ workspace }) => workspace)
+  @OneToMany(() => WorkspaceUserEntity, ({ workspace }) => workspace, {
+    cascade: true,
+  })
   workspaceUsers: WorkspaceUserEntity[];
 }

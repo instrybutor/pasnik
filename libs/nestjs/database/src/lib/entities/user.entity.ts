@@ -2,10 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserModel } from '@pasnik/api/data-transfer';
+import { UserProfileEntity } from './user-slack-profile.entity';
+import { UserSettingsEntity } from './user-settings.entity';
 
 @Entity()
 export class UserEntity implements UserModel {
@@ -24,12 +28,6 @@ export class UserEntity implements UserModel {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ nullable: true })
-  googleId?: string | null;
-
-  @Column({ nullable: true })
-  slackId?: string | null;
-
   @Column()
   email: string;
 
@@ -38,4 +36,10 @@ export class UserEntity implements UserModel {
 
   @Column({ default: false })
   isAdmin: boolean;
+
+  @OneToMany(() => UserProfileEntity, (profile) => profile.user)
+  profiles: UserProfileEntity;
+
+  @OneToOne(() => UserSettingsEntity, { nullable: false })
+  settings: UserSettingsEntity;
 }

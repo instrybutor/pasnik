@@ -4,7 +4,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import { Fragment, useCallback } from 'react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
-import { useAuth } from '@pasnik/auth';
+import { useUserStore } from '@pasnik/store';
 
 export interface OrderPaymentProps {
   totalCents: number;
@@ -17,7 +17,7 @@ export function OrderSelectPayer({
   totalCents,
   setPayer,
 }: OrderPaymentProps) {
-  const { users } = useAuth();
+  const { users } = useUserStore();
 
   const setPayerHandler = useCallback(
     (newPayer: UserModel) => {

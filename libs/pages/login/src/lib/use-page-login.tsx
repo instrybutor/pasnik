@@ -9,7 +9,7 @@ import { PopupClosedError } from './auth-popup/popup-closed.error';
 export const usePageLogin = () => {
   const history = useHistory();
   const query = useQuery();
-  const { fetchUser } = useAuth();
+  const { signIn } = useAuth();
   const [requestToken, setRequestToken] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
   const [invitationStatus, setInvitationStatus] = useState<
@@ -38,7 +38,7 @@ export const usePageLogin = () => {
     setHasError(false);
     setInvitationStatus(undefined);
 
-    fetchUser()
+    signIn()
       .then(() => {
         const redirectTo = query.get('redirectTo');
         if (redirectTo) {
@@ -48,7 +48,7 @@ export const usePageLogin = () => {
         }
       })
       .catch(onError);
-  }, [fetchUser, onError, history, query]);
+  }, [signIn, onError, history, query]);
 
   return {
     requestToken,
