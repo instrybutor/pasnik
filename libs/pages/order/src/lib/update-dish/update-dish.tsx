@@ -72,6 +72,7 @@ export function UpdateDish({
             <input
               type="text"
               id="price"
+              inputMode="numeric"
               className={classNames(
                 {
                   'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500':

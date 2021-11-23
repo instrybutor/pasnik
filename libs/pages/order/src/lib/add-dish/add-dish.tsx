@@ -69,6 +69,7 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
           <div className="relative rounded-md shadow-sm">
             <input
               type="text"
+              inputMode="numeric"
               id="price"
               className={classNames(
                 {
