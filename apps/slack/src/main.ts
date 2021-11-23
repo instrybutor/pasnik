@@ -7,8 +7,7 @@ const app = new App({
   logLevel: LogLevel.DEBUG,
   port: +process.env.SLACK_PORT || 3000,
   socketMode: true,
-  appToken:
-    'xapp-1-A02CPE3B6RK-2740705807857-6cd47f4ed532bdf0c7de983be153683a60f19b2c9a089658e1e7099a1e5977fa',
+  appToken: process.env.SLACK_APP_LEVEL_TOKEN,
 });
 
 app.event('app_home_opened', appHomeOpened);
@@ -23,7 +22,7 @@ app.message('hello', async ({ message, say }) => {
 
   console.log(
     await app.client.conversations.list({
-      types: 'private_channel',
+      types: 'public_channel',
     })
   );
 
