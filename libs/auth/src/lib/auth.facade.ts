@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { UserModel } from '@pasnik/api/data-transfer';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from '@pasnik/axios';
 
 export function useAuthFacade() {
   const [user, setUser] = useState<UserModel | null>(null);
   const [users, setUsers] = useState<UserModel[]>([]);
   const [fetching, setFetching] = useState<boolean>(true);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const fetchUser = useCallback((): Promise<UserModel> => {
     return axios.get<UserModel>('/auth/me').then(({ data }) => {
@@ -27,8 +27,8 @@ export function useAuthFacade() {
   const signOut = useCallback(async () => {
     await axios.post('/auth/logout');
     setUser(null);
-    history.push('/login');
-  }, [history]);
+    navigate('/login');
+  }, [navigate]);
 
   const requestAccess = useCallback((requestToken) => {
     return axios
@@ -40,7 +40,7 @@ export function useAuthFacade() {
     Promise.all([fetchUsers(), fetchUser()]).catch(() => {
       setFetching(false);
     });
-  }, [fetchUser, fetchUsers, history]);
+  }, [fetchUser, fetchUsers]);
 
   return {
     user,

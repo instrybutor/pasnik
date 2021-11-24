@@ -21,8 +21,8 @@ services:
       - 6379
   api:
     build:
-      context: ../
-      dockerfile: ./docker/serve.DockerFile
+      context: ""
+      dockerfile: docker/serve.DockerFile
     environment:
       - APP_NAME=nestjs-api
       - DB_HOST=postgres
@@ -33,8 +33,9 @@ services:
       - DB_MIGRATIONS=true
       - JWT_SECRET=$JWT_SECRET
     volumes:
+      - ./:/app
+      - /app/dist
       - node-modules:/app/node_modules
-      - ../:/app
     depends_on:
       - postgres
       - redis
@@ -42,8 +43,8 @@ services:
       - 3334
   bff:
     build:
-      context: ../
-      dockerfile: ./docker/serve.DockerFile
+      context: ""
+      dockerfile: docker/serve.DockerFile
     ports:
       - "3334:3334"
     environment:
@@ -65,8 +66,9 @@ services:
       - SLACK_CLIENT_ID=$SLACK_CLIENT_ID
       - SLACK_SECRET=$SLACK_SECRET
     volumes:
+      - ./:/app
+      - /app/dist
       - node-modules:/app/node_modules
-      - ../:/app
     depends_on:
       - postgres
       - redis

@@ -1,5 +1,5 @@
-import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
-import { PrivateRoute, ProvideAuth, PublicOnlyRoute } from '@pasnik/auth';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ProvideAuth, PublicOnly, RequireAuth } from '@pasnik/auth';
 
 import { PagesLogin } from '@pasnik/pages/login';
 import { PagesDashboard } from '@pasnik/pages/dashboard';
@@ -17,34 +17,36 @@ export function App() {
   return (
     <BrowserRouter>
       <ProvideAuth>
-        <Switch>
-          <PublicOnlyRoute path="/login">
-            <PagesLogin />
-          </PublicOnlyRoute>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <PublicOnly>
+                <PagesLogin />
+              </PublicOnly>
+            }
+          />
 
-          <Layout version={version}>
-            <PrivateRoute exact path="/">
-              <PagesDashboard />
-            </PrivateRoute>
-            <PrivateRoute path="/create-order">
-              <CreateOrder />
-            </PrivateRoute>
-            <PrivateRoute path="/history">
-              <PagesOrders />
-            </PrivateRoute>
-            <PrivateRoute exact path="/order/:slug">
-              <PagesOrder />
-            </PrivateRoute>
-            <PrivateRoute exact path="/order/:slug/edit">
-              <EditOrder />
-            </PrivateRoute>
-            <PrivateRoute admin={true} path="/admin/invitations">
-              <PagesAdminInvitations />
-            </PrivateRoute>
-          </Layout>
-
-          <Redirect to="/login" />
-        </Switch>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Layout version={version} />
+              </RequireAuth>
+            }
+          >
+            <Route index element={<PagesDashboard />} />
+            <Route path="/create-order" element={<CreateOrder />} />
+            <Route path="/history" element={<PagesOrders />} />
+            <Route path="/order">
+              <Route path=":slug" element={<PagesOrder />} />
+              <Route path=":slug/edit" element={<EditOrder />} />
+            </Route>
+            <Route path="/admin" element={<RequireAuth admin={true} />}>
+              <Route path="invitations" element={<PagesAdminInvitations />} />
+            </Route>
+          </Route>
+        </Routes>
       </ProvideAuth>
     </BrowserRouter>
   );

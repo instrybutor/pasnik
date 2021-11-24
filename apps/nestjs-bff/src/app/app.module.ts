@@ -17,7 +17,7 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ReverseProxyMiddleware)
-      .forRoutes({ path: 'api', method: RequestMethod.ALL })
+      .forRoutes({ path: 'api/**', method: RequestMethod.ALL })
       .apply(BodyParserMiddleware)
       .forRoutes({
         path: '/auth/**',
