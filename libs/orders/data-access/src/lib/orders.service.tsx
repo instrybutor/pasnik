@@ -4,9 +4,9 @@ import axios from '@pasnik/axios';
 export const fetchOrders = () =>
   axios.get<OrderModel[]>('/api/orders').then(({ data }) => data);
 
-export const createOrder = (payload: CreateOrderDto) => {
+export const createOrder = (workspaceId: number, payload: CreateOrderDto) => {
   return axios
-    .post<OrderModel>('/api/orders', payload)
+    .post<OrderModel>(`/api/workspaces/${workspaceId}/orders`, payload)
     .then(({ data }) => data);
 };
 

@@ -2,7 +2,11 @@ import { EntityRepository, Repository } from 'typeorm';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
 
-import { OrderEntity, UserEntity } from '@pasnik/nestjs/database';
+import {
+  OrderEntity,
+  UserEntity,
+  WorkspaceEntity,
+} from '@pasnik/nestjs/database';
 import {
   CreateOrderDto,
   MarkAsDeliveredDto,
@@ -13,9 +17,14 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 @EntityRepository(OrderEntity)
 export class OrdersRepository extends Repository<OrderEntity> {
-  async createOrder(createOrderDto: CreateOrderDto, user: UserEntity) {
+  async createOrder(
+    createOrderDto: CreateOrderDto,
+    workspace: WorkspaceEntity,
+    user: UserEntity
+  ) {
     const order = new OrderEntity();
 
+    order.workspace = workspace;
     order.user = user;
     order.from = createOrderDto.from;
     order.shippingCents = createOrderDto.shippingCents;

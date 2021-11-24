@@ -2,14 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import {
+  OrderActionsRepository,
   OrdersRepository,
   UserEntity,
   WorkspaceEntity,
   WorkspacesRepository,
+  WorkspaceUserEntity,
 } from '@pasnik/nestjs/database';
-import { CreateWorkspaceDto, OrderStatus } from '@pasnik/api/data-transfer';
+import {
+  CreateOrderDto,
+  CreateWorkspaceDto,
+  OrderAction,
+  OrderStatus,
+} from '@pasnik/api/data-transfer';
 import { sub } from 'date-fns';
-import { Between } from 'typeorm';
+import { Between, Connection } from 'typeorm';
 
 @Injectable()
 export class WorkspacesService {
@@ -17,8 +24,34 @@ export class WorkspacesService {
     @InjectRepository(WorkspacesRepository)
     private workspaceRepository: WorkspacesRepository,
     @InjectRepository(OrdersRepository)
-    private ordersRepository: OrdersRepository
+    private ordersRepository: OrdersRepository,
+    private connection: Connection
   ) {}
+
+  async createOrder(
+    createOrderDto: CreateOrderDto,
+    { user, workspace }: WorkspaceUserEntity
+  ) {
+    return await this.connection.transaction(async (manager) => {
+      const ordersRepository = manager.getCustomRepository(OrdersRepository);
+      const orderActionsRepository = manager.getCustomRepository(
+        OrderActionsRepository
+      );
+
+      const order = await ordersRepository.createOrder(
+        createOrderDto,
+        workspace,
+        user
+      );
+      await orderActionsRepository.createAction(
+        user,
+        order,
+        OrderAction.Created
+      );
+
+      return order;
+    });
+  }
 
   findActiveOrders(workspace: WorkspaceEntity) {
     const now = new Date();

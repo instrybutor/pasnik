@@ -7,6 +7,6 @@ export interface UserModel {
   familyName?: string;
   email: string;
   avatarImg?: string | null;
-  currentWorkspace?: WorkspaceModel;
+  currentWorkspace: WorkspaceModel;
   currentWorkspaceId: number;
 }

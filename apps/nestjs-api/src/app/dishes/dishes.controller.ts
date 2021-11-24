@@ -9,45 +9,46 @@ import {
 } from '@nestjs/common';
 
 import { CurrentUser } from '@pasnik/nestjs/auth';
-import { UserEntity } from '@pasnik/nestjs/database';
+import { OrderEntity, UserEntity } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
 import { DishesService } from './dishes.service';
+import { CurrentOrder } from '../orders/current-order.decorator';
 
-@Controller('orders/:orderId/dishes')
+@Controller('orders/:slug/dishes')
 export class DishesController {
   constructor(private readonly dishesService: DishesService) {}
 
   @Get()
-  findAll(@Param('orderId') orderId: string) {
-    return this.dishesService.findAll(orderId);
+  findAll(@CurrentOrder() order: OrderEntity) {
+    return this.dishesService.findAll(order);
   }
 
   @Get(':id')
-  findOne(@Param('orderId') orderId: string, @Param('id') id: string) {
-    return this.dishesService.findOne(orderId, +id);
+  findOne(@CurrentOrder() order: OrderEntity, @Param('id') id: string) {
+    return this.dishesService.findOne(order, +id);
   }
 
   @Post()
   create(
-    @Param('orderId') orderId: string,
+    @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
     @CurrentUser() user: UserEntity
   ) {
-    return this.dishesService.create(addDishDto, orderId, user);
+    return this.dishesService.create(addDishDto, order, user);
   }
 
   @Delete(':id')
-  delete(@Param('orderId') orderId: string, @Param('id') id: string) {
-    return this.dishesService.delete(orderId, +id);
+  delete(@CurrentOrder() order: OrderEntity, @Param('id') id: string) {
+    return this.dishesService.delete(order, +id);
   }
 
   @Put(':id')
   update(
-    @Param('orderId') orderId: string,
+    @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
     @Param('id') id: string
   ) {
-    return this.dishesService.update(orderId, +id, addDishDto);
+    return this.dishesService.update(order, +id, addDishDto);
   }
 }

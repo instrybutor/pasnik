@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 
 import { OrderEntity, UserEntity } from '@pasnik/nestjs/database';
 import {
-  CreateOrderDto,
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
   SetPayerDto,
@@ -13,29 +12,21 @@ import { CurrentUser } from '@pasnik/nestjs/auth';
 import { OrdersService } from './orders.service';
 import { CurrentOrder } from './current-order.decorator';
 
-@Controller('orders')
+@Controller('orders/:slug')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @Post()
-  create(
-    @Body() createOrderDto: CreateOrderDto,
-    @CurrentUser() user: UserEntity
-  ) {
-    return this.ordersService.create(createOrderDto, user);
-  }
-
-  @Get(':slug')
+  @Get()
   findOne(@CurrentOrder() order: OrderEntity) {
     return this.ordersService.findOneById(order.id);
   }
 
-  @Put(':slug')
+  @Put()
   update(@CurrentOrder() order: OrderEntity, @Body() payload: UpdateOrderDto) {
     return this.ordersService.update(order, payload);
   }
 
-  @Post(':slug/mark-as-ordered')
+  @Post('mark-as-ordered')
   markAsOrdered(
     @CurrentOrder() order: OrderEntity,
     @Body() markAsOrderedDto: MarkAsOrderedDto,
@@ -44,7 +35,7 @@ export class OrdersController {
     return this.ordersService.markAsOrdered(order.id, markAsOrderedDto, user);
   }
 
-  @Post(':slug/mark-as-closed')
+  @Post('mark-as-closed')
   markAsClosed(
     @CurrentOrder() order: OrderEntity,
     @CurrentUser() user: UserEntity
@@ -52,7 +43,7 @@ export class OrdersController {
     return this.ordersService.markAsClosed(order.id, user);
   }
 
-  @Post(':slug/mark-as-open')
+  @Post('mark-as-open')
   markAsOpened(
     @CurrentOrder() order: OrderEntity,
     @CurrentUser() user: UserEntity
@@ -60,7 +51,7 @@ export class OrdersController {
     return this.ordersService.markAsOpen(order.id, user);
   }
 
-  @Post(':slug/set-payer')
+  @Post('set-payer')
   markAsPaid(
     @CurrentOrder() order: OrderEntity,
     @Body() setPayerDto: SetPayerDto,
@@ -69,7 +60,7 @@ export class OrdersController {
     return this.ordersService.setPayer(order.id, setPayerDto, user);
   }
 
-  @Post(':slug/mark-as-delivered')
+  @Post('mark-as-delivered')
   markAsDelivered(
     @CurrentOrder() order: OrderEntity,
     @Body() markAsDeliveredDto: MarkAsDeliveredDto,

@@ -11,7 +11,6 @@ import {
   UsersRepository,
 } from '@pasnik/nestjs/database';
 import {
-  CreateOrderDto,
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
   MarkAsPaidDto,
@@ -44,24 +43,6 @@ export class OrdersService {
     return await this.ordersRepository.save({
       ...order,
       ...payload,
-    });
-  }
-
-  async create(createOrderDto: CreateOrderDto, user: UserEntity) {
-    return await this.connection.transaction(async (manager) => {
-      const ordersRepository = manager.getCustomRepository(OrdersRepository);
-      const orderActionsRepository = manager.getCustomRepository(
-        OrderActionsRepository
-      );
-
-      const order = await ordersRepository.createOrder(createOrderDto, user);
-      await orderActionsRepository.createAction(
-        user,
-        order,
-        OrderAction.Created
-      );
-
-      return order;
     });
   }
 

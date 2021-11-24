@@ -27,8 +27,8 @@ export const useOrderFacade = () => {
   });
 
   const orderDishesKey = useMemo(
-    () => ['fetch', 'order', orderQuery?.data?.id, 'dishes'],
-    [orderQuery?.data?.id]
+    () => ['fetch', 'order', slug, 'dishes'],
+    [slug]
   );
 
   const dishesQuery = useQuery(
@@ -39,7 +39,7 @@ export const useOrderFacade = () => {
       return service.fetchDishes(orderId!);
     },
     {
-      enabled: Boolean(slug) && Boolean(orderQuery?.data?.id),
+      enabled: Boolean(slug),
       refetchOnMount: false,
       refetchInterval: REFETCH_INTERVAL,
     }
@@ -66,32 +66,32 @@ export const useOrderFacade = () => {
   );
 
   const markAsDeliveredMutation = useMutation(
-    (orderId: string) => service.markAsDelivered(orderId),
+    (order: OrderModel) => service.markAsDelivered(order),
     optimisticOrderStatusUpdate(OrderStatus.Delivered)
   );
   const markAsOrderedMutation = useMutation(
-    (orderId: string) => service.markAsOrdered(orderId),
+    (order: OrderModel) => service.markAsOrdered(order),
     optimisticOrderStatusUpdate(OrderStatus.Ordered)
   );
   const markAsOpenMutation = useMutation(
-    (orderId: string) => service.markAsOpen(orderId),
+    (order: OrderModel) => service.markAsOpen(order),
     optimisticOrderStatusUpdate(OrderStatus.InProgress)
   );
   const markAsClosedMutation = useMutation(
-    (orderId: string) => service.markAsClosed(orderId),
+    (order: OrderModel) => service.markAsClosed(order),
     optimisticOrderStatusUpdate(OrderStatus.Canceled)
   );
 
   const dishUpdate = useMutation(
     ({
-      orderId,
+      order,
       dishId,
       payload,
     }: {
-      orderId: string;
+      order: OrderModel;
       dishId: number;
       payload: AddDishDto;
-    }) => service.updateDish(orderId, dishId, payload),
+    }) => service.updateDish(order, dishId, payload),
     {
       onMutate: async ({ dishId, payload }) => {
         await queryClient.cancelQueries(orderDishesKey);
@@ -120,8 +120,8 @@ export const useOrderFacade = () => {
   );
 
   const dishDelete = useMutation(
-    ({ orderId, dishId }: { orderId: string; dishId: number }) =>
-      service.deleteDish(orderId, dishId),
+    ({ order, dishId }: { order: OrderModel; dishId: number }) =>
+      service.deleteDish(order, dishId),
     {
       onMutate: async ({ dishId }) => {
         await queryClient.cancelQueries(orderDishesKey);
@@ -141,8 +141,8 @@ export const useOrderFacade = () => {
   );
 
   const dishAdd = useMutation(
-    ({ orderId, payload }: { orderId: string; payload: AddDishDto }) =>
-      service.addDish(orderId, payload),
+    ({ order, payload }: { order: OrderModel; payload: AddDishDto }) =>
+      service.addDish(order, payload),
     {
       onMutate: async ({ payload }) => {
         await queryClient.cancelQueries(orderDishesKey);

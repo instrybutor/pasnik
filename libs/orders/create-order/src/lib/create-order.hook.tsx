@@ -7,9 +7,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import {
   CreateOrderDto,
-  orderValidator,
   OrderModel,
+  orderValidator,
 } from '@pasnik/api/data-transfer';
+import { useUserStore } from '@pasnik/store';
 
 interface FormData extends Omit<CreateOrderDto, 'shippingCents'> {
   shippingCents: string;
@@ -24,13 +25,14 @@ export const useCreateOrder = () => {
     resolver: yupResolver(orderValidator),
   });
   const { createOrder } = useOrdersFacade();
+  const workspaceId = useUserStore(({ user }) => user?.currentWorkspaceId);
 
   const [error, setError] = useState<string | null>(null);
   const history = useHistory();
 
   const onSubmit = useCallback(
     (data: FormData) => {
-      createOrder({
+      createOrder(workspaceId, {
         ...data,
         orderAt: new Date().toISOString(),
         shippingCents: currency(data.shippingCents).multiply(100).value,
@@ -38,7 +40,7 @@ export const useCreateOrder = () => {
         .then((params: OrderModel) => history.push(`/order/${params.slug}`))
         .catch((err: Error) => setError(err.message));
     },
-    [createOrder, history]
+    [workspaceId, createOrder, history]
   );
 
   return {

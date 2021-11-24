@@ -35,23 +35,23 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
   const { url } = useRouteMatch();
 
   const markAsDeliveredHandler = useCallback(
-    () => markAsDeliveredMutation.mutateAsync(order.id),
-    [markAsDeliveredMutation, order.id]
+    () => markAsDeliveredMutation.mutateAsync(order),
+    [markAsDeliveredMutation, order]
   );
 
   const closeOrderHandler = useCallback(
-    () => markAsClosedMutation.mutateAsync(order.id),
-    [markAsClosedMutation, order.id]
+    () => markAsClosedMutation.mutateAsync(order),
+    [markAsClosedMutation, order]
   );
 
   const openOrderHandler = useCallback(
-    () => markAsOpenMutation.mutateAsync(order.id),
-    [markAsOpenMutation, order.id]
+    () => markAsOpenMutation.mutateAsync(order),
+    [markAsOpenMutation, order]
   );
 
   const makeOrderHandler = useCallback(
-    () => markAsOrderedMutation.mutateAsync(order.id),
-    [markAsOrderedMutation, order.id]
+    () => markAsOrderedMutation.mutateAsync(order),
+    [markAsOrderedMutation, order]
   );
 
   useEffect(() => {

@@ -22,7 +22,7 @@ export interface OrderPaymentProps {
 export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
   const { orderQuery } = useOrderFacade();
   const payerUpdate = useMutation((payerId: number) =>
-    service.setPayer(order.id, {
+    service.setPayer(order, {
       payerId,
     })
   );

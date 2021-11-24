@@ -33,7 +33,7 @@ export const useOrderDishes = ({ order }: Props) => {
       }
 
       await dishAdd.mutateAsync({
-        orderId: order?.id,
+        order,
         payload: {
           ...data,
           priceCents: data.priceCents * 100,
@@ -52,7 +52,7 @@ export const useOrderDishes = ({ order }: Props) => {
       }
 
       await dishAdd.mutateAsync({
-        orderId: order?.id,
+        order,
         payload,
       });
     },
@@ -65,7 +65,7 @@ export const useOrderDishes = ({ order }: Props) => {
         return;
       }
 
-      await dishDelete.mutateAsync({ orderId: order?.id, dishId: dish.id });
+      await dishDelete.mutateAsync({ order, dishId: dish.id });
     },
     [dishDelete, order]
   );
@@ -77,7 +77,7 @@ export const useOrderDishes = ({ order }: Props) => {
       }
 
       await dishUpdate.mutateAsync({
-        orderId: order?.id,
+        order,
         dishId: dish.id,
         payload: {
           ...dishDto,

@@ -16,7 +16,10 @@ interface OrdersState {
   fetchOrders: () => Promise<OrderModel[]>;
   fetchOrder: (slug: string) => Promise<OrderModel>;
   updateOrder: (slug: string, payload: UpdateOrderDto) => Promise<OrderModel>;
-  createOrder: (payload: CreateOrderDto) => Promise<OrderModel>;
+  createOrder: (
+    workspaceId: number,
+    payload: CreateOrderDto
+  ) => Promise<OrderModel>;
 }
 
 export const createOrdersStore = create<OrdersState>((set) => ({
@@ -59,8 +62,8 @@ export const createOrdersStore = create<OrdersState>((set) => ({
     return order;
   },
 
-  createOrder: async (payload: CreateOrderDto) => {
-    const order = await service.createOrder(payload);
+  createOrder: async (workspaceId: number, payload: CreateOrderDto) => {
+    const order = await service.createOrder(workspaceId, payload);
 
     set((state) => ({
       ...state,

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   DishesRepository,
-  OrdersRepository,
+  OrderEntity,
   UserEntity,
 } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
@@ -10,15 +10,13 @@ import { AddDishDto } from '@pasnik/api/data-transfer';
 @Injectable()
 export class DishesService {
   constructor(
-    @InjectRepository(OrdersRepository)
-    private ordersRepository: OrdersRepository,
     @InjectRepository(DishesRepository)
     private dishesRepository: DishesRepository
   ) {}
 
-  findAll(orderId: string) {
+  findAll(order: OrderEntity) {
     return this.dishesRepository.find({
-      where: { orderId },
+      where: { order },
       relations: ['user'],
       order: {
         createdAt: 'ASC',
@@ -26,28 +24,27 @@ export class DishesService {
     });
   }
 
-  findOne(orderId: string, id: number) {
+  findOne(order: OrderEntity, id: number) {
     return this.dishesRepository.findOneOrFail({
-      where: { orderId, id },
+      where: { order, id },
       relations: ['user'],
     });
   }
 
-  async create(addDishDto: AddDishDto, orderId: string, user: UserEntity) {
-    const order = await this.ordersRepository.findOneOrFail(orderId);
+  async create(addDishDto: AddDishDto, order: OrderEntity, user: UserEntity) {
     const dish = await this.dishesRepository.addDish(addDishDto, order, user);
 
-    return this.findOne(orderId, dish.id);
+    return this.findOne(order, dish.id);
   }
 
-  async delete(orderId: string, id: number) {
-    return await this.dishesRepository.delete({ id, orderId });
+  async delete(order: OrderEntity, id: number) {
+    return await this.dishesRepository.delete({ id, order });
   }
 
-  async update(orderId: string, dishId: number, addDishDto: AddDishDto) {
-    const dish = await this.findOne(orderId, dishId);
+  async update(order: OrderEntity, dishId: number, addDishDto: AddDishDto) {
+    const dish = await this.findOne(order, dishId);
     await this.dishesRepository.updateDish(addDishDto, dish);
 
-    return this.findOne(orderId, dish.id);
+    return this.findOne(order, dish.id);
   }
 }
