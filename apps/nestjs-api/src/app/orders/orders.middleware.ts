@@ -29,7 +29,11 @@ export class OrdersMiddleware implements NestMiddleware {
     });
 
     if (!workspaceUser) {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    if (!order) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
 
     res.locals.workspaceUser = workspaceUser;

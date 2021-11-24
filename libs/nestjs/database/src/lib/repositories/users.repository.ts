@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from '../entities';
+import { UserEntity, WorkspaceEntity, WorkspaceUserEntity } from '../entities';
+import { WorkspaceUserRole } from '@pasnik/api/data-transfer';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity | undefined> {
@@ -28,6 +29,15 @@ export class UsersRepository extends Repository<UserEntity | undefined> {
     user.email = email;
     user.givenName = givenName;
     user.familyName = familyName;
+    if (!user.currentWorkspace) {
+      const workspace = new WorkspaceEntity();
+      const workspaceUser = new WorkspaceUserEntity();
+      workspaceUser.user = user;
+      workspaceUser.role = WorkspaceUserRole.Admin;
+      workspace.name = 'Default';
+      workspace.workspaceUsers = [workspaceUser];
+      user.currentWorkspace = workspace;
+    }
     await this.save(user);
     return this.findOne(user.id);
   }

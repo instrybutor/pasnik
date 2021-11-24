@@ -19,7 +19,7 @@ export class AppModule {
       .apply(ReverseProxyMiddleware)
       .forRoutes({ path: 'api/**', method: RequestMethod.ALL })
       .apply(BodyParserMiddleware)
-      .forRoutes({ path: '/auth/**', method: RequestMethod.ALL })
+      .forRoutes({ path: 'auth/**', method: RequestMethod.ALL })
       .apply(FrontendMiddleware)
       .exclude('api/(.*)', 'auth/(.*)')
       .forRoutes({ path: '/**', method: RequestMethod.ALL });

@@ -11,13 +11,21 @@ export class WorkspaceUserEntity implements WorkspaceUserModel {
   @CreateDateColumn()
   createdAt: string;
 
-  @ManyToOne(() => WorkspaceEntity, { primary: true, onDelete: 'CASCADE' })
+  @ManyToOne(() => WorkspaceEntity, {
+    primary: true,
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   workspace: WorkspaceEntity;
 
   @Column()
   workspaceId: number;
 
-  @ManyToOne(() => UserEntity, { primary: true, onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, {
+    primary: true,
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   user: UserEntity;
 
   @ManyToOne(() => UserEntity, { onDelete: 'SET NULL' })

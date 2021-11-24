@@ -41,7 +41,11 @@ export class UserEntity implements UserModel {
   @Column({ default: false })
   isAdmin: boolean;
 
-  @ManyToOne(() => WorkspaceEntity, { nullable: false, onDelete: 'SET NULL' })
+  @ManyToOne(() => WorkspaceEntity, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'RESTRICT',
+  })
   currentWorkspace: WorkspaceEntity;
 
   @Column()

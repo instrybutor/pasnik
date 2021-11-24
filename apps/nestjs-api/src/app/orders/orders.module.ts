@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   DishEntity,
@@ -11,7 +11,6 @@ import {
 
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
-import { OrdersMiddleware } from './orders.middleware';
 
 @Module({
   imports: [
@@ -27,11 +26,4 @@ import { OrdersMiddleware } from './orders.middleware';
   controllers: [OrdersController],
   providers: [OrdersService],
 })
-export class OrdersModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(OrdersMiddleware).forRoutes({
-      path: '/orders/:slug',
-      method: RequestMethod.ALL,
-    });
-  }
-}
+export class OrdersModule {}

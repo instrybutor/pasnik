@@ -8,7 +8,7 @@ interface WorkspacesParams {
 }
 
 @Injectable()
-export class WorkspaceUserMiddleware implements NestMiddleware {
+export class WorkspacesMiddleware implements NestMiddleware {
   constructor(
     private readonly workspaceUsersRepository: WorkspaceUsersRepository
   ) {}
@@ -20,8 +20,10 @@ export class WorkspaceUserMiddleware implements NestMiddleware {
       relations: ['workspace', 'user'],
     });
 
+    console.log(workspaceUser);
+
     if (!workspaceUser) {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
 
     res.locals.workspaceUser = workspaceUser;
