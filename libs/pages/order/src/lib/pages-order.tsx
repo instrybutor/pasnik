@@ -11,9 +11,7 @@ import OrderSectionLoading from './order-section-loading/order-section-loading';
 
 import { useOrderFacade } from './order-store/order.facade';
 
-export interface PagesOrderProps {
-  slug: string;
-}
+export type PagesOrderProps = 'slug';
 
 export function PagesOrder() {
   const { orderQuery, dishesQuery } = useOrderFacade();

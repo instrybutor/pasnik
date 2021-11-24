@@ -9,6 +9,7 @@
     "start:api:detached": "npm run docker-compose up -- -d",
     "dev": "run-p start start:api",
     "build": "nx build",
+    "build:docker": "npm run docker-compose build --no-cache --force-recreate",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
@@ -27,7 +28,7 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "docker-compose": "docker-compose -f ./docker/docker-compose.yml --env-file .env.local",
+    "docker-compose": "docker-compose -f docker-compose.yml --env-file .env.local",
     "typeorm": "ts-node --transpile-only --project libs/nestjs/migrations/tsconfig.lib.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ormconfig.ts",
     "approve-user": "ts-node --project tools/tsconfig.tools.json tools/scripts/approve-user",
     "make-admin": "ts-node --project tools/tsconfig.tools.json tools/scripts/make-admin"

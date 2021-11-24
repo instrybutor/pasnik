@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   BookOpenIcon,
   CalendarIcon,
@@ -32,7 +32,6 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
     markAsOpenMutation,
     markAsOrderedMutation,
   } = useOrderFacade();
-  const { url } = useRouteMatch();
 
   const markAsDeliveredHandler = useCallback(
     () => markAsDeliveredMutation.mutateAsync(order.id),
@@ -159,7 +158,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
             {order.status === OrderStatus.InProgress && (
               <span className="hidden sm:block sm:ml-3">
                 <Link
-                  to={`${url}/edit`}
+                  to="edit"
                   className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                 >
                   <PencilIcon
@@ -211,7 +210,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                     <Menu.Item>
                       {({ active }) => (
                         <Link
-                          to={`${url}/edit`}
+                          to="edit"
                           className="inline-flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full"
                         >
                           <PencilIcon
