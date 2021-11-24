@@ -5,7 +5,7 @@ import { ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { useAuth } from '@pasnik/auth';
 import { UserAvatar, UserName } from '@pasnik/components';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@pasnik/store';
 
 export interface HeaderProps {
@@ -16,7 +16,7 @@ export interface HeaderProps {
 export function Header({ openSidebar }: HeaderProps) {
   const { signOut } = useAuth();
   const { user } = useUserStore();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const openSidebarHandler = useCallback(() => {
     openSidebar();
@@ -27,8 +27,8 @@ export function Header({ openSidebar }: HeaderProps) {
   }, [signOut]);
 
   const createOrderHandler = useCallback(() => {
-    history.push('/create-order');
-  }, [history]);
+    navigate('/create-order');
+  }, [navigate]);
 
   return (
     <div className="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:border-none">

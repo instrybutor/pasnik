@@ -1,5 +1,6 @@
 import Footer from './footer/footer';
 import { PropsWithChildren } from 'react';
+import { Outlet } from 'react-router';
 import Sidebar from './sidebar/sidebar';
 import Header from './header/header';
 import { useLayoutStore } from './layout.store';
@@ -22,7 +23,7 @@ export function Layout({ children, version }: PropsWithChildren<LayoutProps>) {
       <div className="flex-1 overflow-auto focus:outline-none flex-col flex">
         <Header sidebarOpen={sidebarOpen} openSidebar={openSidebar} />
         <main className="flex-1 relative pb-8 z-0 overflow-y-auto flex-grow">
-          {children}
+          <Outlet />
         </main>
       </div>
     </div>

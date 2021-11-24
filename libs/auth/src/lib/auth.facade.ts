@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from '@pasnik/axios';
 import { useUserStore } from '@pasnik/store';
 
 export function useAuthFacade() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { fetchUsers, fetchMe, resetState } = useUserStore();
   const isLoggedIn = useUserStore(({ user }) => !!user);
 
@@ -17,8 +17,8 @@ export function useAuthFacade() {
   const signOut = useCallback(async () => {
     await axios.post('/auth/logout');
     resetState();
-    history.push('/login');
-  }, [history, resetState]);
+    navigate('/login');
+  }, [navigate, resetState]);
 
   const requestAccess = useCallback((requestToken) => {
     return axios

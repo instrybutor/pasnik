@@ -1,10 +1,11 @@
 # Nodejs Base image
 FROM node:14-alpine
 WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-# install and app dependencies
 COPY package*.json ./
+
+# install and app dependencies
 RUN npm install
+#ENV PATH /app/node_modules/.bin:$PATH
 
 # start app
-CMD npm run start ${APP_NAME} --host 0.0.0.0
+CMD npm run nx serve ${APP_NAME} --host 0.0.0.0

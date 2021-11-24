@@ -20,7 +20,7 @@ export const useOrderFacade = () => {
 
   const orderKey = useMemo(() => ['fetch', 'order', slug], [slug]);
 
-  const orderQuery = useQuery(orderKey, () => service.fetchOrder(slug), {
+  const orderQuery = useQuery(orderKey, () => service.fetchOrder(slug!), {
     enabled: Boolean(slug),
     refetchOnMount: false,
     refetchInterval: REFETCH_INTERVAL,

@@ -1,6 +1,6 @@
-import { Fragment, useCallback } from 'react';
+import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { matchPath, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   ClockIcon,
   CogIcon,
@@ -50,11 +50,8 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
-  const { showAddWorkspaceModal } = useLayoutStore();
   const { user } = useUserStore();
-  const isCurrentRoute = useCallback((href: string, exact?: boolean) => {
-    return !!matchPath(window.location.pathname, { path: href, exact: exact });
-  }, []);
+  const { showAddWorkspaceModal } = useLayoutStore();
 
   return (
     <>
@@ -125,24 +122,17 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                     <NavLink
                       key={item.name}
                       to={item.href}
-                      exact={item.exact}
-                      activeClassName="bg-cyan-800 text-white"
-                      className={classNames(
-                        'group flex items-center px-2 py-2 text-base font-medium rounded-md',
-                        {
-                          hidden: item.hide,
-                          'bg-cyan-800 text-white': isCurrentRoute(
-                            item.href,
-                            item.exact
-                          ),
-                          'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                            !isCurrentRoute(item.href, item.exact),
-                        }
-                      )}
-                      aria-current={
-                        isCurrentRoute(item.href, item.exact)
-                          ? 'page'
-                          : undefined
+                      end={item.exact}
+                      className={({ isActive }) =>
+                        classNames(
+                          'group flex items-center px-2 py-2 text-base font-medium rounded-md',
+                          {
+                            hidden: item.hide,
+                            'bg-cyan-800 text-white': isActive,
+                            'text-cyan-100 hover:text-white hover:bg-cyan-600':
+                              !isActive,
+                          }
+                        )
                       }
                     >
                       <item.icon
@@ -160,18 +150,17 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                         <NavLink
                           key={item.name}
                           to={item.href}
-                          exact={item.exact}
-                          className={classNames(
-                            'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
-                            {
-                              'bg-cyan-800 text-white': isCurrentRoute(
-                                item.href,
-                                item.exact
-                              ),
-                              'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                                !isCurrentRoute(item.href, item.exact),
-                            }
-                          )}
+                          end={item.exact}
+                          className={({ isActive }) =>
+                            classNames(
+                              'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
+                              {
+                                'bg-cyan-800 text-white': isActive,
+                                'text-cyan-100 hover:text-white hover:bg-cyan-600':
+                                  !isActive,
+                              }
+                            )
+                          }
                         >
                           <item.icon
                             className="mr-4 h-6 w-6 text-cyan-200"
@@ -247,21 +236,17 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                   <NavLink
                     key={item.name}
                     to={item.href}
-                    exact={item.exact}
-                    className={classNames(
-                      'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
-                      {
-                        hidden: item.hide,
-                        'bg-cyan-800 text-white': isCurrentRoute(
-                          item.href,
-                          item.exact
-                        ),
-                        'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                          !isCurrentRoute(item.href, item.exact),
-                      }
-                    )}
-                    aria-current={
-                      isCurrentRoute(item.href, item.exact) ? 'page' : undefined
+                    end={item.exact}
+                    className={({ isActive }) =>
+                      classNames(
+                        'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
+                        {
+                          hidden: item.hide,
+                          'bg-cyan-800 text-white': isActive,
+                          'text-cyan-100 hover:text-white hover:bg-cyan-600':
+                            !isActive,
+                        }
+                      )
                     }
                   >
                     <item.icon
@@ -279,14 +264,16 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                       <NavLink
                         key={item.name}
                         to={item.href}
-                        className={classNames(
-                          'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
-                          {
-                            'bg-cyan-800 text-white': isCurrentRoute(item.href),
-                            'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                              !isCurrentRoute(item.href),
-                          }
-                        )}
+                        className={({ isActive }) =>
+                          classNames(
+                            'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
+                            {
+                              'bg-cyan-800 text-white': isActive,
+                              'text-cyan-100 hover:text-white hover:bg-cyan-600':
+                                !isActive,
+                            }
+                          )
+                        }
                       >
                         <item.icon
                           className="mr-4 h-6 w-6 text-cyan-200"

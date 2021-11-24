@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@pasnik/auth';
 import { InvitationRequiredError, useQuery } from '@pasnik/shared/utils';
@@ -7,7 +7,7 @@ import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PopupClosedError } from './auth-popup/popup-closed.error';
 
 export const usePageLogin = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const { signIn } = useAuth();
   const [requestToken, setRequestToken] = useState<string | null>(null);
@@ -42,13 +42,13 @@ export const usePageLogin = () => {
       .then(() => {
         const redirectTo = query.get('redirectTo');
         if (redirectTo) {
-          history.push(decodeURIComponent(redirectTo));
+          navigate(decodeURIComponent(redirectTo));
         } else {
-          history.push('/');
+          navigate('/');
         }
       })
       .catch(onError);
-  }, [signIn, onError, history, query]);
+  }, [signIn, onError, navigate, query]);
 
   return {
     requestToken,
