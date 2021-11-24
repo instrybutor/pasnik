@@ -36,9 +36,6 @@ export class AuthService {
     const currentUser = await this.usersRepository.findOne({
       where: { email },
     });
-    const currentSlackProfile = await this.usersRepository.findOne({
-      where: {},
-    });
     return this.usersRepository.upsertUser({
       email,
       avatarImg: currentUser.avatarImg ?? picture,

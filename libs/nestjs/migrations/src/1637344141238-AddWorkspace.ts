@@ -140,25 +140,69 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
         isNullable: false,
       })
     );
+
+    const orderTable = await queryRunner.getTable('order_entity');
+
+    await queryRunner.addColumn(
+      orderTable,
+      new TableColumn({
+        name: 'workspaceId',
+        type: 'integer',
+        isNullable: true,
+      })
+    );
+
+    await queryRunner.createForeignKey(
+      orderTable,
+      new TableForeignKey({
+        columnNames: ['workspaceId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'workspace_entity',
+        onDelete: 'CASCADE',
+      })
+    );
+
+    await queryRunner.query(`
+      UPDATE order_entity
+      SET "workspaceId" = 1;
+    `);
+
+    await queryRunner.changeColumn(
+      orderTable,
+      'workspaceId',
+      new TableColumn({
+        name: 'workspaceId',
+        type: 'integer',
+        isNullable: false,
+      })
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "user_entity" DROP CONSTRAINT "FK_a3c5555b0251d7c0dc32e08272c"`
+    // const userTable = await queryRunner.getTable('user_entity');
+    // const currentWorkspaceIdFk = userTable.foreignKeys.find((foreignKey) => foreignKey.name === 'currentWorkspaceId');
+    // await userTable.removeForeignKey(currentWorkspaceIdFk);
+
+    await queryRunner.dropColumn('order_entity', 'workspaceId');
+    await queryRunner.dropColumn('user_entity', 'currentWorkspaceId');
+    await queryRunner.dropTable(
+      await queryRunner.getTable('workspace_user_entity')
     );
-    await queryRunner.query(
-      `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_16f7a599844b98d1cc8bb6f8770"`
-    );
-    await queryRunner.query(
-      `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_21822dcace92903a16b390dedb6"`
-    );
-    await queryRunner.query(
-      `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_2fed887e85c025ad81f1e858b6b"`
-    );
-    await queryRunner.query(
-      `ALTER TABLE "user_entity" DROP COLUMN "currentWorkspaceId"`
-    );
-    await queryRunner.query(`DROP TABLE "workspace_entity"`);
-    await queryRunner.query(`DROP TABLE "workspace_user_entity"`);
+    await queryRunner.dropTable(await queryRunner.getTable('workspace_entity'));
+
+    // await queryRunner.query(
+    //   `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_16f7a599844b98d1cc8bb6f8770"`
+    // );
+    // await queryRunner.query(
+    //   `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_21822dcace92903a16b390dedb6"`
+    // );
+    // await queryRunner.query(
+    //   `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_2fed887e85c025ad81f1e858b6b"`
+    // );
+    // await queryRunner.query(
+    //   `ALTER TABLE "user_entity" DROP COLUMN "currentWorkspaceId"`
+    // );
+    // await queryRunner.query(`DROP TABLE "workspace_entity"`);
+    // await queryRunner.query(`DROP TABLE "workspace_user_entity"`);
   }
 }

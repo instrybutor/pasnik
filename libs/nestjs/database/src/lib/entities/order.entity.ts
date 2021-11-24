@@ -12,6 +12,7 @@ import { DishEntity } from './dish.entity';
 import { OrderActionEntity } from './order-action.entity';
 
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+import { WorkspaceEntity } from './workspace.entity';
 
 @Entity()
 export class OrderEntity implements OrderModel {
@@ -59,4 +60,7 @@ export class OrderEntity implements OrderModel {
 
   @Column({ default: 0 })
   totalPrice: number;
+
+  @ManyToOne(() => WorkspaceEntity, { nullable: false, onDelete: 'CASCADE' })
+  workspace: WorkspaceEntity;
 }

@@ -1,11 +1,11 @@
-import { sub } from 'date-fns';
-import { Between, Connection } from 'typeorm';
+import { Connection } from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   OrderActionsRepository,
+  OrderEntity,
   OrdersRepository,
   UserEntity,
   UsersRepository,
@@ -16,7 +16,6 @@ import {
   MarkAsOrderedDto,
   MarkAsPaidDto,
   OrderAction,
-  OrderStatus,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
 
@@ -28,43 +27,8 @@ export class OrdersService {
     private connection: Connection
   ) {}
 
-  findActive() {
-    const now = new Date();
-    const yesterday = sub(now, { days: 1 });
-    return this.ordersRepository.find({
-      where: [
-        { status: OrderStatus.InProgress },
-        { status: OrderStatus.Ordered },
-        {
-          status: OrderStatus.Delivered,
-          deliveredAt: Between(yesterday, now),
-        },
-      ],
-      relations: ['user'],
-    });
-  }
-
-  findInactive() {
-    return this.ordersRepository.find({
-      where: [
-        { status: OrderStatus.Canceled },
-        { status: OrderStatus.Delivered },
-      ],
-      relations: ['user'],
-    });
-  }
-
   findAll() {
     return this.ordersRepository.find();
-  }
-
-  findOne(slug: string) {
-    return this.ordersRepository.findOneOrFail(
-      { slug },
-      {
-        relations: ['actions', 'actions.user', 'payer', 'actions.actionUser'],
-      }
-    );
   }
 
   findOneById(id: string) {
@@ -76,9 +40,7 @@ export class OrdersService {
     );
   }
 
-  async update(slug: string, payload: UpdateOrderDto) {
-    const order = await this.ordersRepository.findOne({ slug });
-
+  async update(order: OrderEntity, payload: UpdateOrderDto) {
     return await this.ordersRepository.save({
       ...order,
       ...payload,

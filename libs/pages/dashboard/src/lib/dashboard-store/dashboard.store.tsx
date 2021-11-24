@@ -13,7 +13,7 @@ interface DashboardStore {
   transfers: number;
 
   setOrders: (orders: OrderModel[]) => void;
-  fetchActiveOrders: () => Promise<OrderModel[]>;
+  fetchActiveOrders: (workspaceId: number) => Promise<OrderModel[]>;
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -39,10 +39,10 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     }));
   },
 
-  fetchActiveOrders: async () => {
+  fetchActiveOrders: async (workspaceId: number) => {
     set({ isFetching: true });
 
-    const orders = await service.fetchActiveOrders();
+    const orders = await service.fetchActiveOrders(workspaceId);
 
     try {
       set((state) => ({

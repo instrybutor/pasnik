@@ -1,16 +1,19 @@
-import { APP_GUARD } from '@nestjs/core';
-import { Module } from '@nestjs/common';
-
-import { NestJsDatabaseModule } from '@pasnik/nestjs/database';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  NestJsDatabaseModule,
+  WorkspacesRepository,
+  WorkspaceUsersRepository,
+} from '@pasnik/nestjs/database';
 import { NestJsCoreModule } from '@pasnik/nestjs/core';
-import { JwtAuthGuard } from '@pasnik/nestjs/auth';
 
 import { UsersModule } from './users';
 import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
 import { InvitationsModule } from './invitations';
-import { JwtStrategy } from './jwt.strategy';
 import { WorkspacesModule } from './workspaces/workspaces.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthJwtMiddleware } from './auth-jwt.middleware';
+import { WorkspaceUserMiddleware } from './workspace-user.middleware';
 
 @Module({
   imports: [
@@ -21,13 +24,22 @@ import { WorkspacesModule } from './workspaces/workspaces.module';
     DishesModule,
     InvitationsModule,
     WorkspacesModule,
-  ],
-  providers: [
-    JwtStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
+
+    TypeOrmModule.forFeature([WorkspacesRepository, WorkspaceUsersRepository]),
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthJwtMiddleware)
+      .forRoutes({
+        path: '/**',
+        method: RequestMethod.ALL,
+      })
+      .apply(WorkspaceUserMiddleware)
+      .forRoutes({
+        path: '/workspaces/:workspaceId',
+        method: RequestMethod.ALL,
+      });
+  }
+}

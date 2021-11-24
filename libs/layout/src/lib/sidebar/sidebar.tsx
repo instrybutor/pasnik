@@ -117,7 +117,10 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                 className="mt-5 flex-grow divide-y divide-cyan-800 overflow-y-auto"
                 aria-label="Sidebar"
               >
-                <div className="px-2 space-y-1">
+                <div className="px-2">
+                  <SelectWorkspace onAddClick={showAddWorkspaceModal} />
+                </div>
+                <div className="px-2 space-y-1 mt-6 pt-6">
                   {navigation.map((item) => (
                     <NavLink
                       key={item.name}

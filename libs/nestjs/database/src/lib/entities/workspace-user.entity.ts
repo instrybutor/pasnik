@@ -14,6 +14,9 @@ export class WorkspaceUserEntity implements WorkspaceUserModel {
   @ManyToOne(() => WorkspaceEntity, { primary: true, onDelete: 'CASCADE' })
   workspace: WorkspaceEntity;
 
+  @Column()
+  workspaceId: number;
+
   @ManyToOne(() => UserEntity, { primary: true, onDelete: 'CASCADE' })
   user: UserEntity;
 
