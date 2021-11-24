@@ -8,6 +8,7 @@ import {
   WorkspaceEntity,
   WorkspacesRepository,
   WorkspaceUserEntity,
+  WorkspaceUsersRepository,
 } from '@pasnik/nestjs/database';
 import {
   CreateOrderDto,
@@ -23,6 +24,8 @@ export class WorkspacesService {
   constructor(
     @InjectRepository(WorkspacesRepository)
     private workspaceRepository: WorkspacesRepository,
+    @InjectRepository(WorkspaceUsersRepository)
+    private workspaceUsersRepository: WorkspaceUsersRepository,
     @InjectRepository(OrdersRepository)
     private ordersRepository: OrdersRepository,
     private connection: Connection
@@ -78,6 +81,17 @@ export class WorkspacesService {
       ],
       relations: ['user'],
     });
+  }
+
+  findAllForUser(user: UserEntity) {
+    return this.workspaceUsersRepository
+      .find({
+        where: { user },
+        relations: ['workspace'],
+      })
+      .then((workspaceUsers) => {
+        return workspaceUsers.map((workspaceUser) => workspaceUser.workspace);
+      });
   }
 
   findAll(): Promise<WorkspaceEntity[]> {

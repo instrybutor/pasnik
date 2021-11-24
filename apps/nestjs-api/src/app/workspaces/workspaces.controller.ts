@@ -34,8 +34,8 @@ export class WorkspacesController {
   }
 
   @Get()
-  findAll() {
-    return this.workspacesService.findAll();
+  findAll(@CurrentUser() user: UserEntity) {
+    return this.workspacesService.findAllForUser(user);
   }
 
   @Post()
