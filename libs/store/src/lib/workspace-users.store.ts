@@ -6,12 +6,10 @@ import {
   LoadingState,
 } from '@pasnik/shared/utils';
 import axios from '@pasnik/axios';
-import { Dictionary } from './entitity/models';
-import { toEntities } from './entitity/to-entities';
-import produce from 'immer';
 
 export interface WorkspaceState {
-  entities: Dictionary<WorkspaceModel>;
+  workspaces: WorkspaceModel[];
+  ids: number[];
 
   workspacesCallState: CallState;
 
@@ -22,18 +20,20 @@ export interface WorkspaceState {
 }
 
 const initialState = {
-  entities: {},
+  workspaces: [],
+  ids: [],
   workspacesCallState: LoadingState.INIT,
 };
 
 export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   ...initialState,
   fetchWorkspaces: async () => {
-    set({ workspacesCallState: LoadingState.LOADING });
+    set({ workspacesCallState: LoadingState.LOADING, workspaces: [], ids: [] });
     try {
       const { data } = await axios.get<WorkspaceModel[]>('/api/workspaces');
       set({
-        entities: toEntities(data),
+        workspaces: [...data],
+        ids: data.map((workspace) => workspace.id),
         workspacesCallState: LoadingState.LOADED,
       });
     } catch (e: unknown) {
@@ -41,16 +41,18 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     }
   },
   createWorkspace: async (createWorkspaceDto) => {
+    const { workspaces, ids } = get();
     const { data } = await axios.post<WorkspaceModel>(
       '/api/workspaces',
       createWorkspaceDto
     );
-    set(
-      produce((draft) => {
-        draft.entities[data.id] = data;
-      })
-    );
+    set({
+      workspaces: [...workspaces, data],
+      ids: [...ids, data.id],
+    });
   },
+  updateWorkspace: async () => {},
+  removeWorkspace: async () => {},
   resetState: () => {
     set(initialState);
   },

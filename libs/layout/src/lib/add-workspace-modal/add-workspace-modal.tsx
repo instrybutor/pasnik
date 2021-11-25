@@ -3,19 +3,73 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useLayoutStore } from '../layout.store';
 import { PlusIcon, XIcon } from '@heroicons/react/outline';
 import { useAddWorkspace } from './add-workspace.hook';
-import { useFieldArray } from 'react-hook-form';
+import {
+  Controller,
+  FieldArrayWithId,
+  useFieldArray,
+  useWatch,
+} from 'react-hook-form';
+import { AddWorkspaceMemberItem } from '../add-workspace-member-item/add-workspace-member-item';
+import {
+  CreateWorkspaceDto,
+  UserModel,
+  WorkspaceUserRole,
+} from '@pasnik/api/data-transfer';
+import { Control } from 'react-hook-form/dist/types/form';
+import { useUserStore } from '@pasnik/store';
+import { SelectUserDropdown } from '../select-user-dropdown/select-user-dropdown';
 
-export interface AddWorkspaceModalProps {}
+export interface _AddWorkspaceModalProps {
+  control: Control<CreateWorkspaceDto>;
+  index: number;
+  field: FieldArrayWithId<CreateWorkspaceDto, 'members', 'id'>;
+  remove: (index: number) => void;
+}
+
+const ConditionalInput = ({
+  control,
+  index,
+  field: f,
+  remove,
+}: _AddWorkspaceModalProps) => {
+  const value = useWatch({
+    name: 'members',
+    control,
+  });
+
+  return (
+    <Controller
+      control={control}
+      name={`members.${index}.role`}
+      render={({ field }) => (
+        <AddWorkspaceMemberItem
+          createUserDto={value?.[index]}
+          onRemove={() => {
+            remove(index);
+          }}
+          onRoleChange={(role) => {
+            field.onChange(role);
+            console.log(field);
+          }}
+        />
+      )}
+    />
+  );
+};
 
 export const AddWorkspaceModal = (_: AddWorkspaceModalProps) => {
   const isOpen = useLayoutStore((store) => store.addWorkspaceModalOpen);
   const { hideAddWorkspaceModal } = useLayoutStore();
-  const nameInputRef = useRef(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const { register, handleSubmit, onSubmit, control } = useAddWorkspace();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'members',
   });
+  const nameInput = register('name');
+  nameInput.ref(nameInputRef);
+
+  const users = useUserStore(({ users }) => users);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -91,7 +145,8 @@ export const AddWorkspaceModal = (_: AddWorkspaceModalProps) => {
                               <input
                                 type="text"
                                 className="block w-full shadow-sm sm:text-sm focus:ring-cyan-500 focus:border-cyan-500 border-gray-300 rounded-md"
-                                {...register('name')}
+                                {...nameInput}
+                                ref={nameInputRef}
                               />
                             </div>
                           </div>
@@ -100,52 +155,38 @@ export const AddWorkspaceModal = (_: AddWorkspaceModalProps) => {
                               Członkowie
                             </h3>
                             <ul className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
-                              {fields.map((item, index) => (
-                                <li
-                                  className="py-3 flex justify-between items-center"
-                                  key={item.id}
-                                >
-                                  <div className="flex items-center">
-                                    <img
-                                      src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=1024&h=1024&q=80"
-                                      className="w-8 h-8 rounded-full"
-                                    />
-                                    <p className="ml-4 text-sm font-medium text-gray-900">
-                                      Aimee Douglas
-                                    </p>
-                                  </div>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      remove(index);
-                                    }}
-                                    className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                  >
-                                    <XIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                </li>
+                              {fields.map((field, index) => (
+                                <section key={field.id}>
+                                  <ConditionalInput
+                                    {...{ control, index, field, remove }}
+                                  />
+                                </section>
                               ))}
                               <li className="py-2 flex justify-between items-center">
-                                <button
-                                  onClick={() => {
-                                    append({ elo: 'l' });
+                                <SelectUserDropdown
+                                  users={users}
+                                  onSelect={(user: UserModel) => {
+                                    append({
+                                      userId: user.id,
+                                      role: WorkspaceUserRole.User,
+                                    });
                                   }}
-                                  type="button"
-                                  className="group -ml-1 bg-white p-1 rounded-md flex items-center focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                 >
-                                  <span className="w-8 h-8 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400">
-                                    <PlusIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                  <span className="ml-4 text-sm font-medium text-cyan-600 group-hover:text-cyan-500">
-                                    Dodaj
-                                  </span>
-                                </button>
+                                  <button
+                                    type="button"
+                                    className="group -ml-1 bg-white p-1 rounded-md flex items-center focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                  >
+                                    <span className="w-8 h-8 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400">
+                                      <PlusIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                    <span className="ml-4 text-sm font-medium text-cyan-600 group-hover:text-cyan-500">
+                                      Dodaj
+                                    </span>
+                                  </button>
+                                </SelectUserDropdown>
                               </li>
                             </ul>
                           </div>

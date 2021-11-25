@@ -10,12 +10,13 @@ export interface SelectWorkspaceProps {
 
 export function SelectWorkspace({ onAddClick }: SelectWorkspaceProps) {
   const { user, changeWorkspace } = useUserStore();
-  const { workspaces, fetchWorkspaces } = useWorkspaceStore();
+  const { fetchWorkspaces } = useWorkspaceStore();
+  const entities = useWorkspaceStore(({ entities }) => Object.values(entities));
   const selectedWorkspace = useWorkspaceStore(
     useCallback(
-      ({ workspaces, ids }) => {
+      ({ entities }) => {
         if (user?.currentWorkspaceId) {
-          return workspaces[ids.indexOf(user.currentWorkspaceId)];
+          return entities[user?.currentWorkspaceId];
         }
         return null;
       },
@@ -60,7 +61,7 @@ export function SelectWorkspace({ onAddClick }: SelectWorkspaceProps) {
             >
               <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm flex flex-col divide-y divide-gray-200">
                 <Listbox.Options static className="overflow-auto">
-                  {workspaces.map((workspace) => (
+                  {entities.map((workspace) => (
                     <Listbox.Option
                       key={workspace.id}
                       className={({ active }) =>

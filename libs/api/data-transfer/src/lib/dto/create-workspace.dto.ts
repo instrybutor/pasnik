@@ -1,9 +1,11 @@
 import { WorkspaceUserRole } from '../models';
 
+export interface CreateWorkspaceUserDto {
+  userId: number;
+  role: WorkspaceUserRole;
+}
+
 export interface CreateWorkspaceDto {
   name: string;
-  members?: Array<{
-    userId: number;
-    role: WorkspaceUserRole;
-  }>;
+  members?: CreateWorkspaceUserDto[];
 }

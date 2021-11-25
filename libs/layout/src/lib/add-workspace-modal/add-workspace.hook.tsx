@@ -14,7 +14,7 @@ export const useAddWorkspace = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<CreateWorkspaceDto>({
     resolver: yupResolver(createWorkspaceValidator),
   });
   const { createWorkspace } = useWorkspaceStore();
