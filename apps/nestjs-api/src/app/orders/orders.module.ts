@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  DishEntity,
-  OrderActionEntity,
+  DishesRepository,
   OrdersRepository,
   UsersRepository,
   WorkspacesRepository,
@@ -16,8 +15,7 @@ import { OrdersService } from './orders.service';
   imports: [
     TypeOrmModule.forFeature([
       OrdersRepository,
-      OrderActionEntity,
-      DishEntity,
+      DishesRepository,
       UsersRepository,
       WorkspacesRepository,
       WorkspaceUsersRepository,

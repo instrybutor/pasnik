@@ -6,13 +6,16 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { WorkspaceModel } from '@pasnik/api/data-transfer';
+import { WorkspaceModel, WorkspacePrivacy } from '@pasnik/api/data-transfer';
 import { WorkspaceUserEntity } from './workspace-user.entity';
 
 @Entity()
 export class WorkspaceEntity implements WorkspaceModel {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ unique: true })
+  slug: string;
 
   @CreateDateColumn()
   createdAt: string;
@@ -27,4 +30,7 @@ export class WorkspaceEntity implements WorkspaceModel {
     cascade: true,
   })
   workspaceUsers: WorkspaceUserEntity[];
+
+  @Column({ type: 'varchar' })
+  privacy: WorkspacePrivacy;
 }

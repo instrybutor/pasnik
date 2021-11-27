@@ -11,7 +11,7 @@ interface OrdersParams {
 }
 
 @Injectable()
-export class OrdersMiddleware implements NestMiddleware {
+export class OrderMiddleware implements NestMiddleware {
   constructor(
     private readonly workspaceUsersRepository: WorkspaceUsersRepository,
     private readonly ordersRepository: OrdersRepository
@@ -19,10 +19,15 @@ export class OrdersMiddleware implements NestMiddleware {
   async use(req: Request<OrdersParams>, res: Response, next: () => void) {
     const { user, params } = req;
     const { slug } = params;
+
     const order = await this.ordersRepository.findOne({
       where: { slug },
       relations: ['workspace'],
     });
+
+    if (!order) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
     const workspaceUser = await this.workspaceUsersRepository.findOne({
       where: { workspace: order.workspace, user },
       relations: ['workspace'],
@@ -30,10 +35,6 @@ export class OrdersMiddleware implements NestMiddleware {
 
     if (!workspaceUser) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-
-    if (!order) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
 
     res.locals.workspaceUser = workspaceUser;

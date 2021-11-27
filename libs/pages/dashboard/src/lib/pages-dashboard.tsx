@@ -2,17 +2,13 @@ import { Fragment, useEffect } from 'react';
 import DashboardHeader from './dashboard-header/dashboard-header';
 import DashboardOrders from './dashboard-orders/dashboard-orders';
 import { useDashboardFacade } from './dashboard-store/dashboard.facade';
-import { useUserStore } from '@pasnik/store';
 
 export function PagesDashboard() {
   const { fetchActiveOrders } = useDashboardFacade();
-  const user = useUserStore(({ user }) => user);
 
   useEffect(() => {
-    if (user?.currentWorkspaceId) {
-      fetchActiveOrders(user?.currentWorkspaceId);
-    }
-  }, [fetchActiveOrders, user?.currentWorkspaceId]);
+    fetchActiveOrders();
+  }, [fetchActiveOrders]);
 
   return (
     <Fragment>

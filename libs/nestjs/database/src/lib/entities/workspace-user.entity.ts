@@ -18,7 +18,7 @@ export class WorkspaceUserEntity implements WorkspaceUserModel {
   })
   workspace: WorkspaceEntity;
 
-  @Column()
+  @Column({ primary: true })
   workspaceId: number;
 
   @ManyToOne(() => UserEntity, {
@@ -27,6 +27,9 @@ export class WorkspaceUserEntity implements WorkspaceUserModel {
     nullable: false,
   })
   user: UserEntity;
+
+  @Column({ primary: true })
+  userId: number;
 
   @ManyToOne(() => UserEntity, { onDelete: 'SET NULL' })
   addedBy: UserEntity;

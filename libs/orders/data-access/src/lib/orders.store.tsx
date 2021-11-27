@@ -4,6 +4,7 @@ import type {
   CreateOrderDto,
   OrderModel,
   UpdateOrderDto,
+  WorkspaceModel,
 } from '@pasnik/api/data-transfer';
 
 import * as service from './orders.service';
@@ -17,7 +18,7 @@ interface OrdersState {
   fetchOrder: (slug: string) => Promise<OrderModel>;
   updateOrder: (slug: string, payload: UpdateOrderDto) => Promise<OrderModel>;
   createOrder: (
-    workspaceId: number,
+    workspace: WorkspaceModel,
     payload: CreateOrderDto
   ) => Promise<OrderModel>;
 }
@@ -62,8 +63,8 @@ export const createOrdersStore = create<OrdersState>((set) => ({
     return order;
   },
 
-  createOrder: async (workspaceId: number, payload: CreateOrderDto) => {
-    const order = await service.createOrder(workspaceId, payload);
+  createOrder: async (workspace: WorkspaceModel, payload: CreateOrderDto) => {
+    const order = await service.createOrder(workspace, payload);
 
     set((state) => ({
       ...state,

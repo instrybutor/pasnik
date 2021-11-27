@@ -1,163 +1,66 @@
-import { Connection } from 'typeorm';
-
 import { Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  OrderActionsRepository,
-  OrderEntity,
-  OrdersRepository,
-  UserEntity,
-  UsersRepository,
-} from '@pasnik/nestjs/database';
-import {
-  MarkAsDeliveredDto,
-  MarkAsOrderedDto,
-  MarkAsPaidDto,
-  OrderAction,
-  UpdateOrderDto,
-} from '@pasnik/api/data-transfer';
+import { OrdersRepository, UserEntity } from '@pasnik/nestjs/database';
+import { OrderStatus } from '@pasnik/api/data-transfer';
+import { Brackets } from 'typeorm';
+import { sub } from 'date-fns';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(OrdersRepository)
-    private ordersRepository: OrdersRepository,
-    private connection: Connection
+    private ordersRepository: OrdersRepository
   ) {}
 
-  findAll() {
-    return this.ordersRepository.find();
+  findAllActiveForUser(user: UserEntity) {
+    const now = new Date();
+    const yesterday = sub(now, { days: 1 });
+
+    return this.ordersRepository
+      .createQueryBuilder('order')
+      .leftJoin('order.dishes', 'dish', 'dish.userId = :userId')
+      .leftJoinAndMapOne(
+        'order.user',
+        UserEntity,
+        'user',
+        'user.id = order.userId'
+      )
+      .leftJoinAndMapMany(
+        'order.participants',
+        UserEntity,
+        'participant',
+        'dish.userId = participant.id'
+      )
+      .where('order.userId = :userId')
+      .andWhere(
+        new Brackets((db) => {
+          db.where(`order.status = '${OrderStatus.InProgress}'`)
+            .orWhere(`order.status = '${OrderStatus.Ordered}'`)
+            .orWhere(
+              `(order.status = '${OrderStatus.Delivered}' AND order.deliveredAt BETWEEN :startDate AND :endDate)`
+            );
+        })
+      )
+      .addSelect('SUM(dish.priceCents)', 'order_totalPrice')
+      .groupBy('order.id')
+      .addGroupBy('user.id')
+      .addGroupBy('participant.id')
+      .setParameters({
+        userId: user.id,
+        startDate: yesterday,
+        endDate: now,
+      })
+      .getMany();
   }
 
-  findOneById(id: string) {
-    return this.ordersRepository.findOneOrFail(
-      { id },
-      {
-        relations: ['actions', 'actions.user', 'payer', 'actions.actionUser'],
-      }
-    );
-  }
-
-  async update(order: OrderEntity, payload: UpdateOrderDto) {
-    return await this.ordersRepository.save({
-      ...order,
-      ...payload,
+  findAllInactiveForUser(user: UserEntity) {
+    return this.ordersRepository.find({
+      where: [
+        { status: OrderStatus.Delivered, user },
+        { status: OrderStatus.Canceled, user },
+      ],
+      relations: ['user'],
     });
-  }
-
-  async markAsOrdered(
-    orderId: string,
-    markAsOrderedDto: MarkAsOrderedDto,
-    user: UserEntity
-  ) {
-    await this.connection.transaction(async (manager) => {
-      const ordersRepository = manager.getCustomRepository(OrdersRepository);
-      const orderActionsRepository = manager.getCustomRepository(
-        OrderActionsRepository
-      );
-
-      const order = await ordersRepository.findOneOrFail(orderId, {
-        relations: ['dishes'],
-      });
-      await ordersRepository.markAsOrdered(order, markAsOrderedDto);
-      await orderActionsRepository.createAction(
-        user,
-        order,
-        OrderAction.Ordered
-      );
-    });
-    return this.findOneById(orderId);
-  }
-
-  async markAsDelivered(
-    orderId: string,
-    markAsDeliveredDto: MarkAsDeliveredDto,
-    user: UserEntity
-  ) {
-    await this.connection.transaction(async (manager) => {
-      const ordersRepository = manager.getCustomRepository(OrdersRepository);
-      const orderActionsRepository = manager.getCustomRepository(
-        OrderActionsRepository
-      );
-
-      const order = await ordersRepository.findOneOrFail(orderId, {
-        relations: ['dishes', 'payer'],
-      });
-      await ordersRepository.markAsDelivered(order, markAsDeliveredDto);
-      await orderActionsRepository.createAction(
-        user,
-        order,
-        OrderAction.Delivered
-      );
-      order.totalPrice = order.dishes.reduce(
-        (acc, cur) => acc + cur.priceCents,
-        0
-      );
-      await ordersRepository.save(order);
-    });
-    return this.findOneById(orderId);
-  }
-
-  async markAsClosed(orderId: string, user: UserEntity) {
-    await this.connection.transaction(async (manager) => {
-      const ordersRepository = manager.getCustomRepository(OrdersRepository);
-      const orderActionsRepository = manager.getCustomRepository(
-        OrderActionsRepository
-      );
-
-      const order = await this.findOneById(orderId);
-      await ordersRepository.markAsClosed(order);
-      await orderActionsRepository.createAction(
-        user,
-        order,
-        OrderAction.Cancel
-      );
-    });
-    return this.findOneById(orderId);
-  }
-
-  async markAsOpen(orderId: string, user: UserEntity) {
-    await this.connection.transaction(async (manager) => {
-      const ordersRepository = manager.getCustomRepository(OrdersRepository);
-      const orderActionsRepository = manager.getCustomRepository(
-        OrderActionsRepository
-      );
-
-      const order = await this.findOneById(orderId);
-      await ordersRepository.markAsOpen(order);
-      await orderActionsRepository.createAction(user, order, OrderAction.Open);
-    });
-    return this.findOneById(orderId);
-  }
-
-  async setPayer(
-    orderId: string,
-    { payerId }: MarkAsPaidDto,
-    user: UserEntity
-  ) {
-    await this.connection.transaction(async (manager) => {
-      const usersRepository = manager.getCustomRepository(UsersRepository);
-      const ordersRepository = manager.getCustomRepository(OrdersRepository);
-      const orderActionsRepository = manager.getCustomRepository(
-        OrderActionsRepository
-      );
-
-      const payer = await usersRepository.findOneOrFail(payerId);
-      const order = await this.findOneById(orderId);
-
-      if (order.payer?.id === payer.id) {
-        return;
-      }
-
-      await ordersRepository.markAsPaid(order, payer);
-      await orderActionsRepository.createAction(
-        user,
-        order,
-        OrderAction.Paid,
-        payer
-      );
-    });
-    return this.findOneById(orderId);
   }
 }

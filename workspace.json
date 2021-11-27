@@ -93,6 +93,54 @@
       },
       "tags": []
     },
+    "features-orders": {
+      "root": "libs/features/orders",
+      "sourceRoot": "libs/features/orders/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/features/orders/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/features/orders"],
+          "options": {
+            "jestConfig": "libs/features/orders/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "features-workspaces": {
+      "root": "libs/features/workspaces",
+      "sourceRoot": "libs/features/workspaces/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/features/workspaces/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/features/workspaces"],
+          "options": {
+            "jestConfig": "libs/features/workspaces/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "frontend": {
       "root": "apps/frontend",
       "sourceRoot": "apps/frontend/src",
@@ -646,6 +694,29 @@
         }
       },
       "tags": []
+    },
+    "pages-workspace": {
+      "root": "libs/pages/workspace",
+      "sourceRoot": "libs/pages/workspace/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/pages/workspace/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/workspace"],
+          "options": {
+            "jestConfig": "libs/pages/workspace/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     },
     "shared-utils": {
       "root": "libs/shared/utils",

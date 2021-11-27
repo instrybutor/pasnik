@@ -10,7 +10,7 @@ interface OrdersState {
   isFetching: boolean;
 
   setOrders: (orders: OrderModel[]) => void;
-  fetchOrders: (workspaceId: number) => Promise<OrderModel[]>;
+  fetchOrders: () => Promise<OrderModel[]>;
 }
 
 export const useOrdersStore = create<OrdersState>((set) => ({
@@ -32,11 +32,11 @@ export const useOrdersStore = create<OrdersState>((set) => ({
     }));
   },
 
-  fetchOrders: async (workspaceId: number) => {
+  fetchOrders: async () => {
     set({ isFetching: true });
 
     try {
-      const orders = await service.fetchOrders(workspaceId);
+      const orders = await service.fetchOrders();
       set({ isFetching: false });
 
       set((state) => ({

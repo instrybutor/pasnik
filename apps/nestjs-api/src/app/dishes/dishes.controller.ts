@@ -13,9 +13,9 @@ import { OrderEntity, UserEntity } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
 import { DishesService } from './dishes.service';
-import { CurrentOrder } from '../orders/current-order.decorator';
+import { CurrentOrder } from '../order/current-order.decorator';
 
-@Controller('orders/:slug/dishes')
+@Controller('orders/slug/:slug/dishes')
 export class DishesController {
   constructor(private readonly dishesService: DishesService) {}
 

@@ -1,6 +1,7 @@
 import { UserModel } from './user.model';
 import { DishModel } from './dish.model';
 import { OrderActionModel } from './order-action.model';
+import { WorkspaceModel } from './workspace.model';
 
 export enum OrderStatus {
   InProgress = 'in-progress',
@@ -25,6 +26,9 @@ export interface OrderModel {
   dishes?: DishModel[];
   actions?: OrderActionModel[];
   totalPrice: number;
+  workspace?: WorkspaceModel;
+  workspaceId: number;
+  participants?: UserModel[];
 }
 
 export function getOrderStatus(order: OrderModel) {

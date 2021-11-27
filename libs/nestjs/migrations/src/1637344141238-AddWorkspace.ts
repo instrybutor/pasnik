@@ -5,6 +5,8 @@ import {
   TableColumn,
   TableForeignKey,
 } from 'typeorm';
+import slugify from 'slugify';
+import { nanoid } from 'nanoid';
 
 export class AddWorkspace1637344141238 implements MigrationInterface {
   name = 'AddWorkspace1637344141238';
@@ -31,6 +33,14 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
           },
           {
             name: 'name',
+            type: 'character varying',
+          },
+          {
+            name: 'privacy',
+            type: 'character varying',
+          },
+          {
+            name: 'slug',
             type: 'character varying',
           },
         ],
@@ -90,8 +100,12 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
       })
     );
 
+    const slug = slugify(['Instrybutor', nanoid(6)].join(' '), {
+      lower: true,
+    });
+
     await queryRunner.query(
-      `INSERT INTO workspace_entity("name") VALUES('Instrybutor');`
+      `INSERT INTO workspace_entity("name", "privacy", "slug") VALUES('Instrybutor', 'public', '${slug}');`
     );
 
     await queryRunner.query(
@@ -122,7 +136,7 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
         columnNames: ['currentWorkspaceId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'workspace_entity',
-        onDelete: 'SET NULL',
+        onDelete: 'RESTRICT',
       })
     );
 
@@ -179,30 +193,17 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // const userTable = await queryRunner.getTable('user_entity');
-    // const currentWorkspaceIdFk = userTable.foreignKeys.find((foreignKey) => foreignKey.name === 'currentWorkspaceId');
-    // await userTable.removeForeignKey(currentWorkspaceIdFk);
+    const workspaceUserTable = await queryRunner.getTable(
+      'workspace_user_entity'
+    );
+    await queryRunner.dropForeignKeys(
+      workspaceUserTable,
+      workspaceUserTable.foreignKeys
+    );
 
     await queryRunner.dropColumn('order_entity', 'workspaceId');
     await queryRunner.dropColumn('user_entity', 'currentWorkspaceId');
-    await queryRunner.dropTable(
-      await queryRunner.getTable('workspace_user_entity')
-    );
+    await queryRunner.dropTable(workspaceUserTable);
     await queryRunner.dropTable(await queryRunner.getTable('workspace_entity'));
-
-    // await queryRunner.query(
-    //   `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_16f7a599844b98d1cc8bb6f8770"`
-    // );
-    // await queryRunner.query(
-    //   `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_21822dcace92903a16b390dedb6"`
-    // );
-    // await queryRunner.query(
-    //   `ALTER TABLE "workspace_user_entity" DROP CONSTRAINT "FK_2fed887e85c025ad81f1e858b6b"`
-    // );
-    // await queryRunner.query(
-    //   `ALTER TABLE "user_entity" DROP COLUMN "currentWorkspaceId"`
-    // );
-    // await queryRunner.query(`DROP TABLE "workspace_entity"`);
-    // await queryRunner.query(`DROP TABLE "workspace_user_entity"`);
   }
 }

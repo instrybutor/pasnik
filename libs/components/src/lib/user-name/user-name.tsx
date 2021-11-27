@@ -30,7 +30,7 @@ export function UserName({
 
   return (
     <div
-      className={classNames({
+      className={classNames('overflow-hidden', {
         'inline-flex': !children,
         'flex flex-col': Boolean(children),
       })}

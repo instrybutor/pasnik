@@ -7,20 +7,27 @@ import {
   CreditCardIcon,
   DocumentReportIcon,
   HomeIcon,
+  OfficeBuildingIcon,
   QuestionMarkCircleIcon,
   ScaleIcon,
   ShieldCheckIcon,
+  ShoppingCartIcon,
   UserGroupIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { useUserStore } from '@pasnik/store';
-import { SelectWorkspace } from '../select-workspace/select-workspace';
 import { useLayoutStore } from '../layout.store';
-import { AddWorkspaceModal } from '../add-workspace-modal/add-workspace-modal';
+import {
+  CreateWorkspaceDrawer,
+  SelectWorkspaceDropdown,
+  useWorkspaceFacade,
+} from '@pasnik/features/workspaces';
+import { SidebarItem } from '../sidebar-item/sidebar-item';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
+  { name: 'Dashboard', href: '/', icon: HomeIcon },
+  { name: 'Zamówienia', href: '/history2', icon: ShoppingCartIcon },
   { name: 'Historia zamówień', href: '/history', icon: ClockIcon },
   { name: 'Balances', href: '/balances', icon: ScaleIcon, hide: true },
   { name: 'Cards', href: '/cards', icon: CreditCardIcon, hide: true },
@@ -50,8 +57,13 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
-  const { user } = useUserStore();
-  const { showAddWorkspaceModal } = useLayoutStore();
+  const { user, changeWorkspace } = useUserStore();
+  const {
+    showAddWorkspaceModal,
+    hideAddWorkspaceModal,
+    addWorkspaceModalOpen,
+  } = useLayoutStore();
+  const { currentWorkspace } = useWorkspaceFacade();
 
   return (
     <>
@@ -114,15 +126,15 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                 className="mt-5 flex-grow divide-y divide-cyan-800 overflow-y-auto"
                 aria-label="Sidebar"
               >
-                <div className="px-2">
-                  <SelectWorkspace onAddClick={showAddWorkspaceModal} />
-                </div>
+                <SelectWorkspaceDropdown
+                  onChange={changeWorkspace}
+                  onAddClick={showAddWorkspaceModal}
+                />
                 <div className="px-2 space-y-1 mt-6 pt-6">
                   {navigation.map((item) => (
                     <NavLink
                       key={item.name}
                       to={item.href}
-                      end={item.exact}
                       className={({ isActive }) =>
                         classNames(
                           'group flex items-center px-2 py-2 text-base font-medium rounded-md',
@@ -150,7 +162,6 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                         <NavLink
                           key={item.name}
                           to={item.href}
-                          end={item.exact}
                           className={({ isActive }) =>
                             classNames(
                               'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
@@ -224,39 +235,30 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
               </h1>
             </div>
             <nav
-              className="mt-5 flex-1 flex flex-col divide-y divide-cyan-800 overflow-y-auto"
+              className="flex-1 flex flex-col divide-y divide-cyan-800 overflow-y-auto mt-5"
               aria-label="Sidebar"
             >
               <div className="px-2">
-                <SelectWorkspace onAddClick={showAddWorkspaceModal} />
+                <SelectWorkspaceDropdown
+                  onChange={changeWorkspace}
+                  onAddClick={showAddWorkspaceModal}
+                />
+              </div>
+              <div className="px-2 space-y-1 mt-6 pt-6">
+                <SidebarItem to="/" icon={HomeIcon}>
+                  Dashboard
+                </SidebarItem>
+                <SidebarItem
+                  to={`/workspace/${currentWorkspace?.slug}`}
+                  icon={OfficeBuildingIcon}
+                >
+                  {currentWorkspace?.name}
+                </SidebarItem>
+                <SidebarItem to="/history" icon={ClockIcon}>
+                  Historia zamówień
+                </SidebarItem>
               </div>
 
-              <div className="px-2 space-y-1 mt-6 pt-6">
-                {navigation.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.href}
-                    end={item.exact}
-                    className={({ isActive }) =>
-                      classNames(
-                        'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
-                        {
-                          hidden: item.hide,
-                          'bg-cyan-800 text-white': isActive,
-                          'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                            !isActive,
-                        }
-                      )
-                    }
-                  >
-                    <item.icon
-                      className="mr-4 flex-shrink-0 h-6 w-6 text-cyan-200"
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </NavLink>
-                ))}
-              </div>
               {user?.isAdmin && (
                 <div className="mt-6 pt-6">
                   <div className="px-2 space-y-1">
@@ -317,7 +319,14 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
           </div>
         </div>
       </div>
-      <AddWorkspaceModal />
+      <CreateWorkspaceDrawer
+        isOpen={addWorkspaceModalOpen}
+        onSuccess={(workspace) => {
+          hideAddWorkspaceModal();
+          changeWorkspace(workspace);
+        }}
+        onCancel={hideAddWorkspaceModal}
+      />
     </>
   );
 }

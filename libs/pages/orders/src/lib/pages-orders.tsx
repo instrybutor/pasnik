@@ -5,16 +5,14 @@ import OrdersHeader from './orders-header/orders-header';
 import OrderList from './order-list/order-list';
 import { useOrdersStore } from './orders-store/orders.store';
 import OrdersEmpty from './orders-empty/orders-empty';
-import { useUserStore } from '@pasnik/store';
 
 export function PagesOrders() {
-  const workspaceId = useUserStore((state) => state.user?.currentWorkspaceId);
   const { fetchOrders, isFetching } = useOrdersFacade();
   const orders = useOrdersStore((state) => Object.values(state.entities!));
 
   useEffect(() => {
-    fetchOrders(workspaceId!);
-  }, [fetchOrders, workspaceId]);
+    fetchOrders();
+  }, [fetchOrders]);
 
   return (
     <Fragment>

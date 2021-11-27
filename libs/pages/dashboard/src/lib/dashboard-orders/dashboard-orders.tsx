@@ -35,7 +35,7 @@ export function DashboardOrders(props: DashboardOrdersProps) {
   return (
     <>
       <h2 className="max-w-6xl mx-auto mt-8 text-lg leading-6 font-medium text-gray-900">
-        Aktywne zamówienia
+        Twoje zamówienia
       </h2>
       <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">
         <div className="border-b border-gray-200">
@@ -56,7 +56,7 @@ export function DashboardOrders(props: DashboardOrdersProps) {
       {archivedOrders.length !== 0 && (
         <>
           <h2 className="max-w-6xl mx-auto mt-8 text-lg leading-6 font-medium text-gray-900">
-            Zamkniete zamówienia
+            Ostatnio zamkniete zamówienia ({'<'}24h)
           </h2>
 
           <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">

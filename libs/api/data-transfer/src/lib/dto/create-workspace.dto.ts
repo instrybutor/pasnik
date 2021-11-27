@@ -1,11 +1,6 @@
-import { WorkspaceUserRole } from '../models';
-
-export interface CreateWorkspaceUserDto {
-  userId: number;
-  role: WorkspaceUserRole;
-}
+import { WorkspacePrivacy } from '../models';
 
 export interface CreateWorkspaceDto {
   name: string;
-  members?: CreateWorkspaceUserDto[];
+  privacy: WorkspacePrivacy;
 }

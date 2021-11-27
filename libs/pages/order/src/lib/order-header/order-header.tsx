@@ -15,9 +15,8 @@ import { Menu, Transition } from '@headlessui/react';
 import { Price } from '@pasnik/components';
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 
-import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
-import { OrderTimestamp } from '../order-timestamp/order-timestamp';
 import { useOrderFacade } from '../order-store/order.facade';
+import { OrderStatusBadge, OrderTimestamp } from '@pasnik/features/orders';
 
 export interface OrderHeaderProps {
   order: OrderModel;

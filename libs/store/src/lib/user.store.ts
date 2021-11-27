@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { UserModel } from '@pasnik/api/data-transfer';
+import { UserModel, WorkspaceModel } from '@pasnik/api/data-transfer';
 import {
   CallState,
   getAxiosErrorMessage,
@@ -16,7 +16,7 @@ export interface UserState {
 
   fetchMe: () => Promise<void>;
   fetchUsers: () => Promise<void>;
-  changeWorkspace: (workspaceId: number) => Promise<void>;
+  changeWorkspace: (workspace: WorkspaceModel) => void;
 
   resetState: () => void;
 }
@@ -58,9 +58,9 @@ export const useUserStore = create<UserState>((set) => ({
   resetState: () => {
     set(initialState);
   },
-  changeWorkspace: async (workspaceId: number) => {
+  changeWorkspace: async ({ id }: WorkspaceModel) => {
     const { data } = await axios.post<UserModel>(
-      `/auth/set-default-workspace/${workspaceId}`
+      `/auth/set-default-workspace/${id}`
     );
 
     set({ user: data });

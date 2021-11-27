@@ -14,8 +14,8 @@ import { InvitationsModule } from './invitations';
 import { WorkspacesModule } from './workspaces/workspaces.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthJwtMiddleware } from './auth-jwt.middleware';
-import { OrdersMiddleware } from './orders/orders.middleware';
 import { WorkspacesMiddleware } from './workspaces/workspaces.middleware';
+import { OrderModule } from './order';
 
 @Module({
   imports: [
@@ -23,6 +23,7 @@ import { WorkspacesMiddleware } from './workspaces/workspaces.middleware';
     NestJsDatabaseModule,
     UsersModule,
     OrdersModule,
+    OrderModule,
     DishesModule,
     InvitationsModule,
     WorkspacesModule,
@@ -43,8 +44,6 @@ export class AppModule {
         method: RequestMethod.ALL,
       })
       .apply(WorkspacesMiddleware)
-      .forRoutes('/workspaces/:workspaceId', '/workspaces/:workspaceId/**')
-      .apply(OrdersMiddleware)
-      .forRoutes('/orders/:slug', '/orders/:slug/**');
+      .forRoutes('/workspaces/:workspaceSlug', '/workspaces/:workspaceSlug/**');
   }
 }

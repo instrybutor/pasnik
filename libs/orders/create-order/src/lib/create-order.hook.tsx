@@ -10,7 +10,7 @@ import {
   OrderModel,
   orderValidator,
 } from '@pasnik/api/data-transfer';
-import { useUserStore } from '@pasnik/store';
+import { useWorkspaceFacade } from '@pasnik/features/workspaces';
 
 interface FormData extends Omit<CreateOrderDto, 'shippingCents'> {
   shippingCents: string;
@@ -30,7 +30,7 @@ export const useCreateOrder = () => {
   });
   const { createOrder } = useOrdersFacade();
   const watchAll = watch();
-  const workspaceId = useUserStore(({ user }) => user?.currentWorkspaceId);
+  const { currentWorkspace } = useWorkspaceFacade();
 
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ export const useCreateOrder = () => {
 
   const onSubmit = useCallback(
     (data: FormData) => {
-      createOrder(workspaceId!, {
+      createOrder(currentWorkspace!, {
         ...data,
         orderAt: new Date().toISOString(),
         shippingCents: currency(data.shippingCents).multiply(100).value,
@@ -66,7 +66,7 @@ export const useCreateOrder = () => {
         .then((params: OrderModel) => navigate(`/order/${params.slug}`))
         .catch((err: Error) => setError(err.message));
     },
-    [workspaceId, createOrder, navigate]
+    [currentWorkspace, createOrder, navigate]
   );
 
   return {

@@ -8,14 +8,14 @@ import {
   WorkspaceEntity,
   WorkspaceUserEntity,
 } from '@pasnik/nestjs/database';
-import { CurrentWorkspace } from '../current-workspace.decorator';
+import { CurrentWorkspace } from './current-workspace.decorator';
 import { CurrentWorkspaceUser } from '../current-workspace-user.decorator';
 
 @Controller('workspaces')
 export class WorkspacesController {
   constructor(private readonly workspacesService: WorkspacesService) {}
 
-  @Post(':workspaceId/orders')
+  @Post(':workspaceSlug/orders')
   createOrder(
     @Body() createOrderDto: CreateOrderDto,
     @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity
@@ -23,14 +23,19 @@ export class WorkspacesController {
     return this.workspacesService.createOrder(createOrderDto, workspaceUser);
   }
 
-  @Get(':workspaceId/orders/active')
+  @Get(':workspaceSlug/orders/active')
   findActiveOrders(@CurrentWorkspace() workspace: WorkspaceEntity) {
     return this.workspacesService.findActiveOrders(workspace);
   }
 
-  @Get(':workspaceId/orders/inactive')
+  @Get(':workspaceSlug/orders/inactive')
   findInactiveOrders(@CurrentWorkspace() workspace: WorkspaceEntity) {
     return this.workspacesService.findInactiveOrders(workspace);
+  }
+
+  @Get(':workspaceSlug/users')
+  findUsers(@CurrentWorkspace() workspace: WorkspaceEntity) {
+    return this.workspacesService.findUsers(workspace);
   }
 
   @Get()

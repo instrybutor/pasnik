@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -63,4 +64,10 @@ export class OrderEntity implements OrderModel {
 
   @ManyToOne(() => WorkspaceEntity, { nullable: false, onDelete: 'CASCADE' })
   workspace: WorkspaceEntity;
+
+  @Column()
+  workspaceId: number;
+
+  @ManyToMany(() => UserEntity)
+  participants: UserEntity[];
 }

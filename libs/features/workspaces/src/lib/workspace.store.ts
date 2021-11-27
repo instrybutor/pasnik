@@ -2,12 +2,12 @@ import create from 'zustand';
 import { CreateWorkspaceDto, WorkspaceModel } from '@pasnik/api/data-transfer';
 import {
   CallState,
+  Dictionary,
   getAxiosErrorMessage,
   LoadingState,
+  toEntities,
 } from '@pasnik/shared/utils';
 import axios from '@pasnik/axios';
-import { Dictionary } from './entitity/models';
-import { toEntities } from './entitity/to-entities';
 import produce from 'immer';
 
 export interface WorkspaceState {
@@ -16,7 +16,7 @@ export interface WorkspaceState {
   workspacesCallState: CallState;
 
   fetchWorkspaces: () => Promise<void>;
-  createWorkspace: (dto: CreateWorkspaceDto) => Promise<void>;
+  createWorkspace: (dto: CreateWorkspaceDto) => Promise<WorkspaceModel>;
 
   resetState: () => void;
 }
@@ -50,6 +50,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
         draft.entities[data.id] = data;
       })
     );
+    return data;
   },
   resetState: () => {
     set(initialState);

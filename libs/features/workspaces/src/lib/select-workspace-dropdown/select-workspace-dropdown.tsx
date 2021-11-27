@@ -1,41 +1,33 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/outline';
-import { Fragment, useCallback, useEffect } from 'react';
+import { Fragment, MouseEvent, useCallback } from 'react';
 import classNames from 'classnames';
-import { useUserStore, useWorkspaceStore } from '@pasnik/store';
+import { useWorkspaceFacade } from '../workspace.facade';
+import { WorkspaceModel } from '@pasnik/api/data-transfer';
 
 export interface SelectWorkspaceProps {
   onAddClick: () => void;
+  onChange: (workspace: WorkspaceModel) => void;
 }
 
-export function SelectWorkspace({ onAddClick }: SelectWorkspaceProps) {
-  const { user, changeWorkspace } = useUserStore();
-  const { fetchWorkspaces } = useWorkspaceStore();
-  const entities = useWorkspaceStore(({ entities }) => Object.values(entities));
-  const selectedWorkspace = useWorkspaceStore(
-    useCallback(
-      ({ entities }) => {
-        if (user?.currentWorkspaceId) {
-          return entities[user?.currentWorkspaceId];
-        }
-        return null;
-      },
-      [user?.currentWorkspaceId]
-    )
-  );
+export function SelectWorkspaceDropdown({
+  onAddClick,
+  onChange,
+}: SelectWorkspaceProps) {
+  const { currentWorkspace, workspaces } = useWorkspaceFacade();
 
-  useEffect(() => {
-    fetchWorkspaces();
-  }, [fetchWorkspaces]);
+  const onClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button === 0) {
+      if (event.ctrlKey) {
+        event.stopPropagation();
+      } else {
+        event.preventDefault();
+      }
+    }
+  }, []);
 
-  const onChange = useCallback(
-    async (workspaceId: number) => {
-      await changeWorkspace(workspaceId);
-    },
-    [changeWorkspace]
-  );
   return (
-    <Listbox onChange={onChange} value={user?.currentWorkspaceId}>
+    <Listbox onChange={onChange} value={currentWorkspace}>
       {({ open }) => (
         <>
           <Listbox.Label className="flex justify-between w-full text-sm font-medium text-white pl-3 pr-2">
@@ -43,7 +35,7 @@ export function SelectWorkspace({ onAddClick }: SelectWorkspaceProps) {
           </Listbox.Label>
           <div className="mt-1 relative">
             <Listbox.Button className="bg-white relative w-full bg-cyan-800 rounded-md pl-3 pr-10 py-3 text-left text-white hover:bg-cyan-800 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
-              <span className="block truncate">{selectedWorkspace?.name}</span>
+              <span className="block truncate">{currentWorkspace?.name}</span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <ChevronDownIcon
                   className="h-5 w-5 text-gray-200"
@@ -61,7 +53,7 @@ export function SelectWorkspace({ onAddClick }: SelectWorkspaceProps) {
             >
               <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm flex flex-col divide-y divide-gray-200">
                 <Listbox.Options static className="overflow-auto">
-                  {entities.map((workspace) => (
+                  {workspaces.map((workspace) => (
                     <Listbox.Option
                       key={workspace.id}
                       className={({ active }) =>
@@ -70,10 +62,10 @@ export function SelectWorkspace({ onAddClick }: SelectWorkspaceProps) {
                           'cursor-pointer select-none relative py-2 pl-3 pr-9'
                         )
                       }
-                      value={workspace.id}
+                      value={workspace}
                     >
                       {({ selected, active }) => (
-                        <>
+                        <a href="/workspace/asd" onClick={onClick}>
                           <span
                             className={classNames(
                               selected ? 'font-semibold' : 'font-normal',
@@ -96,7 +88,7 @@ export function SelectWorkspace({ onAddClick }: SelectWorkspaceProps) {
                               />
                             </span>
                           ) : null}
-                        </>
+                        </a>
                       )}
                     </Listbox.Option>
                   ))}
