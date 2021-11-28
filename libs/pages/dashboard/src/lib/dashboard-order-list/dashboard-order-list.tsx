@@ -7,14 +7,15 @@ import {
 } from '@pasnik/components';
 import { NavLink } from 'react-router-dom';
 import { OrderStatusBadge, OrderTimestamp } from '@pasnik/features/orders';
-import { CashIcon } from '@heroicons/react/outline';
+import { CashIcon, OfficeBuildingIcon } from '@heroicons/react/outline';
 import { OrderModel } from '@pasnik/api/data-transfer';
+import { WorkspaceName } from '@pasnik/features/workspaces';
 
 export interface WorkspaceOrderListProps {
   orders: OrderModel[];
 }
 
-export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
+export function DashboardOrderList({ orders }: WorkspaceOrderListProps) {
   return (
     <StackedList>
       {orders.map((order) => (
@@ -44,6 +45,13 @@ export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
                 <span className="truncate">
                   <Price priceCents={order.totalPrice} />
                 </span>
+              </StackedList.SubItem>
+              <StackedList.SubItem className="sm:w-32">
+                <OfficeBuildingIcon
+                  className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+                <WorkspaceName workspaceId={order.workspaceId} />
               </StackedList.SubItem>
               <StackedList.SubItem>
                 <OrderTimestamp order={order} showIcon={true} />

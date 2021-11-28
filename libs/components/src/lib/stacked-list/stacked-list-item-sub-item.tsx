@@ -11,13 +11,13 @@ export function StackedListItemSubItem({
   className,
 }: StackedListItemSubItemProps) {
   return (
-    <p
+    <span
       className={classNames(
         'flex items-center text-sm text-gray-500',
         className
       )}
     >
       {children}
-    </p>
+    </span>
   );
 }

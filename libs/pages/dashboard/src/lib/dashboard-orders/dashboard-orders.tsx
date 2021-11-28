@@ -1,8 +1,8 @@
 import { useDashboardStore } from '../dashboard-store/dashboard.store';
-import DashboardOrdersEmpty from '../dashboard-orders-empty/dashboard-orders-empty';
-import DashboardOrdersItem from '../dashboard-orders-item/dashboard-orders-item';
-import { Spinner } from '@pasnik/layout';
+import { Spinner } from '@pasnik/components';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+import { DashboardOrderList } from '../dashboard-order-list/dashboard-order-list';
+import { OrdersEmpty } from '@pasnik/features/orders';
 
 /* eslint-disable-next-line */
 export interface DashboardOrdersProps {}
@@ -42,13 +42,9 @@ export function DashboardOrders(props: DashboardOrdersProps) {
           {isFetching ? (
             <Spinner />
           ) : activeOrders.length ? (
-            <ul className="divide-y divide-gray-200">
-              {activeOrders.map((order) => (
-                <DashboardOrdersItem key={order.id} order={order} />
-              ))}
-            </ul>
+            <DashboardOrderList orders={activeOrders} />
           ) : (
-            <DashboardOrdersEmpty />
+            <OrdersEmpty />
           )}
         </div>
       </div>
@@ -63,7 +59,7 @@ export function DashboardOrders(props: DashboardOrdersProps) {
             <div className="border-b border-gray-200">
               <ul className="divide-y divide-gray-200">
                 {archivedOrders.map((order) => (
-                  <DashboardOrdersItem key={order.id} order={order} />
+                  <DashboardOrderList orders={archivedOrders} />
                 ))}
               </ul>
             </div>

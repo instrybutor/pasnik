@@ -2,6 +2,7 @@ import { UserModel } from '@pasnik/api/data-transfer';
 import { UserAvatar, UserAvatarSize } from '../user-avatar/user-avatar';
 import { Fragment, ReactElement, useEffect, useState } from 'react';
 import { Popover, Transition } from '@headlessui/react';
+import { UserName } from '../user-name/user-name';
 
 export interface UsersPopoverElementProps {
   user: UserModel;
@@ -32,7 +33,10 @@ export function Users({
       <div className="flex flex-shrink-0 -space-x-1">
         {visibleUsers.map((user) =>
           popoverElement ? (
-            <Popover className="relative flex flex-col items-center group">
+            <Popover
+              key={user.id}
+              className="relative flex flex-col items-center group"
+            >
               <Popover.Button>
                 <UserAvatar
                   key={user.id}
@@ -40,12 +44,6 @@ export function Users({
                   size={avatarSize}
                   className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
                 />
-                {/*<div className="absolute bottom-0 flex flex-col items-center hidden mb-6 group-hover:flex">*/}
-                {/*  <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg">*/}
-                {/*    <UserName user={user} />*/}
-                {/*  </span>*/}
-                {/*  <div className="w-3 h-3 -mt-2 transform rotate-45 bg-black" />*/}
-                {/*</div>*/}
               </Popover.Button>
 
               <Transition
@@ -65,12 +63,20 @@ export function Users({
               </Transition>
             </Popover>
           ) : (
-            <UserAvatar
-              key={user.id}
-              user={user}
-              size={avatarSize}
-              className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
-            />
+            <div className="hover:relative flex flex-col items-center group">
+              <UserAvatar
+                key={user.id}
+                user={user}
+                size={avatarSize}
+                className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
+              />
+              <div className="absolute bottom-0 flex flex-col items-center hidden mb-6 group-hover:flex">
+                <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg">
+                  <UserName user={user} />
+                </span>
+                <div className="w-3 h-3 -mt-2 transform rotate-45 bg-black" />
+              </div>
+            </div>
           )
         )}
       </div>

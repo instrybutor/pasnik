@@ -26,12 +26,12 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
   }, [currentWorkspace, navigation, slug, fetchUsers]);
 
   return (
-    <>
+    <div className="flex flex-col overflow-auto flex-1">
       <header className="bg-white shadow">
         <WorkspaceHeader />
       </header>
 
-      <main className="flex-grow flex-1">
+      <main className="flex-grow flex-1 overflow-y-auto">
         <div className="mt-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white sm:rounded-md shadow">
             <div className="sm:hidden">
@@ -76,7 +76,7 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }
 

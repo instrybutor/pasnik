@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 import { BeakerIcon } from '@heroicons/react/outline';
 
-/* eslint-disable-next-line */
-export interface DashboardOrdersEmptyProps {}
-
-export function DashboardOrdersEmpty(props: DashboardOrdersEmptyProps) {
+export function OrdersEmpty() {
   return (
     <div className="text-center bg-white px-4 py-12 flex flex-col gap-4 items-center">
       <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
@@ -27,4 +24,4 @@ export function DashboardOrdersEmpty(props: DashboardOrdersEmptyProps) {
   );
 }
 
-export default DashboardOrdersEmpty;
+export default OrdersEmpty;

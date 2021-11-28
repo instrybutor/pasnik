@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from 'react';
 import { useOrdersFacade } from './orders-store/orders.facade';
-import { Spinner } from '@pasnik/layout';
+import { Spinner } from '@pasnik/components';
 import OrdersHeader from './orders-header/orders-header';
 import OrderList from './order-list/order-list';
 import { useOrdersStore } from './orders-store/orders.store';
