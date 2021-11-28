@@ -3,19 +3,30 @@ import { OrderModel, WorkspaceModel } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
 
 export interface WorkspaceOrdersState {
-  orders: OrderModel[];
+  activeOrders: OrderModel[];
+  inactiveOrders: OrderModel[];
 
   fetchActiveOrders: (workspace: WorkspaceModel) => Promise<void>;
+  fetchInactiveOrders: (workspace: WorkspaceModel) => Promise<void>;
 }
 
 export const useWorkspaceOrdersStore = create<WorkspaceOrdersState>((set) => ({
-  orders: [],
+  activeOrders: [],
+  inactiveOrders: [],
 
   fetchActiveOrders: async (workspace) => {
     const { data } = await axios.get<OrderModel[]>(
       `/api/workspaces/${workspace.slug}/orders/active`
     );
 
-    set({ orders: data });
+    set({ activeOrders: data });
+  },
+
+  fetchInactiveOrders: async (workspace) => {
+    const { data } = await axios.get<OrderModel[]>(
+      `/api/workspaces/${workspace.slug}/orders/inactive`
+    );
+
+    set({ inactiveOrders: data });
   },
 }));

@@ -8,10 +8,13 @@ import {
 import { NavLink } from 'react-router-dom';
 import { OrderStatusBadge, OrderTimestamp } from '@pasnik/features/orders';
 import { CashIcon } from '@heroicons/react/outline';
-import { useWorkspaceOrdersStore } from '../workspace-store/workspace-orders.store';
+import { OrderModel } from '@pasnik/api/data-transfer';
 
-export function WorkspaceOrderList() {
-  const orders = useWorkspaceOrdersStore(({ orders }) => orders);
+export interface WorkspaceOrderListProps {
+  orders: OrderModel[];
+}
+
+export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
   return (
     <StackedList>
       {orders.map((order) => (

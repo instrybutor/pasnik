@@ -1,8 +1,9 @@
 import { useWorkspaceFacade } from '@pasnik/features/workspaces';
-import { CheckIcon, LinkIcon, PencilIcon } from '@heroicons/react/outline';
 import { Users } from '@pasnik/components';
 import { useMemo } from 'react';
 import { useWorkspaceUsersStore } from '../workspace-store/workspace-users.store';
+import { CheckIcon, LinkIcon, PencilIcon } from '@heroicons/react/outline';
+import { WorkspaceUserPopover } from '../workspace-user-popover/workspace-user-popover';
 
 export const WorkspaceHeader = () => {
   const { currentWorkspace } = useWorkspaceFacade();
@@ -15,12 +16,20 @@ export const WorkspaceHeader = () => {
     <div className="px-4 sm:px-6 lg:max-w-6xl md:mx-auto lg:px-8">
       <div className="py-6 xl:flex xl:items-center lg:justify-between lg:border-t lg:border-gray-200">
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-2xl sm:truncate">
             {currentWorkspace?.name}
           </h2>
           <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
             <div className="mt-2 flex items-center text-sm text-gray-500">
-              <Users avatarSize="xsm" users={users} />
+              <Users
+                avatarSize="sm"
+                users={users}
+                popoverElement={({ user }) => (
+                  <div className="bg-white p-4 w-72">
+                    <WorkspaceUserPopover user={user} />
+                  </div>
+                )}
+              />
             </div>
           </div>
         </div>
@@ -28,7 +37,7 @@ export const WorkspaceHeader = () => {
           <span className="hidden sm:block">
             <button
               type="button"
-              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
             >
               <PencilIcon
                 className="-ml-1 mr-2 h-5 w-5 text-gray-500"
@@ -41,7 +50,7 @@ export const WorkspaceHeader = () => {
           <span className="hidden sm:block ml-3">
             <button
               type="button"
-              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
             >
               <LinkIcon
                 className="-ml-1 mr-2 h-5 w-5 text-gray-500"

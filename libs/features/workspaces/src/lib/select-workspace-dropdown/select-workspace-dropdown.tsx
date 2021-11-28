@@ -66,7 +66,7 @@ export function SelectWorkspaceDropdown({
                       key={workspace.id}
                       className={({ active }) =>
                         classNames(
-                          active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                          active ? 'text-white bg-cyan-600' : 'text-gray-900',
                           'cursor-pointer select-none relative py-2 pl-3 pr-9'
                         )
                       }
@@ -89,7 +89,7 @@ export function SelectWorkspaceDropdown({
                           {selected ? (
                             <span
                               className={classNames(
-                                active ? 'text-white' : 'text-indigo-600',
+                                active ? 'text-white' : 'text-cyan-600',
                                 'absolute inset-y-0 right-0 flex items-center pr-4'
                               )}
                             >
@@ -106,7 +106,7 @@ export function SelectWorkspaceDropdown({
                 </Listbox.Options>
                 <button
                   onClick={addClick}
-                  className="relative py-2 pl-3 text-left pr-9 hover:bg-indigo-700 hover:text-white w-full"
+                  className="relative py-2 pl-3 text-left pr-9 hover:bg-cyan-700 hover:text-white w-full"
                 >
                   Dodaj przestrzeń
                 </button>

@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
 export interface StackedListItemWrapperProps {
-  children?: ReactElement;
+  children: ReactElement;
 }
 
 export interface StackedListItemProps {

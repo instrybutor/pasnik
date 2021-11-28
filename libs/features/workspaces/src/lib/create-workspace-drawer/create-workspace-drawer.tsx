@@ -135,7 +135,7 @@ export const CreateWorkspaceDrawer = ({
                                     id="privacy-public"
                                     aria-describedby="privacy-public-description"
                                     type="radio"
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                                    className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
                                     defaultChecked
                                     value={WorkspacePrivacy.Public}
                                     {...register('privacy')}
@@ -163,7 +163,7 @@ export const CreateWorkspaceDrawer = ({
                                       id="privacy-private-to-project"
                                       aria-describedby="privacy-private-to-project-description"
                                       type="radio"
-                                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                                      className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
                                       value={WorkspacePrivacy.PrivateToMembers}
                                       {...register('privacy')}
                                     />
@@ -192,7 +192,7 @@ export const CreateWorkspaceDrawer = ({
                                       id="privacy-private"
                                       aria-describedby="privacy-private-to-project-description"
                                       type="radio"
-                                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                                      className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
                                       value={WorkspacePrivacy.PrivateToYou}
                                       {...register('privacy')}
                                     />

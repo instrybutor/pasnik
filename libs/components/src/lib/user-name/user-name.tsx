@@ -37,9 +37,7 @@ export function UserName({
     >
       <p className="truncate">{formatUser()}</p>
       {children && (
-        <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700 truncate">
-          {children}
-        </p>
+        <p className="text-xs font-medium text-gray-500 truncate">{children}</p>
       )}
     </div>
   );
