@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
 
@@ -14,9 +14,73 @@ import {
   OrderStatus,
 } from '@pasnik/api/data-transfer';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { sub } from 'date-fns';
 
 @EntityRepository(OrderEntity)
 export class OrdersRepository extends Repository<OrderEntity> {
+  findAllActive(showRecentlyClosed = false) {
+    const now = new Date();
+    const yesterday = sub(now, { days: 1 });
+
+    return this.createQueryBuilder('order')
+      .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
+      .leftJoinAndMapOne(
+        'order.user',
+        UserEntity,
+        'user',
+        'user.id = order.userId'
+      )
+      .leftJoinAndMapMany(
+        'order.participants',
+        UserEntity,
+        'participant',
+        'dish.userId = participant.id'
+      )
+      .where(
+        new Brackets((db) => {
+          const query = db
+            .where(`order.status = '${OrderStatus.InProgress}'`)
+            .orWhere(`order.status = '${OrderStatus.Ordered}'`);
+          if (showRecentlyClosed) {
+            query.orWhere(
+              `(order.status = '${OrderStatus.Delivered}' AND order.deliveredAt BETWEEN :startDate AND :endDate)`
+            );
+          }
+        })
+      )
+      .addSelect('SUM(dish.priceCents)', 'order_totalPrice')
+      .groupBy('order.id')
+      .addGroupBy('user.id')
+      .addGroupBy('participant.id')
+      .setParameters({
+        startDate: yesterday,
+        endDate: now,
+      });
+  }
+
+  findAllInactive() {
+    return this.createQueryBuilder('order')
+      .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
+      .leftJoinAndMapOne(
+        'order.user',
+        UserEntity,
+        'user',
+        'user.id = order.userId'
+      )
+      .leftJoinAndMapMany(
+        'order.participants',
+        UserEntity,
+        'participant',
+        'dish.userId = participant.id'
+      )
+      .where(
+        `order.status != '${OrderStatus.InProgress}' AND order.status != '${OrderStatus.Ordered}'`
+      )
+      .groupBy('order.id')
+      .addGroupBy('user.id')
+      .addGroupBy('participant.id');
+  }
+
   async createOrder(
     createOrderDto: CreateOrderDto,
     workspace: WorkspaceEntity,

@@ -16,6 +16,11 @@ export function SelectWorkspaceDropdown({
 }: SelectWorkspaceProps) {
   const { currentWorkspace, workspaces } = useWorkspaceFacade();
 
+  const addClick = useCallback(() => {
+    console.log('addclock');
+    onAddClick();
+  }, [onAddClick]);
+
   const onClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button === 0) {
       if (event.ctrlKey) {
@@ -51,8 +56,11 @@ export function SelectWorkspaceDropdown({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm flex flex-col divide-y divide-gray-200">
-                <Listbox.Options static className="overflow-auto">
+              <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 sm:text-sm flex flex-col divide-y divide-gray-200">
+                <Listbox.Options
+                  static={true}
+                  className="overflow-auto focus:outline-none"
+                >
                   {workspaces.map((workspace) => (
                     <Listbox.Option
                       key={workspace.id}
@@ -65,7 +73,10 @@ export function SelectWorkspaceDropdown({
                       value={workspace}
                     >
                       {({ selected, active }) => (
-                        <a href="/workspace/asd" onClick={onClick}>
+                        <a
+                          href={`/workspace/${workspace.slug}`}
+                          onClick={onClick}
+                        >
                           <span
                             className={classNames(
                               selected ? 'font-semibold' : 'font-normal',
@@ -94,7 +105,7 @@ export function SelectWorkspaceDropdown({
                   ))}
                 </Listbox.Options>
                 <button
-                  onClick={onAddClick}
+                  onClick={addClick}
                   className="relative py-2 pl-3 text-left pr-9 hover:bg-indigo-700 hover:text-white w-full"
                 >
                   Dodaj przestrzeń

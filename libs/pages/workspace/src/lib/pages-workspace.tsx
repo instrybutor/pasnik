@@ -4,16 +4,7 @@ import { useEffect } from 'react';
 import { useWorkspaceOrdersStore } from './workspace-store/workspace-orders.store';
 import { useWorkspaceUsersStore } from './workspace-store/workspace-users.store';
 import { WorkspaceHeader } from './workspace-header/workspace-header';
-import {
-  Price,
-  StackedList,
-  UserAvatar,
-  UserName,
-  Users,
-} from '@pasnik/components';
-import { OrderStatusBadge } from '@pasnik/features/orders';
-import { CalendarIcon, CashIcon } from '@heroicons/react/outline';
-import { OrderTimestamp } from '@pasnik/pages/order';
+import { TabLink } from '@pasnik/components';
 
 /* eslint-disable-next-line */
 export interface PagesWorkspaceProps {}
@@ -22,7 +13,7 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
   const navigation = useNavigate();
   const { currentWorkspace } = useWorkspaceFacade();
   const { slug } = useParams<'slug'>();
-  const { fetchActiveOrders, orders } = useWorkspaceOrdersStore();
+  const { fetchActiveOrders } = useWorkspaceOrdersStore();
   const { fetchUsers } = useWorkspaceUsersStore();
 
   useEffect(() => {
@@ -42,54 +33,37 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
         <WorkspaceHeader />
       </header>
 
-      <h2 className="max-w-6xl mx-auto mt-8 text-lg leading-6 font-medium text-gray-900">
-        Aktywne zamówienia
-      </h2>
-      <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">
-        <div className="border-b border-gray-200">
-          <StackedList>
-            {orders.map((order) => (
-              <StackedList.Item
-                key={order.id}
-                title={order.from}
-                titleRight={<OrderStatusBadge order={order} />}
-                subTitle={
-                  <>
-                    <StackedList.SubItem className="sm:w-40">
-                      <UserAvatar
-                        user={order.user}
-                        size="xsm"
-                        className="mr-2"
-                      />
-                      <UserName user={order.user} />
-                    </StackedList.SubItem>
-                    <StackedList.SubItem className="sm:w-24">
-                      <CashIcon
-                        className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span className="truncate">
-                        <Price priceCents={order.totalPrice} />
-                      </span>
-                    </StackedList.SubItem>
-                    <StackedList.SubItem>
-                      <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                      <OrderTimestamp order={order} />
-                    </StackedList.SubItem>
-                  </>
-                }
-                subTitleRight={
-                  <Users
-                    avatarSize="xsm"
-                    usersToShow={3}
-                    users={order.participants}
-                  />
-                }
-              />
-            ))}
-          </StackedList>
+      <main className="flex-grow flex-1">
+        <div className="mt-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="sm:hidden">
+              <label htmlFor="tabs" className="sr-only">
+                Select a tab
+              </label>
+              <select
+                id="tabs"
+                name="tabs"
+                className="mt-4 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm rounded-md"
+              >
+                <option>Aktywne</option>
+                <option>Zakończone</option>
+              </select>
+            </div>
+            <div className="hidden sm:block">
+              <div className="border-b border-gray-200">
+                <nav className="mt-2 -mb-px flex space-x-8" aria-label="Tabs">
+                  <TabLink to="." count={1} end={true}>
+                    Aktywne
+                  </TabLink>
+                  <TabLink to="./inactive" count={1} end={true}>
+                    Nieaktywne
+                  </TabLink>
+                </nav>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </>
   );
 }

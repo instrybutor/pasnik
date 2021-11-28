@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import classNames from 'classnames';
 
 export interface StackedListItemSubItemProps {
-  children?: ReactElement[] | string;
+  children?: ReactElement | ReactElement[] | string;
   className?: string;
 }
 

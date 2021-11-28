@@ -16,8 +16,7 @@ import {
   OrderAction,
   OrderStatus,
 } from '@pasnik/api/data-transfer';
-import { Brackets, Connection } from 'typeorm';
-import { sub } from 'date-fns';
+import { Connection } from 'typeorm';
 
 @Injectable()
 export class WorkspacesService {
@@ -59,46 +58,15 @@ export class WorkspacesService {
   findUsers(workspace: WorkspaceEntity) {
     return this.workspaceUsersRepository.find({
       where: { workspace },
+      relations: ['user'],
     });
   }
 
   findActiveOrders(workspace: WorkspaceEntity) {
-    const now = new Date();
-    const yesterday = sub(now, { days: 1 });
-
     return this.ordersRepository
-      .createQueryBuilder('order')
-      .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
-      .leftJoinAndMapOne(
-        'order.user',
-        UserEntity,
-        'user',
-        'user.id = order.userId'
-      )
-      .leftJoinAndMapMany(
-        'order.participants',
-        UserEntity,
-        'participant',
-        'dish.userId = participant.id'
-      )
-      .where('order.workspaceId = :workspaceId')
-      .andWhere(
-        new Brackets((db) => {
-          db.where(`order.status = '${OrderStatus.InProgress}'`)
-            .orWhere(`order.status = '${OrderStatus.Ordered}'`)
-            .orWhere(
-              `(order.status = '${OrderStatus.Delivered}' AND order.deliveredAt BETWEEN :startDate AND :endDate)`
-            );
-        })
-      )
-      .addSelect('SUM(dish.priceCents)', 'order_totalPrice')
-      .groupBy('order.id')
-      .addGroupBy('user.id')
-      .addGroupBy('participant.id')
-      .setParameters({
+      .findAllActive(false)
+      .andWhere('order.workspaceId = :workspaceId', {
         workspaceId: workspace.id,
-        startDate: yesterday,
-        endDate: now,
       })
       .getMany();
   }

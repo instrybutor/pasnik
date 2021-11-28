@@ -23,6 +23,8 @@ module.exports = {
   variants: {
     extend: {
       opacity: ['disabled'],
+      position: ['hover'],
+      display: ['group-hover'],
     },
   },
   plugins: [require('@tailwindcss/forms')],

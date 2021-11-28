@@ -7,3 +7,5 @@ export * from './lib/date-format/date-format';
 export * from './lib/success-modal/success-modal';
 export * from './lib/users/users';
 export * from './lib/stacked-list/stacked-list';
+export * from './lib/nav-link-with-param/nav-link-with-param';
+export * from './lib/tab-link/tab-link';
