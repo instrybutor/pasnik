@@ -1,6 +1,9 @@
-import { useAuthPopup } from '../auth-popup/auth-popup';
 import { useCallback } from 'react';
+import { t } from 'i18next';
+
 import { InvitationRequiredError } from '@pasnik/shared/utils';
+
+import { useAuthPopup } from '../auth-popup/auth-popup';
 
 export interface SlackLoginProps {
   onSuccess: () => void;
@@ -40,7 +43,7 @@ export const SlackLogin = ({ onSuccess, onError }: SlackLoginProps) => {
           fill="#ecb22e"
         />
       </svg>
-      Sign in with Slack
+      {t('landing.slack')}
     </button>
   );
 };

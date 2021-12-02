@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { ExclamationIcon } from '@heroicons/react/outline';
 
 export function InvitationPendingAlert() {
@@ -12,7 +13,7 @@ export function InvitationPendingAlert() {
         </div>
         <div className="ml-3">
           <h3 className="text-sm font-medium text-yellow-800">
-            Twoje zaproszenie oczekuje na akceptację.
+            {t('invitation.pending')}
           </h3>
         </div>
       </div>

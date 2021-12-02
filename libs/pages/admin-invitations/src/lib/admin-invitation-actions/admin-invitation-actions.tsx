@@ -1,4 +1,5 @@
 import { Fragment, useCallback } from 'react';
+import { t } from 'i18next';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
@@ -25,7 +26,7 @@ export default function AdminInvitationActions({
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="bg-gray-100 rounded-full flex items-center text-gray-400 hover:text-gray-600">
-          <span className="sr-only">Open options</span>
+          <span className="sr-only">{t('invitation.open')}</span>
           <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
         </Menu.Button>
       </div>
@@ -48,7 +49,7 @@ export default function AdminInvitationActions({
                 className="inline-flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
               >
                 <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                Zatwierdź
+                {t('invitation.approve')}
               </button>
             </Menu.Item>
             <Menu.Item>
@@ -58,7 +59,7 @@ export default function AdminInvitationActions({
                 className="inline-flex items-center w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-500"
               >
                 <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                Odrzuć
+                {t('invitation.reject')}
               </button>
             </Menu.Item>
           </div>

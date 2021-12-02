@@ -1,10 +1,12 @@
+import { t } from 'i18next';
+import { InvitationStatus } from '@pasnik/api/data-transfer';
+
 import { ErrorAlert } from './error-alert/error-alert';
 import { GoogleLogin } from './google-login/google-login';
 import { Invitation } from './invitation/invitation';
 import { InvitationPendingAlert } from './invitation-pending-alert/invitation-pending-alert';
 import { usePageLogin } from './use-page-login';
 import { SlackLogin } from './slack-login/slack-login';
-import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { InvitationRejectedAlert } from './invitation-rejected-alert/invitation-pending-alert';
 
 export function PagesLogin() {
@@ -31,13 +33,12 @@ export function PagesLogin() {
               🍔 Paśnik
             </span>
             <small className="text-xs text-gray-400">
-              Grupowe zamawianie szamy!
+              {t('landing.slogan')}
             </small>
           </h1>
 
           <div className="border-b border-b-gray-100 w-full" />
-
-          <span className="mx-auto">Zaloguj się aby korzystać z serwisu!</span>
+          <span className="mx-auto">{t('landing.login_text')}</span>
 
           <div>
             {invitationStatus === InvitationStatus.PENDING && (

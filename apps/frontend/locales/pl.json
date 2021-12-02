@@ -1,0 +1,134 @@
+{
+  "header": {
+    "title": "Otwórz menu",
+    "create_order": "Utwórz zamówienie",
+    "view_notifications": "Sprawdz powiadomiena",
+    "user_menu": {
+      "open_menu": "Otwórz",
+      "settings": "Ustawienia",
+      "profile": "Profil",
+      "logout": "Wyloguj"
+    }
+  },
+  "landing": {
+    "slogan": "Grupowe zamawianie szamy!",
+    "login_text": "Zaloguj się aby korzystać z serwisu!",
+    "google": "Zaloguj sie przez Google",
+    "slack": "Zaloguj sie przez Slack"
+  },
+  "sidebar": {
+    "close": "Zamknij",
+    "version": "Wersja"
+  },
+  "invitation": {
+    "open": "Otwórz",
+    "approve": "Zatwierdź",
+    "reject": "Odrzuć",
+    "sent": "Wysłane",
+    "invitations": "Zaproszenia",
+    "status": {
+      "pending": "Oczekujące",
+      "approvedBy": "Zatwierdzone przez",
+      "rejectedBy": "Odrzucone przez",
+      "registeredAs": "Zarejestrowany jako"
+    },
+    "success": {
+      "title": "Zapytanie wysłane",
+      "back": "Wróć na stronę logowania"
+    },
+    "pending": "Twoje zaproszenie oczekuje na akceptację.",
+    "rejected": "Twoje zaproszenie zostało odrzucone",
+    "invitation_required": "Wymagane zaproszenie",
+    "invitation_info": "Aplikacja jest dostępna tylko dla zaproszonych.",
+    "send_request": "Wyślij zapytanie",
+    "cancel": "Anuluj"
+  },
+  "order": {
+    "create_order": "Tworzenie zamówienia",
+    "request_failed": "Coś poszło nie tak.",
+
+    "form": {
+      "restaurant_label": "Restauracja",
+      "restaurant_placeholder": "Nazwa restauracji",
+
+      "menu_label": "Link do menu",
+      "menu_placeholder": "Podaj link do menu",
+
+      "delivery_price_label": "Kwota dostawy",
+      "delivery_price_placeholder": "Podaj kwotę dostawy",
+
+      "create": "Utwórz",
+      "save": "Zapisz"
+    },
+    "closed": {
+      "title": "Brak zakończonych zamówień"
+    },
+    "history": {
+      "title": "Historia zamówień"
+    },
+    "summary": {
+      "title": "Podsumowanie zamówienia"
+    }
+  },
+  "dashboard": {
+    "header": {
+      "hello": "Witaj",
+      "company": "Company"
+    },
+    "no_active_orders": "Brak aktywnych zamówień",
+    "active_orders": "Aktywne zamówienia",
+    "closed_orders": "Zamkniete zamówienia",
+    "starting_info": "Zacznij od utworzenia nowego zamówienia",
+    "create_order": "Utwórz zamówienie",
+    "overview": {
+      "title": "Przegląd",
+      "balance": "Twoje saldo",
+      "orders": "Twoje zamówienia",
+      "transfers": "Oczekujące transfery",
+      "see_all": "Zobacz wszystko"
+    }
+  },
+  "dish": {
+    "title": "Zamówienie",
+    "header_menu": {
+      "title": "menu",
+      "cancel": "Anuluj",
+      "edit": "Edytuj",
+      "open": "Otwórz",
+      "order": "Zamów",
+      "delivered": "Dostarczone",
+      "more": "Więcej"
+    },
+    "paying": {
+      "title": "Change published status",
+      "myself": "mnie",
+      "payed_by": "Opłacone przez",
+      "you_paid": "Twój wkład",
+      "pick_payer": "Wybierz płacącego"
+    },
+    "delivery": "dostawa",
+    "form": {
+      "name": "Nazwa",
+      "duplicate": "Duplikuj",
+      "edit": "Edit",
+      "delete": "Usuń"
+    }
+  },
+  "timeline": {
+    "title": "Historia",
+    "createdBy": "Utworzone przez",
+    "orderedBy": "Zamówione przez",
+    "payedBy": "Opłacone przez",
+    "deliveredBy": "Odebrane przez",
+    "canceledBy": "Usunięte przez"
+  },
+  "timestamp": {
+    "created": "Utworzone",
+    "ordered": "Zamowiono",
+    "delivered": "Dostarczono",
+    "canceled": "Usunięto"
+  },
+  "errors": {
+    "login": "Problem z logowaniem"
+  }
+}

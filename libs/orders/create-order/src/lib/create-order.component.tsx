@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { useCreateOrder } from './create-order.hook';
 import { OrderHeader } from './components/order-header';
 
@@ -16,11 +17,11 @@ export function CreateOrder() {
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
-            <label className="mb-2">Restaurant</label>
+            <label className="mb-2">{t('order.form.restaurant_label')}</label>
             <input
               autoFocus
               type="text"
-              placeholder="Put restaurant name"
+              placeholder={t('order.form.restaurant_placeholder')}
               className="border rounded border-gray-300 p-4"
               {...register('from')}
             />
@@ -32,10 +33,10 @@ export function CreateOrder() {
           </div>
 
           <div className="flex flex-col">
-            <label className="mb-2">Menu URL</label>
+            <label className="mb-2">{t('order.form.menu_label')}</label>
             <input
               type="text"
-              placeholder="Put Menu URL"
+              placeholder={t('order.form.menu_placeholder')}
               className="border rounded border-gray-300 p-4"
               {...register('menuUrl')}
             />
@@ -48,11 +49,13 @@ export function CreateOrder() {
           )}
 
           <div className="flex flex-col">
-            <label className="mb-2">Delivery Price (optional)</label>
+            <label className="mb-2">
+              {t('order.form.delivery_price_label')}
+            </label>
             <input
               type="number"
               step="0.01"
-              placeholder="Put delivery price"
+              placeholder={t('order.form.delivery_price_placeholder')}
               className="border rounded border-gray-300 p-4"
               {...register('shippingCents')}
             />
@@ -67,7 +70,7 @@ export function CreateOrder() {
             type="submit"
             className="items-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
           >
-            Utwórz
+            {t('order.form.create')}
           </button>
         </form>
       </div>

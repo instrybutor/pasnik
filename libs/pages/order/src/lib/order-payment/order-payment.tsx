@@ -13,6 +13,7 @@ import { UserDishesSummary } from '../order-summary/order-summary.hook';
 import OrderSelectPayer from '../order-select-payer/order-select-payer';
 import * as service from '../order-store/order.service';
 import { useOrderFacade } from '../order-store/order.facade';
+import { t } from 'i18next';
 
 export interface OrderPaymentProps {
   order: OrderModel;
@@ -41,7 +42,7 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
         <div className="divide-y divide-gray-200">
           <div className="px-4 py-5 sm:px-6 sm:flex sm:items-center sm:justify-between">
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-              Twój wkład
+              {t('dish.paying.you_paid')}
             </h2>
           </div>
           <div className="py-5 px-4 sm:px-6">
@@ -82,7 +83,8 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
                         ).value
                       }
                     />{' '}
-                    (dostawa <Price priceCents={userDishesSummary.shipping} />)
+                    ({t('dish.delivery')}{' '}
+                    <Price priceCents={userDishesSummary.shipping} />)
                   </UserName>
                 </div>
                 <UserAvatar user={userDishesSummary.user} />

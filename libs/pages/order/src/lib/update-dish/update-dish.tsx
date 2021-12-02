@@ -4,6 +4,7 @@ import { useUpdateDish } from './update-dish.hook';
 import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
 import { useCallback } from 'react';
+import { t } from 'i18next';
 
 export interface UpdateDishProps {
   dish: DishModel;
@@ -36,13 +37,13 @@ export function UpdateDish({
           htmlFor="email"
           className="block text-sm font-medium text-gray-700 sr-only"
         >
-          Dish
+          {t('dish.title')}
         </label>
         <div className="relative rounded-md shadow-sm">
           <input
             autoFocus={true}
             type="text"
-            placeholder="Nazwa"
+            placeholder={t('dish.form.name')}
             className={classNames(
               {
                 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500':
@@ -66,7 +67,7 @@ export function UpdateDish({
       <div className="whitespace-nowrap text-sm text-gray-500 w-36 sm:w-44 flex-shrink-0">
         <div>
           <label htmlFor="price" className="sr-only">
-            Price
+            {t('dish.form.price')}
           </label>
           <div className="relative rounded-md shadow-sm">
             <input

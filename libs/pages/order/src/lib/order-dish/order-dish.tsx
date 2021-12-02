@@ -9,6 +9,7 @@ import { DishModel } from '@pasnik/api/data-transfer';
 import OrderDishUser from '../order-dish-users/order-dish-user';
 import { Price } from '@pasnik/components';
 import { Menu, Transition } from '@headlessui/react';
+import { t } from 'i18next';
 
 export interface OrderDishProps {
   inProgress: boolean;
@@ -152,7 +153,7 @@ export function OrderDish({
                       className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                       aria-hidden="true"
                     />
-                    Duplikuj
+                    {t('dish.form.duplicate')}
                   </button>
                 </Menu.Item>
                 <Menu.Item>
@@ -165,7 +166,7 @@ export function OrderDish({
                       className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                       aria-hidden="true"
                     />
-                    Edytuj
+                    {t('dish.form.edit')}
                   </button>
                 </Menu.Item>
                 <Menu.Item>
@@ -178,7 +179,7 @@ export function OrderDish({
                       className="-ml-1 mr-2 h-5 w-5"
                       aria-hidden="true"
                     />
-                    Usuń
+                    {t('dish.form.delete')}
                   </button>
                 </Menu.Item>
               </Menu.Items>

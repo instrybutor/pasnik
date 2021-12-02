@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { Fragment, useCallback } from 'react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
 import { useAuth } from '@pasnik/auth';
+import { t } from 'i18next';
 
 export interface OrderPaymentProps {
   totalCents: number;
@@ -35,7 +36,10 @@ export function OrderSelectPayer({
             <div className="flex items-center">
               <UserAvatar user={payer} />
               <div className="ml-3 truncate">
-                <UserName user={payer} fallbackValue="Wybierz płacącego">
+                <UserName
+                  user={payer}
+                  fallbackValue={t('dish.paying.pick_payer')}
+                >
                   <Price priceCents={totalCents} />
                 </UserName>
               </div>

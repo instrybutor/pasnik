@@ -4,6 +4,7 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { CashIcon } from '@heroicons/react/outline';
 import { UserModel } from '@pasnik/api/data-transfer';
+import { t } from 'i18next';
 
 export interface OrderPaidButtonProps {
   onClick?: (payer: UserModel) => void;
@@ -38,7 +39,7 @@ export function OrderPaidButton({
       {({ open }) => (
         <>
           <Listbox.Label className="sr-only">
-            Change published status
+            {t('dish.paying.title')}
           </Listbox.Label>
           <div className="relative">
             <div className="inline-flex shadow-sm rounded-md divide-x divide-yellow-600">
@@ -46,11 +47,14 @@ export function OrderPaidButton({
                 <button className="relative inline-flex items-center py-2 pl-3 pr-4 border border-transparent rounded-l-md shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                   <CashIcon className="h-5 w-5" aria-hidden="true" />
                   <p className="ml-2.5 text-sm font-medium">
-                    Opłacone przez {selected ? getName(selected) : ' mnie'}
+                    {t('dish.paying.payed_by')}{' '}
+                    {selected
+                      ? getName(selected)
+                      : ` ${t('dish.paying.myself')}`}
                   </p>
                 </button>
                 <Listbox.Button className="relative inline-flex items-center bg-yellow-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-yellow-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-yellow-500">
-                  <span className="sr-only">Change published status</span>
+                  <span className="sr-only">{t('dish.paying.title')}</span>
                   <ChevronDownIcon
                     className="h-5 w-5 text-white"
                     aria-hidden="true"

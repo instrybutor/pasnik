@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { XCircleIcon } from '@heroicons/react/solid';
 
 export function ErrorAlert() {
@@ -9,7 +10,7 @@ export function ErrorAlert() {
         </div>
         <div className="ml-3">
           <h3 className="text-sm font-medium text-red-800">
-            Problem z logowaniem
+            {t('errors.login')}
           </h3>
         </div>
       </div>

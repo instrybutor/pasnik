@@ -18,6 +18,7 @@ import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
 import { OrderTimestamp } from '../order-timestamp/order-timestamp';
 import { useOrderFacade } from '../order-store/order.facade';
+import { t } from 'i18next';
 
 export interface OrderHeaderProps {
   order: OrderModel;
@@ -115,7 +116,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                 >
                   <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                  Anuluj
+                  {t('dish.header_menu.cancel')}
                 </button>
               </span>
             )}
@@ -133,7 +134,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                     className="-ml-1 mr-2 h-5 w-5"
                     aria-hidden="true"
                   />
-                  Otwórz
+                  {t('dish.header_menu.open')}
                 </button>
               </span>
             )}
@@ -150,7 +151,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                     className="-ml-1 mr-2 h-5 w-5"
                     aria-hidden="true"
                   />
-                  Dostarczone
+                  {t('dish.header_menu.delivered')}
                 </button>
               </span>
             )}
@@ -165,7 +166,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                     className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                     aria-hidden="true"
                   />
-                  Edytuj
+                  {t('dish.header_menu.edit')}
                 </Link>
               </span>
             )}
@@ -182,7 +183,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                     className="-ml-1 mr-2 h-5 w-5"
                     aria-hidden="true"
                   />
-                  Zamów
+                  {t('dish.header_menu.order')}
                 </button>
               </span>
             )}
@@ -190,7 +191,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
             {order.status === OrderStatus.InProgress && (
               <Menu as="span" className="ml-3 relative sm:hidden">
                 <Menu.Button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
-                  Więcej
+                  {t('dish.header_menu.more')}
                   <ChevronDownIcon
                     className="-mr-1 ml-2 h-5 w-5 text-gray-500"
                     aria-hidden="true"
@@ -217,7 +218,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                             className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                             aria-hidden="true"
                           />
-                          Edytuj
+                          {t('dish.header_menu.edit')}
                         </Link>
                       )}
                     </Menu.Item>
@@ -232,7 +233,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                             className="-ml-1 mr-2 h-5 w-5"
                             aria-hidden="true"
                           />
-                          Anuluj
+                          {t('dish.header_menu.cancel')}
                         </button>
                       )}
                     </Menu.Item>

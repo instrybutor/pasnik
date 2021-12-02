@@ -8,6 +8,7 @@ import AddDish from '../add-dish/add-dish';
 
 import UpdateDish from '../update-dish/update-dish';
 import { useOrderDishes } from './use-order-dishes';
+import { t } from 'i18next';
 
 export interface OrderDishesProps {
   dishes: DishModel[] | null;
@@ -41,7 +42,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
         <div className="divide-y divide-gray-200">
           <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-              Zamówienie
+              {t('dish.title')}
             </h2>
             {inProgress && (
               <div className="flex">
@@ -59,6 +60,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
             {dishes?.sort(sortByCreateAt).map((dish) => (
               <Transition
                 as="li"
+                key={dish.id}
                 show
                 className="flex items-center gap-4 px-6"
                 enter="transition ease-out duration-[1000ms]"

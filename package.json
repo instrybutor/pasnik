@@ -56,6 +56,8 @@
     "dotenv": "^10.0.0",
     "express-session": "^1.17.2",
     "http-proxy-middleware": "^2.0.1",
+    "i18next": "^21.5.4",
+    "i18next-resources-to-backend": "^1.0.0",
     "nanoid": "^3.1.30",
     "openid-client": "^5.0.2",
     "passport": "^0.5.0",
