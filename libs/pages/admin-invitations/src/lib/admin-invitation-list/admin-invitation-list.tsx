@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next';
+
 import { CalendarIcon, MailIcon } from '@heroicons/react/solid';
 import { InvitationModel, InvitationStatus } from '@pasnik/api/data-transfer';
 import { DateFormat } from '@pasnik/components';
+
 import AdminInvitationStatus from '../admin-invitation-status/admin-invitation-status';
 import AdminInvitationActions from '../admin-invitation-actions/admin-invitation-actions';
 
@@ -13,6 +16,8 @@ export default function AdminInvitationList({
   invitations,
   changeStatus,
 }: AdminInvitationListProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-white shadow sm:rounded-md">
       <ul className="divide-y divide-gray-200">
@@ -36,7 +41,7 @@ export default function AdminInvitationList({
                           aria-hidden="true"
                         />
                         <p>
-                          Wysłane{' '}
+                          {`${t('invitation.sent')} `}
                           <DateFormat
                             date={invitation.createdAt}
                             format="LLL"

@@ -16,9 +16,9 @@ export function OrderUser({ user, initials }: OrderUserProps) {
         : `${user.familyName} ${user.givenName}`;
     }
     return user.email;
-  }, [user]);
+  }, [initials, user.email, user.familyName, user.givenName]);
 
-  return <a className="font-medium text-gray-900">{formatName()}</a>;
+  return <span className="font-medium text-gray-900">{formatName()}</span>;
 }
 
 export default OrderUser;

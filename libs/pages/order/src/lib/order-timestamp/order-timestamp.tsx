@@ -1,5 +1,6 @@
 import { DateDistance, DateFormat } from '@pasnik/components';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+import { useTranslation } from 'react-i18next';
 
 export interface OrderTimestampProps {
   order: OrderModel;
@@ -7,29 +8,31 @@ export interface OrderTimestampProps {
 }
 
 export function OrderTimestamp({ order, showLabel }: OrderTimestampProps) {
+  const { t } = useTranslation();
+
   return (
     <p>
       {order.status === OrderStatus.InProgress && (
         <>
-          {showLabel && <span>Utworzone </span>}
+          {showLabel && <span>{t('timestamp.created')} </span>}
           <DateDistance date={order.createdAt} />
         </>
       )}
       {order.status === OrderStatus.Ordered && (
         <>
-          {showLabel && <span>Zamowiono </span>}
+          {showLabel && <span>{t('timestamp.ordered')} </span>}
           <DateDistance date={order.orderedAt} />
         </>
       )}
       {order.status === OrderStatus.Delivered && (
         <>
-          {showLabel && <span>Dostarczono </span>}
+          {showLabel && <span>{t('timestamp.delivered')} </span>}
           <DateFormat date={order.deliveredAt} format="MM/dd/yyyy HH:mm" />
         </>
       )}
       {order.status === OrderStatus.Canceled && (
         <>
-          {showLabel && <span>Usunięto </span>}
+          {showLabel && <span>{t('timestamp.canceled')} </span>}
           <DateFormat date={order.updatedAt} format="MM/dd/yyyy HH:mm" />
         </>
       )}

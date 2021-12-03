@@ -1,11 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { useDashboardStore } from '../dashboard-store/dashboard.store';
 import DashboardOrdersEmpty from '../dashboard-orders-empty/dashboard-orders-empty';
 import DashboardOrdersItem from '../dashboard-orders-item/dashboard-orders-item';
 import { Spinner } from '@pasnik/layout';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
-
-/* eslint-disable-next-line */
-export interface DashboardOrdersProps {}
 
 const sortOrder = (order: OrderModel, nextOrder: OrderModel) =>
   new Date(order.createdAt).getTime() > new Date(nextOrder.createdAt).getTime()
@@ -26,16 +24,18 @@ const getArchivedOrders = (orders: OrderModel[]) =>
     )
     .sort(sortOrder);
 
-export function DashboardOrders(props: DashboardOrdersProps) {
+export function DashboardOrders() {
   const { activeOrders, archivedOrders } = useDashboardStore((state) => ({
     activeOrders: getActiveOrder(Object.values(state.entities ?? {})),
     archivedOrders: getArchivedOrders(Object.values(state.entities ?? {})),
   }));
   const isFetching = useDashboardStore((state) => state.isFetching);
+  const { t } = useTranslation();
+
   return (
     <>
       <h2 className="max-w-6xl mx-auto mt-8 text-lg leading-6 font-medium text-gray-900">
-        Aktywne zamówienia
+        {t('dashboard.active_orders')}
       </h2>
       <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">
         <div className="border-b border-gray-200">
@@ -56,7 +56,7 @@ export function DashboardOrders(props: DashboardOrdersProps) {
       {archivedOrders.length !== 0 && (
         <>
           <h2 className="max-w-6xl mx-auto mt-8 text-lg leading-6 font-medium text-gray-900">
-            Zamkniete zamówienia
+            {t('dashboard.closed_orders')}
           </h2>
 
           <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">

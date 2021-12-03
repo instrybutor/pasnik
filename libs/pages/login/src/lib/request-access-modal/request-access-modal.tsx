@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { Fragment, useRef } from 'react';
+
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationIcon } from '@heroicons/react/outline';
 
@@ -14,6 +16,7 @@ export const RequestAccessModal = ({
   cancelHandler,
 }: RequestAccessModalProps) => {
   const submitButtonRef = useRef(null);
+  const { t } = useTranslation();
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -64,11 +67,11 @@ export const RequestAccessModal = ({
                     as="h3"
                     className="text-lg leading-6 font-medium text-gray-900"
                   >
-                    Wymagane zaproszenie
+                    {t('invitation.invitation_required')}
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Aplikacja jest dostępna tylko dla zaproszonych.
+                      {t('invitation.invitation_info')}
                     </p>
                   </div>
                 </div>
@@ -80,14 +83,14 @@ export const RequestAccessModal = ({
                   onClick={submitHandler}
                   ref={submitButtonRef}
                 >
-                  Wyślij zapytanie
+                  {t('invitation.send_request')}
                 </button>
                 <button
                   type="button"
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                   onClick={cancelHandler}
                 >
-                  Anuluj
+                  {t('invitation.cancel')}
                 </button>
               </div>
             </div>

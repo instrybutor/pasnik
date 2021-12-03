@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ExclamationCircleIcon } from '@heroicons/react/solid';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 import { useAddDish } from './add-dish.hook';
@@ -13,6 +14,7 @@ export interface AddDishProps {
 
 export function AddDish({ onAdd, onCancel }: AddDishProps) {
   const { handleSubmit, register, errors, reset } = useAddDish();
+  const { t } = useTranslation();
 
   const onSubmit = useCallback(
     async (data: AddDishDto) => {
@@ -29,17 +31,14 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
     >
       <div className="whitespace-nowrap text-sm text-gray-500 flex-grow">
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700 sr-only"
-          >
-            Dish
+          <label className="block text-sm font-medium text-gray-700 sr-only">
+            {t('dish.title')}
           </label>
           <div className="relative rounded-md shadow-sm">
             <input
               autoFocus={true}
               type="text"
-              placeholder="Nazwa"
+              placeholder={t('dish.form.name')}
               className={classNames(
                 {
                   'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500':
@@ -64,7 +63,7 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
       <div className="whitespace-nowrap text-sm text-gray-500 w-36 sm:w-44 flex-shrink-0">
         <div>
           <label htmlFor="price" className="sr-only">
-            Price
+            {t('dish.form.price')}
           </label>
           <div className="relative rounded-md shadow-sm">
             <input

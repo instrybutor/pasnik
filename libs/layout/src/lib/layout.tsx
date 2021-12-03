@@ -9,7 +9,7 @@ export interface LayoutProps {
   version?: string;
 }
 
-export function Layout({ children, version }: PropsWithChildren<LayoutProps>) {
+export function Layout({ version }: PropsWithChildren<LayoutProps>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuth();
   const closeSidebar = useCallback(() => {
