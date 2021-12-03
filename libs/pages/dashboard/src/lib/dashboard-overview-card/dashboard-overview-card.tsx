@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -15,6 +15,8 @@ export function DashboardOverviewCard({
   amount,
   href,
 }: DashboardOverviewCardProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-white overflow-hidden shadow rounded-lg">
       <div className="p-5">

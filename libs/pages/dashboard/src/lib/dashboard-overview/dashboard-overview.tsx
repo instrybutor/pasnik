@@ -3,10 +3,12 @@ import {
   ScaleIcon,
   ShoppingCartIcon,
 } from '@heroicons/react/outline';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import DashboardOverviewCard from '../dashboard-overview-card/dashboard-overview-card';
 
 export function DashboardOverview() {
+  const { t } = useTranslation();
+
   return (
     <>
       <h2 className="text-lg leading-6 font-medium text-gray-900">

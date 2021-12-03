@@ -1,6 +1,8 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export const AdminInvitationsHeader = () => {
+  const { t } = useTranslation();
+
   return (
     <header className="bg-white shadow">
       <div className="bg-white shadow">

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import { InvitationRequiredError } from '@pasnik/shared/utils';
 
@@ -15,6 +15,7 @@ export const SlackLogin = ({ onSuccess, onError }: SlackLoginProps) => {
   const buttonClick = useCallback(() => {
     openSignInWindow('/auth/slack').then(onSuccess).catch(onError);
   }, [openSignInWindow, onSuccess, onError]);
+  const { t } = useTranslation();
 
   return (
     <button

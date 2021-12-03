@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { useDashboardStore } from '../dashboard-store/dashboard.store';
 import DashboardOrdersEmpty from '../dashboard-orders-empty/dashboard-orders-empty';
 import DashboardOrdersItem from '../dashboard-orders-item/dashboard-orders-item';
@@ -30,6 +30,8 @@ export function DashboardOrders() {
     archivedOrders: getArchivedOrders(Object.values(state.entities ?? {})),
   }));
   const isFetching = useDashboardStore((state) => state.isFetching);
+  const { t } = useTranslation();
+
   return (
     <>
       <h2 className="max-w-6xl mx-auto mt-8 text-lg leading-6 font-medium text-gray-900">

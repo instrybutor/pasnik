@@ -1,9 +1,10 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { useCreateOrder } from './create-order.hook';
 import { OrderHeader } from './components/order-header';
 
 export function CreateOrder() {
   const { error, handleSubmit, onSubmit, register, errors } = useCreateOrder();
+  const { t } = useTranslation();
 
   return (
     <>

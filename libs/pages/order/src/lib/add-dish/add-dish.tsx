@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { ExclamationCircleIcon } from '@heroicons/react/solid';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 import { useAddDish } from './add-dish.hook';
@@ -14,6 +14,7 @@ export interface AddDishProps {
 
 export function AddDish({ onAdd, onCancel }: AddDishProps) {
   const { handleSubmit, register, errors, reset } = useAddDish();
+  const { t } = useTranslation();
 
   const onSubmit = useCallback(
     async (data: AddDishDto) => {

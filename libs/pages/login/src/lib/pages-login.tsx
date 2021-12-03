@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 
 import { ErrorAlert } from './error-alert/error-alert';
@@ -12,6 +12,7 @@ import { InvitationRejectedAlert } from './invitation-rejected-alert/invitation-
 export function PagesLogin() {
   const { requestToken, onError, invitationStatus, hasError, onSuccess } =
     usePageLogin();
+  const { t } = useTranslation();
 
   return (
     <>

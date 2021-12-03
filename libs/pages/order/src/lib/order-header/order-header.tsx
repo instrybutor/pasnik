@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -18,7 +19,6 @@ import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
 import { OrderTimestamp } from '../order-timestamp/order-timestamp';
 import { useOrderFacade } from '../order-store/order.facade';
-import { t } from 'i18next';
 
 export interface OrderHeaderProps {
   order: OrderModel;
@@ -33,6 +33,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
     markAsOpenMutation,
     markAsOrderedMutation,
   } = useOrderFacade();
+  const { t } = useTranslation();
 
   const markAsDeliveredHandler = useCallback(
     () => markAsDeliveredMutation.mutateAsync(order.id),

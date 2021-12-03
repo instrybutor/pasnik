@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import {
   CashIcon,
@@ -10,7 +11,6 @@ import {
 } from '@heroicons/react/outline';
 import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
 import { DateFormat, UserName } from '@pasnik/components';
-import { t } from 'i18next';
 
 const typesMap = {
   [OrderAction.Created]: {
@@ -18,7 +18,8 @@ const typesMap = {
     bgColorClass: 'bg-gray-400',
     text: ({ user }: OrderActionModel) => (
       <>
-        {t('timeline.createdBy')} <UserName user={user} initials={true} />
+        <Trans>timeline.createdBy</Trans>{' '}
+        <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -27,7 +28,8 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        {t('timeline.canceledBy')} <UserName user={user} initials={true} />
+        <Trans>timeline.canceledBy</Trans>{' '}
+        <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -36,7 +38,8 @@ const typesMap = {
     bgColorClass: 'bg-yellow-500',
     text: ({ actionUser }: OrderActionModel) => (
       <>
-        {t('timeline.payedBy')} <UserName user={actionUser!} initials={true} />
+        <Trans>timeline.payedBy</Trans>{' '}
+        <UserName user={actionUser!} initials={true} />
       </>
     ),
   },
@@ -45,7 +48,8 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        {t('timeline.deliveredBy')} <UserName user={user} initials={true} />
+        <Trans>timeline.deliveredBy</Trans>{' '}
+        <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -63,7 +67,8 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        {t('timeline.orderedBy')} <UserName user={user} initials={true} />
+        <Trans>timeline.orderedBy</Trans>{' '}
+        <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -74,6 +79,8 @@ export interface OrderTimelineProps {
 }
 
 export function OrderTimeline({ actions }: OrderTimelineProps) {
+  const { t } = useTranslation();
+
   return (
     <section
       aria-labelledby="timeline-title"

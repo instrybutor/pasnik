@@ -1,11 +1,12 @@
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import classNames from 'classnames';
+
 import { ExclamationCircleIcon } from '@heroicons/react/solid';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
-import { useUpdateDish } from './update-dish.hook';
 import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
-import classNames from 'classnames';
-import { useCallback } from 'react';
-import { t } from 'i18next';
 
+import { useUpdateDish } from './update-dish.hook';
 export interface UpdateDishProps {
   dish: DishModel;
   onUpdateDish: (addDishDto: AddDishDto, dishModel: DishModel) => void;
@@ -26,6 +27,7 @@ export function UpdateDish({
     },
     [onUpdateDish, reset, dish]
   );
+  const { t } = useTranslation();
 
   return (
     <form

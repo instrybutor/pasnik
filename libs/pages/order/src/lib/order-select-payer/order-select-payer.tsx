@@ -1,11 +1,13 @@
+import { Fragment, useCallback } from 'react';
+import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
+
+import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
+import { Listbox, Transition } from '@headlessui/react';
+
+import { useAuth } from '@pasnik/auth';
 import { UserModel } from '@pasnik/api/data-transfer';
 import { Price, UserAvatar, UserInfo, UserName } from '@pasnik/components';
-import { Listbox, Transition } from '@headlessui/react';
-import classNames from 'classnames';
-import { Fragment, useCallback } from 'react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
-import { useAuth } from '@pasnik/auth';
-import { t } from 'i18next';
 
 export interface OrderPaymentProps {
   totalCents: number;
@@ -19,6 +21,7 @@ export function OrderSelectPayer({
   setPayer,
 }: OrderPaymentProps) {
   const { users } = useAuth();
+  const { t } = useTranslation();
 
   const setPayerHandler = useCallback(
     (newPayer: UserModel) => {

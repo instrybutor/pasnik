@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
 
 import { InvitationRequiredError } from '@pasnik/shared/utils';
@@ -15,6 +15,7 @@ export const GoogleLogin = ({ onSuccess, onError }: GoogleLoginProps) => {
   const buttonClick = useCallback(() => {
     openSignInWindow('/auth/google').then(onSuccess).catch(onError);
   }, [openSignInWindow, onSuccess, onError]);
+  const { t } = useTranslation();
 
   return (
     <button

@@ -1,5 +1,5 @@
 import { Fragment, useCallback } from 'react';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
@@ -21,6 +21,7 @@ export default function AdminInvitationActions({
     },
     [changeStatus, email]
   );
+  const { t } = useTranslation();
 
   return (
     <Menu as="div" className="relative inline-block text-left">

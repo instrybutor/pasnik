@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
 
@@ -8,7 +9,6 @@ import AddDish from '../add-dish/add-dish';
 
 import UpdateDish from '../update-dish/update-dish';
 import { useOrderDishes } from './use-order-dishes';
-import { t } from 'i18next';
 
 export interface OrderDishesProps {
   dishes: DishModel[] | null;
@@ -35,6 +35,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
     editClickHandler,
     updateDishHandler,
   } = useOrderDishes({ order });
+  const { t } = useTranslation();
 
   return (
     <section aria-labelledby="notes-title">

@@ -1,9 +1,8 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
-/* eslint-disable-next-line */
-export interface OrdersHeaderProps {}
+export function OrdersHeader() {
+  const { t } = useTranslation();
 
-export function OrdersHeader(props: OrdersHeaderProps) {
   return (
     <div className="bg-white shadow">
       <div>

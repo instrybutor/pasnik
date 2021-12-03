@@ -1,8 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { Price, UserAvatar, UserName } from '@pasnik/components';
 import { SwitchHorizontalIcon } from '@heroicons/react/outline';
 import { UserDishesSummary } from '../order-summary/order-summary.hook';
-import { t } from 'i18next';
 
 export interface OrderPaymentProps {
   order: OrderModel;
@@ -13,6 +13,8 @@ export function OrderSummaryPayment({
   order,
   userDishesSummary,
 }: OrderPaymentProps) {
+  const { t } = useTranslation();
+
   return (
     <section>
       <div className="bg-white shadow sm:rounded-lg sm:overflow-hidden">

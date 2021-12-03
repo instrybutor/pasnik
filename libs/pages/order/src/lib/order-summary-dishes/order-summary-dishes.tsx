@@ -1,5 +1,5 @@
 import { Price, UserInfo } from '@pasnik/components';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { UserDishesSummary } from '../order-summary/order-summary.hook';
 
 export interface OrderSummaryDishesProps {
@@ -9,6 +9,8 @@ export interface OrderSummaryDishesProps {
 export function OrderSummaryDishes({
   userDishesSummaries,
 }: OrderSummaryDishesProps) {
+  const { t } = useTranslation();
+
   return (
     <section aria-labelledby="notes-title">
       <div className="bg-white shadow sm:rounded-lg sm:overflow-hidden">

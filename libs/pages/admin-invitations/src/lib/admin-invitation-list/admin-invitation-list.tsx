@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 import { CalendarIcon, MailIcon } from '@heroicons/react/solid';
 import { InvitationModel, InvitationStatus } from '@pasnik/api/data-transfer';
 import { DateFormat } from '@pasnik/components';
+
 import AdminInvitationStatus from '../admin-invitation-status/admin-invitation-status';
 import AdminInvitationActions from '../admin-invitation-actions/admin-invitation-actions';
-import { t } from 'i18next';
 
 export interface AdminInvitationListProps {
   invitations: InvitationModel[];
@@ -14,6 +16,8 @@ export default function AdminInvitationList({
   invitations,
   changeStatus,
 }: AdminInvitationListProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-white shadow sm:rounded-md">
       <ul className="divide-y divide-gray-200">

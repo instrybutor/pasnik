@@ -1,7 +1,9 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { ExclamationIcon } from '@heroicons/react/outline';
 
 export function InvitationPendingAlert() {
+  const { t } = useTranslation();
+
   return (
     <div className="rounded-md bg-yellow-50 p-4">
       <div className="flex">

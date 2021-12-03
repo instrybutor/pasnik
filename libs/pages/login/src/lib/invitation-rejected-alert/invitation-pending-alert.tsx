@@ -1,7 +1,9 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { XCircleIcon } from '@heroicons/react/solid';
 
 export function InvitationRejectedAlert() {
+  const { t } = useTranslation();
+
   return (
     <div className="rounded-md bg-red-50 p-4">
       <div className="flex">

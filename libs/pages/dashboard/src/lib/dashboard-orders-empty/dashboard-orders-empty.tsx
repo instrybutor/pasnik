@@ -1,8 +1,10 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { BeakerIcon } from '@heroicons/react/outline';
 
 export function DashboardOrdersEmpty() {
+  const { t } = useTranslation();
+
   return (
     <div className="text-center bg-white px-4 py-12 flex flex-col gap-4 items-center">
       <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />

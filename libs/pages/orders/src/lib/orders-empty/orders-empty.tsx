@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { BeakerIcon } from '@heroicons/react/outline';
-import { t } from 'i18next';
 
 export function OrdersEmpty() {
+  const { t } = useTranslation();
+
   return (
     <div className="text-center bg-white px-4 py-12">
       <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />

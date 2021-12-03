@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { Fragment, useRef } from 'react';
 
 import { Dialog, Transition } from '@headlessui/react';
@@ -16,6 +16,7 @@ export const RequestAccessModal = ({
   cancelHandler,
 }: RequestAccessModalProps) => {
   const submitButtonRef = useRef(null);
+  const { t } = useTranslation();
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>

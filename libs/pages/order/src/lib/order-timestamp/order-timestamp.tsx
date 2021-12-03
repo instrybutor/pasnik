@@ -1,6 +1,6 @@
 import { DateDistance, DateFormat } from '@pasnik/components';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export interface OrderTimestampProps {
   order: OrderModel;
@@ -8,6 +8,8 @@ export interface OrderTimestampProps {
 }
 
 export function OrderTimestamp({ order, showLabel }: OrderTimestampProps) {
+  const { t } = useTranslation();
+
   return (
     <p>
       {order.status === OrderStatus.InProgress && (

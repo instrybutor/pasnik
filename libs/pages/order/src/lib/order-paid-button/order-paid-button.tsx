@@ -4,7 +4,7 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { CashIcon } from '@heroicons/react/outline';
 import { UserModel } from '@pasnik/api/data-transfer';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export interface OrderPaidButtonProps {
   onClick?: (payer: UserModel) => void;

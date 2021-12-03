@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
 import currency from 'currency.js';
@@ -13,7 +14,6 @@ import { UserDishesSummary } from '../order-summary/order-summary.hook';
 import OrderSelectPayer from '../order-select-payer/order-select-payer';
 import * as service from '../order-store/order.service';
 import { useOrderFacade } from '../order-store/order.facade';
-import { t } from 'i18next';
 
 export interface OrderPaymentProps {
   order: OrderModel;
@@ -22,6 +22,7 @@ export interface OrderPaymentProps {
 
 export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
   const { orderQuery } = useOrderFacade();
+  const { t } = useTranslation();
   const payerUpdate = useMutation((payerId: number) =>
     service.setPayer(order.id, {
       payerId,

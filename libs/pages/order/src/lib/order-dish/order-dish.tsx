@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import {
   CheckIcon,
@@ -9,7 +10,6 @@ import { DishModel } from '@pasnik/api/data-transfer';
 import OrderDishUser from '../order-dish-users/order-dish-user';
 import { Price } from '@pasnik/components';
 import { Menu, Transition } from '@headlessui/react';
-import { t } from 'i18next';
 
 export interface OrderDishProps {
   inProgress: boolean;
@@ -26,6 +26,7 @@ export function OrderDish({
   onEdit,
 }: OrderDishProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const { t } = useTranslation();
 
   const deleteHandler = useCallback(() => {
     if (isDeleting && dish.id) {
