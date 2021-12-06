@@ -28,6 +28,7 @@ export class WorkspaceMiddleware implements NestMiddleware {
           slug,
         },
         user,
+        isRemoved: false,
       },
       relations: ['workspace'],
     });

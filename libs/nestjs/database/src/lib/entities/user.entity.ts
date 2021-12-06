@@ -43,11 +43,12 @@ export class UserEntity implements UserModel {
 
   @ManyToOne(() => WorkspaceEntity, {
     cascade: true,
-    nullable: false,
-    onDelete: 'RESTRICT',
+    onDelete: 'SET NULL',
   })
   currentWorkspace: WorkspaceEntity;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   currentWorkspaceId: number;
 }

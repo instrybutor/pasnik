@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, ManyToOne } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { WorkspaceEntity } from './workspace.entity';
 import { UserEntity } from './user.entity';
 import {
@@ -8,27 +14,28 @@ import {
 
 @Entity()
 export class WorkspaceUserEntity implements WorkspaceUserModel {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @CreateDateColumn()
   createdAt: string;
 
   @ManyToOne(() => WorkspaceEntity, {
-    primary: true,
     onDelete: 'CASCADE',
     nullable: false,
   })
   workspace: WorkspaceEntity;
 
-  @Column({ primary: true })
+  @Column()
   workspaceId: number;
 
   @ManyToOne(() => UserEntity, {
-    primary: true,
     onDelete: 'CASCADE',
     nullable: false,
   })
   user: UserEntity;
 
-  @Column({ primary: true })
+  @Column()
   userId: number;
 
   @ManyToOne(() => UserEntity, { onDelete: 'SET NULL' })
@@ -36,4 +43,7 @@ export class WorkspaceUserEntity implements WorkspaceUserModel {
 
   @Column({ type: 'varchar', default: WorkspaceUserRole.User })
   role: WorkspaceUserRole;
+
+  @Column({ default: false })
+  isRemoved: boolean;
 }

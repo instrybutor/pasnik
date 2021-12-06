@@ -42,6 +42,7 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
           {
             name: 'slug',
             type: 'character varying',
+            isUnique: true,
           },
         ],
       })
@@ -51,6 +52,11 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
       new Table({
         name: 'workspace_user_entity',
         columns: [
+          {
+            name: 'id',
+            type: 'SERIAL',
+            isPrimary: true,
+          },
           {
             name: 'createdAt',
             default: 'NOW()',
@@ -64,17 +70,20 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
           {
             name: 'workspaceId',
             type: 'integer',
-            isPrimary: true,
           },
           {
             name: 'userId',
             type: 'integer',
-            isPrimary: true,
           },
           {
             name: 'addedById',
             type: 'integer',
             isNullable: true,
+          },
+          {
+            name: 'isRemoved',
+            type: 'boolean',
+            default: 'false',
           },
         ],
         foreignKeys: [
@@ -136,7 +145,7 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
         columnNames: ['currentWorkspaceId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'workspace_entity',
-        onDelete: 'RESTRICT',
+        onDelete: 'SET NULL',
       })
     );
 
@@ -144,16 +153,6 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
       UPDATE user_entity
       SET "currentWorkspaceId" = 1;
     `);
-
-    await queryRunner.changeColumn(
-      userTable,
-      'currentWorkspaceId',
-      new TableColumn({
-        name: 'currentWorkspaceId',
-        type: 'integer',
-        isNullable: false,
-      })
-    );
 
     const orderTable = await queryRunner.getTable('order_entity');
 

@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import {
   OrderActionsRepository,
   OrdersRepository,
   UserEntity,
+  UsersRepository,
   WorkspaceEntity,
   WorkspacesRepository,
   WorkspaceUserEntity,
@@ -15,8 +16,10 @@ import {
   CreateWorkspaceDto,
   OrderAction,
   OrderStatus,
+  UpdateWorkspaceDto,
 } from '@pasnik/api/data-transfer';
 import { Connection } from 'typeorm';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 @Injectable()
 export class WorkspacesService {
@@ -55,9 +58,16 @@ export class WorkspacesService {
     });
   }
 
+  findUser(workspace: WorkspaceEntity, user: UserEntity) {
+    return this.workspaceUsersRepository.findOneOrFail({
+      where: { workspace, user },
+      relations: ['user'],
+    });
+  }
+
   findUsers(workspace: WorkspaceEntity) {
     return this.workspaceUsersRepository.find({
-      where: { workspace },
+      where: { workspace, isRemoved: false },
       relations: ['user'],
     });
   }
@@ -84,7 +94,7 @@ export class WorkspacesService {
   findAllForUser(user: UserEntity) {
     return this.workspaceUsersRepository
       .find({
-        where: { user },
+        where: { user, isRemoved: false },
         relations: ['workspace'],
       })
       .then((workspaceUsers) => {
@@ -100,11 +110,55 @@ export class WorkspacesService {
     return this.workspaceRepository.findOne(id);
   }
 
+  async update(
+    workspace: WorkspaceEntity,
+    updateWorkspaceDto: UpdateWorkspaceDto,
+    user: WorkspaceUserEntity
+  ) {
+    await this.workspaceRepository.updateWorkspace(
+      workspace,
+      updateWorkspaceDto
+    );
+    return this.findOne(workspace.id);
+  }
+
   async create(createWorkspaceDto: CreateWorkspaceDto, user: UserEntity) {
     return this.workspaceRepository.createWorkspace(createWorkspaceDto, user);
   }
 
-  async removeWorkspace(id: string): Promise<void> {
-    await this.workspaceRepository.delete(id);
+  async removeWorkspace(workspace: WorkspaceEntity) {
+    const { affected } = await this.workspaceRepository.delete({
+      id: workspace.id,
+    });
+    if (affected === 1) {
+      return workspace;
+    }
+    throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+  }
+
+  async addMember(workspace: WorkspaceEntity, email: string) {
+    return this.connection.transaction(async (manager) => {
+      const usersRepository = manager.getCustomRepository(UsersRepository);
+      const workspaceUsersRepository = manager.getCustomRepository(
+        WorkspaceUsersRepository
+      );
+
+      const user = await usersRepository.findOneOrFail({ where: { email } });
+      const workspaceUser = await workspaceUsersRepository.findOne({
+        where: { user },
+      });
+      if (workspaceUser.isRemoved === false) {
+        return workspaceUser;
+      }
+      const { id } = await workspaceUsersRepository.addMember(workspace, user);
+      return workspaceUsersRepository.findOne(id, { relations: ['user'] });
+    });
+  }
+
+  async removeMember(workspace: WorkspaceEntity, userId: number) {
+    const workspaceUser = await this.workspaceUsersRepository.findOneOrFail({
+      where: { workspace, userId, isRemoved: false },
+    });
+    return this.workspaceUsersRepository.removeMember(workspaceUser);
   }
 }

@@ -1,7 +1,22 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 
 import { WorkspacesService } from './workspaces.service';
-import { CreateOrderDto, CreateWorkspaceDto } from '@pasnik/api/data-transfer';
+import {
+  AddMemberToWorkspaceDto,
+  CreateOrderDto,
+  CreateWorkspaceDto,
+  UpdateWorkspaceDto,
+  WorkspaceUserRole,
+} from '@pasnik/api/data-transfer';
 import { CurrentUser } from '@pasnik/nestjs/auth';
 import {
   UserEntity,
@@ -10,10 +25,68 @@ import {
 } from '@pasnik/nestjs/database';
 import { CurrentWorkspace } from './current-workspace.decorator';
 import { CurrentWorkspaceUser } from '../current-workspace-user.decorator';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 @Controller('workspaces')
 export class WorkspacesController {
   constructor(private readonly workspacesService: WorkspacesService) {}
+
+  @Get()
+  findAllWorkspacesForCurrentUser(@CurrentUser() user: UserEntity) {
+    return this.workspacesService.findAllForUser(user);
+  }
+
+  @Get(':workspaceSlug')
+  findOne(@CurrentWorkspace() workspace: WorkspaceEntity) {
+    return workspace;
+  }
+
+  @Post()
+  createWorkspace(
+    @Body() createWorkspaceDto: CreateWorkspaceDto,
+    @CurrentUser() user: UserEntity
+  ) {
+    return this.workspacesService.create(createWorkspaceDto, user);
+  }
+
+  @Put(':workspaceSlug')
+  updateWorkspace(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @Body() updateWorkspaceDto: UpdateWorkspaceDto,
+    @CurrentWorkspaceUser() user: WorkspaceUserEntity
+  ) {
+    return this.workspacesService.update(workspace, updateWorkspaceDto, user);
+  }
+
+  @Delete(':workspaceSlug')
+  removeWorkspace(@CurrentWorkspace() workspace: WorkspaceEntity) {
+    return this.workspacesService.removeWorkspace(workspace);
+  }
+
+  @Put(':workspaceSlug/join')
+  joinWorkspace(
+    @CurrentUser() user: UserEntity,
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentWorkspaceUser() workspaceUser?: WorkspaceUserEntity
+  ) {
+    if (workspaceUser?.isRemoved === false) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+    return this.workspacesService.addMember(workspace, user.email);
+  }
+
+  @Put(':workspaceSlug/leave')
+  leaveWorkspace(@CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity) {
+    if (workspaceUser.role === WorkspaceUserRole.Owner) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+    return this.workspacesService.removeMember(
+      workspaceUser.workspace,
+      workspaceUser.userId
+    );
+  }
+
+  // Orders
 
   @Post(':workspaceSlug/orders')
   createOrder(
@@ -33,21 +106,34 @@ export class WorkspacesController {
     return this.workspacesService.findInactiveOrders(workspace);
   }
 
+  // Users
+
   @Get(':workspaceSlug/users')
   findUsers(@CurrentWorkspace() workspace: WorkspaceEntity) {
     return this.workspacesService.findUsers(workspace);
   }
 
-  @Get()
-  findAll(@CurrentUser() user: UserEntity) {
-    return this.workspacesService.findAllForUser(user);
+  @Put(':workspaceSlug/users')
+  addMemberToWorkspace(
+    @Body() { email }: AddMemberToWorkspaceDto,
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity
+  ) {
+    if (workspaceUser.role === WorkspaceUserRole.User) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+    return this.workspacesService.addMember(workspace, email);
   }
 
-  @Post()
-  create(
-    @Body() createWorkspaceDto: CreateWorkspaceDto,
-    @CurrentUser() user: UserEntity
+  @Delete(':workspaceSlug/users/:userId')
+  removeMemberFromWorkspace(
+    @Param('userId') userId: string,
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity
   ) {
-    return this.workspacesService.create(createWorkspaceDto, user);
+    if (workspaceUser.role === WorkspaceUserRole.User) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+    return this.workspacesService.removeMember(workspace, +userId);
   }
 }

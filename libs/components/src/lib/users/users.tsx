@@ -1,6 +1,13 @@
 import { UserModel } from '@pasnik/api/data-transfer';
 import { UserAvatar, UserAvatarSize } from '../user-avatar/user-avatar';
-import { Fragment, ReactElement, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  Fragment,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { UserName } from '../user-name/user-name';
 
@@ -22,11 +29,34 @@ export function Users({
   popoverElement,
 }: UsersProps) {
   const [visibleUsers, setVisibleUsers] = useState<UserModel[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<UserModel[]>([]);
+  const [filterValue, setFilterValue] = useState('');
+
   useEffect(() => {
     if (users) {
       setVisibleUsers(users.slice(0, usersToShow ?? users.length));
     }
   }, [usersToShow, users, setVisibleUsers]);
+
+  useEffect(() => {
+    if (users) {
+      setFilteredUsers(
+        users.filter(({ givenName, familyName }) =>
+          [givenName, familyName]
+            .join(' ')
+            .toLowerCase()
+            .includes(filterValue.toLowerCase())
+        )
+      );
+    }
+  }, [filterValue, users, setFilteredUsers]);
+
+  const onFilterChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setFilterValue(event.target.value ?? '');
+    },
+    [setFilterValue]
+  );
 
   return (
     <div className="flex items-center space-x-2">
@@ -42,7 +72,7 @@ export function Users({
                   key={user.id}
                   user={user}
                   size={avatarSize}
-                  className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
+                  className="max-w-none ring-2 ring-white"
                 />
               </Popover.Button>
 
@@ -63,9 +93,11 @@ export function Users({
               </Transition>
             </Popover>
           ) : (
-            <div className="hover:relative flex flex-col items-center group">
+            <div
+              key={user.id}
+              className="hover:relative flex flex-col items-center group"
+            >
               <UserAvatar
-                key={user.id}
                 user={user}
                 size={avatarSize}
                 className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
@@ -79,12 +111,45 @@ export function Users({
             </div>
           )
         )}
+        {users && users.length > visibleUsers.length && (
+          <Popover className="relative flex flex-col items-center group">
+            <Popover.Button className="relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 h-8 w-8 max-w-none ring-2 ring-white">
+              + {users.length - visibleUsers.length}
+            </Popover.Button>
+
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-200"
+              enterFrom="opacity-0 translate-y-1"
+              enterTo="opacity-100 translate-y-0"
+              leave="transition ease-in duration-150"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-1"
+            >
+              <Popover.Panel className="absolute z-30 w-56 bg-white px-4 mt-3 top-full transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
+                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 flex flex-wrap p-4 gap-2">
+                  <input
+                    placeholder="Szukaj..."
+                    type="text"
+                    id="workspace-name"
+                    className="block w-full shadow-sm sm:text-sm focus:ring-cyan-500 focus:border-cyan-500 border-gray-300 rounded-md mb-2"
+                    onChange={onFilterChange}
+                  />
+                  {filteredUsers.map((user) => (
+                    <button key={user.id}>
+                      <UserAvatar
+                        user={user}
+                        size={avatarSize}
+                        className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </Popover.Panel>
+            </Transition>
+          </Popover>
+        )}
       </div>
-      {users && users.length > visibleUsers.length && (
-        <span className="flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 px-1.5">
-          + {users.length - visibleUsers.length}
-        </span>
-      )}
     </div>
   );
 }

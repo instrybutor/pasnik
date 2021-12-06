@@ -35,7 +35,7 @@ export class UsersRepository extends Repository<UserEntity | undefined> {
       const workspace = new WorkspaceEntity();
       const workspaceUser = new WorkspaceUserEntity();
       workspaceUser.user = user;
-      workspaceUser.role = WorkspaceUserRole.Admin;
+      workspaceUser.role = WorkspaceUserRole.Owner;
       workspace.name = 'Moja przestrzeń';
       workspace.workspaceUsers = [workspaceUser];
       workspace.privacy = WorkspacePrivacy.PrivateToYou;

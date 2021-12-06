@@ -16,11 +16,6 @@ export function SelectWorkspaceDropdown({
 }: SelectWorkspaceProps) {
   const { currentWorkspace, workspaces } = useWorkspaceFacade();
 
-  const addClick = useCallback(() => {
-    console.log('addclock');
-    onAddClick();
-  }, [onAddClick]);
-
   const onClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button === 0) {
       if (event.ctrlKey) {
@@ -40,7 +35,9 @@ export function SelectWorkspaceDropdown({
           </Listbox.Label>
           <div className="mt-1 relative">
             <Listbox.Button className="bg-white relative w-full bg-cyan-800 rounded-md pl-3 pr-10 py-3 text-left text-white hover:bg-cyan-800 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
-              <span className="block truncate">{currentWorkspace?.name}</span>
+              <span className="block truncate">
+                {currentWorkspace?.name ?? 'Wybierz przestrzeń'}
+              </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <ChevronDownIcon
                   className="h-5 w-5 text-gray-200"
@@ -105,7 +102,9 @@ export function SelectWorkspaceDropdown({
                   ))}
                 </Listbox.Options>
                 <button
-                  onClick={addClick}
+                  onClick={() => {
+                    onAddClick();
+                  }}
                   className="relative py-2 pl-3 text-left pr-9 hover:bg-cyan-700 hover:text-white w-full"
                 >
                   Dodaj przestrzeń

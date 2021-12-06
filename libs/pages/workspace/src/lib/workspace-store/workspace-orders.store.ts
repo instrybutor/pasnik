@@ -44,7 +44,7 @@ export const useWorkspaceOrdersStore = create<WorkspaceOrdersState>((set) => ({
       set({ inactiveOrdersCallState: LoadingState.LOADING });
 
       const { data } = await axios.get<OrderModel[]>(
-        `/api/workspaces/${workspace.slug}/orders/active`
+        `/api/workspaces/${workspace.slug}/orders/inactive`
       );
 
       set({

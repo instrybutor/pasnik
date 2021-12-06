@@ -1,7 +1,8 @@
 import { Navigate } from 'react-router-dom';
-import { useUserStore } from '@pasnik/store';
+import { useWorkspaceFacade } from './workspace.facade';
 
 export function RedirectToCurrentWorkspace() {
-  const { user } = useUserStore();
-  return <Navigate to={`/w/${user?.currentWorkspaceId}`} />;
+  const { currentWorkspace } = useWorkspaceFacade();
+
+  return <Navigate to={`/workspace/${currentWorkspace?.slug}`} />;
 }

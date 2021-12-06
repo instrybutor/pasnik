@@ -1,59 +1,71 @@
 import create from 'zustand';
-import { CreateWorkspaceDto, WorkspaceModel } from '@pasnik/api/data-transfer';
+import { WorkspaceModel, WorkspaceUserModel } from '@pasnik/api/data-transfer';
+import axios from '@pasnik/axios';
 import {
   CallState,
-  getAxiosErrorMessage,
+  Dictionary,
   LoadingState,
+  toEntities,
 } from '@pasnik/shared/utils';
-import axios from '@pasnik/axios';
 
-export interface WorkspaceState {
-  workspaces: WorkspaceModel[];
-  ids: number[];
+export interface WorkspaceUsersState {
+  users: Dictionary<WorkspaceUserModel>;
+  callState: CallState;
 
-  workspacesCallState: CallState;
-
-  fetchWorkspaces: () => Promise<void>;
-  createWorkspace: (dto: CreateWorkspaceDto) => Promise<void>;
+  fetchUsers: (workspace: WorkspaceModel) => Promise<void>;
+  joinWorkspace: (workspace: WorkspaceModel) => Promise<WorkspaceUserModel>;
+  leaveWorkspace: (workspace: WorkspaceModel) => Promise<void>;
 
   resetState: () => void;
 }
 
-const initialState = {
-  workspaces: [],
-  ids: [],
-  workspacesCallState: LoadingState.INIT,
-};
+export const useWorkspaceUsersStore = create<WorkspaceUsersState>(
+  (set, get) => ({
+    users: {},
+    callState: LoadingState.INIT,
 
-export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
-  ...initialState,
-  fetchWorkspaces: async () => {
-    set({ workspacesCallState: LoadingState.LOADING, workspaces: [], ids: [] });
-    try {
-      const { data } = await axios.get<WorkspaceModel[]>('/api/workspaces');
+    fetchUsers: async (workspace) => {
+      set({ callState: LoadingState.LOADING });
+      const { data } = await axios.get<WorkspaceUserModel[]>(
+        `/api/workspaces/${workspace.slug}/users`
+      );
+
+      set({ users: toEntities(data), callState: LoadingState.LOADED });
+    },
+
+    joinWorkspace: async (workspace: WorkspaceModel) => {
+      const { data } = await axios.put<WorkspaceUserModel>(
+        `api/workspaces/${workspace.slug}/join`
+      );
+
+      const users = {
+        ...get().users,
+        [data.id]: data,
+      };
+
+      set({ users });
+
+      return data;
+    },
+
+    leaveWorkspace: async (workspace: WorkspaceModel) => {
+      const { data } = await axios.put<WorkspaceUserModel>(
+        `api/workspaces/${workspace.slug}/leave`
+      );
+
+      const users = {
+        ...get().users,
+      };
+
+      delete users[data.id];
+
+      set({ users });
+    },
+    resetState: () => {
       set({
-        workspaces: [...data],
-        ids: data.map((workspace) => workspace.id),
-        workspacesCallState: LoadingState.LOADED,
+        users: {},
+        callState: LoadingState.INIT,
       });
-    } catch (e: unknown) {
-      set({ workspacesCallState: { errorMsg: getAxiosErrorMessage(e) } });
-    }
-  },
-  createWorkspace: async (createWorkspaceDto) => {
-    const { workspaces, ids } = get();
-    const { data } = await axios.post<WorkspaceModel>(
-      '/api/workspaces',
-      createWorkspaceDto
-    );
-    set({
-      workspaces: [...workspaces, data],
-      ids: [...ids, data.id],
-    });
-  },
-  updateWorkspace: async () => {},
-  removeWorkspace: async () => {},
-  resetState: () => {
-    set(initialState);
-  },
-}));
+    },
+  })
+);

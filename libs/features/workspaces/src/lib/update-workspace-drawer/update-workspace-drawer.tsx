@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import {
   CreateWorkspaceDto,
-  createWorkspaceValidator,
+  updateWorkspaceValidator,
   WorkspaceModel,
   WorkspacePrivacy,
 } from '@pasnik/api/data-transfer';
@@ -11,25 +11,28 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useWorkspaceStore } from '../workspace.store';
 
-export interface CreateWorkspaceDrawerProps {
+export interface UpdateWorkspaceDrawerProps {
+  workspace: WorkspaceModel;
   isOpen: boolean;
   onSuccess: (workspace: WorkspaceModel) => void;
   onCancel: () => void;
 }
 
-export const CreateWorkspaceDrawer = ({
+export const UpdateWorkspaceDrawer = ({
+  workspace,
   onCancel,
   onSuccess,
   isOpen,
-}: CreateWorkspaceDrawerProps) => {
+}: UpdateWorkspaceDrawerProps) => {
   const { register, handleSubmit, reset } = useForm<CreateWorkspaceDto>({
-    resolver: yupResolver(createWorkspaceValidator),
+    resolver: yupResolver(updateWorkspaceValidator),
     defaultValues: {
-      privacy: WorkspacePrivacy.Public,
+      name: workspace.name,
+      privacy: workspace.privacy,
     },
   });
 
-  const { createWorkspace } = useWorkspaceStore();
+  const { updateWorkspace } = useWorkspaceStore();
   const nameInputLabel = useRef(null);
 
   useEffect(() => {
@@ -40,9 +43,9 @@ export const CreateWorkspaceDrawer = ({
 
   const onSubmit = useCallback(
     (data: CreateWorkspaceDto) => {
-      createWorkspace(data).then(onSuccess);
+      updateWorkspace(workspace, data).then(onSuccess);
     },
-    [createWorkspace, onSuccess]
+    [updateWorkspace, onSuccess, workspace]
   );
 
   return (
@@ -85,7 +88,7 @@ export const CreateWorkspaceDrawer = ({
                     <div className="py-6 px-4 bg-cyan-700 sm:px-6">
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="text-lg font-medium text-white">
-                          Nowa przestrzeń
+                          Edytuj przestrzeń
                         </Dialog.Title>
                         <div className="ml-3 h-7 flex items-center">
                           <button
@@ -98,10 +101,7 @@ export const CreateWorkspaceDrawer = ({
                         </div>
                       </div>
                       <div className="mt-1">
-                        <p className="text-sm text-cyan-300">
-                          Utwórz nową przestrzeń podając jej nazwę oraz
-                          zapraszając użytkowników
-                        </p>
+                        <p className="text-sm text-cyan-300"></p>
                       </div>
                     </div>
                     <div className="flex-1 flex flex-col justify-between">
@@ -132,13 +132,12 @@ export const CreateWorkspaceDrawer = ({
                               <div className="relative flex items-start">
                                 <div className="absolute flex items-center h-5">
                                   <input
+                                    {...register('privacy')}
                                     id="privacy-public"
                                     aria-describedby="privacy-public-description"
                                     type="radio"
                                     className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
-                                    defaultChecked
                                     value={WorkspacePrivacy.Public}
-                                    {...register('privacy')}
                                   />
                                 </div>
                                 <div className="pl-7 text-sm">

@@ -1,8 +1,7 @@
 import { Outlet, Route, Routes } from 'react-router';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useWorkspaceFacade } from '@pasnik/features/workspaces';
-import { useEffect } from 'react';
-import { useWorkspaceUsersStore } from './workspace-store/workspace-users.store';
+import { useMatch, useNavigate, useParams } from 'react-router-dom';
+import { useWorkspaceStore } from '@pasnik/features/workspaces';
+import { SyntheticEvent, useCallback, useEffect } from 'react';
 import { WorkspacePageActiveOrders } from './workspace-page-active-orders/workspace-page-active-orders';
 import { WorkspaceHeader } from './workspace-header/workspace-header';
 import { TabLink } from '@pasnik/components';
@@ -13,17 +12,25 @@ export interface PagesWorkspaceProps {}
 
 export function PagesWorkspace(props: PagesWorkspaceProps) {
   const navigation = useNavigate();
-  const { currentWorkspace } = useWorkspaceFacade();
   const { slug } = useParams<'slug'>();
-  const { fetchUsers } = useWorkspaceUsersStore();
+  const { fetchWorkspace } = useWorkspaceStore();
+
+  const onTabChange = useCallback(
+    (event: SyntheticEvent<HTMLSelectElement>) => {
+      navigation(event.currentTarget.value);
+    },
+    [navigation]
+  );
+
+  const currentPath = useMatch({ path: '/workspace/:slug', end: true })
+    ? '.'
+    : './inactive';
 
   useEffect(() => {
-    if (currentWorkspace?.slug && currentWorkspace?.slug !== slug) {
-      navigation(`/workspace/${currentWorkspace?.slug}`);
-    } else if (currentWorkspace) {
-      fetchUsers(currentWorkspace);
+    if (slug) {
+      fetchWorkspace(slug);
     }
-  }, [currentWorkspace, navigation, slug, fetchUsers]);
+  }, [slug, fetchWorkspace]);
 
   return (
     <div className="flex flex-col overflow-auto flex-1">
@@ -36,15 +43,17 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
           <div className="bg-white sm:rounded-md shadow">
             <div className="sm:hidden">
               <label htmlFor="tabs" className="sr-only">
-                Select a tab
+                Wybierz zakładkę
               </label>
               <select
+                value={currentPath}
+                onChange={onTabChange}
                 id="tabs"
                 name="tabs"
                 className="mt-4 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm rounded-md"
               >
-                <option>Aktywne</option>
-                <option>Zakończone</option>
+                <option value=".">Aktywne</option>
+                <option value="./inactive">Zakończone</option>
               </select>
             </div>
             <div className="hidden sm:block">
