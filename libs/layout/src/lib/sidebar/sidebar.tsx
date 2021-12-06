@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect } from 'react';
+import { Fragment, useCallback } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { NavLink } from 'react-router-dom';
 import {
@@ -18,7 +18,6 @@ import {
   CreateWorkspaceDrawer,
   SelectWorkspaceDropdown,
   useWorkspaceFacade,
-  useWorkspaceUsersStore,
 } from '@pasnik/features/workspaces';
 import { SidebarItem } from '../sidebar-item/sidebar-item';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
@@ -52,16 +51,6 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
     addWorkspaceModalOpen,
   } = useLayoutStore();
   const { currentWorkspace, changeWorkspace } = useWorkspaceFacade();
-
-  const { fetchUsers, resetState } = useWorkspaceUsersStore();
-
-  useEffect(() => {
-    if (currentWorkspace) {
-      fetchUsers(currentWorkspace);
-    } else {
-      resetState();
-    }
-  }, [currentWorkspace, fetchUsers, resetState]);
 
   const onCreateWorkspaceSuccess = useCallback(
     async (workspace: WorkspaceModel) => {

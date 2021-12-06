@@ -9,10 +9,6 @@ export const useWorkspaceFacade = () => {
     ({ user }) => user?.currentWorkspaceId
   );
 
-  const removeWorkspaceFromStore = useWorkspaceStore(
-    ({ removeWorkspace }) => removeWorkspace
-  );
-
   const changeCurrentWorkspace = useUserStore(
     ({ changeWorkspace }) => changeWorkspace
   );
@@ -43,19 +39,10 @@ export const useWorkspaceFacade = () => {
     [changeCurrentWorkspace, navigate]
   );
 
-  const removeWorkspace = useCallback(
-    async (workspace: WorkspaceModel) => {
-      await removeWorkspaceFromStore(workspace);
-      await changeWorkspace(workspaces[0]);
-    },
-    [changeWorkspace, workspaces, removeWorkspaceFromStore]
-  );
-
   return {
     currentWorkspaceId,
     currentWorkspace,
     changeWorkspace,
     workspaces,
-    removeWorkspace,
   };
 };

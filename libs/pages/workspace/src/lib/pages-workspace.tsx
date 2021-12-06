@@ -13,7 +13,7 @@ export interface PagesWorkspaceProps {}
 export function PagesWorkspace(props: PagesWorkspaceProps) {
   const navigation = useNavigate();
   const { slug } = useParams<'slug'>();
-  const { fetchWorkspace } = useWorkspaceStore();
+  const { fetchWorkspace, workspace, fetchUsers } = useWorkspaceStore();
 
   const onTabChange = useCallback(
     (event: SyntheticEvent<HTMLSelectElement>) => {
@@ -31,6 +31,12 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
       fetchWorkspace(slug);
     }
   }, [slug, fetchWorkspace]);
+
+  useEffect(() => {
+    if (workspace) {
+      fetchUsers(workspace);
+    }
+  }, [workspace, fetchUsers]);
 
   return (
     <div className="flex flex-col overflow-auto flex-1">

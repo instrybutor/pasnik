@@ -119,18 +119,12 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
       `api/workspaces/${workspace.slug}/join`
     );
 
-    const users = {
-      ...get().users,
-      [data.id]: data,
-    };
-
     set(
       produce((draft) => {
         draft.users[data.id] = data;
+        draft.entities[workspace.id] = workspace;
       })
     );
-
-    set({ users });
   },
 
   leaveWorkspace: async (workspace: WorkspaceModel) => {
@@ -140,10 +134,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
 
     set(
       produce((draft) => {
-        if (draft.workspace.id === data.id) {
-          delete draft.workspace;
-        }
-        delete draft.entities[data.id];
+        delete draft.entities[workspace.id];
+        delete draft.users[data.id];
       })
     );
   },

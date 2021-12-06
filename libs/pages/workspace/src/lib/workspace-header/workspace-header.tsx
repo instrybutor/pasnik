@@ -1,42 +1,30 @@
 import {
   UpdateWorkspaceDrawer,
-  useWorkspaceFacade,
   useWorkspaceStore,
   useWorkspaceUsersFacade,
-  useWorkspaceUsersStore,
 } from '@pasnik/features/workspaces';
 import { Users } from '@pasnik/components';
 import { useMemo, useState } from 'react';
-import {
-  LoginIcon,
-  LogoutIcon,
-  PencilIcon,
-  TrashIcon,
-} from '@heroicons/react/outline';
+import { PencilIcon } from '@heroicons/react/outline';
 import { WorkspaceUserPopover } from '../workspace-user-popover/workspace-user-popover';
 import {
   WorkspaceUserModel,
   WorkspaceUserRole,
 } from '@pasnik/api/data-transfer';
+import { WorkspaceJoinLeaveButton } from '../workspace-join-leave-button/workspace-join-leave-button';
 
 export const WorkspaceHeader = () => {
   const [editWorkspace, setEditWorkspace] = useState(false);
   const { workspace } = useWorkspaceStore();
   const { currentWorkspaceUser, mappedWorkspaceUsers, workspaceUsers } =
     useWorkspaceUsersFacade();
-  const { joinWorkspace, leaveWorkspace } = useWorkspaceUsersStore(
-    ({ leaveWorkspace, joinWorkspace }) => ({
-      joinWorkspace,
-      leaveWorkspace,
-    })
-  );
+
   const userToWorkspaceUserMap = useMemo(() => {
     return workspaceUsers.reduce((acc, workspaceUser) => {
       acc[workspaceUser.userId] = workspaceUser;
       return acc;
     }, {} as Record<number, WorkspaceUserModel>);
   }, [workspaceUsers]);
-  const { removeWorkspace } = useWorkspaceFacade();
 
   return (
     <div className="px-4 sm:px-6 lg:max-w-6xl md:mx-auto lg:px-8">
@@ -80,51 +68,7 @@ export const WorkspaceHeader = () => {
                 </button>
               </span>
             )}
-
-          {!currentWorkspaceUser && (
-            <span className="sm:ml-3">
-              <button
-                onClick={() => joinWorkspace(workspace!)}
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                <LoginIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                Dołącz
-              </button>
-            </span>
-          )}
-          {currentWorkspaceUser &&
-            currentWorkspaceUser.role !== WorkspaceUserRole.Owner && (
-              <span className="sm:ml-3">
-                <button
-                  onClick={() => leaveWorkspace(workspace!)}
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  <LogoutIcon
-                    className="-ml-1 mr-2 h-5 w-5"
-                    aria-hidden="true"
-                  />
-                  Opuść
-                </button>
-              </span>
-            )}
-          {currentWorkspaceUser &&
-            currentWorkspaceUser.role === WorkspaceUserRole.Owner && (
-              <span className="sm:ml-3">
-                <button
-                  onClick={() => removeWorkspace(workspace!)}
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  <TrashIcon
-                    className="-ml-1 mr-2 h-5 w-5"
-                    aria-hidden="true"
-                  />
-                  Usuń
-                </button>
-              </span>
-            )}
+          {workspace && <WorkspaceJoinLeaveButton workspace={workspace} />}
         </div>
       </div>
       {workspace && (
