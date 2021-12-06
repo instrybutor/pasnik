@@ -37,9 +37,12 @@ export const UpdateWorkspaceDrawer = ({
 
   useEffect(() => {
     if (isOpen) {
-      reset();
+      reset({
+        name: workspace.name,
+        privacy: workspace.privacy,
+      });
     }
-  }, [isOpen, reset]);
+  }, [isOpen, reset, workspace]);
 
   const onSubmit = useCallback(
     (data: CreateWorkspaceDto) => {

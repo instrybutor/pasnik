@@ -1,6 +1,6 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/outline';
-import { Fragment, MouseEvent, useCallback } from 'react';
+import { Fragment, MouseEvent, useCallback, useRef } from 'react';
 import classNames from 'classnames';
 import { useWorkspaceFacade } from '../workspace.facade';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
@@ -15,6 +15,7 @@ export function SelectWorkspaceDropdown({
   onChange,
 }: SelectWorkspaceProps) {
   const { currentWorkspace, workspaces } = useWorkspaceFacade();
+  const refButton = useRef<HTMLButtonElement | null>(null);
 
   const onClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button === 0) {
@@ -34,7 +35,10 @@ export function SelectWorkspaceDropdown({
             Przestrzenie robocze
           </Listbox.Label>
           <div className="mt-1 relative">
-            <Listbox.Button className="bg-white relative w-full bg-cyan-800 rounded-md pl-3 pr-10 py-3 text-left text-white hover:bg-cyan-800 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+            <Listbox.Button
+              ref={refButton}
+              className="bg-white relative w-full bg-cyan-800 rounded-md pl-3 pr-10 py-3 text-left text-white hover:bg-cyan-800 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+            >
               <span className="block truncate">
                 {currentWorkspace?.name ?? 'Wybierz przestrzeń'}
               </span>
@@ -53,11 +57,11 @@ export function SelectWorkspaceDropdown({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 sm:text-sm flex flex-col divide-y divide-gray-200">
-                <Listbox.Options
-                  static={true}
-                  className="overflow-auto focus:outline-none"
-                >
+              <Listbox.Options
+                static={true}
+                className="focus:outline-none absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 sm:text-sm flex flex-col divide-y divide-gray-200"
+              >
+                <div className="overflow-auto">
                   {workspaces.map((workspace) => (
                     <Listbox.Option
                       key={workspace.id}
@@ -100,16 +104,17 @@ export function SelectWorkspaceDropdown({
                       )}
                     </Listbox.Option>
                   ))}
-                </Listbox.Options>
+                </div>
                 <button
                   onClick={() => {
                     onAddClick();
+                    refButton.current?.click(); // nasty hack to close listbox
                   }}
-                  className="relative py-2 pl-3 text-left pr-9 hover:bg-cyan-700 hover:text-white w-full"
+                  className="relative py-2 pl-3 text-left pr-9 hover:bg-cyan-700 hover:text-white w-full focus:outline-none"
                 >
                   Dodaj przestrzeń
                 </button>
-              </div>
+              </Listbox.Options>
             </Transition>
           </div>
         </>
