@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserEntity } from './user.entity';
 import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
 import { OrderEntity } from './order.entity';
@@ -8,10 +14,10 @@ export class OrderActionEntity implements OrderActionModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, { onDelete: 'SET NULL' })
   user: UserEntity;
 
-  @ManyToOne(() => OrderEntity)
+  @ManyToOne(() => OrderEntity, { onDelete: 'CASCADE' })
   order: OrderEntity;
 
   @ManyToOne(() => UserEntity, { nullable: true })

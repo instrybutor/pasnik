@@ -11,11 +11,11 @@ import { CashIcon, OfficeBuildingIcon } from '@heroicons/react/outline';
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { WorkspaceName } from '@pasnik/features/workspaces';
 
-export interface WorkspaceOrderListProps {
+export interface DashboardOrderListProps {
   orders: OrderModel[];
 }
 
-export function DashboardOrderList({ orders }: WorkspaceOrderListProps) {
+export function DashboardOrderList({ orders }: DashboardOrderListProps) {
   return (
     <StackedList>
       {orders.map((order) => (

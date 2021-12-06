@@ -1,61 +1,72 @@
+import {
+  Price,
+  StackedList,
+  UserAvatar,
+  UserName,
+  Users,
+} from '@pasnik/components';
 import { NavLink } from 'react-router-dom';
+import { OrderStatusBadge, OrderTimestamp } from '@pasnik/features/orders';
+import { CashIcon, OfficeBuildingIcon } from '@heroicons/react/outline';
 import { OrderModel } from '@pasnik/api/data-transfer';
-import { CalendarIcon, CashIcon, UserIcon } from '@heroicons/react/outline';
-import { OrderStatusBadge, OrderTimestamp } from '@pasnik/pages/order';
-import { UserName } from '@pasnik/components';
+import { WorkspaceName } from '@pasnik/features/workspaces';
 
 export interface OrderListProps {
   orders: OrderModel[];
 }
 
-const sortByCreateAt = (order: OrderModel, nextOrder: OrderModel) =>
-  new Date(order.createdAt).getTime() > new Date(nextOrder.createdAt).getTime()
-    ? -1
-    : 1;
-
 export function OrderList({ orders }: OrderListProps) {
   return (
-    <ul className="divide-y divide-gray-200">
-      {orders.sort(sortByCreateAt).map((order) => (
-        <li key={order.id}>
-          <NavLink
-            to={`/order/${order.slug}`}
-            className="block hover:bg-gray-50"
-          >
-            <div className="px-4 py-4 sm:px-6">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-cyan-600 truncate">
-                  {order.from}
-                </p>
-                <div className="ml-2 flex-shrink-0 flex">
-                  <OrderStatusBadge order={order} />
-                </div>
-              </div>
-              <div className="mt-2 sm:flex sm:justify-between">
-                <div className="sm:flex">
-                  <p className="flex items-center text-sm text-gray-500">
-                    <CashIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                    {order.totalPrice}
-                  </p>
-                  <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                    <UserIcon
-                      className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <UserName user={order.user} />
-                  </p>
-                </div>
-                <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                  <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <OrderTimestamp order={order} />
-                </div>
-              </div>
-            </div>
-          </NavLink>
-        </li>
+    <StackedList>
+      {orders.map((order) => (
+        <StackedList.Item
+          key={order.id}
+          wrapper={({ children }) => (
+            <NavLink
+              to={`/order/${order.slug}`}
+              className="block hover:bg-gray-50"
+            >
+              {children}
+            </NavLink>
+          )}
+          title={order.from}
+          titleRight={<OrderStatusBadge order={order} />}
+          subTitle={
+            <>
+              <StackedList.SubItem className="sm:w-40">
+                <UserAvatar user={order.user} size="xsm" className="mr-2" />
+                <UserName user={order.user} />
+              </StackedList.SubItem>
+              <StackedList.SubItem className="sm:w-24">
+                <CashIcon
+                  className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+                <span className="truncate">
+                  <Price priceCents={order.totalPrice} />
+                </span>
+              </StackedList.SubItem>
+              <StackedList.SubItem className="sm:w-32">
+                <OfficeBuildingIcon
+                  className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+                <WorkspaceName workspaceId={order.workspaceId} />
+              </StackedList.SubItem>
+              <StackedList.SubItem>
+                <OrderTimestamp order={order} showIcon={true} />
+              </StackedList.SubItem>
+            </>
+          }
+          subTitleRight={
+            <Users
+              avatarSize="xsm"
+              usersToShow={3}
+              users={order.participants}
+            />
+          }
+        />
       ))}
-    </ul>
+    </StackedList>
   );
 }
-
-export default OrderList;
