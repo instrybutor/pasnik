@@ -3,7 +3,7 @@ import { BeakerIcon } from '@heroicons/react/outline';
 
 export function OrdersEmpty() {
   return (
-    <div className="text-center bg-white px-4 py-12 flex flex-col gap-4 items-center">
+    <div className="text-center bg-white px-4 py-12 flex flex-col items-center">
       <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
       <div>
         <h3 className="mt-2 text-sm font-medium text-gray-900">
@@ -16,7 +16,7 @@ export function OrdersEmpty() {
 
       <Link
         to="/create-order"
-        className="bg-cyan-500 hover:bg-cyan-600 text-white py-2 text-sm rounded w-48"
+        className="bg-cyan-500 hover:bg-cyan-600 text-white py-2 text-sm rounded px-10 mt-4"
       >
         Utwórz zamówienie
       </Link>

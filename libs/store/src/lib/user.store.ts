@@ -6,6 +6,7 @@ import {
   LoadingState,
 } from '@pasnik/shared/utils';
 import axios from '@pasnik/axios';
+import produce from 'immer';
 
 export interface UserState {
   user?: UserModel;
@@ -29,7 +30,7 @@ const initialState = {
   usersCallState: LoadingState.INIT,
 };
 
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserState>((set, get) => ({
   ...initialState,
   fetchMe: async () => {
     set({ userCallState: LoadingState.LOADING });
@@ -59,10 +60,23 @@ export const useUserStore = create<UserState>((set) => ({
     set(initialState);
   },
   changeWorkspace: async ({ id }: WorkspaceModel) => {
-    const { data } = await axios.post<UserModel>(
-      `/auth/set-default-workspace/${id}`
+    const currentWorkspaceId = get().user?.currentWorkspaceId;
+    set(
+      produce((draft) => {
+        draft.user.currentWorkspaceId = id;
+      })
     );
-
-    set({ user: data });
+    try {
+      const { data } = await axios.post<UserModel>(
+        `/auth/set-default-workspace/${id}`
+      );
+      set({ user: data });
+    } catch (e) {
+      set(
+        produce((draft) => {
+          draft.user.currentWorkspaceId = currentWorkspaceId;
+        })
+      );
+    }
   },
 }));

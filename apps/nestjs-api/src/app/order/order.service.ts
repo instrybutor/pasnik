@@ -30,7 +30,13 @@ export class OrderService {
     return this.ordersRepository.findOneOrFail(
       { id },
       {
-        relations: ['actions', 'actions.user', 'payer', 'actions.actionUser'],
+        relations: [
+          'actions',
+          'actions.user',
+          'payer',
+          'actions.actionUser',
+          'workspace',
+        ],
       }
     );
   }

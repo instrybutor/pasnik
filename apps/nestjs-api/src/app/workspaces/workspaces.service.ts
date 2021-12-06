@@ -106,6 +106,10 @@ export class WorkspacesService {
     return this.workspaceRepository.find();
   }
 
+  findOneBySlug(slug: string): Promise<WorkspaceEntity> {
+    return this.workspaceRepository.findOne({ where: { slug } });
+  }
+
   findOne(id: string | number): Promise<WorkspaceEntity> {
     return this.workspaceRepository.findOne(id);
   }
@@ -146,6 +150,7 @@ export class WorkspacesService {
       const user = await usersRepository.findOneOrFail({ where: { email } });
       const workspaceUser = await workspaceUsersRepository.findOne({
         where: { user },
+        relations: ['user'],
       });
       if (workspaceUser.isRemoved === false) {
         return workspaceUser;

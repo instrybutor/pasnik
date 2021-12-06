@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { UserName } from '../user-name/user-name';
+import { UsersSkeleton } from './users-skeleton';
 
 export interface UsersPopoverElementProps {
   user: UserModel;
@@ -153,3 +154,5 @@ export function Users({
     </div>
   );
 }
+
+Users.Skeleton = UsersSkeleton;

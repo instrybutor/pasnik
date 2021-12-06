@@ -32,9 +32,11 @@ export const useWorkspaceFacade = () => {
   );
 
   const changeWorkspace = useCallback(
-    async (workspace: WorkspaceModel) => {
+    async (workspace: WorkspaceModel, redirect = true) => {
       await changeCurrentWorkspace(workspace);
-      navigate(`/workspace/${workspace.slug}`);
+      if (redirect) {
+        navigate(`/workspace/${workspace.slug}`);
+      }
     },
     [changeCurrentWorkspace, navigate]
   );

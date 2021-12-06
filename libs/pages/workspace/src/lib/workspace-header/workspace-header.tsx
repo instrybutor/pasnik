@@ -4,18 +4,22 @@ import {
   useWorkspaceUsersFacade,
 } from '@pasnik/features/workspaces';
 import { Users } from '@pasnik/components';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { PencilIcon } from '@heroicons/react/outline';
 import { WorkspaceUserPopover } from '../workspace-user-popover/workspace-user-popover';
 import {
+  WorkspaceModel,
   WorkspaceUserModel,
   WorkspaceUserRole,
 } from '@pasnik/api/data-transfer';
 import { WorkspaceJoinLeaveButton } from '../workspace-join-leave-button/workspace-join-leave-button';
+import { LoadingState } from '@pasnik/shared/utils';
+import { useNavigate } from 'react-router-dom';
 
 export const WorkspaceHeader = () => {
+  const navigate = useNavigate();
   const [editWorkspace, setEditWorkspace] = useState(false);
-  const { workspace } = useWorkspaceStore();
+  const { workspace, usersCallState } = useWorkspaceStore();
   const { currentWorkspaceUser, mappedWorkspaceUsers, workspaceUsers } =
     useWorkspaceUsersFacade();
 
@@ -26,27 +30,39 @@ export const WorkspaceHeader = () => {
     }, {} as Record<number, WorkspaceUserModel>);
   }, [workspaceUsers]);
 
+  const onUpdateWorkspaceSuccess = useCallback(
+    (workspace: WorkspaceModel) => {
+      navigate(`/workspace/${workspace.slug}`);
+      setEditWorkspace(false);
+    },
+    [navigate, setEditWorkspace]
+  );
+
   return (
     <div className="px-4 sm:px-6 lg:max-w-6xl md:mx-auto lg:px-8">
-      <div className="py-6 xl:flex xl:items-center lg:justify-between lg:border-t lg:border-gray-200">
+      <div className="py-6 sm:flex sm:items-center justify-between border-t border-gray-200">
         <div className="flex-1 min-w-0">
           <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-2xl sm:truncate">
             {workspace?.name}
           </h2>
           <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
             <div className="mt-2 flex items-center text-sm text-gray-500">
-              <Users
-                usersToShow={5}
-                avatarSize="sm"
-                users={mappedWorkspaceUsers}
-                popoverElement={({ user }) => (
-                  <div className="bg-white p-4 w-72">
-                    <WorkspaceUserPopover
-                      user={userToWorkspaceUserMap[user.id]}
-                    />
-                  </div>
-                )}
-              />
+              {usersCallState === LoadingState.LOADED ? (
+                <Users
+                  usersToShow={10}
+                  avatarSize="sm"
+                  users={mappedWorkspaceUsers}
+                  popoverElement={({ user }) => (
+                    <div className="bg-white p-4 w-72">
+                      <WorkspaceUserPopover
+                        user={userToWorkspaceUserMap[user.id]}
+                      />
+                    </div>
+                  )}
+                />
+              ) : (
+                <Users.Skeleton usersToShow={11} avatarSize="sm" />
+              )}
               {/*<WorkspaceUserInviteButton /> hidden */}
             </div>
           </div>
@@ -68,14 +84,16 @@ export const WorkspaceHeader = () => {
                 </button>
               </span>
             )}
-          {workspace && <WorkspaceJoinLeaveButton workspace={workspace} />}
+          {workspace && usersCallState === LoadingState.LOADED && (
+            <WorkspaceJoinLeaveButton workspace={workspace} />
+          )}
         </div>
       </div>
       {workspace && (
         <UpdateWorkspaceDrawer
           workspace={workspace}
           isOpen={editWorkspace}
-          onSuccess={() => setEditWorkspace(false)}
+          onSuccess={onUpdateWorkspaceSuccess}
           onCancel={() => setEditWorkspace(false)}
         />
       )}

@@ -1,25 +1,32 @@
-import { Outlet, Route, Routes } from 'react-router';
-import { useMatch, useNavigate, useParams } from 'react-router-dom';
+import {
+  Outlet,
+  Route,
+  Routes,
+  useMatch,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useWorkspaceStore } from '@pasnik/features/workspaces';
 import { SyntheticEvent, useCallback, useEffect } from 'react';
-import { WorkspacePageActiveOrders } from './workspace-page-active-orders/workspace-page-active-orders';
+import axios, { AxiosError } from '@pasnik/axios';
 import { WorkspaceHeader } from './workspace-header/workspace-header';
 import { TabLink } from '@pasnik/components';
+import { WorkspacePageActiveOrders } from './workspace-page-active-orders/workspace-page-active-orders';
 import { WorkspacePageInactiveOrders } from './workspace-page-inactive-orders/workspace-page-inactive-orders';
 
 /* eslint-disable-next-line */
 export interface PagesWorkspaceProps {}
 
 export function PagesWorkspace(props: PagesWorkspaceProps) {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const { slug } = useParams<'slug'>();
   const { fetchWorkspace, workspace, fetchUsers } = useWorkspaceStore();
 
   const onTabChange = useCallback(
     (event: SyntheticEvent<HTMLSelectElement>) => {
-      navigation(event.currentTarget.value);
+      navigate(event.currentTarget.value);
     },
-    [navigation]
+    [navigate]
   );
 
   const currentPath = useMatch({ path: '/workspace/:slug', end: true })
@@ -27,10 +34,23 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
     : './inactive';
 
   useEffect(() => {
-    if (slug) {
-      fetchWorkspace(slug);
-    }
-  }, [slug, fetchWorkspace]);
+    (async () => {
+      if (slug && slug !== workspace?.slug) {
+        try {
+          await fetchWorkspace(slug);
+        } catch (e) {
+          if (axios.isAxiosError(e)) {
+            const axiosError = e as AxiosError<{ message: string }>;
+            if (axiosError.response?.status === 403) {
+              navigate('/workspace');
+              return;
+            }
+          }
+          throw e;
+        }
+      }
+    })();
+  }, [workspace, slug, fetchWorkspace, navigate]);
 
   useEffect(() => {
     if (workspace) {
@@ -44,8 +64,8 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
         <WorkspaceHeader />
       </header>
 
-      <main className="flex-grow flex-1 overflow-y-auto">
-        <div className="mt-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow flex-1">
+        <div className="my-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white sm:rounded-md shadow">
             <div className="sm:hidden">
               <label htmlFor="tabs" className="sr-only">
@@ -77,7 +97,7 @@ export function PagesWorkspace(props: PagesWorkspaceProps) {
                 </nav>
               </div>
             </div>
-            <div className="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0 sm:rounded-md">
+            <div className="border-t border-gray-200 divide-y divide-gray-200 sm:border-t-0 sm:rounded-md">
               <Routes>
                 <Route element={<Outlet />}>
                   <Route index element={<WorkspacePageActiveOrders />} />

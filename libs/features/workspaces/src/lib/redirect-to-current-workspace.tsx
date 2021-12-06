@@ -4,5 +4,9 @@ import { useWorkspaceFacade } from './workspace.facade';
 export function RedirectToCurrentWorkspace() {
   const { currentWorkspace } = useWorkspaceFacade();
 
-  return <Navigate to={`/workspace/${currentWorkspace?.slug}`} />;
+  return currentWorkspace ? (
+    <Navigate to={`/workspace/${currentWorkspace?.slug}`} />
+  ) : (
+    <></>
+  );
 }

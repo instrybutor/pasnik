@@ -55,7 +55,9 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     );
     if (foundWorkspace) {
       // user is member of this workspace
-      set({ workspace: foundWorkspace });
+      if (get().workspace?.id !== foundWorkspace?.id) {
+        set({ workspace: foundWorkspace });
+      }
     } else {
       const { data } = await axios.get<WorkspaceModel>(
         `/api/workspaces/${workspaceSlug}`
@@ -96,6 +98,9 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     set(
       produce((draft) => {
         draft.entities[data.id] = data;
+        if (workspace.id === draft.workspace?.id) {
+          draft.workspace = data;
+        }
       })
     );
     return data;

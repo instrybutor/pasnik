@@ -12,7 +12,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
-import { Price } from '@pasnik/components';
+import { HeaderBreadcrumbs, Price } from '@pasnik/components';
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 
 import { useOrderFacade } from '../order-store/order.facade';
@@ -61,7 +61,24 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
       <div className="px-4 sm:px-6 lg:max-w-6xl md:mx-auto lg:px-8">
         <div className="py-6 xl:flex xl:items-center lg:justify-between lg:border-t lg:border-gray-200">
           <div className="flex-1 min-w-0 ml-3">
-            <h1 className="text-2xl font-semibold leading-7 text-gray-900 sm:leading-9 sm:truncate flex items-center">
+            <HeaderBreadcrumbs
+              back={() => (
+                <HeaderBreadcrumbs.Back
+                  to={`/workspace/${order.workspace!.slug}`}
+                >
+                  Wróć do {order.workspace!.name}
+                </HeaderBreadcrumbs.Back>
+              )}
+            >
+              {order.workspace && (
+                <HeaderBreadcrumbs.Item
+                  to={`/workspace/${order.workspace.slug}`}
+                >
+                  {order.workspace.name}
+                </HeaderBreadcrumbs.Item>
+              )}
+            </HeaderBreadcrumbs>
+            <h1 className="mt-4 text-2xl font-semibold leading-7 text-gray-900 sm:mt-2 sm:leading-9 sm:truncate flex items-center">
               {order.from}
               <div className="inline-flex ml-4">
                 <OrderStatusBadge order={order} />
