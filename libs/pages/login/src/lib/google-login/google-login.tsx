@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
-import { useAuthPopup } from '../auth-popup/auth-popup';
+
 import { InvitationRequiredError } from '@pasnik/shared/utils';
+
+import { useAuthPopup } from '../auth-popup/auth-popup';
 
 export interface GoogleLoginProps {
   onSuccess: () => void;
@@ -12,6 +15,7 @@ export const GoogleLogin = ({ onSuccess, onError }: GoogleLoginProps) => {
   const buttonClick = useCallback(() => {
     openSignInWindow('/auth/google').then(onSuccess).catch(onError);
   }, [openSignInWindow, onSuccess, onError]);
+  const { t } = useTranslation();
 
   return (
     <button
@@ -41,7 +45,7 @@ export const GoogleLogin = ({ onSuccess, onError }: GoogleLoginProps) => {
         />
         <path fill="none" d="M0 0h48v48H0z" />
       </svg>
-      Sign in with Google
+      {t('landing.google')}
     </button>
   );
 };

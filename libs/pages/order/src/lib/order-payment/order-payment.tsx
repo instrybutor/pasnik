@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
 import currency from 'currency.js';
@@ -21,6 +22,7 @@ export interface OrderPaymentProps {
 
 export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
   const { orderQuery } = useOrderFacade();
+  const { t } = useTranslation();
   const payerUpdate = useMutation((payerId: number) =>
     service.setPayer(order, {
       payerId,
@@ -41,7 +43,7 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
         <div className="divide-y divide-gray-200">
           <div className="px-4 py-5 sm:px-6 sm:flex sm:items-center sm:justify-between">
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-              Twój wkład
+              {t('dish.paying.you_paid')}
             </h2>
           </div>
           <div className="py-5 px-4 sm:px-6">
@@ -82,7 +84,8 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
                         ).value
                       }
                     />{' '}
-                    (dostawa <Price priceCents={userDishesSummary.shipping} />)
+                    ({t('dish.delivery')}{' '}
+                    <Price priceCents={userDishesSummary.shipping} />)
                   </UserName>
                 </div>
                 <UserAvatar user={userDishesSummary.user} />

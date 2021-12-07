@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import {
   CheckIcon,
@@ -25,6 +26,7 @@ export function OrderDish({
   onEdit,
 }: OrderDishProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const { t } = useTranslation();
 
   const deleteHandler = useCallback(() => {
     if (isDeleting && dish.id) {
@@ -152,7 +154,7 @@ export function OrderDish({
                       className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                       aria-hidden="true"
                     />
-                    Duplikuj
+                    {t('dish.form.duplicate')}
                   </button>
                 </Menu.Item>
                 <Menu.Item>
@@ -165,7 +167,7 @@ export function OrderDish({
                       className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                       aria-hidden="true"
                     />
-                    Edytuj
+                    {t('dish.form.edit')}
                   </button>
                 </Menu.Item>
                 <Menu.Item>
@@ -178,7 +180,7 @@ export function OrderDish({
                       className="-ml-1 mr-2 h-5 w-5"
                       aria-hidden="true"
                     />
-                    Usuń
+                    {t('dish.form.delete')}
                   </button>
                 </Menu.Item>
               </Menu.Items>

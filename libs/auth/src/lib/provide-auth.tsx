@@ -4,6 +4,7 @@ import { AuthContext } from './auth-context';
 import { useAuthFacade } from './auth.facade';
 import { UserState, useUserStore } from '@pasnik/store';
 import { getError, LoadingState } from '@pasnik/shared/utils';
+import { FullscreenSpinner } from '@pasnik/components';
 
 const errorSelector = (state: UserState) => getError(state.userCallState);
 
@@ -19,13 +20,7 @@ export function ProvideAuth({ children }: PropsWithChildren<unknown>) {
       </div>
     );
   } else if (userCallState !== LoadingState.LOADED) {
-    return (
-      <div className="w-screen h-screen flex flex-col gap-2 items-center justify-center">
-        <span role="img" aria-label="food" className="text-6xl animate-bounce">
-          🍔
-        </span>
-      </div>
-    );
+    return <FullscreenSpinner />;
   }
   return (
     <AuthContext.Provider value={{ ...auth }}>{children}</AuthContext.Provider>

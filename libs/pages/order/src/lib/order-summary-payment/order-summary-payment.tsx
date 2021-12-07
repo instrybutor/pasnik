@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { Price, UserAvatar, UserName } from '@pasnik/components';
 import { SwitchHorizontalIcon } from '@heroicons/react/outline';
@@ -12,13 +13,15 @@ export function OrderSummaryPayment({
   order,
   userDishesSummary,
 }: OrderPaymentProps) {
+  const { t } = useTranslation();
+
   return (
     <section>
       <div className="bg-white shadow sm:rounded-lg sm:overflow-hidden">
         <div className="divide-y divide-gray-200">
           <div className="px-4 py-5 sm:px-6 sm:flex sm:items-center sm:justify-between">
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-              Twój wkład
+              {t('dish.paying.you_paid')}
             </h2>
           </div>
           <div className="py-5 px-6">
@@ -57,7 +60,8 @@ export function OrderSummaryPayment({
                         userDishesSummary.shipping + userDishesSummary.total
                       }
                     />{' '}
-                    (dostawa <Price priceCents={userDishesSummary.shipping} />)
+                    ({t('dish.delivery')}{' '}
+                    <Price priceCents={userDishesSummary.shipping} />)
                   </UserName>
                 </div>
                 <UserAvatar user={userDishesSummary.user} />

@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import {
   CashIcon,
@@ -17,7 +18,8 @@ const typesMap = {
     bgColorClass: 'bg-gray-400',
     text: ({ user }: OrderActionModel) => (
       <>
-        Utworzone przez <UserName user={user} initials={true} />
+        <Trans>timeline.createdBy</Trans>{' '}
+        <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -26,7 +28,8 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        Anulowane przez <UserName user={user} initials={true} />
+        <Trans>timeline.canceledBy</Trans>{' '}
+        <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -35,7 +38,8 @@ const typesMap = {
     bgColorClass: 'bg-yellow-500',
     text: ({ actionUser }: OrderActionModel) => (
       <>
-        Opłacone przez <UserName user={actionUser!} initials={true} />
+        <Trans>timeline.payedBy</Trans>{' '}
+        <UserName user={actionUser!} initials={true} />
       </>
     ),
   },
@@ -44,7 +48,8 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        Odebrane przez <UserName user={user} initials={true} />
+        <Trans>timeline.deliveredBy</Trans>{' '}
+        <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -62,7 +67,8 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        Zamówione przez <UserName user={user} initials={true} />
+        <Trans>timeline.orderedBy</Trans>{' '}
+        <UserName user={user} initials={true} />
       </>
     ),
   },
@@ -73,6 +79,8 @@ export interface OrderTimelineProps {
 }
 
 export function OrderTimeline({ actions }: OrderTimelineProps) {
+  const { t } = useTranslation();
+
   return (
     <section
       aria-labelledby="timeline-title"
@@ -80,7 +88,7 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
     >
       <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
         <h2 id="timeline-title" className="text-lg font-medium text-gray-900">
-          Timeline
+          {t('timeline.title')}
         </h2>
 
         <div className="mt-6 flow-root">

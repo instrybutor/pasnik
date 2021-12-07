@@ -1,10 +1,13 @@
-import { UserModel } from '@pasnik/api/data-transfer';
-import { Price, UserAvatar, UserInfo, UserName } from '@pasnik/components';
-import { Listbox, Transition } from '@headlessui/react';
-import classNames from 'classnames';
 import { Fragment, useCallback } from 'react';
+import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
+
 import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
 import { useUserStore } from '@pasnik/store';
+import { Listbox, Transition } from '@headlessui/react';
+
+import { UserModel } from '@pasnik/api/data-transfer';
+import { Price, UserAvatar, UserInfo, UserName } from '@pasnik/components';
 
 export interface OrderPaymentProps {
   totalCents: number;
@@ -18,7 +21,7 @@ export function OrderSelectPayer({
   setPayer,
 }: OrderPaymentProps) {
   const { users } = useUserStore();
-
+  const { t } = useTranslation();
   const setPayerHandler = useCallback(
     (newPayer: UserModel) => {
       if (newPayer.id !== payer?.id) {
@@ -35,7 +38,10 @@ export function OrderSelectPayer({
             <div className="flex items-center">
               <UserAvatar user={payer} />
               <div className="ml-3 truncate">
-                <UserName user={payer} fallbackValue="Wybierz płacącego">
+                <UserName
+                  user={payer}
+                  fallbackValue={t('dish.paying.pick_payer')}
+                >
                   <Price priceCents={totalCents} />
                 </UserName>
               </div>

@@ -9,7 +9,7 @@ export interface LayoutProps {
   version?: string;
 }
 
-export function Layout({ children, version }: PropsWithChildren<LayoutProps>) {
+export function Layout({ version }: PropsWithChildren<LayoutProps>) {
   const sidebarOpen = useLayoutStore((store) => store.sidebarOpen);
   const { openSidebar, closeSidebar } = useLayoutStore();
 

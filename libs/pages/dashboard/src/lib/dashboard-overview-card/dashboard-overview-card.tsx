@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -14,6 +15,8 @@ export function DashboardOverviewCard({
   amount,
   href,
 }: DashboardOverviewCardProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-white overflow-hidden shadow rounded-lg">
       <div className="p-5">
@@ -41,7 +44,7 @@ export function DashboardOverviewCard({
             to={href}
             className="font-medium text-cyan-700 hover:text-cyan-900"
           >
-            Zobacz wszystko
+            {t('dashboard.overview.see_all')}
           </NavLink>
         </div>
       </div>

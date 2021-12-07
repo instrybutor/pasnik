@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { ExclamationIcon } from '@heroicons/react/outline';
 
 export function InvitationPendingAlert() {
+  const { t } = useTranslation();
+
   return (
     <div className="rounded-md bg-yellow-50 p-4">
       <div className="flex">
@@ -12,7 +15,7 @@ export function InvitationPendingAlert() {
         </div>
         <div className="ml-3">
           <h3 className="text-sm font-medium text-yellow-800">
-            Twoje zaproszenie oczekuje na akceptację.
+            {t('invitation.pending')}
           </h3>
         </div>
       </div>

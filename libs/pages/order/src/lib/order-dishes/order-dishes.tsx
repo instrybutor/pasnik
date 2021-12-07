@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
 
@@ -34,6 +35,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
     editClickHandler,
     updateDishHandler,
   } = useOrderDishes({ order });
+  const { t } = useTranslation();
 
   return (
     <section aria-labelledby="notes-title">
@@ -41,7 +43,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
         <div className="divide-y divide-gray-200">
           <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-              Zamówienie
+              {t('dish.title')}
             </h2>
             {inProgress && (
               <div className="flex">
@@ -59,6 +61,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
             {dishes?.sort(sortByCreateAt).map((dish) => (
               <Transition
                 as="li"
+                key={dish.id}
                 show
                 className="flex items-center gap-4 px-6"
                 enter="transition ease-out duration-[1000ms]"

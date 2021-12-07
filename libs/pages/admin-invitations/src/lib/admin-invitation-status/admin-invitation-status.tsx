@@ -1,6 +1,8 @@
-import { InvitationModel, InvitationStatus } from '@pasnik/api/data-transfer';
 import { ReactNode, useMemo } from 'react';
 import classNames from 'classnames';
+import { Trans } from 'react-i18next';
+
+import { InvitationModel, InvitationStatus } from '@pasnik/api/data-transfer';
 import { UserName } from '@pasnik/components';
 
 export interface AdminInvitationStatusProps {
@@ -10,20 +12,23 @@ export interface AdminInvitationStatusProps {
 const statusMap: Partial<
   Record<InvitationStatus, (invitation: InvitationModel) => ReactNode>
 > = {
-  [InvitationStatus.PENDING]: () => 'Oczekujące',
+  [InvitationStatus.PENDING]: () => <Trans>invitation.status.pending</Trans>,
   [InvitationStatus.APPROVED]: (invitation: InvitationModel) => (
     <span>
-      Zatwierdzone przez <UserName user={invitation.changedBy} />
+      <Trans>invitation.status.approvedBy</Trans>{' '}
+      <UserName user={invitation.changedBy} />
     </span>
   ),
   [InvitationStatus.REJECTED]: (invitation: InvitationModel) => (
     <span>
-      Odrzucone przez <UserName user={invitation.changedBy} />
+      <Trans>invitation.status.rejectedBy</Trans>{' '}
+      <UserName user={invitation.changedBy} />
     </span>
   ),
   [InvitationStatus.REGISTERED]: (invitation: InvitationModel) => (
     <span>
-      Zarejestrowany jako <UserName user={invitation.user} />
+      <Trans>invitation.status.registeredAs</Trans>{' '}
+      <UserName user={invitation.user} />
     </span>
   ),
 };
