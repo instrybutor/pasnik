@@ -1,6 +1,6 @@
 import { Fragment, useCallback } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   ClockIcon,
   CogIcon,
@@ -17,7 +17,7 @@ import { useLayoutStore } from '../layout.store';
 import {
   CreateWorkspaceDrawer,
   SelectWorkspaceDropdown,
-  useWorkspaceFacade,
+  useCurrentWorkspace,
 } from '@pasnik/features/workspaces';
 import { SidebarItem } from '../sidebar-item/sidebar-item';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
@@ -50,7 +50,9 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
     hideAddWorkspaceModal,
     addWorkspaceModalOpen,
   } = useLayoutStore();
-  const { currentWorkspace, changeWorkspace } = useWorkspaceFacade();
+  const { changeWorkspace } = useUserStore();
+  const navigate = useNavigate();
+  const currentWorkspace = useCurrentWorkspace();
 
   const onCreateWorkspaceSuccess = useCallback(
     async (workspace: WorkspaceModel) => {
@@ -58,6 +60,14 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
       hideAddWorkspaceModal();
     },
     [changeWorkspace, hideAddWorkspaceModal]
+  );
+
+  const onChangeWorkspace = useCallback(
+    async (workspace: WorkspaceModel) => {
+      await changeWorkspace(workspace);
+      navigate(`/workspace/${workspace.slug}`);
+    },
+    [navigate, changeWorkspace]
   );
 
   return (
@@ -123,7 +133,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
               >
                 <div className="px-2">
                   <SelectWorkspaceDropdown
-                    onChange={changeWorkspace}
+                    onChange={onChangeWorkspace}
                     onAddClick={showAddWorkspaceModal}
                   />
                 </div>
@@ -228,7 +238,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
             >
               <div className="px-2">
                 <SelectWorkspaceDropdown
-                  onChange={changeWorkspace}
+                  onChange={onChangeWorkspace}
                   onAddClick={showAddWorkspaceModal}
                 />
               </div>

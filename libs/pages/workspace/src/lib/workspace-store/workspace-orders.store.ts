@@ -1,11 +1,7 @@
 import create from 'zustand';
 import { OrderModel, WorkspaceModel } from '@pasnik/api/data-transfer';
-import axios from '@pasnik/axios';
-import {
-  CallState,
-  getAxiosErrorMessage,
-  LoadingState,
-} from '@pasnik/shared/utils';
+import axios, { getAxiosErrorMessage } from '@pasnik/axios';
+import { CallState, LoadingState } from '@pasnik/shared/utils';
 
 export interface WorkspaceOrdersState {
   activeOrders: OrderModel[];

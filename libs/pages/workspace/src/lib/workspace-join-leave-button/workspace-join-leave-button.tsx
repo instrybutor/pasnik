@@ -1,11 +1,14 @@
 import { LoginIcon, LogoutIcon, TrashIcon } from '@heroicons/react/outline';
 import { WorkspaceModel, WorkspaceUserRole } from '@pasnik/api/data-transfer';
 import {
-  useWorkspaceFacade,
-  useWorkspaceStore,
-  useWorkspaceUsersFacade,
+  useCurrentWorkspaceUser,
+  useWorkspaceJoinMutation,
+  useWorkspaceLeaveMutation,
+  useWorkspaceRemoveMutation,
+  useWorkspaces,
 } from '@pasnik/features/workspaces';
 import { useCallback } from 'react';
+import { useUserStore } from '@pasnik/store';
 
 export interface WorkspaceJoinLeaveButtonProps {
   workspace: WorkspaceModel;
@@ -14,36 +17,29 @@ export interface WorkspaceJoinLeaveButtonProps {
 export function WorkspaceJoinLeaveButton({
   workspace,
 }: WorkspaceJoinLeaveButtonProps) {
-  const { currentWorkspaceUser } = useWorkspaceUsersFacade();
-  const { joinWorkspace, leaveWorkspace, removeWorkspace } =
-    useWorkspaceStore();
+  const { changeWorkspace } = useUserStore();
+  const { data: workspaces } = useWorkspaces();
 
-  const { changeWorkspace, workspaces } = useWorkspaceFacade();
+  const leaveWorkspace = useWorkspaceLeaveMutation(workspace.slug);
+  const joinWorkspace = useWorkspaceJoinMutation(workspace.slug);
+  const removeWorkspace = useWorkspaceRemoveMutation(workspace.slug);
 
   const onWorkspaceJoin = useCallback(async () => {
-    await joinWorkspace(workspace);
-    await changeWorkspace(workspace);
-  }, [joinWorkspace, changeWorkspace, workspace]);
-
-  const onWorkspaceLeave = useCallback(async () => {
-    await leaveWorkspace(workspace);
-    const nextWorkspace = workspaces.find(
-      (_workspace) => _workspace.id !== workspace.id
-    );
-    if (nextWorkspace) {
-      await changeWorkspace(nextWorkspace, false);
-    }
-  }, [leaveWorkspace, workspace, workspaces, changeWorkspace]);
+    await joinWorkspace.mutateAsync();
+    // await changeWorkspace(workspace);
+  }, [joinWorkspace]);
 
   const onWorkspaceRemove = useCallback(async () => {
-    await removeWorkspace(workspace);
-    const nextWorkspace = workspaces.find(
+    await removeWorkspace.mutateAsync();
+    const nextWorkspace = workspaces?.find(
       (_workspace) => _workspace.id !== workspace.id
     );
     if (nextWorkspace) {
       await changeWorkspace(nextWorkspace);
     }
-  }, [removeWorkspace, workspace, workspaces, changeWorkspace]);
+  }, [removeWorkspace, workspace, changeWorkspace, workspaces]);
+
+  const currentWorkspaceUser = useCurrentWorkspaceUser();
 
   return (
     <span className="sm:ml-3">
@@ -58,7 +54,7 @@ export function WorkspaceJoinLeaveButton({
         </button>
       ) : currentWorkspaceUser.role !== WorkspaceUserRole.Owner ? (
         <button
-          onClick={onWorkspaceLeave}
+          onClick={() => leaveWorkspace.mutateAsync()}
           type="button"
           className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >

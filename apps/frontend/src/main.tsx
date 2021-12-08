@@ -4,11 +4,23 @@ import * as ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-import App from './app/app';
-import './i18n';
 import { FullscreenSpinner } from '@pasnik/components';
 
-const queryClient = new QueryClient();
+import App from './app/app';
+import './i18n';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+    mutations: {
+      useErrorBoundary: false,
+    },
+  },
+});
 
 ReactDOM.render(
   <StrictMode>

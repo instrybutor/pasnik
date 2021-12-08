@@ -1,8 +1,12 @@
 import { Dictionary, IdSelector } from './models';
 
-export function toEntities<T>(
+export interface BaseEntity {
+  id: number & string;
+}
+
+export function toEntities<T extends BaseEntity>(
   entities: T[],
-  idSelector: IdSelector<T> = (instance: any) => instance.id
+  idSelector: IdSelector<T> = (instance) => instance.id
 ): Dictionary<T> {
   return entities.reduce((acc, entity) => {
     acc[idSelector(entity)] = entity;

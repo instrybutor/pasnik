@@ -1,4 +1,4 @@
-import axios, { AxiosError } from '@pasnik/axios';
+import axios, { AxiosError } from 'axios';
 
 export function getAxiosErrorMessage(e: unknown) {
   if (axios.isAxiosError(e)) {

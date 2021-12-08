@@ -1,18 +1,11 @@
-import { useWorkspaceStore } from './workspace.store';
-import { useCallback } from 'react';
+import { useCurrentWorkspaceById } from './queries';
 
 export interface WorkspaceNameParams {
   workspaceId: number;
 }
 
 export function WorkspaceName({ workspaceId }: WorkspaceNameParams) {
-  const workspace = useWorkspaceStore(
-    useCallback(
-      ({ entities }) => {
-        return entities[workspaceId];
-      },
-      [workspaceId]
-    )
-  );
+  const workspace = useCurrentWorkspaceById(workspaceId);
+
   return <span className="truncate">{workspace?.name}</span>;
 }

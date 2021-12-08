@@ -55,7 +55,10 @@ export class WorkspacesController {
     @Body() updateWorkspaceDto: UpdateWorkspaceDto,
     @CurrentWorkspaceUser() user: WorkspaceUserEntity
   ) {
-    return this.workspacesService.update(workspace, updateWorkspaceDto, user);
+    if (user && user.role !== WorkspaceUserRole.User) {
+      return this.workspacesService.update(workspace, updateWorkspaceDto);
+    }
+    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 
   @Delete(':workspaceSlug')
@@ -106,7 +109,7 @@ export class WorkspacesController {
     return this.workspacesService.findInactiveOrders(workspace);
   }
 
-  // Users
+  // WorkspaceUsers
 
   @Get(':workspaceSlug/users')
   findUsers(@CurrentWorkspace() workspace: WorkspaceEntity) {

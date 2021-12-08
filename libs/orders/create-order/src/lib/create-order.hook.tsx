@@ -10,7 +10,7 @@ import {
   OrderModel,
   orderValidator,
 } from '@pasnik/api/data-transfer';
-import { useWorkspaceFacade } from '@pasnik/features/workspaces';
+import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 
 interface FormData extends Omit<CreateOrderDto, 'shippingCents'> {
   shippingCents: string;
@@ -30,7 +30,7 @@ export const useCreateOrder = () => {
   });
   const { createOrder } = useOrdersFacade();
   const watchAll = watch();
-  const { currentWorkspace } = useWorkspaceFacade();
+  const currentWorkspace = useCurrentWorkspace();
 
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();

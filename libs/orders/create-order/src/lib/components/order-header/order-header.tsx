@@ -1,8 +1,8 @@
 import { HeaderBreadcrumbs } from '@pasnik/components';
-import { useWorkspaceFacade } from '@pasnik/features/workspaces';
+import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 
 export const OrderHeader = () => {
-  const { currentWorkspace } = useWorkspaceFacade();
+  const currentWorkspace = useCurrentWorkspace();
   return (
     <header className="bg-white shadow">
       <div className="bg-white shadow">

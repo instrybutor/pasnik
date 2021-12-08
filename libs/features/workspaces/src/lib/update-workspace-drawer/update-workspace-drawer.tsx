@@ -9,7 +9,7 @@ import {
 } from '@pasnik/api/data-transfer';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useWorkspaceStore } from '../workspace.store';
+import { useWorkspaceUpdateMutation } from '../mutations';
 
 export interface UpdateWorkspaceDrawerProps {
   workspace: WorkspaceModel;
@@ -32,7 +32,7 @@ export const UpdateWorkspaceDrawer = ({
     },
   });
 
-  const { updateWorkspace } = useWorkspaceStore();
+  const updateWorkspace = useWorkspaceUpdateMutation(workspace.slug);
   const nameInputLabel = useRef(null);
 
   useEffect(() => {
@@ -46,9 +46,9 @@ export const UpdateWorkspaceDrawer = ({
 
   const onSubmit = useCallback(
     (data: CreateWorkspaceDto) => {
-      updateWorkspace(workspace, data).then(onSuccess);
+      updateWorkspace.mutateAsync(data).then(onSuccess);
     },
-    [updateWorkspace, onSuccess, workspace]
+    [updateWorkspace, onSuccess]
   );
 
   return (
@@ -104,7 +104,7 @@ export const UpdateWorkspaceDrawer = ({
                         </div>
                       </div>
                       <div className="mt-1">
-                        <p className="text-sm text-cyan-300"></p>
+                        <p className="text-sm text-cyan-300" />
                       </div>
                     </div>
                     <div className="flex-1 flex flex-col justify-between">
@@ -233,6 +233,7 @@ export const UpdateWorkspaceDrawer = ({
                     </button>
                     <button
                       type="submit"
+                      disabled={updateWorkspace.isLoading}
                       className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                     >
                       Zapisz

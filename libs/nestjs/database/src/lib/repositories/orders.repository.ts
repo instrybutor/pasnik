@@ -3,11 +3,6 @@ import { nanoid } from 'nanoid';
 import slugify from 'slugify';
 
 import {
-  OrderEntity,
-  UserEntity,
-  WorkspaceEntity,
-} from '@pasnik/nestjs/database';
-import {
   CreateOrderDto,
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
@@ -15,6 +10,7 @@ import {
 } from '@pasnik/api/data-transfer';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { sub } from 'date-fns';
+import { OrderEntity, UserEntity, WorkspaceEntity } from '../entities';
 
 @EntityRepository(OrderEntity)
 export class OrdersRepository extends Repository<OrderEntity> {

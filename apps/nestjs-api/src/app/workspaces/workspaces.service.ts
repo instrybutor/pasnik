@@ -116,8 +116,7 @@ export class WorkspacesService {
 
   async update(
     workspace: WorkspaceEntity,
-    updateWorkspaceDto: UpdateWorkspaceDto,
-    user: WorkspaceUserEntity
+    updateWorkspaceDto: UpdateWorkspaceDto
   ) {
     await this.workspaceRepository.updateWorkspace(
       workspace,

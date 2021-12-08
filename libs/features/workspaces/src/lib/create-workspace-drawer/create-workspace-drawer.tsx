@@ -9,7 +9,7 @@ import {
 } from '@pasnik/api/data-transfer';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useWorkspaceStore } from '../workspace.store';
+import { useWorkspaceCreateMutation } from '../mutations/use-workspace-create-mutation';
 
 export interface CreateWorkspaceDrawerProps {
   isOpen: boolean;
@@ -29,7 +29,7 @@ export const CreateWorkspaceDrawer = ({
     },
   });
 
-  const { createWorkspace } = useWorkspaceStore();
+  const createWorkspace = useWorkspaceCreateMutation();
   const nameInputLabel = useRef(null);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export const CreateWorkspaceDrawer = ({
 
   const onSubmit = useCallback(
     (data: CreateWorkspaceDto) => {
-      createWorkspace(data).then(onSuccess);
+      createWorkspace.mutateAsync(data).then(onSuccess);
     },
     [createWorkspace, onSuccess]
   );

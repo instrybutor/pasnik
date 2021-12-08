@@ -70,10 +70,12 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
           {
             name: 'workspaceId',
             type: 'integer',
+            isUnique: true,
           },
           {
             name: 'userId',
             type: 'integer',
+            isUnique: true,
           },
           {
             name: 'addedById',

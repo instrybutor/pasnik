@@ -1,11 +1,7 @@
 import create from 'zustand';
 import { UserModel, WorkspaceModel } from '@pasnik/api/data-transfer';
-import {
-  CallState,
-  getAxiosErrorMessage,
-  LoadingState,
-} from '@pasnik/shared/utils';
-import axios from '@pasnik/axios';
+import { CallState, LoadingState } from '@pasnik/shared/utils';
+import axios, { getAxiosErrorMessage } from '@pasnik/axios';
 import produce from 'immer';
 
 export interface UserState {

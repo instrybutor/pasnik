@@ -76,8 +76,8 @@
       "company": "Company"
     },
     "no_active_orders": "Brak aktywnych zamówień",
-    "active_orders": "Aktywne zamówienia",
-    "closed_orders": "Zamkniete zamówienia",
+    "active_orders": "Twoje zamówienia",
+    "closed_orders": "Ostatnio zamkniete zamówienia (<24h)",
     "starting_info": "Zacznij od utworzenia nowego zamówienia",
     "create_order": "Utwórz zamówienie",
     "overview": {
