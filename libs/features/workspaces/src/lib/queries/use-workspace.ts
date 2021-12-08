@@ -5,8 +5,7 @@ import { AxiosError } from 'axios';
 
 export const useWorkspace = (
   slug?: string,
-  onError?: (error: AxiosError) => void,
-  suspense = true
+  onError?: (error: AxiosError) => void
 ) => {
   return useQuery(
     ['workspaces', slug],
@@ -18,10 +17,13 @@ export const useWorkspace = (
     },
     {
       retry: false,
-      enabled: !!slug,
-      onError,
+      enabled: Boolean(slug),
+      onError: (err: AxiosError) => {
+        onError?.(err);
+      },
       useErrorBoundary: false,
-      suspense,
+      suspense: !!onError,
+      refetchOnMount: false,
     }
   );
 };

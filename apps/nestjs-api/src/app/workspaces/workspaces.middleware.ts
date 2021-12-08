@@ -21,12 +21,20 @@ export class WorkspacesMiddleware implements NestMiddleware {
     const { user, params } = req;
     const { workspaceSlug } = params;
     const workspace = await this.workspacesService.findOneBySlug(workspaceSlug);
+
+    if (!workspace) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+
     const workspaceUser = await this.workspaceUsersRepository.findOne({
       where: { workspace, user },
       relations: ['user', 'workspace'],
     });
 
-    if (!workspaceUser && workspace?.privacy !== WorkspacePrivacy.Public) {
+    if (
+      workspace?.privacy !== WorkspacePrivacy.Public &&
+      (!workspaceUser || workspaceUser.isRemoved)
+    ) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
 

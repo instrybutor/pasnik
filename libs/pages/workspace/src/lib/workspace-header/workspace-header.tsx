@@ -15,7 +15,7 @@ export const WorkspaceHeader = () => {
   const { slug } = useParams<'slug'>();
   const navigate = useNavigate();
   const [editWorkspace, setEditWorkspace] = useState(false);
-  const currentWorkspaceUser = useCurrentWorkspaceUser();
+  const currentWorkspaceUser = useCurrentWorkspaceUser(slug);
   const { data: workspace } = useWorkspace(slug!);
 
   const onUpdateWorkspaceSuccess = useCallback(

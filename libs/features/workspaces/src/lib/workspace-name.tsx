@@ -1,11 +1,9 @@
-import { useCurrentWorkspaceById } from './queries';
+import { WorkspaceModel } from '@pasnik/api/data-transfer';
 
 export interface WorkspaceNameParams {
-  workspaceId: number;
+  workspace?: WorkspaceModel;
 }
 
-export function WorkspaceName({ workspaceId }: WorkspaceNameParams) {
-  const workspace = useCurrentWorkspaceById(workspaceId);
-
+export function WorkspaceName({ workspace }: WorkspaceNameParams) {
   return <span className="truncate">{workspace?.name}</span>;
 }

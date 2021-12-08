@@ -46,7 +46,7 @@ export function DashboardOrdersItem({ order }: DashboardOrdersItemProps) {
                   className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
-                <WorkspaceName workspaceId={order.workspaceId} />
+                <WorkspaceName workspace={order.workspace} />
               </div>
               <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
                 <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />

@@ -94,7 +94,7 @@ export class WorkspacesService {
   findAllForUser(user: UserEntity) {
     return this.workspaceUsersRepository
       .find({
-        where: { user, isRemoved: false },
+        where: { userId: user.id, isRemoved: false },
         relations: ['workspace'],
       })
       .then((workspaceUsers) => {

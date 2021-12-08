@@ -10,17 +10,11 @@ export interface PagesWorkspaceProps {}
 export function PagesWorkspace(props: PagesWorkspaceProps) {
   const { slug } = useParams<'slug'>();
   const navigate = useNavigate();
-  useWorkspace(
-    slug!,
-    (error) => {
-      if (error.response?.status === 403) {
-        navigate('/');
-      } else {
-        throw error;
-      }
-    },
-    false
-  );
+  useWorkspace(slug!, (error) => {
+    if (error.response?.status === 404) {
+      navigate('/');
+    }
+  });
   return (
     <div className="flex flex-col overflow-auto flex-1">
       <Suspense fallback={<WorkspaceSuspenseContainer />}>

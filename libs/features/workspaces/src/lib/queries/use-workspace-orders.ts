@@ -18,6 +18,7 @@ export const useWorkspaceOrders = (
       useErrorBoundary: true,
       retry: false,
       enabled: !!slug,
+      refetchOnMount: true,
     }
   );
 };

@@ -21,6 +21,12 @@ export class OrdersRepository extends Repository<OrderEntity> {
     return this.createQueryBuilder('order')
       .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
       .leftJoinAndMapOne(
+        'order.workspace',
+        WorkspaceEntity,
+        'workspace',
+        'workspace.id = order.workspaceId'
+      )
+      .leftJoinAndMapOne(
         'order.user',
         UserEntity,
         'user',
@@ -48,6 +54,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
       .groupBy('order.id')
       .addGroupBy('user.id')
       .addGroupBy('participant.id')
+      .addGroupBy('workspace.id')
       .setParameters({
         startDate: yesterday,
         endDate: now,
@@ -57,6 +64,12 @@ export class OrdersRepository extends Repository<OrderEntity> {
   findAllInactive() {
     return this.createQueryBuilder('order')
       .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
+      .leftJoinAndMapOne(
+        'order.workspace',
+        WorkspaceEntity,
+        'workspace',
+        'workspace.id = order.workspaceId'
+      )
       .leftJoinAndMapOne(
         'order.user',
         UserEntity,
@@ -74,7 +87,8 @@ export class OrdersRepository extends Repository<OrderEntity> {
       )
       .groupBy('order.id')
       .addGroupBy('user.id')
-      .addGroupBy('participant.id');
+      .addGroupBy('participant.id')
+      .addGroupBy('workspace.id');
   }
 
   async createOrder(

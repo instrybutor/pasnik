@@ -9,6 +9,7 @@ import {
 } from '@pasnik/features/workspaces';
 import { useCallback } from 'react';
 import { useUserStore } from '@pasnik/store';
+import { useNavigate } from 'react-router-dom';
 
 export interface WorkspaceJoinLeaveButtonProps {
   workspace: WorkspaceModel;
@@ -19,6 +20,7 @@ export function WorkspaceJoinLeaveButton({
 }: WorkspaceJoinLeaveButtonProps) {
   const { changeWorkspace } = useUserStore();
   const { data: workspaces } = useWorkspaces();
+  const navigate = useNavigate();
 
   const leaveWorkspace = useWorkspaceLeaveMutation(workspace.slug);
   const joinWorkspace = useWorkspaceJoinMutation(workspace.slug);
@@ -36,10 +38,11 @@ export function WorkspaceJoinLeaveButton({
     );
     if (nextWorkspace) {
       await changeWorkspace(nextWorkspace);
+      navigate(`/workspace/${nextWorkspace.slug}`);
     }
   }, [removeWorkspace, workspace, changeWorkspace, workspaces]);
 
-  const currentWorkspaceUser = useCurrentWorkspaceUser();
+  const currentWorkspaceUser = useCurrentWorkspaceUser(workspace.slug);
 
   return (
     <span className="sm:ml-3">

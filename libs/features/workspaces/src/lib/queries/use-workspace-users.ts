@@ -14,8 +14,8 @@ export const useWorkspaceUsers = (slug?: string) => {
     {
       retry: false,
       useErrorBoundary: false,
-      enabled: !!slug,
-      onError: () => {},
+      enabled: Boolean(slug),
+      refetchOnMount: false,
     }
   );
 };
