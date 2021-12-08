@@ -40,7 +40,7 @@ export function WorkspaceJoinLeaveButton({
       await changeWorkspace(nextWorkspace);
       navigate(`/workspace/${nextWorkspace.slug}`);
     }
-  }, [removeWorkspace, workspace, changeWorkspace, workspaces]);
+  }, [removeWorkspace, workspace, changeWorkspace, workspaces, navigate]);
 
   const currentWorkspaceUser = useCurrentWorkspaceUser(workspace.slug);
 
