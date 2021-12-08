@@ -70,12 +70,10 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
           {
             name: 'workspaceId',
             type: 'integer',
-            isUnique: true,
           },
           {
             name: 'userId',
             type: 'integer',
-            isUnique: true,
           },
           {
             name: 'addedById',
@@ -106,6 +104,11 @@ export class AddWorkspace1637344141238 implements MigrationInterface {
             referencedTableName: 'workspace_entity',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE',
+          },
+        ],
+        uniques: [
+          {
+            columnNames: ['workspaceId', 'userId'],
           },
         ],
       })

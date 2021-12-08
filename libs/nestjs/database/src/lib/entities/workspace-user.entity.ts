@@ -4,6 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { WorkspaceEntity } from './workspace.entity';
 import { UserEntity } from './user.entity';
@@ -13,6 +14,7 @@ import {
 } from '@pasnik/api/data-transfer';
 
 @Entity()
+@Unique(['userId', 'workspaceId'])
 export class WorkspaceUserEntity implements WorkspaceUserModel {
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,7 +28,7 @@ export class WorkspaceUserEntity implements WorkspaceUserModel {
   })
   workspace: WorkspaceEntity;
 
-  @Column({ unique: true })
+  @Column()
   workspaceId: number;
 
   @ManyToOne(() => UserEntity, {
@@ -35,7 +37,7 @@ export class WorkspaceUserEntity implements WorkspaceUserModel {
   })
   user: UserEntity;
 
-  @Column({ unique: true })
+  @Column()
   userId: number;
 
   @ManyToOne(() => UserEntity, { onDelete: 'SET NULL' })
