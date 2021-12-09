@@ -1,5 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from '../entities';
+import { UserEntity, WorkspaceEntity, WorkspaceUserEntity } from '../entities';
+import { WorkspacePrivacy, WorkspaceUserRole } from '@pasnik/api/data-transfer';
+import slugify from 'slugify';
+import { nanoid } from 'nanoid';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity | undefined> {
@@ -28,6 +31,19 @@ export class UsersRepository extends Repository<UserEntity | undefined> {
     user.email = email;
     user.givenName = givenName;
     user.familyName = familyName;
+    if (!user.id) {
+      const workspace = new WorkspaceEntity();
+      const workspaceUser = new WorkspaceUserEntity();
+      workspaceUser.user = user;
+      workspaceUser.role = WorkspaceUserRole.Owner;
+      workspace.name = 'Moja przestrzeń';
+      workspace.workspaceUsers = [workspaceUser];
+      workspace.privacy = WorkspacePrivacy.PrivateToYou;
+      workspace.slug = slugify([workspace.name, nanoid(6)].join(' '), {
+        lower: true,
+      });
+      user.currentWorkspace = workspace;
+    }
     await this.save(user);
     return this.findOne(user.id);
   }

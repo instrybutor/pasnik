@@ -16,7 +16,7 @@ export function UserInfo({
   return (
     <div className="flex items-center">
       <UserAvatar user={user} size={size} />
-      <div className="ml-3">
+      <div className="ml-3 overflow-hidden">
         <UserName user={user}>{children}</UserName>
       </div>
     </div>

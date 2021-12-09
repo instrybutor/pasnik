@@ -15,7 +15,7 @@ export function PagesAdminInvitations(props: PagesAdminInvitationsProps) {
 
   useEffect(() => {
     fetchInvitations();
-  }, []);
+  }, [fetchInvitations]);
 
   return (
     <>

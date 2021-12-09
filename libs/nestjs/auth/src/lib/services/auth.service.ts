@@ -10,12 +10,20 @@ export class AuthService {
     private usersRepository: UsersRepository
   ) {}
 
-  findUserById(id: string) {
+  findUserById(id: number) {
     return this.usersRepository.findOne(id);
   }
 
   findUserByEmail(email: string, fail?: boolean) {
     return this.usersRepository.findByEmail(email, fail);
+  }
+
+  async setDefaultWorkspace(user: UserEntity, workspaceId: number) {
+    await this.usersRepository.update(
+      { id: user.id },
+      { currentWorkspaceId: workspaceId }
+    );
+    return this.findUserById(user.id);
   }
 
   async upsertSlackUser({

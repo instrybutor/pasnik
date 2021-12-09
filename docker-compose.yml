@@ -72,6 +72,16 @@ services:
     depends_on:
       - postgres
       - redis
+  phppgadmin:
+    image: 'bitnami/phppgadmin'
+    environment:
+      - DATABASE_HOST=postgres
+      - POSTGRESQL_PASSWORD=pasnik
+    ports:
+      - '8080:8080'
+      - '8443:8443'
+    depends_on:
+      - postgres
 
 volumes:
   pasnik-data:

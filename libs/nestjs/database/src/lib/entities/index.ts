@@ -5,3 +5,5 @@ export * from './order-action.entity';
 export * from './payment.entity';
 export * from './transfer.entity';
 export * from './user.entity';
+export * from './workspace.entity';
+export * from './workspace-user.entity';

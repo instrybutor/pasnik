@@ -1,12 +1,16 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UsersRepository } from '@pasnik/nestjs/database';
+import {
+  DishesRepository,
+  OrdersRepository,
+  UsersRepository,
+  WorkspaceUsersRepository,
+} from '@pasnik/nestjs/database';
 
 import { DishesController } from './dishes.controller';
 import { DishesService } from './dishes.service';
-import { OrdersRepository } from '../repositories/orders.repository';
-import { DishesRepository } from '../repositories/dishes.repository';
+import { OrderMiddleware } from '../order/order.middleware';
 
 @Module({
   imports: [
@@ -14,9 +18,14 @@ import { DishesRepository } from '../repositories/dishes.repository';
       OrdersRepository,
       DishesRepository,
       UsersRepository,
+      WorkspaceUsersRepository,
     ]),
   ],
   controllers: [DishesController],
   providers: [DishesService],
 })
-export class DishesModule {}
+export class DishesModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(OrderMiddleware).forRoutes(DishesController);
+  }
+}

@@ -1,22 +1,24 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  DishEntity,
-  OrderActionEntity,
+  DishesRepository,
+  OrdersRepository,
   UsersRepository,
+  WorkspacesRepository,
+  WorkspaceUsersRepository,
 } from '@pasnik/nestjs/database';
 
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
-import { OrdersRepository } from '../repositories/orders.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       OrdersRepository,
-      OrderActionEntity,
-      DishEntity,
+      DishesRepository,
       UsersRepository,
+      WorkspacesRepository,
+      WorkspaceUsersRepository,
     ]),
   ],
   controllers: [OrdersController],

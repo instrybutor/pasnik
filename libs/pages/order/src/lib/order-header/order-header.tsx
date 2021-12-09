@@ -13,12 +13,11 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
-import { Price } from '@pasnik/components';
+import { HeaderBreadcrumbs, Price } from '@pasnik/components';
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 
-import { OrderStatusBadge } from '../order-status-badge/order-status-badge';
-import { OrderTimestamp } from '../order-timestamp/order-timestamp';
 import { useOrderFacade } from '../order-store/order.facade';
+import { OrderStatusBadge, OrderTimestamp } from '@pasnik/features/orders';
 
 export interface OrderHeaderProps {
   order: OrderModel;
@@ -36,24 +35,32 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
   const { t } = useTranslation();
 
   const markAsDeliveredHandler = useCallback(
-    () => markAsDeliveredMutation.mutateAsync(order.id),
-    [markAsDeliveredMutation, order.id]
+    () => markAsDeliveredMutation.mutateAsync(order),
+    [markAsDeliveredMutation, order]
   );
 
   const closeOrderHandler = useCallback(
-    () => markAsClosedMutation.mutateAsync(order.id),
-    [markAsClosedMutation, order.id]
+    () => markAsClosedMutation.mutateAsync(order),
+    [markAsClosedMutation, order]
   );
 
   const openOrderHandler = useCallback(
-    () => markAsOpenMutation.mutateAsync(order.id),
-    [markAsOpenMutation, order.id]
+    () => markAsOpenMutation.mutateAsync(order),
+    [markAsOpenMutation, order]
   );
 
   const makeOrderHandler = useCallback(
-    () => markAsOrderedMutation.mutateAsync(order.id),
-    [markAsOrderedMutation, order.id]
+    () => markAsOrderedMutation.mutateAsync(order),
+    [markAsOrderedMutation, order]
   );
+
+  const backElement = useCallback(() => {
+    return (
+      <HeaderBreadcrumbs.Back to={`/workspace/${order.workspace!.slug}`}>
+        Wróć do {order.workspace!.name}
+      </HeaderBreadcrumbs.Back>
+    );
+  }, [order]);
 
   useEffect(() => {
     setTotalPrice(dishes.reduce((acc, cur) => acc + cur.priceCents, 0));
@@ -64,7 +71,16 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
       <div className="px-4 sm:px-6 lg:max-w-6xl md:mx-auto lg:px-8">
         <div className="py-6 xl:flex xl:items-center lg:justify-between lg:border-t lg:border-gray-200">
           <div className="flex-1 min-w-0 ml-3">
-            <h1 className="text-2xl font-semibold leading-7 text-gray-900 sm:leading-9 sm:truncate flex items-center">
+            <HeaderBreadcrumbs back={backElement}>
+              {order.workspace && (
+                <HeaderBreadcrumbs.Item
+                  to={`/workspace/${order.workspace.slug}`}
+                >
+                  {order.workspace.name}
+                </HeaderBreadcrumbs.Item>
+              )}
+            </HeaderBreadcrumbs>
+            <h1 className="mt-4 text-2xl font-semibold leading-7 text-gray-900 sm:mt-2 sm:leading-9 sm:truncate flex items-center">
               {order.from}
               <div className="inline-flex ml-4">
                 <OrderStatusBadge order={order} />

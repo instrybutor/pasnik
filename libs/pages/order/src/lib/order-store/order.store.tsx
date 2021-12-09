@@ -16,7 +16,7 @@ interface OrderState {
   isDishesLoading: boolean;
 
   addDish: (payload: AddDishDto) => Promise<DishModel>;
-  fetchDishes: () => Promise<DishModel[]>;
+  fetchDishes: (slug: string) => Promise<DishModel[]>;
   fetchOrder: (slug: string) => Promise<OrderModel>;
   deleteDish: (dishId: number) => Promise<void>;
   setPayer: (payerId: number) => Promise<OrderModel>;
@@ -46,12 +46,10 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
 
   reset: () => set(initialState),
 
-  fetchDishes: async () => {
-    const { order } = getState();
-
+  fetchDishes: async (slug: string) => {
     set({ isDishesLoading: true });
 
-    const dishes = await service.fetchDishes(order!.id);
+    const dishes = await service.fetchDishes(slug);
 
     set((state) => ({
       ...state,
@@ -72,7 +70,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
   addDish: async (payload: AddDishDto) => {
     const { order } = getState();
 
-    const dish = await service.addDish(order!.id, payload);
+    const dish = await service.addDish(order!, payload);
 
     set((state) => ({
       ...state,
@@ -87,7 +85,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
   },
   deleteDish: async (dishId: number) => {
     const { order } = getState();
-    await service.deleteDish(order!.id, dishId);
+    await service.deleteDish(order!, dishId);
 
     set((state) => ({
       ...state,
@@ -98,7 +96,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
   updateDish: async (dishId: number, payload: AddDishDto) => {
     const { order } = getState();
 
-    const dish = await service.updateDish(order!.id, dishId, payload);
+    const dish = await service.updateDish(order!, dishId, payload);
 
     set((state) => ({
       ...state,
@@ -127,7 +125,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
     const { order } = getState();
     set({ isOrderLoading: true });
 
-    const newOrder = await service.markAsClosed(order!.id);
+    const newOrder = await service.markAsClosed(order!);
 
     set((state) => ({
       ...state,
@@ -142,7 +140,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
 
     set({ isOrderLoading: true });
 
-    const newOrder = await service.markAsOpen(order!.id);
+    const newOrder = await service.markAsOpen(order!);
 
     set((state) => ({
       ...state,
@@ -157,7 +155,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
 
     set({ isOrderLoading: true });
 
-    const newOrder = await service.markAsOrdered(order!.id);
+    const newOrder = await service.markAsOrdered(order!);
 
     set((state) => ({
       ...state,
@@ -172,7 +170,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
 
     set({ isOrderLoading: true });
 
-    const newOrder = await service.markAsPaid(order!.id, payerId);
+    const newOrder = await service.markAsPaid(order!, payerId);
 
     set((state) => ({
       ...state,
@@ -187,7 +185,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
 
     set({ isOrderLoading: true });
 
-    const newOrder = await service.markAsDelivered(order!.id);
+    const newOrder = await service.markAsDelivered(order!);
 
     set((state) => ({
       ...state,
@@ -202,7 +200,7 @@ export const useOrderStore = create<OrderState>((set, getState) => ({
 
     set({ isOrderLoading: true });
 
-    const newOrder = await service.setPayer(order!.id, { payerId });
+    const newOrder = await service.setPayer(order!, { payerId });
 
     set((state) => ({
       ...state,

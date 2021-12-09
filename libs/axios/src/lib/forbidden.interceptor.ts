@@ -1,5 +1,5 @@
-import { redirectToLogin } from '@pasnik/shared/utils';
 import { AxiosError, AxiosResponse } from 'axios';
+import { redirectToLogin } from './redirect-to-login';
 
 export const forbiddenInterceptor = {
   onFulfilled: (response: AxiosResponse) => response,

@@ -1,4 +1,4 @@
-import { Spinner } from '@pasnik/layout';
+import { Spinner } from '@pasnik/components';
 import classNames from 'classnames';
 
 /* eslint-disable-next-line */

@@ -9,3 +9,6 @@ export * from './change-invitation-status.dto';
 export * from './update-order.dto';
 export * from './set-payer.dto';
 export * from './request-access.dto';
+export * from './create-workspace.dto';
+export * from './update-workspace.dto';
+export * from './add-member-to-workspace.dto';

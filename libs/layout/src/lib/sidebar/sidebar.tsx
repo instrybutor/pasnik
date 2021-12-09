@@ -1,29 +1,26 @@
-import { Fragment } from 'react';
+import { Fragment, useCallback } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   ClockIcon,
   CogIcon,
-  CreditCardIcon,
-  DocumentReportIcon,
   HomeIcon,
+  OfficeBuildingIcon,
   QuestionMarkCircleIcon,
-  ScaleIcon,
   ShieldCheckIcon,
   UserGroupIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import { useAuth } from '@pasnik/auth';
-
-const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
-  { name: 'Historia zamówień', href: '/history', icon: ClockIcon },
-  { name: 'Balances', href: '/balances', icon: ScaleIcon, hide: true },
-  { name: 'Cards', href: '/cards', icon: CreditCardIcon, hide: true },
-  { name: 'Recipients', href: '/recipients', icon: UserGroupIcon, hide: true },
-  { name: 'Reports', href: '/reports', icon: DocumentReportIcon, hide: true },
-];
+import { useUserStore } from '@pasnik/store';
+import { useLayoutStore } from '../layout.store';
+import {
+  CreateWorkspaceDrawer,
+  SelectWorkspaceDropdown,
+  useCurrentWorkspace,
+} from '@pasnik/features/workspaces';
+import { SidebarItem } from '../sidebar-item/sidebar-item';
+import { WorkspaceModel } from '@pasnik/api/data-transfer';
 
 const adminNavigation = [
   {
@@ -47,7 +44,33 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
-  const { user } = useAuth();
+  const { user } = useUserStore();
+  const {
+    showAddWorkspaceModal,
+    hideAddWorkspaceModal,
+    addWorkspaceModalOpen,
+  } = useLayoutStore();
+  const { changeWorkspace } = useUserStore();
+  const navigate = useNavigate();
+  const currentWorkspace = useCurrentWorkspace();
+
+  const onCreateWorkspaceSuccess = useCallback(
+    async (workspace: WorkspaceModel) => {
+      await changeWorkspace(workspace);
+      hideAddWorkspaceModal();
+      navigate(`/workspace/${workspace.slug}`);
+    },
+    [navigate, changeWorkspace, hideAddWorkspaceModal]
+  );
+
+  const onChangeWorkspace = useCallback(
+    async (workspace: WorkspaceModel) => {
+      await changeWorkspace(workspace);
+      navigate(`/workspace/${workspace.slug}`);
+    },
+    [navigate, changeWorkspace]
+  );
+
   return (
     <>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -109,31 +132,27 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                 className="mt-5 flex-grow divide-y divide-cyan-800 overflow-y-auto"
                 aria-label="Sidebar"
               >
-                <div className="px-2 space-y-1">
-                  {navigation.map((item) => (
-                    <NavLink
-                      key={item.name}
-                      to={item.href}
-                      end={item.exact}
-                      className={({ isActive }) =>
-                        classNames(
-                          'group flex items-center px-2 py-2 text-base font-medium rounded-md',
-                          {
-                            hidden: item.hide,
-                            'bg-cyan-800 text-white': isActive,
-                            'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                              !isActive,
-                          }
-                        )
-                      }
+                <div className="px-2">
+                  <SelectWorkspaceDropdown
+                    onChange={onChangeWorkspace}
+                    onAddClick={showAddWorkspaceModal}
+                  />
+                </div>
+                <div className="px-2 space-y-1 mt-6 pt-6">
+                  <SidebarItem to="/" icon={HomeIcon}>
+                    Dashboard
+                  </SidebarItem>
+                  {currentWorkspace && (
+                    <SidebarItem
+                      to={`/workspace/${currentWorkspace.slug}`}
+                      icon={OfficeBuildingIcon}
                     >
-                      <item.icon
-                        className="mr-4 flex-shrink-0 h-6 w-6 text-cyan-200"
-                        aria-hidden="true"
-                      />
-                      {item.name}
-                    </NavLink>
-                  ))}
+                      {currentWorkspace.name}
+                    </SidebarItem>
+                  )}
+                  <SidebarItem to="/history" icon={ClockIcon}>
+                    Historia zamówień
+                  </SidebarItem>
                 </div>
                 {user?.isAdmin && (
                   <div className="mt-6 pt-6">
@@ -142,7 +161,6 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                         <NavLink
                           key={item.name}
                           to={item.href}
-                          end={item.exact}
                           className={({ isActive }) =>
                             classNames(
                               'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
@@ -216,35 +234,32 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
               </h1>
             </div>
             <nav
-              className="mt-5 flex-1 flex flex-col divide-y divide-cyan-800 overflow-y-auto"
+              className="flex-1 flex flex-col divide-y divide-cyan-800 overflow-y-auto mt-5"
               aria-label="Sidebar"
             >
-              <div className="px-2 space-y-1">
-                {navigation.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.href}
-                    end={item.exact}
-                    className={({ isActive }) =>
-                      classNames(
-                        'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
-                        {
-                          hidden: item.hide,
-                          'bg-cyan-800 text-white': isActive,
-                          'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                            !isActive,
-                        }
-                      )
-                    }
-                  >
-                    <item.icon
-                      className="mr-4 flex-shrink-0 h-6 w-6 text-cyan-200"
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </NavLink>
-                ))}
+              <div className="px-2">
+                <SelectWorkspaceDropdown
+                  onChange={onChangeWorkspace}
+                  onAddClick={showAddWorkspaceModal}
+                />
               </div>
+              <div className="px-2 space-y-1 mt-6 pt-6">
+                <SidebarItem to="/" icon={HomeIcon}>
+                  Dashboard
+                </SidebarItem>
+                {currentWorkspace && (
+                  <SidebarItem
+                    to={`/workspace/${currentWorkspace.slug}`}
+                    icon={OfficeBuildingIcon}
+                  >
+                    {currentWorkspace.name}
+                  </SidebarItem>
+                )}
+                <SidebarItem to="/history" icon={ClockIcon}>
+                  Historia zamówień
+                </SidebarItem>
+              </div>
+
               {user?.isAdmin && (
                 <div className="mt-6 pt-6">
                   <div className="px-2 space-y-1">
@@ -305,6 +320,11 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
           </div>
         </div>
       </div>
+      <CreateWorkspaceDrawer
+        isOpen={addWorkspaceModalOpen}
+        onSuccess={onCreateWorkspaceSuccess}
+        onCancel={hideAddWorkspaceModal}
+      />
     </>
   );
 }

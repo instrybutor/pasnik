@@ -24,7 +24,7 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
   const { orderQuery } = useOrderFacade();
   const { t } = useTranslation();
   const payerUpdate = useMutation((payerId: number) =>
-    service.setPayer(order.id, {
+    service.setPayer(order, {
       payerId,
     })
   );

@@ -3,9 +3,9 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
+import { useUserStore } from '@pasnik/store';
 import { Listbox, Transition } from '@headlessui/react';
 
-import { useAuth } from '@pasnik/auth';
 import { UserModel } from '@pasnik/api/data-transfer';
 import { Price, UserAvatar, UserInfo, UserName } from '@pasnik/components';
 
@@ -20,9 +20,8 @@ export function OrderSelectPayer({
   totalCents,
   setPayer,
 }: OrderPaymentProps) {
-  const { users } = useAuth();
+  const { users } = useUserStore();
   const { t } = useTranslation();
-
   const setPayerHandler = useCallback(
     (newPayer: UserModel) => {
       if (newPayer.id !== payer?.id) {

@@ -1,7 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router';
-
-import { useAuth } from './auth';
+import { useUserStore } from '@pasnik/store';
 
 export interface RequireAuthProps {
   admin?: boolean;
@@ -9,7 +8,7 @@ export interface RequireAuthProps {
 }
 
 export function RequireAuth({ admin, children }: RequireAuthProps) {
-  const { user } = useAuth();
+  const { user } = useUserStore();
   const location = useLocation();
 
   if (!user) {

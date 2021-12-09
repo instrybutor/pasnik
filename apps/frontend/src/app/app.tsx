@@ -10,6 +10,8 @@ import { CreateOrder } from '@pasnik/orders/create-order';
 import { PagesAdminInvitations } from '@pasnik/pages/admin-invitations';
 
 import { EditOrder } from '@pasnik/orders/edit-order';
+import { PagesWorkspace } from '@pasnik/pages/workspace';
+import { RedirectToCurrentWorkspace } from '@pasnik/features/workspaces';
 
 export function App() {
   const version = process.env.NX_VERSION;
@@ -38,6 +40,8 @@ export function App() {
             <Route index element={<PagesDashboard />} />
             <Route path="/create-order" element={<CreateOrder />} />
             <Route path="/history" element={<PagesOrders />} />
+            <Route path="/workspace" element={<RedirectToCurrentWorkspace />} />
+            <Route path="/workspace/:slug/*" element={<PagesWorkspace />} />
             <Route path="/order">
               <Route path=":slug" element={<PagesOrder />} />
               <Route path=":slug/edit" element={<EditOrder />} />

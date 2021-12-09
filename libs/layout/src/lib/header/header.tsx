@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { useAuth } from '@pasnik/auth';
 import { UserAvatar, UserName } from '@pasnik/components';
 import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '@pasnik/store';
 
 export interface HeaderProps {
   sidebarOpen: boolean;
@@ -13,7 +14,8 @@ export interface HeaderProps {
 }
 
 export function Header({ openSidebar }: HeaderProps) {
-  const auth = useAuth();
+  const { signOut } = useAuth();
+  const { user } = useUserStore();
   const navigate = useNavigate();
 
   const openSidebarHandler = useCallback(() => {
@@ -21,8 +23,8 @@ export function Header({ openSidebar }: HeaderProps) {
   }, [openSidebar]);
 
   const logoutClickHandler = useCallback(() => {
-    auth.signOut();
-  }, [auth]);
+    signOut();
+  }, [signOut]);
 
   const createOrderHandler = useCallback(() => {
     navigate('/create-order');
@@ -39,7 +41,7 @@ export function Header({ openSidebar }: HeaderProps) {
         <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
       </button>
       <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-        <div className="flex-1 flex" />
+        <div className="flex-1 flex items-center" />
         <div className="ml-4 flex items-center md:ml-6">
           <div className="flex space-x-3 md:ml-4">
             <button
@@ -62,11 +64,11 @@ export function Header({ openSidebar }: HeaderProps) {
           <Menu as="div" className="ml-3 relative">
             <div>
               <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
-                <UserAvatar user={auth.user} size="sm" />
+                <UserAvatar user={user} size="sm" />
 
                 <span className="hidden ml-3 text-gray-700 text-sm font-medium lg:block">
                   <span className="sr-only">Open user menu for </span>
-                  <UserName user={auth.user} />
+                  <UserName user={user} />
                 </span>
                 <ChevronDownIcon
                   className="hidden flex-shrink-0 ml-1 h-5 w-5 text-gray-400 lg:block"

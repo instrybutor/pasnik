@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserModel } from '@pasnik/api/data-transfer';
+import { WorkspaceEntity } from './workspace.entity';
 
 @Entity()
 export class UserEntity implements UserModel {
@@ -38,4 +40,15 @@ export class UserEntity implements UserModel {
 
   @Column({ default: false })
   isAdmin: boolean;
+
+  @ManyToOne(() => WorkspaceEntity, {
+    cascade: true,
+    onDelete: 'SET NULL',
+  })
+  currentWorkspace: WorkspaceEntity;
+
+  @Column({
+    nullable: true,
+  })
+  currentWorkspaceId: number;
 }
