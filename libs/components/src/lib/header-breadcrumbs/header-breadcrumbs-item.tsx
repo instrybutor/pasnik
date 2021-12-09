@@ -1,14 +1,11 @@
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import { ChevronRightIcon } from '@heroicons/react/solid';
-
-export type HeaderBreadcrumbsItemProps = NavLinkProps & {
-  children?: JSX.Element | string;
-};
+import { PropsWithChildren } from 'react';
 
 export function HeaderBreadcrumbsItem({
   children,
   ...rest
-}: HeaderBreadcrumbsItemProps) {
+}: PropsWithChildren<NavLinkProps>) {
   return (
     <li>
       <div className="flex items-center">

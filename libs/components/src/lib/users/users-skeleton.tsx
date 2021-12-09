@@ -12,7 +12,6 @@ export function UsersSkeleton({ avatarSize, usersToShow }: UsersSkeletonProps) {
 
   useEffect(() => {
     setVisibleUsers(Array(usersToShow).fill(null));
-    console.log(visibleUsers);
   }, [usersToShow, setVisibleUsers]);
 
   return (

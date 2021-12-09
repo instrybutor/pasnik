@@ -8,7 +8,7 @@ export interface StackedListItemProps {
   wrapper?: (props: StackedListItemWrapperProps) => JSX.Element;
   title?: ReactElement | string;
   titleRight?: ReactElement | string;
-  subTitle?: ReactElement | string;
+  subTitle?: ReactElement | JSX.Element | string;
   subTitleRight?: ReactElement | string;
 }
 

@@ -54,6 +54,14 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
     [markAsOrderedMutation, order]
   );
 
+  const backElement = useCallback(() => {
+    return (
+      <HeaderBreadcrumbs.Back to={`/workspace/${order.workspace!.slug}`}>
+        Wróć do {order.workspace!.name}
+      </HeaderBreadcrumbs.Back>
+    );
+  }, [order]);
+
   useEffect(() => {
     setTotalPrice(dishes.reduce((acc, cur) => acc + cur.priceCents, 0));
   }, [dishes]);
@@ -63,15 +71,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
       <div className="px-4 sm:px-6 lg:max-w-6xl md:mx-auto lg:px-8">
         <div className="py-6 xl:flex xl:items-center lg:justify-between lg:border-t lg:border-gray-200">
           <div className="flex-1 min-w-0 ml-3">
-            <HeaderBreadcrumbs
-              back={() => (
-                <HeaderBreadcrumbs.Back
-                  to={`/workspace/${order.workspace!.slug}`}
-                >
-                  Wróć do {order.workspace!.name}
-                </HeaderBreadcrumbs.Back>
-              )}
-            >
+            <HeaderBreadcrumbs back={backElement}>
               {order.workspace && (
                 <HeaderBreadcrumbs.Item
                   to={`/workspace/${order.workspace.slug}`}

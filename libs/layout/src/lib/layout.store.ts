@@ -14,11 +14,9 @@ export const useLayoutStore = create<LayoutStore>((set) => ({
   sidebarOpen: false,
 
   showAddWorkspaceModal: () => {
-    console.log('show');
     set({ addWorkspaceModalOpen: true });
   },
   hideAddWorkspaceModal: () => {
-    console.log('close');
     set({ addWorkspaceModalOpen: false });
   },
 

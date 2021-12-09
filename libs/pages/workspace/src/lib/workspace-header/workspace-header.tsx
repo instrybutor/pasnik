@@ -26,6 +26,10 @@ export const WorkspaceHeader = () => {
     [navigate, setEditWorkspace]
   );
 
+  const onUpdateWorkspaceCancel = useCallback(() => {
+    setEditWorkspace(false);
+  }, [setEditWorkspace]);
+
   return (
     <div className="px-4 sm:px-6 lg:max-w-6xl md:mx-auto lg:px-8">
       <div className="py-6 sm:flex sm:items-center justify-between border-t border-gray-200">
@@ -70,7 +74,7 @@ export const WorkspaceHeader = () => {
           workspace={workspace}
           isOpen={editWorkspace}
           onSuccess={onUpdateWorkspaceSuccess}
-          onCancel={() => setEditWorkspace(false)}
+          onCancel={onUpdateWorkspaceCancel}
         />
       )}
     </div>
