@@ -32,8 +32,8 @@ export class OrderEntity implements OrderModel {
   @Column({ type: 'varchar', default: OrderStatus.InProgress })
   status: OrderStatus;
 
-  @Column({ nullable: true })
-  from?: string;
+  @Column()
+  from: string;
 
   @Column()
   menuUrl: string;

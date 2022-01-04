@@ -7,6 +7,7 @@ import {
   DishModel,
   OrderModel,
   OrderStatus,
+  WorkspaceModel,
 } from '@pasnik/api/data-transfer';
 
 import * as service from '../order-store/order.service';
@@ -81,6 +82,10 @@ export const useOrderFacade = () => {
     (order: OrderModel) => service.markAsClosed(order),
     optimisticOrderStatusUpdate(OrderStatus.Canceled)
   );
+  const cloneOrder = (
+    workspace: WorkspaceModel,
+    { from, menuUrl, shippingCents }: OrderModel
+  ) => service.createOrder(workspace, { from, menuUrl, shippingCents });
 
   const dishUpdate = useMutation(
     ({
@@ -173,6 +178,7 @@ export const useOrderFacade = () => {
   );
 
   return {
+    cloneOrder,
     dishAdd,
     dishUpdate,
     dishDelete,

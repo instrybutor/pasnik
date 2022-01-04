@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { PlusIcon } from '@heroicons/react/outline';
+import { BeakerIcon, PlusIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
 
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
@@ -58,12 +58,20 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
             )}
           </div>
           <ul className="divide-y divide-gray-200">
+            {dishes && dishes.length === 0 && (
+              <div className="text-center bg-white px-4 py-12">
+                <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                  {t('dish.empty')}
+                </h3>
+              </div>
+            )}
             {dishes?.sort(sortByCreateAt).map((dish) => (
               <Transition
                 as="li"
                 key={dish.id}
                 show
-                className="flex items-center gap-4 px-6"
+                className="flex items-center gap-4 pr-6 pl-3"
                 enter="transition ease-out duration-[1000ms]"
                 enterFrom="transform opacity-0 scale-95"
                 enterTo="transform opacity-100 scale-100"

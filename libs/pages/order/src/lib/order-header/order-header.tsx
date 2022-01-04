@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { Fragment, useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   BookOpenIcon,
   CalendarIcon,
   CheckIcon,
   ChevronDownIcon,
   CurrencyDollarIcon,
+  DuplicateIcon,
   LockOpenIcon,
   PencilIcon,
   TruckIcon,
@@ -25,12 +26,14 @@ export interface OrderHeaderProps {
 }
 
 export function OrderHeader({ order, dishes }: OrderHeaderProps) {
+  const navigate = useNavigate();
   const [totalPrice, setTotalPrice] = useState(0);
   const {
     markAsClosedMutation,
     markAsDeliveredMutation,
     markAsOpenMutation,
     markAsOrderedMutation,
+    cloneOrder,
   } = useOrderFacade();
   const { t } = useTranslation();
 
@@ -52,6 +55,14 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
   const makeOrderHandler = useCallback(
     () => markAsOrderedMutation.mutateAsync(order),
     [markAsOrderedMutation, order]
+  );
+
+  const cloneOrderHandler = useCallback(
+    () =>
+      cloneOrder(order.workspace!, order).then(({ slug }) => {
+        navigate(`/order/${slug}`);
+      }),
+    [cloneOrder, order, navigate]
   );
 
   const backElement = useCallback(() => {
@@ -201,6 +212,23 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                     aria-hidden="true"
                   />
                   {t('dish.header_menu.order')}
+                </button>
+              </span>
+            )}
+
+            {order.status === OrderStatus.Delivered && (
+              <span className="sm:ml-3">
+                <button
+                  type="button"
+                  onClick={cloneOrderHandler}
+                  disabled={dishes.length === 0}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <DuplicateIcon
+                    className="-ml-1 mr-2 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  {t('dish.header_menu.duplicate')}
                 </button>
               </span>
             )}

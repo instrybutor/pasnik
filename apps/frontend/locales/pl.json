@@ -97,7 +97,8 @@
       "open": "Otwórz",
       "order": "Zamów",
       "delivered": "Dostarczone",
-      "more": "Więcej"
+      "more": "Więcej",
+      "duplicate": "Ponów"
     },
     "paying": {
       "title": "Change published status",
@@ -112,7 +113,8 @@
       "duplicate": "Duplikuj",
       "edit": "Edit",
       "delete": "Usuń"
-    }
+    },
+    "empty": "Brak pozycji w zamówieniu"
   },
   "timeline": {
     "title": "Historia",

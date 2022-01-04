@@ -1,8 +1,10 @@
 import {
   AddDishDto,
+  CreateOrderDto,
   DishModel,
   OrderModel,
   SetPayerDto,
+  WorkspaceModel,
 } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
 
@@ -65,3 +67,12 @@ export const updateDish = (
   axios
     .put<DishModel>(`/api/orders/slug/${slug}/dishes/${dishId}`, addDishDto)
     .then(({ data }) => data);
+
+export const createOrder = (
+  { slug }: WorkspaceModel,
+  payload: CreateOrderDto
+) => {
+  return axios
+    .post<OrderModel>(`/api/workspaces/${slug}/orders`, payload)
+    .then(({ data }) => data);
+};

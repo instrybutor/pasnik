@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrdersRepository, UserEntity } from '@pasnik/nestjs/database';
+import { Brackets } from 'typeorm';
 
 @Injectable()
 export class OrdersService {
@@ -13,14 +14,28 @@ export class OrdersService {
   findAllActiveForUser(user: UserEntity) {
     return this.ordersRepository
       .findAllActive(true)
-      .andWhere('dish.userId = :userId', { userId: user.id })
+      .andWhere(
+        new Brackets((db) => {
+          db.where('dish.userId = :userId')
+            .orWhere('order.userId = :userId')
+            .orWhere('order.payerId = :userId');
+        })
+      )
+      .setParameters({ userId: user.id })
       .getMany();
   }
 
   findAllInactiveForUser(user: UserEntity) {
     return this.ordersRepository
       .findAllInactive()
-      .andWhere('dish.userId = :userId', { userId: user.id })
+      .andWhere(
+        new Brackets((db) => {
+          db.where('dish.userId = :userId')
+            .orWhere('order.userId = :userId')
+            .orWhere('order.payerId = :userId');
+        })
+      )
+      .setParameters({ userId: user.id })
       .getMany();
   }
 }
