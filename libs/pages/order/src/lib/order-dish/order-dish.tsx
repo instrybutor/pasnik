@@ -50,7 +50,7 @@ export function OrderDish({
 
   return (
     <>
-      <div className="flex-1 w-full">
+      <div className="flex-1 w-full pl-3">
         <div className="text-sm text-gray-500 min-w-0 flex-1">{dish.name}</div>
       </div>
 

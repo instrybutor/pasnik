@@ -14,7 +14,7 @@ export interface OrderModel {
   id: string;
   user: UserModel;
   status: OrderStatus;
-  from?: string;
+  from: string;
   slug: string;
   menuUrl: string;
   shippingCents?: number;
