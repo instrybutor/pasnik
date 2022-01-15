@@ -12,6 +12,9 @@ import { PagesAdminInvitations } from '@pasnik/pages/admin-invitations';
 import { EditOrder } from '@pasnik/orders/edit-order';
 import { PagesWorkspace } from '@pasnik/pages/workspace';
 import { RedirectToCurrentWorkspace } from '@pasnik/features/workspaces';
+import { initBrowserNotifications } from '@pasnik/shared/notification';
+
+initBrowserNotifications();
 
 export function App() {
   const version = process.env.NX_VERSION;

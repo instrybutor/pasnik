@@ -718,6 +718,31 @@
         }
       }
     },
+    "shared-notification": {
+      "root": "libs/shared/notification",
+      "sourceRoot": "libs/shared/notification/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/notification/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/notification"],
+          "options": {
+            "jestConfig": "libs/shared/notification/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shared-utils": {
       "root": "libs/shared/utils",
       "sourceRoot": "libs/shared/utils/src",

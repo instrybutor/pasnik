@@ -1,6 +1,7 @@
 import { Connection } from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -17,13 +18,15 @@ import {
   OrderAction,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
+import { OrderStatusChangedEvent, EventName } from '../notifications';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(OrdersRepository)
     private ordersRepository: OrdersRepository,
-    private connection: Connection
+    private connection: Connection,
+    private eventEmitter: EventEmitter2
   ) {}
 
   findOneById(id: string) {
@@ -68,6 +71,11 @@ export class OrderService {
         order,
         OrderAction.Ordered
       );
+
+      const event = new OrderStatusChangedEvent();
+      event.order = order;
+
+      this.eventEmitter.emit(EventName, event);
     });
     return this.findOneById(orderId);
   }
@@ -97,6 +105,11 @@ export class OrderService {
         0
       );
       await ordersRepository.save(order);
+
+      const event = new OrderStatusChangedEvent();
+      event.order = order;
+
+      this.eventEmitter.emit(EventName, event);
     });
     return this.findOneById(orderId);
   }
@@ -115,6 +128,11 @@ export class OrderService {
         order,
         OrderAction.Cancel
       );
+
+      const event = new OrderStatusChangedEvent();
+      event.order = order;
+
+      this.eventEmitter.emit(EventName, event);
     });
     return this.findOneById(orderId);
   }
@@ -129,6 +147,11 @@ export class OrderService {
       const order = await this.findOneById(orderId);
       await ordersRepository.markAsOpen(order);
       await orderActionsRepository.createAction(user, order, OrderAction.Open);
+
+      const event = new OrderStatusChangedEvent();
+      event.order = order;
+
+      this.eventEmitter.emit(EventName, event);
     });
     return this.findOneById(orderId);
   }

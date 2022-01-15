@@ -9,6 +9,7 @@ import {
   OrderStatus,
   WorkspaceModel,
 } from '@pasnik/api/data-transfer';
+import { notifyStatusChanged } from '@pasnik/shared/notification';
 
 import * as service from '../order-store/order.service';
 import { PagesOrderProps } from '../pages-order';
@@ -59,7 +60,8 @@ export const useOrderFacade = () => {
 
         return { prevOrder };
       },
-      onSettled: () => {
+      onSettled: (data?: OrderModel) => {
+        notifyStatusChanged(data!.from, data!.status, data!.slug);
         queryClient.invalidateQueries(orderKey);
       },
     }),
@@ -70,18 +72,22 @@ export const useOrderFacade = () => {
     (order: OrderModel) => service.markAsDelivered(order),
     optimisticOrderStatusUpdate(OrderStatus.Delivered)
   );
+
   const markAsOrderedMutation = useMutation(
     (order: OrderModel) => service.markAsOrdered(order),
     optimisticOrderStatusUpdate(OrderStatus.Ordered)
   );
+
   const markAsOpenMutation = useMutation(
     (order: OrderModel) => service.markAsOpen(order),
     optimisticOrderStatusUpdate(OrderStatus.InProgress)
   );
+
   const markAsClosedMutation = useMutation(
     (order: OrderModel) => service.markAsClosed(order),
     optimisticOrderStatusUpdate(OrderStatus.Canceled)
   );
+
   const cloneOrder = (
     workspace: WorkspaceModel,
     { from, menuUrl, shippingCents }: OrderModel

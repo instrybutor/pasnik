@@ -114,7 +114,8 @@
       "edit": "Edit",
       "delete": "Usuń"
     },
-    "empty": "Brak pozycji w zamówieniu"
+    "empty": "Brak pozycji w zamówieniu",
+    "price": "Cena"
   },
   "timeline": {
     "title": "Historia",
@@ -132,5 +133,15 @@
   },
   "errors": {
     "login": "Problem z logowaniem"
+  },
+  "notifications": {
+    "orderStatusChanged": "Zamówienie z {{placeName}} zostało {{status}}.",
+    "openOrder": "Kliknij i sprawdz zamówienie."
+  },
+  "orderStatus": {
+    "in-progress": "otwarte",
+    "ordered": "zamówione",
+    "delivered": "dostarczone",
+    "canceled": "anulowane"
   }
 }

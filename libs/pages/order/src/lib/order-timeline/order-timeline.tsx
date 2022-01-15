@@ -133,7 +133,7 @@ export function OrderTimeline({ actions }: OrderTimelineProps) {
                         <div className="text-right text-sm whitespace-nowrap text-gray-500">
                           <DateFormat
                             date={item.createdAt}
-                            format="HH:mm dd LLL"
+                            format="dd LLL, HH:mm"
                           />
                         </div>
                       </div>

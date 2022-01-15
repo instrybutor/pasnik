@@ -1,12 +1,15 @@
 import { Fragment, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import { BellIcon, MenuAlt1Icon } from '@heroicons/react/outline';
+import { MenuAlt1Icon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
+
 import { useAuth } from '@pasnik/auth';
-import { UserAvatar, UserName } from '@pasnik/components';
-import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@pasnik/store';
+import { UserAvatar, UserName } from '@pasnik/components';
+
+import { NotificationsDropdown } from '../containers/notifications-dropdown';
 
 export interface HeaderProps {
   sidebarOpen: boolean;
@@ -52,13 +55,9 @@ export function Header({ openSidebar }: HeaderProps) {
               Utwórz zamówienie
             </button>
           </div>
-          <button
-            type="button"
-            className="ml-3 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-          >
-            <span className="sr-only">View notifications</span>
-            <BellIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
+
+          {/* Notification dropdown */}
+          <NotificationsDropdown />
 
           {/* Profile dropdown */}
           <Menu as="div" className="ml-3 relative">
