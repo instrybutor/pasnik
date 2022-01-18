@@ -1,15 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
-import {
-  NotificationAction,
-  OrderStatusChangedDto,
-} from '@pasnik/api/data-transfer';
+import { NotificationAction } from '@pasnik/api/data-transfer';
 
 import { UserEntity } from '../entities';
 import { NotificationEntity } from '../entities/notification.entity';
 
 @EntityRepository(NotificationEntity)
 export class NotificationsRepository extends Repository<NotificationEntity> {
-  async createNotification<T extends OrderStatusChangedDto>(
+  async createNotification<T = unknown>(
     data: T,
     action: NotificationAction,
     users: UserEntity[]

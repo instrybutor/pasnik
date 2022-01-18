@@ -9,7 +9,6 @@ import {
 import {
   NotificationModel,
   NotificationAction,
-  OrderStatusChangedDto,
 } from '@pasnik/api/data-transfer';
 
 import { UserEntity } from './user.entity';
@@ -20,13 +19,13 @@ export class NotificationEntity implements NotificationModel {
   id: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: string;
 
   @Column({ type: 'text' })
   action: NotificationAction;
 
   @Column({ type: 'jsonb', nullable: true })
-  data?: OrderStatusChangedDto;
+  data?: unknown;
 
   @ManyToMany(() => UserEntity)
   @JoinTable()

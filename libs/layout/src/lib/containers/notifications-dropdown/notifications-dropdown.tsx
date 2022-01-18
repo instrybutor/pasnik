@@ -2,8 +2,7 @@ import { Fragment } from 'react';
 import i18next from 'i18next';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow, isAfter } from 'date-fns';
-import { pl } from 'date-fns/locale';
+import { isAfter } from 'date-fns';
 import { Popover, Transition } from '@headlessui/react';
 import {
   BellIcon,
@@ -15,6 +14,7 @@ import {
 
 import { OrderStatus } from '@pasnik/api/data-transfer';
 import { useNotificationsDropdown } from './notifications-dropdown.hook';
+import { DateDistance } from '@pasnik/components';
 
 const NOTIFICATION_ICON_MAPPER: Record<string, JSX.Element> = {
   [OrderStatus.Ordered]: (
@@ -106,10 +106,11 @@ export const NotificationsDropdown = () => {
                   })}
                 </div>
                 <div className="text-xs text-gray-400 font-thin">
-                  {formatDistanceToNow(new Date(notification.createdAt), {
+                  <DateDistance date={notification.createdAt} />
+                  {/* {formatDistanceToNow(new Date(), {
                     addSuffix: true,
                     locale: pl,
-                  })}
+                  })} */}
                 </div>
               </div>
             </Link>

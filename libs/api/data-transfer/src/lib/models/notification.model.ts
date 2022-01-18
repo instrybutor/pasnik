@@ -1,4 +1,3 @@
-import { OrderStatusChangedDto } from '../dto';
 import { UserModel } from './user.model';
 
 export enum NotificationType {
@@ -8,10 +7,10 @@ export enum NotificationType {
 
 export type NotificationAction = `${NotificationType}`;
 
-export interface NotificationModel {
+export interface NotificationModel<T = unknown> {
   id: string;
   action: NotificationAction;
-  data?: OrderStatusChangedDto;
+  data?: T;
   users: UserModel[];
-  createdAt: Date;
+  createdAt: string;
 }
