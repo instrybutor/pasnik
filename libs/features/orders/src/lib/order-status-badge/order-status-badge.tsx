@@ -13,7 +13,7 @@ export function OrderStatusBadge({ order }: OrderStatusBadgeProps) {
   return (
     <p
       className={classNames(
-        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+        'px-2 inline-flex text-xs leading-5 font-normal rounded-full',
         {
           'bg-green-100 text-green-800':
             order.status === OrderStatus.InProgress,

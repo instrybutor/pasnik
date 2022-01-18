@@ -4,10 +4,10 @@ import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, isAfter } from 'date-fns';
 import { pl } from 'date-fns/locale';
-import { ReceiptTaxIcon } from '@heroicons/react/solid';
 import { Popover, Transition } from '@headlessui/react';
 import {
   BellIcon,
+  EmojiHappyIcon,
   ExclamationIcon,
   InformationCircleIcon,
   TruckIcon,
@@ -24,7 +24,7 @@ const NOTIFICATION_ICON_MAPPER: Record<string, JSX.Element> = {
     <ExclamationIcon className="h-8 w-8 object-cover mx-1 text-red-400" />
   ),
   [OrderStatus.Delivered]: (
-    <ReceiptTaxIcon className="h-8 w-8 object-cover mx-1 text-sky-400" />
+    <EmojiHappyIcon className="h-8 w-8 object-cover mx-1 text-sky-400" />
   ),
   [OrderStatus.InProgress]: (
     <InformationCircleIcon className="h-8 w-8 object-cover mx-1 text-sky-400" />
@@ -40,8 +40,13 @@ const NotificationIcon = ({ status }: { status?: OrderStatus }) => {
 };
 
 export const NotificationsDropdown = () => {
-  const { hasNewNotifications, notifications, popoverRef, lastSeenDate } =
-    useNotificationsDropdown();
+  const {
+    hasNewNotifications,
+    notifications,
+    popoverRef,
+    lastSeenDate,
+    onPopoverClose,
+  } = useNotificationsDropdown();
 
   return (
     <Popover as="div" className="relative">
@@ -70,6 +75,7 @@ export const NotificationsDropdown = () => {
         leave="transition ease-in duration-75"
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
+        afterLeave={onPopoverClose}
       >
         <Popover.Panel className="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col w-96">
           {notifications!.map((notification, index) => (
@@ -88,7 +94,7 @@ export const NotificationsDropdown = () => {
                 <div
                   className={classnames(
                     isAfter(new Date(notification.createdAt), lastSeenDate)
-                      ? 'font-medium'
+                      ? 'font-semibold'
                       : 'font-light'
                   )}
                 >
