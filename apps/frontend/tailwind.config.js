@@ -3,9 +3,9 @@ const colors = require('tailwindcss/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-  purge: createGlobPatternsForDependencies(__dirname),
+  content: createGlobPatternsForDependencies(__dirname),
 
-  darkMode: false, // or 'media' or 'class'
+  media: false,
   theme: {
     fontFamily: {
       sans: ['Lato', 'sans-serif'],
