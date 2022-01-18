@@ -2,29 +2,65 @@ import { Fragment } from 'react';
 import i18next from 'i18next';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow, isBefore } from 'date-fns';
+import { formatDistanceToNow, isAfter } from 'date-fns';
 import { pl } from 'date-fns/locale';
-
+import { ReceiptTaxIcon } from '@heroicons/react/solid';
 import { Popover, Transition } from '@headlessui/react';
-import { BellIcon, TruckIcon } from '@heroicons/react/outline';
+import {
+  BellIcon,
+  ExclamationIcon,
+  InformationCircleIcon,
+  TruckIcon,
+} from '@heroicons/react/outline';
 
-import { useNotificationsQuery } from '@pasnik/shared/notification';
+import { OrderStatus } from '@pasnik/api/data-transfer';
+import { useNotificationsDropdown } from './notifications-dropdown.hook';
 
-const LAST_SEEN_DATE = new Date('2022/1/13 10:00');
+const NOTIFICATION_ICON_MAPPER: Record<string, JSX.Element> = {
+  [OrderStatus.Ordered]: (
+    <TruckIcon className="h-8 w-8 object-cover mx-1 text-lime-400" />
+  ),
+  [OrderStatus.Canceled]: (
+    <ExclamationIcon className="h-8 w-8 object-cover mx-1 text-red-400" />
+  ),
+  [OrderStatus.Delivered]: (
+    <ReceiptTaxIcon className="h-8 w-8 object-cover mx-1 text-sky-400" />
+  ),
+  [OrderStatus.InProgress]: (
+    <InformationCircleIcon className="h-8 w-8 object-cover mx-1 text-sky-400" />
+  ),
+};
+
+const NotificationIcon = ({ status }: { status?: OrderStatus }) => {
+  if (!status) {
+    return null;
+  }
+
+  return NOTIFICATION_ICON_MAPPER[status] ?? null;
+};
 
 export const NotificationsDropdown = () => {
-  const { data: notifications } = useNotificationsQuery();
+  const { hasNewNotifications, notifications, popoverRef, lastSeenDate } =
+    useNotificationsDropdown();
 
   return (
     <Popover as="div" className="relative">
-      <Popover.Button className="animate-wiggle ml-3 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+      <Popover.Button
+        ref={popoverRef}
+        className={classnames(
+          'ml-3 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+          { 'animate-wiggle': hasNewNotifications }
+        )}
+      >
         <span className="sr-only">View notifications</span>
         <BellIcon className="h-6 w-6" aria-hidden="true" />
       </Popover.Button>
-      <span className="flex h-3 w-3 absolute top-0 right-0">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
-      </span>
+      {hasNewNotifications ? (
+        <span className="flex h-3 w-3 absolute top-0 right-0">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
+        </span>
+      ) : null}
 
       <Transition
         as={Fragment}
@@ -39,26 +75,31 @@ export const NotificationsDropdown = () => {
           {notifications!.map((notification, index) => (
             <Link
               key={new Date(notification.createdAt).getTime() + index}
-              to={`/order/${notification.data.slug}`}
+              to={`/order/${notification.data?.slug}`}
               className={classnames(
-                'flex items-center px-4 py-3 border-b hover:bg-gray-100',
+                'flex items-center px-4 py-3 hover:bg-gray-100',
                 {
-                  'opacity-50': isBefore(
-                    new Date(notification.createdAt),
-                    new Date(LAST_SEEN_DATE)
-                  ),
+                  'border-b': index < notifications!.length - 1,
                 }
               )}
             >
-              <TruckIcon className="h-8 w-8 object-cover mx-1 text-sky-400" />
+              <NotificationIcon status={notification.data?.status} />
               <div className="text-gray-600 text-sm mx-2">
-                <div className="font-bold">
+                <div
+                  className={classnames(
+                    isAfter(new Date(notification.createdAt), lastSeenDate)
+                      ? 'font-medium'
+                      : 'font-light'
+                  )}
+                >
                   {i18next.t('notifications.orderStatusChanged', {
-                    placeName: notification.data.title,
-                    status: i18next.t(`orderStatus.${notification.status}`),
+                    placeName: notification.data?.from,
+                    status: i18next.t(
+                      `orderStatus.${notification.data?.status}`
+                    ),
                   })}
                 </div>
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-gray-400 font-thin">
                   {formatDistanceToNow(new Date(notification.createdAt), {
                     addSuffix: true,
                     locale: pl,

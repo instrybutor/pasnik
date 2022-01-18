@@ -72,10 +72,7 @@ export class OrderService {
         OrderAction.Ordered
       );
 
-      const event = new OrderStatusChangedEvent();
-      event.order = order;
-
-      this.eventEmitter.emit(EventName, event);
+      this.dispatchNotification(order);
     });
     return this.findOneById(orderId);
   }
@@ -106,10 +103,7 @@ export class OrderService {
       );
       await ordersRepository.save(order);
 
-      const event = new OrderStatusChangedEvent();
-      event.order = order;
-
-      this.eventEmitter.emit(EventName, event);
+      this.dispatchNotification(order);
     });
     return this.findOneById(orderId);
   }
@@ -129,10 +123,7 @@ export class OrderService {
         OrderAction.Cancel
       );
 
-      const event = new OrderStatusChangedEvent();
-      event.order = order;
-
-      this.eventEmitter.emit(EventName, event);
+      this.dispatchNotification(order);
     });
     return this.findOneById(orderId);
   }
@@ -148,10 +139,7 @@ export class OrderService {
       await ordersRepository.markAsOpen(order);
       await orderActionsRepository.createAction(user, order, OrderAction.Open);
 
-      const event = new OrderStatusChangedEvent();
-      event.order = order;
-
-      this.eventEmitter.emit(EventName, event);
+      this.dispatchNotification(order);
     });
     return this.findOneById(orderId);
   }
@@ -184,5 +172,17 @@ export class OrderService {
       );
     });
     return this.findOneById(orderId);
+  }
+
+  private dispatchNotification({ id, from, slug, status }: OrderEntity) {
+    const event = new OrderStatusChangedEvent();
+    event.data = {
+      id,
+      from,
+      slug,
+      status,
+    };
+
+    this.eventEmitter.emit(EventName, event);
   }
 }

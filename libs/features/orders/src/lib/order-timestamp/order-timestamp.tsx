@@ -49,7 +49,7 @@ export function OrderTimestamp({
       {order.status === OrderStatus.Canceled && (
         <>
           {showIcon && <BanIcon className={_iconClass} />}
-          {showLabel && <span>{t('timestamp.canceled')} </span>}
+          {showLabel && <span className="pr-1">{t('timestamp.canceled')}</span>}
           <DateFormat date={order.updatedAt} format="MM/dd/yyyy HH:mm" />
         </>
       )}

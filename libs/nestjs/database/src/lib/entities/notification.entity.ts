@@ -1,10 +1,16 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { NotificationModel } from '@pasnik/api/data-transfer';
+import {
+  NotificationModel,
+  NotificationAction,
+  OrderStatusChangedDto,
+} from '@pasnik/api/data-transfer';
 
 import { UserEntity } from './user.entity';
 
@@ -14,8 +20,15 @@ export class NotificationEntity implements NotificationModel {
   id: string;
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt: Date;
+
+  @Column({ type: 'text' })
+  action: NotificationAction;
+
+  @Column({ type: 'jsonb', nullable: true })
+  data?: OrderStatusChangedDto;
 
   @ManyToMany(() => UserEntity)
+  @JoinTable()
   users: UserEntity[];
 }

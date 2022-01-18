@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import {
@@ -13,6 +13,6 @@ export class OrderStatusChangedListener {
 
   @OnEvent(EventName)
   handleOrderStatusChangedEvent(event: OrderStatusChangedEvent) {
-    this.notificationService.create(event.order.id, event.order);
+    this.notificationService.create(event.data, event.action);
   }
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OrderStatusChangedDto } from '@pasnik/api/data-transfer';
 
 import {
   NotificationsRepository,
   OrdersRepository,
 } from '@pasnik/nestjs/database';
-import { OrderStatusChangedDto } from './dto';
 
 @Injectable()
 export class NotificationService {
@@ -16,12 +16,19 @@ export class NotificationService {
     private ordersRepository: OrdersRepository
   ) {}
 
-  async create(orderId: string, orderStatusChangedDto: OrderStatusChangedDto) {
-    const order = await this.ordersRepository.findOneOrFail(orderId);
+  async create(orderStatusChangedDto: OrderStatusChangedDto, action) {
+    const order = await this.ordersRepository.findOneWithParticipants(
+      orderStatusChangedDto.id
+    );
 
-    return this.notificationRepository.createNotification<OrderStatusChangedDto>(
+    await this.notificationRepository.createNotification<OrderStatusChangedDto>(
       orderStatusChangedDto,
+      action,
       order.participants
     );
+  }
+
+  async getNotifications(userId: number) {
+    return this.notificationRepository.findAllByUserId(userId);
   }
 }

@@ -61,6 +61,19 @@ export class OrdersRepository extends Repository<OrderEntity> {
       });
   }
 
+  findOneWithParticipants(orderId: string) {
+    return this.createQueryBuilder('order')
+      .where('order.id = :orderId', { orderId })
+      .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
+      .leftJoinAndMapMany(
+        'order.participants',
+        UserEntity,
+        'participant',
+        'dish.userId = participant.id'
+      )
+      .getOne();
+  }
+
   findAllInactive() {
     return this.createQueryBuilder('order')
       .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')

@@ -1,4 +1,7 @@
-import { OrderStatusChangedDto } from '../dto';
+import {
+  NotificationType,
+  OrderStatusChangedDto,
+} from '@pasnik/api/data-transfer';
 
 export const EventName = 'order.status.changed';
 
@@ -7,5 +10,6 @@ export class OrderStatusChangedEvent {
     browser: true,
     inApp: true,
   };
-  order: OrderStatusChangedDto;
+  action = NotificationType.STATUS_CHANGED;
+  data: OrderStatusChangedDto;
 }

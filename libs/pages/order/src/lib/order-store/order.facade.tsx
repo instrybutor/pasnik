@@ -9,7 +9,6 @@ import {
   OrderStatus,
   WorkspaceModel,
 } from '@pasnik/api/data-transfer';
-import { notifyStatusChanged } from '@pasnik/shared/notification';
 
 import * as service from '../order-store/order.service';
 import { PagesOrderProps } from '../pages-order';
@@ -61,7 +60,6 @@ export const useOrderFacade = () => {
         return { prevOrder };
       },
       onSettled: (data?: OrderModel) => {
-        notifyStatusChanged(data!.from, data!.status, data!.slug);
         queryClient.invalidateQueries(orderKey);
       },
     }),

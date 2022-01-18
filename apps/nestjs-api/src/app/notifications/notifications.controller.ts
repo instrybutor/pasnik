@@ -1,42 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
+import { CurrentUser } from '@pasnik/nestjs/auth';
+import { UserEntity } from '@pasnik/nestjs/database';
 
-import { OrderNotification } from './notifications.models';
+import { NotificationService } from './notifications.service';
 
 @Controller('notifications')
 export class NotificationsController {
+  constructor(private notificationService: NotificationService) {}
+
   @Get()
-  getAll(): OrderNotification[] {
-    return [
-      {
-        id: '1',
-        type: 'ORDER_STATUS_CHANGED',
-        status: 'in-progress',
-        data: {
-          slug: 'sdfsd-vtq0mk',
-          title: 'Pobite Gary',
-        },
-        createdAt: new Date('2022/1/13 10:12').toLocaleString(),
-      },
-      {
-        id: '2',
-        type: 'ORDER_STATUS_CHANGED',
-        status: 'in-progress',
-        data: {
-          slug: 'sdfsd-vtq0mk',
-          title: 'Pobite Gary',
-        },
-        createdAt: new Date('2022/1/13 9:12').toLocaleString(),
-      },
-      {
-        id: '3',
-        type: 'ORDER_STATUS_CHANGED',
-        status: 'in-progress',
-        data: {
-          slug: 'sdfsd-vtq0mk',
-          title: 'Pobite Gary',
-        },
-        createdAt: new Date('2022/1/13 8:12').toLocaleString(),
-      },
-    ];
+  getAll(@CurrentUser() user: UserEntity) {
+    return this.notificationService.getNotifications(user.id);
   }
 }
