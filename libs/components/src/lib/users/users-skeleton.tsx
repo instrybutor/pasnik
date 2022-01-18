@@ -22,7 +22,7 @@ export function UsersSkeleton({ avatarSize, usersToShow }: UsersSkeletonProps) {
             key={index}
             size={avatarSize}
             className="max-w-none ring-2 ring-white bg-gray-300"
-            fallback={<></>}
+            fallback={null}
           />
         ))}
       </div>
