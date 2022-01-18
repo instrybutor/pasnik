@@ -138,8 +138,6 @@ export class OrderService {
       const order = await this.findOneById(orderId);
       await ordersRepository.markAsOpen(order);
       await orderActionsRepository.createAction(user, order, OrderAction.Open);
-
-      this.dispatchNotification(order);
     });
     return this.findOneById(orderId);
   }
