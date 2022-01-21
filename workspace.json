@@ -93,6 +93,31 @@
       },
       "tags": []
     },
+    "features-notifications": {
+      "root": "libs/features/notifications",
+      "sourceRoot": "libs/features/notifications/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/features/notifications/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/features/notifications"],
+          "options": {
+            "jestConfig": "libs/features/notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "features-orders": {
       "root": "libs/features/orders",
       "sourceRoot": "libs/features/orders/src",
@@ -713,31 +738,6 @@
           "outputs": ["coverage/libs/pages/workspace"],
           "options": {
             "jestConfig": "libs/pages/workspace/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-notification": {
-      "root": "libs/shared/notification",
-      "sourceRoot": "libs/shared/notification/src",
-      "projectType": "library",
-      "tags": [],
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/notification/**/*.{ts,tsx,js,jsx}"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/notification"],
-          "options": {
-            "jestConfig": "libs/shared/notification/jest.config.js",
             "passWithNoTests": true
           }
         }

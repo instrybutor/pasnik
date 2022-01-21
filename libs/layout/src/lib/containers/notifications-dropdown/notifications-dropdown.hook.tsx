@@ -1,7 +1,7 @@
 import { useRef, useState, useMemo, useCallback } from 'react';
 import { isAfter } from 'date-fns';
 
-import { useNotificationsQuery } from '@pasnik/shared/notification';
+import { useNotificationsQuery } from '@pasnik/features-notifications';
 
 export const useNotificationsDropdown = () => {
   const { data: notifications } = useNotificationsQuery();

@@ -78,7 +78,7 @@ export const NotificationsDropdown = () => {
         afterLeave={onPopoverClose}
       >
         <Popover.Panel className="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col w-96">
-          {notifications!.map((notification, index) => (
+          {notifications?.map((notification, index) => (
             <Link
               key={new Date(notification.createdAt).getTime() + index}
               to={`/order/${notification.data?.slug}`}
@@ -107,10 +107,6 @@ export const NotificationsDropdown = () => {
                 </div>
                 <div className="text-xs text-gray-400 font-thin">
                   <DateDistance date={notification.createdAt} />
-                  {/* {formatDistanceToNow(new Date(), {
-                    addSuffix: true,
-                    locale: pl,
-                  })} */}
                 </div>
               </div>
             </Link>

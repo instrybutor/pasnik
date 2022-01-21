@@ -1,9 +1,9 @@
 module.exports = {
-  displayName: 'shared-notification',
+  displayName: 'features-notifications',
   preset: '../../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/libs/shared/notification',
+  coverageDirectory: '../../../coverage/libs/features/notifications',
 };

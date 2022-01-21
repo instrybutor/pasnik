@@ -21,6 +21,9 @@
       "@pasnik/auth": ["libs/auth/src/index.ts"],
       "@pasnik/axios": ["libs/axios/src/index.ts"],
       "@pasnik/components": ["libs/components/src/index.ts"],
+      "@pasnik/features-notifications": [
+        "libs/features/notifications/src/index.ts"
+      ],
       "@pasnik/features/orders": ["libs/features/orders/src/index.ts"],
       "@pasnik/features/workspaces": ["libs/features/workspaces/src/index.ts"],
       "@pasnik/layout": ["libs/layout/src/index.ts"],
@@ -42,7 +45,6 @@
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
       "@pasnik/pages/orders": ["libs/pages/orders/src/index.ts"],
       "@pasnik/pages/workspace": ["libs/pages/workspace/src/index.ts"],
-      "@pasnik/shared/notification": ["libs/shared/notification/src/index.ts"],
       "@pasnik/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@pasnik/store": ["libs/store/src/index.ts"]
     }

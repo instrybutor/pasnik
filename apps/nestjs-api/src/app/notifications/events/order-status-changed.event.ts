@@ -11,6 +11,6 @@ export class OrderStatusChangedEvent extends BaseEvent {
     browser: true,
     inApp: true,
   };
-  action = NotificationType.STATUS_CHANGED;
+  action = NotificationType.OrderStatusChanged;
   data: OrderStatusChangedDto;
 }
