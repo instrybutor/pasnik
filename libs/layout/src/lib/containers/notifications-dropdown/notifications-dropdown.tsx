@@ -80,7 +80,7 @@ export const NotificationsDropdown = () => {
         <Popover.Panel className="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col w-96">
           {notifications?.map((notification, index) => (
             <Link
-              key={new Date(notification.createdAt).getTime() + index}
+              key={notification.id}
               to={`/order/${notification.data?.slug}`}
               className={classnames(
                 'flex items-center px-4 py-3 hover:bg-gray-100',
