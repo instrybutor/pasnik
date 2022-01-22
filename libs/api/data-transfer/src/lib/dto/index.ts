@@ -12,3 +12,4 @@ export * from './request-access.dto';
 export * from './create-workspace.dto';
 export * from './update-workspace.dto';
 export * from './add-member-to-workspace.dto';
+export * from './notifications';

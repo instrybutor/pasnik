@@ -6,16 +6,18 @@ import {
   WorkspaceUsersRepository,
 } from '@pasnik/nestjs/database';
 import { NestJsCoreModule } from '@pasnik/nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { UsersModule } from './users';
 import { OrdersModule } from './orders';
 import { DishesModule } from './dishes';
 import { InvitationsModule } from './invitations';
 import { WorkspacesModule } from './workspaces/workspaces.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthJwtMiddleware } from './auth-jwt.middleware';
 import { WorkspacesMiddleware } from './workspaces/workspaces.middleware';
 import { OrderModule } from './order';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { OrderModule } from './order';
     DishesModule,
     InvitationsModule,
     WorkspacesModule,
+    NotificationsModule,
+    EventEmitterModule.forRoot(),
 
     TypeOrmModule.forFeature([
       WorkspacesRepository,

@@ -93,6 +93,31 @@
       },
       "tags": []
     },
+    "features-notifications": {
+      "root": "libs/features/notifications",
+      "sourceRoot": "libs/features/notifications/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/features/notifications/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/features/notifications"],
+          "options": {
+            "jestConfig": "libs/features/notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "features-orders": {
       "root": "libs/features/orders",
       "sourceRoot": "libs/features/orders/src",

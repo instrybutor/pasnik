@@ -1,6 +1,7 @@
 import { Connection } from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -17,13 +18,15 @@ import {
   OrderAction,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
+import { OrderStatusChangedEvent, EventName } from '../notifications';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(OrdersRepository)
     private ordersRepository: OrdersRepository,
-    private connection: Connection
+    private connection: Connection,
+    private eventEmitter: EventEmitter2
   ) {}
 
   findOneById(id: string) {
@@ -68,6 +71,8 @@ export class OrderService {
         order,
         OrderAction.Ordered
       );
+
+      this.dispatchNotification(order);
     });
     return this.findOneById(orderId);
   }
@@ -97,6 +102,8 @@ export class OrderService {
         0
       );
       await ordersRepository.save(order);
+
+      this.dispatchNotification(order);
     });
     return this.findOneById(orderId);
   }
@@ -115,6 +122,8 @@ export class OrderService {
         order,
         OrderAction.Cancel
       );
+
+      this.dispatchNotification(order);
     });
     return this.findOneById(orderId);
   }
@@ -161,5 +170,17 @@ export class OrderService {
       );
     });
     return this.findOneById(orderId);
+  }
+
+  private dispatchNotification({ id, from, slug, status }: OrderEntity) {
+    const event = new OrderStatusChangedEvent();
+    event.data = {
+      id,
+      from,
+      slug,
+      status,
+    };
+
+    this.eventEmitter.emit(EventName, event);
   }
 }

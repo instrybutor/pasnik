@@ -19,7 +19,7 @@ import {
   SelectWorkspaceDropdown,
   useCurrentWorkspace,
 } from '@pasnik/features/workspaces';
-import { SidebarItem } from '../sidebar-item/sidebar-item';
+import { SidebarItem } from '../components/sidebar-item/sidebar-item';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
 
 const adminNavigation = [
