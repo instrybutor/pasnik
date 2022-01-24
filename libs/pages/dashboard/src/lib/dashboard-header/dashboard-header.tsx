@@ -25,7 +25,7 @@ export function DashboardHeader(props: DashboardHeaderProps) {
                   <div className="sm:hidden">
                     <UserAvatar user={user!} size="xxlg" />
                   </div>
-                  <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
+                  <h1 className="ml-3 text-2xl font-normal leading-7 text-gray-900 sm:leading-9 sm:truncate">
                     {t('dashboard.header.hello')}, <UserName user={user} />
                   </h1>
                 </div>
