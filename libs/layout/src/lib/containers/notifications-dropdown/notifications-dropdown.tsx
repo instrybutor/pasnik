@@ -52,6 +52,7 @@ export const NotificationsDropdown = () => {
     <Popover as="div" className="relative">
       <Popover.Button
         ref={popoverRef}
+        disabled={!notifications?.length}
         className={classnames(
           'ml-3 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
           { 'animate-wiggle': hasNewNotifications }
