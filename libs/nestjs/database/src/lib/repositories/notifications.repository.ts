@@ -22,12 +22,8 @@ export class NotificationsRepository extends Repository<NotificationEntity> {
 
   async findAllByUserId(userId: number) {
     return this.createQueryBuilder('notification')
-      .leftJoinAndMapOne(
-        'notification.users',
-        UserEntity,
-        'user',
-        `user.id = ${userId}`
-      )
+      .leftJoinAndSelect('notification.users', 'user')
+      .where('user.id = :userId', { userId })
       .orderBy('notification.createdAt', 'DESC')
       .limit(10)
       .getMany();

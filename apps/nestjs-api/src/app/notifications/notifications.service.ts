@@ -21,6 +21,10 @@ export class NotificationService {
       orderStatusChangedDto.id
     );
 
+    if (!order.participants.length) {
+      return;
+    }
+
     await this.notificationRepository.createNotification<OrderStatusChangedDto>(
       orderStatusChangedDto,
       action,
