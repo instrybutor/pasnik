@@ -17,6 +17,8 @@ export interface UserState {
   changeWorkspace: (workspace: WorkspaceModel) => void;
 
   resetState: () => void;
+
+  updateCurrentUser(payload: Partial<UserModel>): Promise<void>;
 }
 
 const initialState = {
@@ -55,6 +57,14 @@ export const useUserStore = create<UserState>((set, get) => ({
   },
   resetState: () => {
     set(initialState);
+  },
+  updateCurrentUser: async (payload: Partial<UserModel>) => {
+    try {
+      const { data } = await axios.put<UserModel>('/api/users/me', payload);
+      set({ user: data });
+    } catch (e: unknown) {
+      throw new Error('User update error');
+    }
   },
   changeWorkspace: async ({ id }: WorkspaceModel) => {
     const currentWorkspaceId = get().user?.currentWorkspaceId;

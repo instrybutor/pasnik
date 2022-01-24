@@ -54,7 +54,7 @@ export const NotificationsDropdown = () => {
         ref={popoverRef}
         disabled={!notifications?.length}
         className={classnames(
-          'ml-3 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+          'bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
           { 'animate-wiggle': hasNewNotifications }
         )}
       >
@@ -78,7 +78,7 @@ export const NotificationsDropdown = () => {
         leaveTo="transform opacity-0 scale-95"
         afterLeave={onPopoverClose}
       >
-        <Popover.Panel className="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col w-96">
+        <Popover.Panel className="origin-top-right fixed w-screen h-screen right-0 mt-2 md:rounded-md md:shadow-md py-1 bg-white ring-1 ring-gray-900 ring-opacity-10 focus:outline-none flex flex-col md:w-96 md:h-auto md:absolute">
           {notifications?.map((notification, index) => (
             <Link
               key={notification.id}
