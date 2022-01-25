@@ -19,7 +19,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Put('/last-seen')
+  @Put('/notifications-seen')
   updateLastSeenDate(@CurrentUser() user: UserEntity) {
     return this.usersService.update(user, {
       lastNotificationDate: new Date().toISOString(),

@@ -60,7 +60,9 @@ export const useUserStore = create<UserState>((set, get) => ({
   },
   updateLastNotificationDate: async () => {
     try {
-      const { data } = await axios.put<UserModel>('/api/users/last-seen');
+      const { data } = await axios.put<UserModel>(
+        '/api/users/notifications-seen'
+      );
       set({ user: data });
     } catch (e: unknown) {
       throw new Error('User update error');
