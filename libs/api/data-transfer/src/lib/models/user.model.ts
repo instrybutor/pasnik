@@ -8,5 +8,6 @@ export interface UserModel {
   email: string;
   avatarImg?: string | null;
   currentWorkspace: WorkspaceModel;
+  lastNotificationDate: Date;
   currentWorkspaceId: number;
 }

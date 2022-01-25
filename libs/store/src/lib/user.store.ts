@@ -17,6 +17,8 @@ export interface UserState {
   changeWorkspace: (workspace: WorkspaceModel) => void;
 
   resetState: () => void;
+
+  updateLastNotificationDate(): Promise<void>;
 }
 
 const initialState = {
@@ -55,6 +57,16 @@ export const useUserStore = create<UserState>((set, get) => ({
   },
   resetState: () => {
     set(initialState);
+  },
+  updateLastNotificationDate: async () => {
+    try {
+      const { data } = await axios.put<UserModel>(
+        '/api/users/notifications-seen'
+      );
+      set({ user: data });
+    } catch (e: unknown) {
+      throw new Error('User update error');
+    }
   },
   changeWorkspace: async ({ id }: WorkspaceModel) => {
     const currentWorkspaceId = get().user?.currentWorkspaceId;

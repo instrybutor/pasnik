@@ -1,4 +1,5 @@
 import { Fragment, useCallback } from 'react';
+import i18next from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { MenuAlt1Icon } from '@heroicons/react/outline';
@@ -45,14 +46,14 @@ export function Header({ openSidebar }: HeaderProps) {
       </button>
       <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
         <div className="flex-1 flex items-center" />
-        <div className="ml-4 flex items-center md:ml-6">
+        <div className="flex items-center md:ml-6 gap-4">
           <div className="flex space-x-3 md:ml-4">
             <button
               type="button"
               onClick={createOrderHandler}
               className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
             >
-              Utwórz zamówienie
+              {i18next.t('header.create_order')}
             </button>
           </div>
 
@@ -60,7 +61,7 @@ export function Header({ openSidebar }: HeaderProps) {
           <NotificationsDropdown />
 
           {/* Profile dropdown */}
-          <Menu as="div" className="ml-3 relative">
+          <Menu as="div" className="relative">
             <div>
               <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
                 <UserAvatar user={user} size="sm" />
