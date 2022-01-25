@@ -18,7 +18,7 @@ export interface UserState {
 
   resetState: () => void;
 
-  updateCurrentUser(payload: Partial<UserModel>): Promise<void>;
+  updateLastNotificationDate(): Promise<void>;
 }
 
 const initialState = {
@@ -58,9 +58,9 @@ export const useUserStore = create<UserState>((set, get) => ({
   resetState: () => {
     set(initialState);
   },
-  updateCurrentUser: async (payload: Partial<UserModel>) => {
+  updateLastNotificationDate: async () => {
     try {
-      const { data } = await axios.put<UserModel>('/api/users/me', payload);
+      const { data } = await axios.put<UserModel>('/api/users/last-seen');
       set({ user: data });
     } catch (e: unknown) {
       throw new Error('User update error');

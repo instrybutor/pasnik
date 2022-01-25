@@ -8,7 +8,7 @@ export const useNotificationsDropdown = () => {
   const { data: notifications } = useNotificationsQuery();
   const { lastSeenDate, setLastSeenDate } = useUserStore((state) => ({
     lastSeenDate: new Date(state.user?.lastNotificationDate ?? ''),
-    setLastSeenDate: state.updateCurrentUser,
+    setLastSeenDate: state.updateLastNotificationDate,
   }));
 
   const popoverRef = useRef<HTMLButtonElement>(null);
@@ -20,7 +20,7 @@ export const useNotificationsDropdown = () => {
   }, [notifications, lastSeenDate]);
 
   const onPopoverClose = useCallback(() => {
-    setLastSeenDate({ lastNotificationDate: new Date() });
+    setLastSeenDate();
   }, [setLastSeenDate]);
 
   return {
