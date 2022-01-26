@@ -43,6 +43,9 @@ export class UserEntity implements UserModel {
   @Column({ default: false })
   isAdmin: boolean;
 
+  @CreateDateColumn()
+  lastNotificationDate: Date;
+
   @ManyToOne(() => WorkspaceEntity, {
     cascade: true,
     onDelete: 'SET NULL',

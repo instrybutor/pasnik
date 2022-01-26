@@ -20,7 +20,7 @@ export const SlackLogin = ({ onSuccess, onError }: SlackLoginProps) => {
   return (
     <button
       onClick={buttonClick}
-      className="items-center border-gray-300 border w-64 justify-center h-12 font-bold inline-flex rounded-md hover:bg-gray-100"
+      className="items-center border-gray-300 border w-64 justify-center h-12 font-normal inline-flex rounded-md hover:bg-gray-100"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

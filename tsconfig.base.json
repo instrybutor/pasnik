@@ -22,6 +22,9 @@
       "@pasnik/auth": ["libs/auth/src/index.ts"],
       "@pasnik/axios": ["libs/axios/src/index.ts"],
       "@pasnik/components": ["libs/components/src/index.ts"],
+      "@pasnik/features-notifications": [
+        "libs/features/notifications/src/index.ts"
+      ],
       "@pasnik/features/orders": ["libs/features/orders/src/index.ts"],
       "@pasnik/features/workspaces": ["libs/features/workspaces/src/index.ts"],
       "@pasnik/layout": ["libs/layout/src/index.ts"],

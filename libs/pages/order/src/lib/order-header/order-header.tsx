@@ -92,7 +92,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                 </HeaderBreadcrumbs.Item>
               )}
             </HeaderBreadcrumbs>
-            <h1 className="mt-4 text-2xl font-semibold leading-7 text-gray-900 sm:mt-2 sm:leading-9 sm:truncate flex items-center">
+            <h1 className="mt-4 text-2xl font-normal leading-7 text-gray-900 sm:mt-2 sm:leading-9 sm:truncate flex items-center">
               {order.from}
               <div className="inline-flex ml-4">
                 <OrderStatusBadge order={order} />

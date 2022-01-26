@@ -1,12 +1,15 @@
 import { Fragment, useCallback } from 'react';
+import i18next from 'i18next';
 import { Menu, Transition } from '@headlessui/react';
-import { BellIcon, MenuAlt1Icon } from '@heroicons/react/outline';
+import { MenuAlt1Icon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
+
 import { useAuth } from '@pasnik/auth';
-import { UserAvatar, UserName } from '@pasnik/components';
-import { NavLink } from 'react-router-dom';
 import { useUserStore } from '@pasnik/store';
+import { UserAvatar, UserName } from '@pasnik/components';
+
+import { NotificationsDropdown } from '../containers/notifications-dropdown';
 import { Can, WorkspacesAction } from '@pasnik/ability';
 
 export interface HeaderProps {
@@ -38,28 +41,24 @@ export function Header({ openSidebar }: HeaderProps) {
       </button>
       <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
         <div className="flex-1 flex items-center" />
-        <div className="ml-4 flex items-center md:ml-6">
+        <div className="flex items-center ml-4 md:ml-6">
           <Can I={WorkspacesAction.CreateOrder} on="WorkspaceModel">
             <div className="flex space-x-3 md:ml-4">
-              <NavLink
-                to="/create-order"
+              <button
                 type="button"
+                to="/create-order"
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
               >
-                Utwórz zamówienie
-              </NavLink>
+                {i18next.t('header.create_order')}
+              </button>
             </div>
           </Can>
-          <button
-            type="button"
-            className="ml-3 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-          >
-            <span className="sr-only">View notifications</span>
-            <BellIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
+
+          {/* Notification dropdown */}
+          <NotificationsDropdown />
 
           {/* Profile dropdown */}
-          <Menu as="div" className="ml-3 relative">
+          <Menu as="div" className="relative">
             <div>
               <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
                 <UserAvatar user={user} size="sm" />

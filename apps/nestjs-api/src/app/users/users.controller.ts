@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Put } from '@nestjs/common';
 
 import { UserEntity } from '@pasnik/nestjs/database';
 import { CurrentUser } from '@pasnik/nestjs/auth';
@@ -23,5 +23,12 @@ export class UsersController {
     } else {
       return [];
     }
+  }
+
+  @Put('/notifications-seen')
+  updateLastSeenDate(@CurrentUser() user: UserEntity) {
+    return this.usersService.update(user, {
+      lastNotificationDate: new Date().toISOString(),
+    });
   }
 }

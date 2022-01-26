@@ -59,7 +59,7 @@ export const useOrderFacade = () => {
 
         return { prevOrder };
       },
-      onSettled: () => {
+      onSettled: (data?: OrderModel) => {
         queryClient.invalidateQueries(orderKey);
       },
     }),
@@ -70,14 +70,17 @@ export const useOrderFacade = () => {
     (order: OrderModel) => service.markAsDelivered(order),
     optimisticOrderStatusUpdate(OrderStatus.Delivered)
   );
+
   const markAsOrderedMutation = useMutation(
     (order: OrderModel) => service.markAsOrdered(order),
     optimisticOrderStatusUpdate(OrderStatus.Ordered)
   );
+
   const markAsOpenMutation = useMutation(
     (order: OrderModel) => service.markAsOpen(order),
     optimisticOrderStatusUpdate(OrderStatus.InProgress)
   );
+
   const markAsClosedMutation = useMutation(
     (order: OrderModel) => service.markAsClosed(order),
     optimisticOrderStatusUpdate(OrderStatus.Canceled)
