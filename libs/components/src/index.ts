@@ -14,3 +14,7 @@ export * from './lib/spinner/spinner';
 export * from './lib/call-state-wrapper/call-state-wrapper';
 export * from './lib/header-breadcrumbs/header-breadcrumbs';
 export * from './lib/query-boundary/query-boundary';
+export * from './lib/drawer/drawer';
+export * from './lib/container/container';
+export * from './lib/panel/panel';
+export * from './lib/popover/popover';

@@ -82,7 +82,7 @@ export const useOrderFacade = () => {
     (order: OrderModel) => service.markAsClosed(order),
     optimisticOrderStatusUpdate(OrderStatus.Canceled)
   );
-  const cloneOrder = (
+  const duplicateOrder = (
     workspace: WorkspaceModel,
     { from, menuUrl, shippingCents }: OrderModel
   ) => service.createOrder(workspace, { from, menuUrl, shippingCents });
@@ -178,7 +178,7 @@ export const useOrderFacade = () => {
   );
 
   return {
-    cloneOrder,
+    duplicateOrder,
     dishAdd,
     dishUpdate,
     dishDelete,

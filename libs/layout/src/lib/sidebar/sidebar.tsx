@@ -139,20 +139,19 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                   />
                 </div>
                 <div className="px-2 space-y-1 mt-6 pt-6">
-                  <SidebarItem to="/" icon={HomeIcon}>
-                    Dashboard
-                  </SidebarItem>
+                  <SidebarItem to="/" icon={HomeIcon} label="Dashboard" />
                   {currentWorkspace && (
                     <SidebarItem
                       to={`/workspace/${currentWorkspace.slug}`}
                       icon={OfficeBuildingIcon}
-                    >
-                      {currentWorkspace.name}
-                    </SidebarItem>
+                      label={currentWorkspace.name}
+                    />
                   )}
-                  <SidebarItem to="/history" icon={ClockIcon}>
-                    Historia zamówień
-                  </SidebarItem>
+                  <SidebarItem
+                    to="/history"
+                    icon={ClockIcon}
+                    label="Historia zamówień"
+                  />
                 </div>
                 {user?.isAdmin && (
                   <div className="mt-6 pt-6">
@@ -244,20 +243,19 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                 />
               </div>
               <div className="px-2 space-y-1 mt-6 pt-6">
-                <SidebarItem to="/" icon={HomeIcon}>
-                  Dashboard
-                </SidebarItem>
+                <SidebarItem to="/" icon={HomeIcon} label="Dashboard" />
                 {currentWorkspace && (
                   <SidebarItem
                     to={`/workspace/${currentWorkspace.slug}`}
                     icon={OfficeBuildingIcon}
-                  >
-                    {currentWorkspace.name}
-                  </SidebarItem>
+                    label={currentWorkspace.name}
+                  />
                 )}
-                <SidebarItem to="/history" icon={ClockIcon}>
-                  Historia zamówień
-                </SidebarItem>
+                <SidebarItem
+                  to="/history"
+                  icon={ClockIcon}
+                  label="Historia zamówień"
+                />
               </div>
 
               {user?.isAdmin && (

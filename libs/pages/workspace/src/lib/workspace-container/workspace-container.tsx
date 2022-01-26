@@ -1,13 +1,31 @@
-import { Outlet, Route, Routes, useMatch, useNavigate } from 'react-router-dom';
+import {
+  Outlet,
+  Route,
+  Routes,
+  useMatch,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { SyntheticEvent, useCallback } from 'react';
 import { WorkspaceHeader } from '../workspace-header/workspace-header';
 import { QueryBoundary, TabLink } from '@pasnik/components';
 import { WorkspaceOrders } from '../workspace-orders/workspace-orders';
 import { OrdersEmpty } from '@pasnik/features/orders';
 import { WorkspaceInactiveOrdersEmpty } from '../workspace-inactive-orders-empty/workspace-inactive-orders-empty';
+import {
+  useWorkspace,
+  WorkspaceAbilityProvider,
+} from '@pasnik/features/workspaces';
 
 export function WorkspaceContainer() {
   const navigate = useNavigate();
+  const { slug } = useParams<'slug'>();
+
+  useWorkspace(slug!, (error) => {
+    if (error.response?.status === 404) {
+      navigate('/');
+    }
+  });
 
   const onTabChange = useCallback(
     (event: SyntheticEvent<HTMLSelectElement>) => {
@@ -21,7 +39,7 @@ export function WorkspaceContainer() {
     : './inactive';
 
   return (
-    <>
+    <WorkspaceAbilityProvider slug={slug!}>
       <header className="bg-white shadow">
         <WorkspaceHeader />
       </header>
@@ -88,6 +106,6 @@ export function WorkspaceContainer() {
           </div>
         </div>
       </main>
-    </>
+    </WorkspaceAbilityProvider>
   );
 }

@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {
   OrdersRepository,
+  WorkspaceAccessRequestsRepository,
   WorkspacesRepository,
   WorkspaceUsersRepository,
 } from '@pasnik/nestjs/database';
@@ -15,6 +16,7 @@ import { WorkspacesController } from './workspaces.controller';
     TypeOrmModule.forFeature([
       WorkspacesRepository,
       WorkspaceUsersRepository,
+      WorkspaceAccessRequestsRepository,
       OrdersRepository,
     ]),
   ],

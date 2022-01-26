@@ -4,7 +4,6 @@ import { WorkspaceUsersRepository } from '@pasnik/nestjs/database';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WorkspacesService } from './workspaces.service';
-import { WorkspacePrivacy } from '@pasnik/api/data-transfer';
 
 interface WorkspacesParams {
   workspaceSlug: string;
@@ -30,13 +29,6 @@ export class WorkspacesMiddleware implements NestMiddleware {
       where: { workspace, user },
       relations: ['user', 'workspace'],
     });
-
-    if (
-      workspace?.privacy !== WorkspacePrivacy.Public &&
-      (!workspaceUser || workspaceUser.isRemoved)
-    ) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
 
     res.locals.workspaceUser = workspaceUser;
     res.locals.workspace = workspace;

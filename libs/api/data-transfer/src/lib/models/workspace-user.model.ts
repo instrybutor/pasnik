@@ -8,6 +8,7 @@ export enum WorkspaceUserRole {
 }
 
 export interface WorkspaceUserModel {
+  kind: 'WorkspaceUserModel';
   id: number;
   createdAt: string;
   workspace?: WorkspaceModel;

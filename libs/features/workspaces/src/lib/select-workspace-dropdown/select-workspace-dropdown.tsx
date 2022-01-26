@@ -4,6 +4,7 @@ import { Fragment, MouseEvent, Suspense, useCallback, useRef } from 'react';
 import classNames from 'classnames';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
 import { useCurrentWorkspace, useWorkspaces } from '../queries';
+import { Can, WorkspacesAction } from '@pasnik/ability';
 
 export interface SelectWorkspaceProps {
   onAddClick: () => void;
@@ -109,15 +110,17 @@ export function SelectWorkspaceDropdown({
                       </Listbox.Option>
                     ))}
                   </div>
-                  <button
-                    onClick={() => {
-                      onAddClick();
-                      refButton.current?.click(); // nasty hack to close listbox
-                    }}
-                    className="relative py-2 pl-3 text-left pr-9 hover:bg-cyan-700 hover:text-white w-full focus:outline-none"
-                  >
-                    Dodaj przestrzeń
-                  </button>
+                  <Can I={WorkspacesAction.Create} a="WorkspaceModel">
+                    <button
+                      onClick={() => {
+                        onAddClick();
+                        refButton.current?.click(); // nasty hack to close listbox
+                      }}
+                      className="relative py-2 pl-3 text-left pr-9 hover:bg-cyan-700 hover:text-white w-full focus:outline-none"
+                    >
+                      Dodaj przestrzeń
+                    </button>
+                  </Can>
                 </Listbox.Options>
               </Transition>
             </div>

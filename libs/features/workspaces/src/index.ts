@@ -6,3 +6,4 @@ export * from './lib/workspace-name';
 export * from './lib/workspace-users/workspace-users';
 export * from './lib/queries';
 export * from './lib/mutations';
+export * from './lib/workspace-ability-provider';

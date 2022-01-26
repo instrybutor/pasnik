@@ -1,7 +1,6 @@
 import { LoginIcon, LogoutIcon, TrashIcon } from '@heroicons/react/outline';
-import { WorkspaceModel, WorkspaceUserRole } from '@pasnik/api/data-transfer';
+import { WorkspaceModel } from '@pasnik/api/data-transfer';
 import {
-  useCurrentWorkspaceUser,
   useWorkspaceJoinMutation,
   useWorkspaceLeaveMutation,
   useWorkspaceRemoveMutation,
@@ -10,6 +9,7 @@ import {
 import { useCallback } from 'react';
 import { useUserStore } from '@pasnik/store';
 import { useNavigate } from 'react-router-dom';
+import { Can, WorkspacesAction } from '@pasnik/ability';
 
 export interface WorkspaceJoinLeaveButtonProps {
   workspace: WorkspaceModel;
@@ -42,11 +42,9 @@ export function WorkspaceJoinLeaveButton({
     }
   }, [removeWorkspace, workspace, changeWorkspace, workspaces, navigate]);
 
-  const currentWorkspaceUser = useCurrentWorkspaceUser(workspace.slug);
-
   return (
-    <span className="sm:ml-3">
-      {!currentWorkspaceUser ? (
+    <span className="sm:ml-3 flex gap-3">
+      <Can I={WorkspacesAction.Join} this={workspace}>
         <button
           onClick={onWorkspaceJoin}
           type="button"
@@ -55,7 +53,8 @@ export function WorkspaceJoinLeaveButton({
           <LoginIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           Dołącz
         </button>
-      ) : currentWorkspaceUser.role !== WorkspaceUserRole.Owner ? (
+      </Can>
+      <Can I={WorkspacesAction.Leave} this={workspace}>
         <button
           onClick={() => leaveWorkspace.mutateAsync()}
           type="button"
@@ -64,7 +63,8 @@ export function WorkspaceJoinLeaveButton({
           <LogoutIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           Opuść
         </button>
-      ) : (
+      </Can>
+      <Can I={WorkspacesAction.Delete} this={workspace}>
         <button
           onClick={onWorkspaceRemove}
           type="button"
@@ -73,7 +73,7 @@ export function WorkspaceJoinLeaveButton({
           <TrashIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           Usuń
         </button>
-      )}
+      </Can>
     </span>
   );
 }

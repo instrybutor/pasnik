@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { UpdateWorkspaceDto, WorkspaceModel } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
+import { renameQueryData } from './rename-query-data';
 
 export const useWorkspaceUpdateMutation = (slug: string) => {
   const queryKey = ['workspaces', slug];
@@ -30,9 +31,38 @@ export const useWorkspaceUpdateMutation = (slug: string) => {
       onError: (err, updateWorkspaceDto, context) => {
         queryClient.setQueryData(queryKey, context?.previousWorkspace);
       },
-      onSuccess: (workspace) => {
-        queryClient.setQueryData(queryKey, workspace);
-        queryClient.invalidateQueries(['workspaces']);
+      onSuccess: (updatedWorkspace) => {
+        queryClient.invalidateQueries(queryKey, { refetchActive: false }); // in case of slug has changed
+        queryClient.setQueryData(
+          ['workspaces', updatedWorkspace.slug],
+          updatedWorkspace
+        );
+        const previousWorkspaces =
+          queryClient.getQueryData<WorkspaceModel[]>(['workspaces']) ?? [];
+        const previousWorkspaceIndex = previousWorkspaces.findIndex(
+          (workspace) => workspace.slug === slug
+        );
+        const newWorkspaces = [...previousWorkspaces];
+        newWorkspaces[previousWorkspaceIndex] = updatedWorkspace;
+        queryClient.setQueryData(['workspaces'], newWorkspaces);
+
+        renameQueryData(
+          queryClient,
+          ['workspaces', slug, 'users'],
+          ['workspaces', updatedWorkspace.slug, 'users']
+        );
+
+        renameQueryData(
+          queryClient,
+          ['workspaces', slug, 'orders', 'active'],
+          ['workspaces', updatedWorkspace.slug, 'orders', 'active']
+        );
+
+        renameQueryData(
+          queryClient,
+          ['workspaces', slug, 'orders', 'inactive'],
+          ['workspaces', updatedWorkspace.slug, 'orders', 'inactive']
+        );
       },
     }
   );

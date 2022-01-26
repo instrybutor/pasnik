@@ -16,6 +16,7 @@ import {
 import { Menu, Transition } from '@headlessui/react';
 import { HeaderBreadcrumbs, Price } from '@pasnik/components';
 import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+import { Can, OrdersAction } from '@pasnik/ability';
 
 import { useOrderFacade } from '../order-store/order.facade';
 import { OrderStatusBadge, OrderTimestamp } from '@pasnik/features/orders';
@@ -33,7 +34,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
     markAsDeliveredMutation,
     markAsOpenMutation,
     markAsOrderedMutation,
-    cloneOrder,
+    duplicateOrder,
   } = useOrderFacade();
   const { t } = useTranslation();
 
@@ -57,12 +58,12 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
     [markAsOrderedMutation, order]
   );
 
-  const cloneOrderHandler = useCallback(
+  const duplicateOrderHandler = useCallback(
     () =>
-      cloneOrder(order.workspace!, order).then(({ slug }) => {
+      duplicateOrder(order.workspace!, order).then(({ slug }) => {
         navigate(`/order/${slug}`);
       }),
-    [cloneOrder, order, navigate]
+    [duplicateOrder, order, navigate]
   );
 
   const backElement = useCallback(() => {
@@ -136,7 +137,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
             </div>
           </div>
           <div className="mt-5 flex xl:mt-0 xl:ml-4">
-            {order.status === OrderStatus.InProgress && (
+            <Can I={OrdersAction.MarkAsClosed} this={order}>
               <span className="hidden sm:block">
                 <button
                   type="button"
@@ -147,11 +148,9 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   {t('dish.header_menu.cancel')}
                 </button>
               </span>
-            )}
+            </Can>
 
-            {[OrderStatus.Canceled, OrderStatus.Ordered].includes(
-              order.status
-            ) && (
+            <Can I={OrdersAction.MarkAsOpened} this={order}>
               <span className="sm:ml-3">
                 <button
                   type="button"
@@ -165,9 +164,9 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   {t('dish.header_menu.open')}
                 </button>
               </span>
-            )}
+            </Can>
 
-            {[OrderStatus.Ordered].includes(order.status) && (
+            <Can I={OrdersAction.MarkAsDelivered} this={order}>
               <span className="ml-3">
                 <button
                   type="button"
@@ -182,9 +181,9 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   {t('dish.header_menu.delivered')}
                 </button>
               </span>
-            )}
+            </Can>
 
-            {order.status === OrderStatus.InProgress && (
+            <Can I={OrdersAction.Update} this={order}>
               <span className="hidden sm:block sm:ml-3">
                 <Link
                   to="edit"
@@ -197,9 +196,9 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   {t('dish.header_menu.edit')}
                 </Link>
               </span>
-            )}
+            </Can>
 
-            {order.status === OrderStatus.InProgress && (
+            <Can I={OrdersAction.MarkAsOrdered} this={order}>
               <span className="sm:ml-3">
                 <button
                   type="button"
@@ -214,13 +213,13 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   {t('dish.header_menu.order')}
                 </button>
               </span>
-            )}
+            </Can>
 
-            {order.status === OrderStatus.Delivered && (
+            <Can I={OrdersAction.Duplicate} this={order}>
               <span className="sm:ml-3">
                 <button
                   type="button"
-                  onClick={cloneOrderHandler}
+                  onClick={duplicateOrderHandler}
                   disabled={dishes.length === 0}
                   className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                 >
@@ -231,7 +230,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
                   {t('dish.header_menu.duplicate')}
                 </button>
               </span>
-            )}
+            </Can>
 
             {order.status === OrderStatus.InProgress && (
               <Menu as="span" className="ml-3 relative sm:hidden">

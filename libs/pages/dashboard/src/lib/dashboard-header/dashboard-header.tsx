@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { OfficeBuildingIcon } from '@heroicons/react/outline';
 import { useUserStore } from '@pasnik/store';
 import { UserAvatar, UserName } from '@pasnik/components';
+import { useCurrentWorkspaceById } from '@pasnik/features/workspaces';
 
 /* eslint-disable-next-line */
 export interface DashboardHeaderProps {}
@@ -9,6 +10,7 @@ export interface DashboardHeaderProps {}
 export function DashboardHeader(props: DashboardHeaderProps) {
   const { t } = useTranslation();
   const { user } = useUserStore();
+  const workspace = useCurrentWorkspaceById(user?.currentWorkspaceId);
 
   return (
     <div className="bg-white shadow">
@@ -36,7 +38,7 @@ export function DashboardHeader(props: DashboardHeaderProps) {
                       className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                       aria-hidden="true"
                     />
-                    Instrybutor
+                    {workspace?.name}
                   </dd>
                 </dl>
               </div>
