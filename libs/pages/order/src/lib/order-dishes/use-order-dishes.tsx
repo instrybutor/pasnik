@@ -46,14 +46,18 @@ export const useOrderDishes = ({ order }: Props) => {
   );
 
   const duplicateDish = useCallback(
-    async (payload: DishModel) => {
+    async ({ name, priceCents, user }: DishModel) => {
       if (!order) {
         return;
       }
 
       await dishAdd.mutateAsync({
         order,
-        payload,
+        payload: {
+          name: name,
+          priceCents: priceCents,
+          userId: user.id,
+        },
       });
     },
     [dishAdd, order]

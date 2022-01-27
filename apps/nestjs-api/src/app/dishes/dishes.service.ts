@@ -4,6 +4,7 @@ import {
   DishesRepository,
   OrderEntity,
   UserEntity,
+  UsersRepository,
 } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
@@ -11,7 +12,9 @@ import { AddDishDto } from '@pasnik/api/data-transfer';
 export class DishesService {
   constructor(
     @InjectRepository(DishesRepository)
-    private dishesRepository: DishesRepository
+    private dishesRepository: DishesRepository,
+    @InjectRepository(UsersRepository)
+    private usersRepository: UsersRepository
   ) {}
 
   findAll(order: OrderEntity) {
@@ -32,7 +35,14 @@ export class DishesService {
   }
 
   async create(addDishDto: AddDishDto, order: OrderEntity, user: UserEntity) {
-    const dish = await this.dishesRepository.addDish(addDishDto, order, user);
+    const dishOwner =
+      (await this.usersRepository.findOne(addDishDto.userId)) ?? user;
+    const dish = await this.dishesRepository.addDish(
+      addDishDto,
+      order,
+      dishOwner,
+      user
+    );
 
     return this.findOne(order, dish.id);
   }

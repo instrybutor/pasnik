@@ -2,7 +2,14 @@ import { UserModel } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
 import { ReactElement } from 'react';
 
-export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg' | 'xxlg';
+export type UserAvatarSize =
+  | 'xxs'
+  | 'xsm'
+  | 'sm'
+  | 'md'
+  | 'lg'
+  | 'xlg'
+  | 'xxlg';
 
 export interface UserAvatarProps {
   user?: UserModel | null;
@@ -24,6 +31,7 @@ export function UserAvatar({
     `${givenName!} ${familyName!}`;
 
   const sizeClasses = classNames({
+    'h-5 w-5': size === 'xxs',
     'h-6 w-6': size === 'xsm',
     'h-8 w-8': size === 'sm',
     'h-10 w-10': size === 'md' || !size,

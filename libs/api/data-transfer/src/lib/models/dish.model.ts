@@ -7,4 +7,5 @@ export interface DishModel {
   createdAt: string;
   updatedAt: string;
   user: UserModel;
+  createdBy: UserModel;
 }
