@@ -91,6 +91,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
                     inProgress={order?.status === OrderStatus.InProgress}
                     key={dish.id}
                     dish={dish}
+                    onUpdate={updateDishHandler}
                     onDelete={deleteDishHandler}
                     onDuplicate={duplicateDish}
                     onEdit={editClickHandler}

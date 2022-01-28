@@ -2,11 +2,12 @@ import React, { Fragment } from 'react';
 import { Listbox, Portal, Transition } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 import classNames from 'classnames';
+import { CheckIcon } from '@heroicons/react/outline';
 
 export interface Props<T extends unknown> {
   items: T[];
   selected?: T;
-  keyExtraction?(item: T): string;
+  keyExtraction(item: T): string;
   onSelect(item: T): void;
   children: React.ReactChildren | React.ReactChild;
   renderItem({
@@ -21,9 +22,10 @@ export interface Props<T extends unknown> {
 }
 
 export const Select = <T extends unknown>({
-  selected,
+  selected: selectedItem,
   onSelect,
   items,
+  keyExtraction,
   children,
   renderItem,
 }: Props<T>) => {
@@ -44,9 +46,16 @@ export const Select = <T extends unknown>({
   );
 
   const onClose = React.useCallback(() => setPopperElement(null), []);
+  const isElementSelected = React.useCallback(
+    (item: T) =>
+      selectedItem
+        ? keyExtraction(selectedItem) === keyExtraction(item)
+        : false,
+    [selectedItem, keyExtraction]
+  );
 
   return (
-    <Listbox value={selected} onChange={onSelect}>
+    <Listbox value={selectedItem} onChange={onSelect}>
       <div className="relative">
         <Listbox.Button
           ref={setTargetElement}
@@ -70,19 +79,30 @@ export const Select = <T extends unknown>({
               <Listbox.Options className="flex flex-col absolute z-10 mt-1 bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                 {items.map((item, index) => (
                   <Listbox.Option
-                    key={index}
+                    key={keyExtraction ? keyExtraction(item) : index}
                     className={({ active }) =>
                       classNames(
                         active ? 'text-white bg-cyan-600' : 'text-gray-900',
-                        'cursor-default select-none relative py-2 pl-3 pr-9',
-                        'w-60'
+                        'cursor-default select-none relative py-2 px-3 w-60 flex'
                       )
                     }
                     value={item}
                   >
-                    {({ selected, active }) =>
-                      renderItem({ selected, active, item })
-                    }
+                    {({ selected, active }) => (
+                      <>
+                        <div className="flex flex-1">
+                          {renderItem({ selected, active, item })}
+                        </div>
+                        {isElementSelected(item) ? (
+                          <CheckIcon
+                            className={classNames(
+                              'w-6 h-6 ',
+                              active ? 'text-white' : 'text-slate-600'
+                            )}
+                          />
+                        ) : null}
+                      </>
+                    )}
                   </Listbox.Option>
                 ))}
               </Listbox.Options>

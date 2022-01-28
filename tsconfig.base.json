@@ -45,9 +45,6 @@
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
       "@pasnik/pages/orders": ["libs/pages/orders/src/index.ts"],
       "@pasnik/pages/workspace": ["libs/pages/workspace/src/index.ts"],
-      "@pasnik/shared/ui-button": ["libs/shared/ui-button/src/index.ts"],
-      "@pasnik/shared/ui-input": ["libs/shared/ui-input/src/index.ts"],
-      "@pasnik/shared/ui-select": ["libs/shared/ui-select/src/index.ts"],
       "@pasnik/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@pasnik/store": ["libs/store/src/index.ts"]
     }

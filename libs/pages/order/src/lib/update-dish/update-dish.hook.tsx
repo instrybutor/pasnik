@@ -12,10 +12,6 @@ export const useUpdateDish = (dish: DishModel) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(addDishValidator),
-    defaultValues: {
-      priceCents: String(dish.priceCents / 100),
-      name: dish.name,
-    },
   });
 
   const [error, setError] = useState<string | null>(null);

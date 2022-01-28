@@ -8,7 +8,7 @@ import { useUserStore } from '@pasnik/store';
 import { UserModel } from '@pasnik/api/data-transfer';
 import { UserAvatar, UserInfo, UserName } from '@pasnik/components';
 import { CheckIcon } from '@heroicons/react/outline';
-import { Select } from '@pasnik/shared/ui-select';
+import { Select } from '@pasnik/components';
 
 enum SelectionType {
   SLIM = 'slim',
@@ -43,7 +43,7 @@ export const UserSelection: React.FC<UserSelectionProps> = ({
     <div className="flex justify-center">
       <Select
         items={users}
-        selected={null}
+        selected={user}
         keyExtraction={(item) => `${item?.id}`}
         onSelect={handleUserSelection}
         renderItem={({ selected, active, item }) => (

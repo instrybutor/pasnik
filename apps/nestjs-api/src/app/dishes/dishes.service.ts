@@ -34,14 +34,18 @@ export class DishesService {
     });
   }
 
-  async create(addDishDto: AddDishDto, order: OrderEntity, user: UserEntity) {
+  async create(
+    addDishDto: AddDishDto,
+    order: OrderEntity,
+    createdBy: UserEntity
+  ) {
     const dishOwner =
-      (await this.usersRepository.findOne(addDishDto.userId)) ?? user;
+      (await this.usersRepository.findOne(addDishDto.userId)) ?? createdBy;
     const dish = await this.dishesRepository.addDish(
       addDishDto,
       order,
       dishOwner,
-      user
+      createdBy
     );
 
     return this.findOne(order, dish.id);
@@ -51,9 +55,22 @@ export class DishesService {
     return await this.dishesRepository.delete({ id, order });
   }
 
-  async update(order: OrderEntity, dishId: number, addDishDto: AddDishDto) {
+  async update(
+    order: OrderEntity,
+    dishId: number,
+    addDishDto: AddDishDto,
+    createdBy: UserEntity
+  ) {
+    const dishOwner =
+      (await this.usersRepository.findOne(addDishDto.userId)) ?? createdBy;
+
     const dish = await this.findOne(order, dishId);
-    await this.dishesRepository.updateDish(addDishDto, dish);
+    await this.dishesRepository.updateDish(
+      addDishDto,
+      dish,
+      dishOwner,
+      createdBy
+    );
 
     return this.findOne(order, dish.id);
   }

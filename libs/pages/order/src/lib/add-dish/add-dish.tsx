@@ -4,8 +4,8 @@ import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
 import { useUserStore } from '@pasnik/store';
 import { AddDishDto, UserModel } from '@pasnik/api/data-transfer';
-import { Input } from '@pasnik/shared/ui-input';
-import { Button } from '@pasnik/shared/ui-button';
+import { Input } from '@pasnik/components';
+import { Button } from '@pasnik/components';
 
 import { useAddDish } from './add-dish.hook';
 import { UserSelection } from '../user-selection';

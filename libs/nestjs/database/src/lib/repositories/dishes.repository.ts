@@ -21,9 +21,16 @@ export class DishesRepository extends Repository<DishEntity> {
     return this.save(dish);
   }
 
-  async updateDish(addDishDto: AddDishDto, dish: DishEntity) {
+  async updateDish(
+    addDishDto: AddDishDto,
+    dish: DishEntity,
+    user: UserEntity,
+    createdBy: UserEntity
+  ) {
     dish.name = addDishDto.name;
     dish.priceCents = addDishDto.priceCents;
+    dish.user = user;
+    dish.createdBy = createdBy;
 
     return this.save(dish);
   }
