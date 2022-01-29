@@ -2,15 +2,23 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { addDishValidator, DishModel } from '@pasnik/api/data-transfer';
+import { addDishValidator, UserModel } from '@pasnik/api/data-transfer';
 
-export const useUpdateDish = (dish: DishModel) => {
+export interface UpdateDishModel {
+  name: string;
+  user: UserModel;
+  priceCents: number;
+}
+
+export const useUpdateDish = () => {
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<UpdateDishModel>({
     resolver: yupResolver(addDishValidator),
   });
 
@@ -19,6 +27,8 @@ export const useUpdateDish = (dish: DishModel) => {
   return {
     error,
     errors,
+    setValue,
+    getValues,
     register,
     setError,
     handleSubmit,

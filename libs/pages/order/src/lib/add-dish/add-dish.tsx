@@ -39,8 +39,15 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
   return (
     <form
       className="flex flex-col items-stretch py-3 pl-3 pr-6 gap-4 xsm:flex-row"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit as any)}
     >
+      <div className="flex items-center">
+        <UserSelection
+          type="slim"
+          user={selectedUser}
+          selectUser={onUserSelect}
+        />
+      </div>
       <div className="text-sm text-gray-500 w-full">
         <Input
           type="text"
@@ -67,13 +74,7 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
             {...register('priceCents')}
           />
         </div>
-        <div className="flex items-center">
-          <UserSelection
-            type="slim"
-            user={selectedUser}
-            selectUser={onUserSelect}
-          />
-        </div>
+
         <div className="text-right text-sm font-medium space-x-2 flex-shrink-0">
           <Button type="submit">
             <CheckIcon className="h-5 w-5" aria-hidden="true" />

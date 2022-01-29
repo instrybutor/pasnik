@@ -1,4 +1,4 @@
-import { WorkspaceUserModel } from './workspace-user.model';
+// import { WorkspaceUserModel } from './workspace-user.model';
 
 export enum WorkspacePrivacy {
   Public = 'public',
@@ -13,5 +13,5 @@ export interface WorkspaceModel {
   updatedAt: string;
   name: string;
   privacy: WorkspacePrivacy;
-  workspaceUsers?: WorkspaceUserModel[];
+  // workspaceUsers?: WorkspaceUserModel[];
 }

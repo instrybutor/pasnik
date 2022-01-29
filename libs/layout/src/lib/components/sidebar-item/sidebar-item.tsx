@@ -3,7 +3,7 @@ import { NavLink, NavLinkProps } from 'react-router-dom';
 import React from 'react';
 
 export interface SidebarItemProps extends NavLinkProps {
-  children?: JSX.Element | string;
+  children: JSX.Element | string;
   icon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
 }
 

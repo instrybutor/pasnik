@@ -67,6 +67,9 @@ export function OrderDish({
 
   return (
     <>
+      <div className="flex items-center">
+        <UserSelection type="slim" user={dish.user} selectUser={onDishUpdate} />
+      </div>
       <div className="flex-1 w-full pl-3">
         <div className="text-sm text-gray-500 min-w-0 flex-1">{dish.name}</div>
       </div>
@@ -93,10 +96,6 @@ export function OrderDish({
           </button>
         </div>
       )}
-
-      <div className="flex items-center">
-        <UserSelection type="slim" user={dish.user} selectUser={onDishUpdate} />
-      </div>
 
       {inProgress && (
         <div className="py-4">

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
-import { AddDishDto, DishModel, UserModel } from '@pasnik/api/data-transfer';
+import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import { Input } from '@pasnik/components';
 import { Button } from '@pasnik/components';
 
@@ -20,34 +20,37 @@ export function UpdateDish({
   onUpdateDish,
   onCancelUpdate,
 }: UpdateDishProps) {
-  const { handleSubmit, register, errors, reset } = useUpdateDish(dish);
-  const [selectedUser, setSelectedUser] = useState<UserModel>(dish.user);
+  const { handleSubmit, register, errors, reset, setValue, getValues } =
+    useUpdateDish();
 
-  const onUserSelect = useCallback((pickedUser: UserModel) => {
-    setSelectedUser(pickedUser);
-  }, []);
+  const onUserSelect = useCallback(
+    (pickedUser) => {
+      setValue('user', pickedUser);
+    },
+    [setValue]
+  );
 
   useEffect(() => {
     reset({
-      ...dish,
+      name: dish.name,
+      user: dish.user,
       priceCents: dish.priceCents / 100,
     });
   }, [dish, reset]);
 
-  const onSubmit = useCallback(
-    (data: AddDishDto) => {
-      onUpdateDish(
-        {
-          ...data,
-          priceCents: data.priceCents,
-          userId: selectedUser.id,
-        },
-        dish
-      );
-      reset();
-    },
-    [onUpdateDish, selectedUser.id, dish, reset]
-  );
+  const onSubmit = useCallback(() => {
+    const data = getValues();
+    onUpdateDish(
+      {
+        name: data.name,
+        priceCents: data.priceCents,
+        userId: data.user.id,
+      },
+      dish
+    );
+    reset();
+  }, [getValues, onUpdateDish, dish, reset]);
+
   const { t } = useTranslation();
 
   return (
@@ -55,12 +58,19 @@ export function UpdateDish({
       className="flex flex-col items-stretch py-3 gap-4 w-full xsm:flex-row"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <div className="flex items-center">
+        <UserSelection
+          type="slim"
+          user={getValues('user')}
+          selectUser={onUserSelect}
+        />
+      </div>
       <div className="text-sm text-gray-500 w-full">
         <Input
           type="text"
           autoFocus={true}
           placeholder={t('dish.form.name')}
-          error={errors.name}
+          error={Boolean(errors.name)}
           {...register('name')}
         />
       </div>
@@ -70,7 +80,7 @@ export function UpdateDish({
             type="text"
             inputMode="numeric"
             placeholder="0.00"
-            error={errors.priceCents}
+            error={Boolean(errors.priceCents)}
             aria-describedby="price-currency"
             className="text-right"
             errorMessage={
@@ -81,13 +91,7 @@ export function UpdateDish({
             {...register('priceCents')}
           />
         </div>
-        <div className="flex items-center">
-          <UserSelection
-            type="slim"
-            user={selectedUser}
-            selectUser={onUserSelect}
-          />
-        </div>
+
         <div className="text-right text-sm font-medium space-x-2 flex-shrink-0">
           <Button type="submit">
             <CheckIcon className="h-5 w-5" aria-hidden="true" />

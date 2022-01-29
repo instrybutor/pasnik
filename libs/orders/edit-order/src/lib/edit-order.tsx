@@ -14,7 +14,10 @@ export function EditOrder() {
           </div>
         )}
 
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={handleSubmit(onSubmit as any)}
+        >
           <div className="flex flex-col">
             <label className="mb-2">Restaurant</label>
             <input
