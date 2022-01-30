@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
@@ -17,34 +17,43 @@ export interface AddDishProps {
 
 export function AddDish({ onAdd, onCancel }: AddDishProps) {
   const { user } = useUserStore();
-  const [selectedUser, setSelectedUser] = useState<UserModel>(user!);
-  const { handleSubmit, register, errors, reset } = useAddDish();
+  const { handleSubmit, register, errors, reset, getValues, setValue } =
+    useAddDish();
   const { t } = useTranslation();
 
-  const onSubmit = useCallback(
-    async (data: AddDishDto) => {
-      onAdd({
-        ...data,
-        userId: selectedUser.id,
-      });
-      reset();
+  const onSubmit = useCallback(async () => {
+    const data = getValues();
+    onAdd({
+      ...data,
+      userId: data.user.id,
+    });
+    reset();
+  }, [getValues, onAdd, reset]);
+
+  const onUserSelect = useCallback(
+    (pickedUser: UserModel) => {
+      setValue('user', pickedUser);
     },
-    [onAdd, reset, selectedUser]
+    [setValue]
   );
 
-  const onUserSelect = useCallback((pickedUser: UserModel) => {
-    setSelectedUser(pickedUser);
-  }, []);
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    setValue('user', user);
+  }, [user, setValue]);
 
   return (
     <form
       className="flex flex-col items-stretch py-3 pl-3 pr-6 gap-4 xsm:flex-row"
-      onSubmit={handleSubmit(onSubmit as any)}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex items-center">
         <UserSelection
           type="slim"
-          user={selectedUser}
+          user={getValues('user')}
           selectUser={onUserSelect}
         />
       </div>
@@ -53,7 +62,7 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
           type="text"
           autoFocus={true}
           placeholder={t('dish.form.name')}
-          error={errors.name}
+          error={Boolean(errors.name)}
           {...register('name')}
         />
       </div>
@@ -63,7 +72,7 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
             type="text"
             inputMode="numeric"
             placeholder="0.00"
-            error={errors.priceCents}
+            error={Boolean(errors.priceCents)}
             aria-describedby="price-currency"
             className="text-right"
             errorMessage={
