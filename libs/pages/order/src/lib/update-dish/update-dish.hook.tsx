@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { addDishValidator, UserModel } from '@pasnik/api/data-transfer';
+import { addDishValidator } from '@pasnik/api/data-transfer';
 
 export interface UpdateDishModel {
   name: string;
-  user: UserModel;
+  userId: number;
   priceCents: number;
 }
 

@@ -20,30 +20,31 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
   const { handleSubmit, register, errors, reset, getValues, setValue } =
     useAddDish();
   const { t } = useTranslation();
+  const selectedUser = useUserStore(
+    (state) =>
+      state.users.find((item) => item.id === getValues('userId')) ?? user
+  );
 
   const onSubmit = useCallback(async () => {
     const data = getValues();
-    onAdd({
-      ...data,
-      userId: data.user.id,
-    });
+    onAdd(data);
     reset();
   }, [getValues, onAdd, reset]);
 
   const onUserSelect = useCallback(
     (pickedUser: UserModel) => {
-      setValue('user', pickedUser);
+      setValue('userId', pickedUser.id);
     },
     [setValue]
   );
 
   useEffect(() => {
-    if (!user) {
+    if (!selectedUser) {
       return;
     }
 
-    setValue('user', user);
-  }, [user, setValue]);
+    setValue('userId', selectedUser.id);
+  }, [selectedUser, setValue]);
 
   return (
     <form
@@ -53,7 +54,7 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
       <div className="flex items-center">
         <UserSelection
           type="slim"
-          user={getValues('user')}
+          user={selectedUser}
           selectUser={onUserSelect}
         />
       </div>

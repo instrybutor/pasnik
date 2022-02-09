@@ -6,6 +6,8 @@ import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import { Input } from '@pasnik/components';
 import { Button } from '@pasnik/components';
 
+import { useUserStore } from '@pasnik/store';
+
 import { useUpdateDish } from './update-dish.hook';
 import { UserSelection } from '../user-selection';
 
@@ -22,32 +24,30 @@ export function UpdateDish({
 }: UpdateDishProps) {
   const { handleSubmit, register, errors, reset, setValue, getValues } =
     useUpdateDish();
+  const selectedUser = useUserStore((state) =>
+    state.users.find((item) => item.id === getValues('userId'))
+  );
 
   const onUserSelect = useCallback(
     (pickedUser) => {
-      setValue('user', pickedUser);
+      setValue('userId', pickedUser.id);
     },
     [setValue]
   );
 
+  console.log(dish, getValues());
+
   useEffect(() => {
     reset({
       name: dish.name,
-      user: dish.user,
+      userId: dish.user.id,
       priceCents: dish.priceCents / 100,
     });
   }, [dish, reset]);
 
   const onSubmit = useCallback(() => {
     const data = getValues();
-    onUpdateDish(
-      {
-        name: data.name,
-        priceCents: data.priceCents,
-        userId: data.user.id,
-      },
-      dish
-    );
+    onUpdateDish(data, dish);
     reset();
   }, [getValues, onUpdateDish, dish, reset]);
 
@@ -61,7 +61,7 @@ export function UpdateDish({
       <div className="flex items-center">
         <UserSelection
           type="slim"
-          user={getValues('user')}
+          user={selectedUser}
           selectUser={onUserSelect}
         />
       </div>
