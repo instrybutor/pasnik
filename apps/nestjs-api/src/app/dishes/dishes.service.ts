@@ -4,6 +4,7 @@ import {
   DishesRepository,
   OrderEntity,
   UserEntity,
+  UsersRepository,
 } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
@@ -11,7 +12,9 @@ import { AddDishDto } from '@pasnik/api/data-transfer';
 export class DishesService {
   constructor(
     @InjectRepository(DishesRepository)
-    private dishesRepository: DishesRepository
+    private dishesRepository: DishesRepository,
+    @InjectRepository(UsersRepository)
+    private usersRepository: UsersRepository
   ) {}
 
   findAll(order: OrderEntity) {
@@ -31,8 +34,19 @@ export class DishesService {
     });
   }
 
-  async create(addDishDto: AddDishDto, order: OrderEntity, user: UserEntity) {
-    const dish = await this.dishesRepository.addDish(addDishDto, order, user);
+  async create(
+    addDishDto: AddDishDto,
+    order: OrderEntity,
+    createdBy: UserEntity
+  ) {
+    const dishOwner =
+      (await this.usersRepository.findOne(addDishDto.userId)) ?? createdBy;
+    const dish = await this.dishesRepository.addDish(
+      addDishDto,
+      order,
+      dishOwner,
+      createdBy
+    );
 
     return this.findOne(order, dish.id);
   }
@@ -41,9 +55,22 @@ export class DishesService {
     return await this.dishesRepository.delete({ id, order });
   }
 
-  async update(order: OrderEntity, dishId: number, addDishDto: AddDishDto) {
+  async update(
+    order: OrderEntity,
+    dishId: number,
+    addDishDto: AddDishDto,
+    createdBy: UserEntity
+  ) {
+    const dishOwner =
+      (await this.usersRepository.findOne(addDishDto.userId)) ?? createdBy;
+
     const dish = await this.findOne(order, dishId);
-    await this.dishesRepository.updateDish(addDishDto, dish);
+    await this.dishesRepository.updateDish(
+      addDishDto,
+      dish,
+      dishOwner,
+      createdBy
+    );
 
     return this.findOne(order, dish.id);
   }

@@ -32,6 +32,9 @@ export class DishEntity implements DishModel {
   @ManyToOne(() => UserEntity)
   user: UserEntity;
 
+  @ManyToOne(() => UserEntity)
+  createdBy: UserEntity;
+
   @CreateDateColumn()
   createdAt: string;
 

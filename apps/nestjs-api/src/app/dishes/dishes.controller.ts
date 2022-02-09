@@ -47,8 +47,9 @@ export class DishesController {
   update(
     @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
-    @Param('id') id: string
+    @Param('id') id: string,
+    @CurrentUser() user: UserEntity
   ) {
-    return this.dishesService.update(order, +id, addDishDto);
+    return this.dishesService.update(order, +id, addDishDto, user);
   }
 }

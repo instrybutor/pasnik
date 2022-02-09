@@ -11,7 +11,7 @@ export interface NavLinkWithParamChildrenProps {
 }
 
 export interface NavLinkWithParamProps extends NavLinkProps {
-  children?: (props: NavLinkWithParamChildrenProps) => ReactElement;
+  children: (props: NavLinkWithParamChildrenProps) => ReactElement;
 }
 
 export function NavLinkWithParam({
