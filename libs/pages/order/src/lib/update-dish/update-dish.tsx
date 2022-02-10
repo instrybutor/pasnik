@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
@@ -6,10 +6,10 @@ import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import { Input } from '@pasnik/components';
 import { Button } from '@pasnik/components';
 
-import { useUserStore } from '@pasnik/store';
-
 import { useUpdateDish } from './update-dish.hook';
 import { UserSelection } from '../user-selection';
+import { useWorkspaceUsers } from '@pasnik/features/workspaces';
+import { useOrderFacade } from '../order-store/order.facade';
 
 export interface UpdateDishProps {
   dish: DishModel;
@@ -22,10 +22,18 @@ export function UpdateDish({
   onUpdateDish,
   onCancelUpdate,
 }: UpdateDishProps) {
+  const {
+    orderQuery: { data: order },
+  } = useOrderFacade();
   const { handleSubmit, register, errors, reset, setValue, getValues } =
     useUpdateDish();
-  const selectedUser = useUserStore((state) =>
-    state.users.find((item) => item.id === getValues('userId'))
+  const { data: users } = useWorkspaceUsers(order?.workspace?.slug);
+
+  const selectedUser = useMemo(
+    () =>
+      users?.find((item) => item.userId === getValues('userId'))?.user ??
+      dish.user,
+    [getValues, users, dish.user]
   );
 
   const onUserSelect = useCallback(
@@ -34,8 +42,6 @@ export function UpdateDish({
     },
     [setValue]
   );
-
-  console.log(dish, getValues());
 
   useEffect(() => {
     reset({

@@ -1,14 +1,16 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
 import { useUserStore } from '@pasnik/store';
 import { AddDishDto, UserModel } from '@pasnik/api/data-transfer';
+import { useWorkspaceUsers } from '@pasnik/features/workspaces';
 import { Input } from '@pasnik/components';
 import { Button } from '@pasnik/components';
 
 import { useAddDish } from './add-dish.hook';
 import { UserSelection } from '../user-selection';
+import { useOrderFacade } from '../order-store/order.facade';
 
 export interface AddDishProps {
   onAdd(addDishDto: AddDishDto): void;
@@ -16,13 +18,19 @@ export interface AddDishProps {
 }
 
 export function AddDish({ onAdd, onCancel }: AddDishProps) {
+  const {
+    orderQuery: { data: order },
+  } = useOrderFacade();
   const { user } = useUserStore();
   const { handleSubmit, register, errors, reset, getValues, setValue } =
     useAddDish();
   const { t } = useTranslation();
-  const selectedUser = useUserStore(
-    (state) =>
-      state.users.find((item) => item.id === getValues('userId')) ?? user
+  const { data: users } = useWorkspaceUsers(order?.workspace?.slug);
+
+  const selectedUser = useMemo(
+    () =>
+      users?.find((item) => item.userId === getValues('userId'))?.user ?? user,
+    [getValues, user, users]
   );
 
   const onSubmit = useCallback(async () => {

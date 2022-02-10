@@ -3,12 +3,12 @@ import React from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { useUserStore } from '@pasnik/store';
-
 import { UserModel } from '@pasnik/api/data-transfer';
 import { UserAvatar, UserInfo, UserName } from '@pasnik/components';
 import { CheckIcon } from '@heroicons/react/outline';
 import { Select } from '@pasnik/components';
+import { useWorkspaceUsers } from '@pasnik/features/workspaces';
+import { useOrderFacade } from '../order-store/order.facade';
 
 enum SelectionType {
   SLIM = 'slim',
@@ -27,8 +27,12 @@ export const UserSelection: React.FC<UserSelectionProps> = ({
   children,
   selectUser,
 }) => {
-  const { users } = useUserStore();
+  const {
+    orderQuery: { data: order },
+  } = useOrderFacade();
+  const { data } = useWorkspaceUsers(order?.workspace?.slug);
   const { t } = useTranslation();
+  const users = data?.map((item) => item.user) ?? [];
 
   const handleUserSelection = useCallback(
     (selectedUser: UserModel) => {
