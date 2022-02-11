@@ -11,8 +11,6 @@ import { AddDishDto, DishModel, UserModel } from '@pasnik/api/data-transfer';
 import { Price } from '@pasnik/components';
 
 import { UserSelection } from '../user-selection';
-import { useCurrentWorkspaceUser } from '@pasnik/features/workspaces';
-import { useOrderFacade } from '../order-store/order.facade';
 
 export interface OrderDishProps {
   inProgress: boolean;
@@ -30,11 +28,7 @@ export function OrderDish({
   onDuplicate,
   onEdit,
 }: OrderDishProps) {
-  const {
-    orderQuery: { data: order },
-  } = useOrderFacade();
   const [isDeleting, setIsDeleting] = useState(false);
-  const currentWorkspaceUser = useCurrentWorkspaceUser(order?.workspace?.slug);
   const { t } = useTranslation();
 
   const deleteHandler = useCallback(() => {
@@ -50,9 +44,8 @@ export function OrderDish({
   }, [onEdit, dish]);
 
   const onDuplicateClick = useCallback(() => {
-    const user = currentWorkspaceUser?.user ?? dish.user;
-    onDuplicate({ ...dish, user });
-  }, [dish, onDuplicate, currentWorkspaceUser]);
+    onDuplicate(dish);
+  }, [dish, onDuplicate]);
 
   useEffect(() => {
     setIsDeleting(false);

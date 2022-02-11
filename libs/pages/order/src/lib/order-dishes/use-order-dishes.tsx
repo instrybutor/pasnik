@@ -46,7 +46,7 @@ export const useOrderDishes = ({ order }: Props) => {
   );
 
   const duplicateDish = useCallback(
-    async ({ name, priceCents, user }: DishModel) => {
+    async ({ name, priceCents }: DishModel) => {
       if (!order) {
         return;
       }
@@ -56,7 +56,6 @@ export const useOrderDishes = ({ order }: Props) => {
         payload: {
           name: name,
           priceCents: priceCents,
-          userId: user.id,
         },
       });
     },
