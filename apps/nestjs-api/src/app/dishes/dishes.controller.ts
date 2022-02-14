@@ -33,9 +33,9 @@ export class DishesController {
   create(
     @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() currentUser: UserEntity
   ) {
-    return this.dishesService.create(addDishDto, order, user);
+    return this.dishesService.create(addDishDto, order, currentUser);
   }
 
   @Delete(':id')

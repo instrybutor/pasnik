@@ -8,14 +8,14 @@ export class DishesRepository extends Repository<DishEntity> {
     addDishDto: AddDishDto,
     order: OrderEntity,
     user: UserEntity,
-    createdBy: UserEntity
+    currentUser: UserEntity
   ) {
     const dish = new DishEntity();
 
     dish.order = order;
     dish.name = addDishDto.name;
     dish.priceCents = addDishDto.priceCents;
-    dish.createdBy = createdBy;
+    dish.createdBy = currentUser;
     dish.user = user;
 
     return this.save(dish);
@@ -25,12 +25,12 @@ export class DishesRepository extends Repository<DishEntity> {
     addDishDto: AddDishDto,
     dish: DishEntity,
     user: UserEntity,
-    createdBy: UserEntity
+    currentUser: UserEntity
   ) {
     dish.name = addDishDto.name;
     dish.priceCents = addDishDto.priceCents;
     dish.user = user;
-    dish.createdBy = createdBy;
+    dish.createdBy = currentUser;
 
     return this.save(dish);
   }

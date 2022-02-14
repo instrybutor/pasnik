@@ -37,15 +37,18 @@ export class DishesService {
   async create(
     addDishDto: AddDishDto,
     order: OrderEntity,
-    createdBy: UserEntity
+    currentUser: UserEntity
   ) {
     const dishOwner =
-      (await this.usersRepository.findOne(addDishDto.userId)) ?? createdBy;
+      (await this.usersRepository.findOne({
+        where: { id: addDishDto.userId },
+      })) ?? currentUser;
+
     const dish = await this.dishesRepository.addDish(
       addDishDto,
       order,
       dishOwner,
-      createdBy
+      currentUser
     );
 
     return this.findOne(order, dish.id);
