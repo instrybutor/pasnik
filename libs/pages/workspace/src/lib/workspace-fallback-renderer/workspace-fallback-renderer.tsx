@@ -16,7 +16,7 @@ export function WorkspaceFallbackRenderer({
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError;
     return axiosError.response?.status === 403 ? (
-      <WorkspaceRequestAccess slug={slug} />
+      <WorkspaceRequestAccess slug={slug} retry={resetErrorBoundary} />
     ) : axiosError.response?.status === 302 ? (
       <WorkspaceRequestAccessPending />
     ) : (

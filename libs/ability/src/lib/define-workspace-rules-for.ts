@@ -19,6 +19,7 @@ export enum WorkspacesAction {
   Join = 'join',
   CreateOrder = 'createOrder',
   RequestAccess = 'request-access',
+  ApproveAccess = 'approve-access',
 }
 
 export enum WorkspaceUsersAction {
@@ -97,6 +98,7 @@ function defineWorkspaceUserRules(
   { can, cannot }: AppAbilityBuilder,
   workspaceUser: WorkspaceUserModel
 ) {
+  can(WorkspacesAction.Create, 'WorkspaceModel');
   can(WorkspacesAction.Leave, 'WorkspaceModel');
   can(WorkspacesAction.Read, 'WorkspaceModel');
   cannot(WorkspacesAction.Join, 'WorkspaceModel');

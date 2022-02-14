@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/outline';
-import { PopoverPanelProps, UserAvatar, UserInfo } from '@pasnik/components';
+import { PopoverPanelProps, UserInfo } from '@pasnik/components';
 import { UserAddIcon } from '@heroicons/react/solid';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -91,18 +91,21 @@ export function WorkspaceUserInvitePopover({
           </button>
         </div>
       </form>
-      {fields.length > 0 ? (
+      {fields.length > 0 || (requestAccesses && requestAccesses.length > 0) ? (
         <ul className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
           {requestAccesses?.map(({ id, user }) => (
             <li key={id} className="py-3 flex justify-between items-center">
               <div className="flex items-center">
-                <UserInfo user={user} />
+                <UserInfo size="sm" user={user} />
               </div>
               <button
                 type="button"
+                onClick={() => {
+                  insert(0, user);
+                }}
                 className="ml-6 bg-white rounded-md text-sm font-medium text-cyan-600 hover:text-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
               >
-                Usuń
+                Zatwierdź
               </button>
             </li>
           ))}
@@ -112,10 +115,7 @@ export function WorkspaceUserInvitePopover({
               className="py-3 flex justify-between items-center"
             >
               <div className="flex items-center">
-                <UserAvatar size="sm" />
-                <p className="ml-4 text-sm font-medium text-gray-900">
-                  {value.email}
-                </p>
+                <UserInfo size="sm" fallbackValue={value.email} />
               </div>
               <button
                 onClick={() => {

@@ -14,7 +14,7 @@ export const useWorkspaceRequestAccessMutation = (slug: string) => {
     },
     {
       onSuccess: async () => {
-        queryClient.invalidateQueries(queryKey);
+        await queryClient.invalidateQueries(queryKey);
       },
     }
   );

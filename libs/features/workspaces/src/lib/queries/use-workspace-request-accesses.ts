@@ -4,10 +4,10 @@ import { WorkspaceAccessRequestModel } from '@pasnik/api/data-transfer';
 
 export const useWorkspaceRequestAccesses = (slug?: string) => {
   return useQuery(
-    ['workspaces', slug, 'request-accesses'],
+    ['workspaces', slug, 'access-requests'],
     async () => {
       const { data } = await axios.get<WorkspaceAccessRequestModel[]>(
-        `/api/workspaces/${slug}/request-accesses`
+        `/api/workspaces/${slug}/access-requests`
       );
       return data;
     },
@@ -15,6 +15,7 @@ export const useWorkspaceRequestAccesses = (slug?: string) => {
       retry: false,
       enabled: Boolean(slug),
       refetchOnMount: false,
+      useErrorBoundary: false,
     }
   );
 };

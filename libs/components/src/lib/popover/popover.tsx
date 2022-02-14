@@ -35,6 +35,7 @@ export function Popover({
   );
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'bottom',
+    strategy: 'fixed',
   });
 
   return (
@@ -58,8 +59,8 @@ export function Popover({
           >
             <HeadlessPopover.Panel
               focus={true}
-              unmount={false}
               children={panel}
+              static={true}
               className="bg-white px-4 sm:px-0 rounded-lg"
             />
           </Transition>

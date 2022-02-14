@@ -1,19 +1,38 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 
 import { WorkspacesService } from './workspaces.service';
 import {
   AddMembersToWorkspaceDto,
   CreateOrderDto,
   CreateWorkspaceDto,
-  UpdateWorkspaceDto
+  UpdateWorkspaceDto,
+  WorkspacePrivacy,
 } from '@pasnik/api/data-transfer';
 import { CurrentUser } from '@pasnik/nestjs/auth';
-import { UserEntity, WorkspaceEntity, WorkspaceUserEntity } from '@pasnik/nestjs/database';
+import {
+  UserEntity,
+  WorkspaceEntity,
+  WorkspaceUserEntity,
+} from '@pasnik/nestjs/database';
 import { CurrentWorkspace } from './current-workspace.decorator';
-import { AppAbility, WorkspacesAction, WorkspaceUsersAction } from '@pasnik/ability';
+import {
+  AppAbility,
+  WorkspacesAction,
+  WorkspaceUsersAction,
+} from '@pasnik/ability';
 import { ForbiddenError } from '@casl/ability';
 import { CurrentAbility } from '../app-ability';
 import { CurrentWorkspaceUser } from './current-workspace-user.decorator';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 @Controller('workspaces')
 export class WorkspacesController {
@@ -25,15 +44,29 @@ export class WorkspacesController {
   }
 
   @Get(':workspaceSlug')
-  findOne(
+  async findOne(
+    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity,
     @CurrentWorkspace() workspace: WorkspaceEntity,
-    @CurrentAbility() ability: AppAbility
+    @CurrentAbility() ability: AppAbility,
+    @CurrentUser() user: UserEntity
   ) {
-    ForbiddenError.from(ability).throwUnlessCan(
-      WorkspacesAction.Read,
-      workspace
+    if (workspaceUser) {
+      ForbiddenError.from(ability).throwUnlessCan(
+        WorkspacesAction.Read,
+        workspace
+      );
+      return workspace;
+    } else if (workspace.privacy === WorkspacePrivacy.Public) {
+      return workspace;
+    }
+    const accessRequest = await this.workspacesService.findAccessRequest(
+      workspace,
+      user
     );
-    return workspace;
+    if (accessRequest) {
+      throw new HttpException('Pending', HttpStatus.FOUND);
+    }
+    throw new HttpException('Not invited', HttpStatus.FORBIDDEN);
   }
 
   @Post()
@@ -43,7 +76,7 @@ export class WorkspacesController {
     @CurrentAbility() ability: AppAbility
   ) {
     ForbiddenError.from(ability).throwUnlessCan(
-      WorkspacesAction.Read,
+      WorkspacesAction.Create,
       'WorkspaceModel'
     );
     return this.workspacesService.create(createWorkspaceDto, user);
@@ -88,6 +121,18 @@ export class WorkspacesController {
     return this.workspacesService.joinWorkspace(workspace, user);
   }
 
+  @Get(':workspaceSlug/access-requests')
+  accessRequests(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.ApproveAccess,
+      workspace
+    );
+    return this.workspacesService.findAccessRequests(workspace);
+  }
+
   @Put(':workspaceSlug/request-access')
   requestAccess(
     @CurrentUser() user: UserEntity,
@@ -129,19 +174,40 @@ export class WorkspacesController {
   }
 
   @Get(':workspaceSlug/orders/active')
-  findActiveOrders(@CurrentWorkspace() workspace: WorkspaceEntity) {
+  findActiveOrders(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Read,
+      workspace
+    );
     return this.workspacesService.findActiveOrders(workspace);
   }
 
   @Get(':workspaceSlug/orders/inactive')
-  findInactiveOrders(@CurrentWorkspace() workspace: WorkspaceEntity) {
+  findInactiveOrders(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Read,
+      workspace
+    );
     return this.workspacesService.findInactiveOrders(workspace);
   }
 
   // WorkspaceUsers
 
   @Get(':workspaceSlug/users')
-  findUsers(@CurrentWorkspace() workspace: WorkspaceEntity) {
+  findUsers(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Read,
+      workspace
+    );
     return this.workspacesService.findUsers(workspace);
   }
 

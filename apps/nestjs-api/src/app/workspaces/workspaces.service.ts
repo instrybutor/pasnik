@@ -159,6 +159,9 @@ export class WorkspacesService {
       const workspaceUsersRepository = manager.getCustomRepository(
         WorkspaceUsersRepository
       );
+      const workspaceAccessRequestsRepository = manager.getCustomRepository(
+        WorkspaceAccessRequestsRepository
+      );
 
       const users = await usersRepository.find({
         where: { email: In(emails) },
@@ -172,6 +175,10 @@ export class WorkspacesService {
             (workspaceUser) => workspaceUser.userId === user.id
           )
       );
+
+      await workspaceAccessRequestsRepository.delete({
+        user: { email: In(emails) },
+      });
       await Promise.all(
         filteredUsers.map((user) =>
           workspaceUsersRepository.addMember(workspace, user)
@@ -187,16 +194,30 @@ export class WorkspacesService {
   }
 
   async joinWorkspace(workspace: WorkspaceEntity, user: UserEntity) {}
+
   async requestAccess(workspace: WorkspaceEntity, user: UserEntity) {
-    const requestAccess = this.workspaceAccessRequestsRepository.findOne({
+    const requestAccess = await this.workspaceAccessRequestsRepository.findOne({
       where: { workspace, user },
     });
     if (requestAccess) {
       return;
     }
-    return await this.workspaceAccessRequestsRepository.create({
+    return await this.workspaceAccessRequestsRepository.createAccessRequest(
       workspace,
-      user,
+      user
+    );
+  }
+
+  async findAccessRequest(workspace: WorkspaceEntity, user: UserEntity) {
+    return await this.workspaceAccessRequestsRepository.findOne({
+      where: { workspace, user },
+    });
+  }
+
+  async findAccessRequests(workspace: WorkspaceEntity) {
+    return await this.workspaceAccessRequestsRepository.find({
+      where: { workspace },
+      relations: ['user'],
     });
   }
 }
