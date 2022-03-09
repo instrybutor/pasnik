@@ -10,22 +10,34 @@ import {
   addMembersToWorkspaceValidator,
   emailValidator,
 } from '@pasnik/api/data-transfer';
-import { useWorkspaceRequestAccesses } from '@pasnik/features/workspaces';
+import {
+  useWorkspaceAddMembersMutation,
+  useWorkspaceRequestAccesses,
+} from '@pasnik/features/workspaces';
+import { WorkspaceUserInviteItem } from '../workspace-user-invite-item/workspace-user-invite-item';
 
 export interface WorkspaceUserInvitePopoverProps extends PopoverPanelProps {
   slug: string;
 }
 
+// interface WorkspaceUserInviteForm {
+//   members: {
+//     user: Partial<UserModel>;
+//   }[];
+// }
+
 export function WorkspaceUserInvitePopover({
   open,
   slug,
+  close,
 }: WorkspaceUserInvitePopoverProps) {
   const { data: requestAccesses } = useWorkspaceRequestAccesses(slug);
+  const addMembersMutation = useWorkspaceAddMembersMutation(slug);
 
   const { register, handleSubmit, reset } = useForm({
     resolver: yupResolver(
       yup.object().shape({
-        email: emailValidator.required(),
+        email: emailValidator,
       })
     ),
   });
@@ -43,21 +55,28 @@ export function WorkspaceUserInvitePopover({
     name: 'members',
   });
 
-  const onSubmit = useCallback(
-    (data) => {
-      insert(0, data);
-      reset();
-    },
-    [insert, reset]
-  );
-
   const onSubmitButtonClick = useCallback(() => {
     const values = getValues();
-    console.log(values);
-  }, [getValues]);
+    if (values.members.length > 0) {
+      addMembersMutation.mutate(values);
+      close();
+    }
+  }, [close, getValues, addMembersMutation]);
+
+  const onSubmit = useCallback(
+    (data) => {
+      if (data.email.length > 0) {
+        insert(0, data);
+        reset();
+      } else {
+        onSubmitButtonClick();
+      }
+    },
+    [insert, reset, onSubmitButtonClick]
+  );
 
   useEffect(() => {
-    if (!open) {
+    if (open) {
       reset();
       resetMembers();
     }
@@ -76,6 +95,7 @@ export function WorkspaceUserInvitePopover({
             </label>
             <input
               {...register('email')}
+              autoFocus={true}
               type="text"
               id="invite-user-email"
               className="focus:ring-cyan-500 focus:border-cyan-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300"
@@ -101,7 +121,9 @@ export function WorkspaceUserInvitePopover({
               <button
                 type="button"
                 onClick={() => {
-                  insert(0, user);
+                  addMembersMutation.mutateAsync({
+                    members: [{ email: user.email }],
+                  });
                 }}
                 className="ml-6 bg-white rounded-md text-sm font-medium text-cyan-600 hover:text-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
               >
@@ -109,24 +131,13 @@ export function WorkspaceUserInvitePopover({
               </button>
             </li>
           ))}
-          {fields.map((value, index) => (
-            <li
-              key={value.id}
-              className="py-3 flex justify-between items-center"
-            >
-              <div className="flex items-center">
-                <UserInfo size="sm" fallbackValue={value.email} />
-              </div>
-              <button
-                onClick={() => {
-                  remove(index);
-                }}
-                type="button"
-                className="ml-6 bg-white rounded-md text-sm font-medium text-cyan-600 hover:text-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              >
-                Usuń
-              </button>
-            </li>
+          {fields.map((field, index) => (
+            <WorkspaceUserInviteItem
+              key={index}
+              remove={() => remove(index)}
+              control={control}
+              name={`members.${index}.email`}
+            />
           ))}
         </ul>
       ) : (

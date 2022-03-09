@@ -167,7 +167,11 @@ export class WorkspacesService {
         where: { email: In(emails) },
       });
       const workspaceUsers = await workspaceUsersRepository.find({
-        where: { user: In(users) },
+        where: {
+          userId: In(users.map(({ id }) => id)),
+          workspace,
+          isRemoved: false,
+        },
       });
       const filteredUsers = users.filter(
         (user) =>
@@ -177,23 +181,23 @@ export class WorkspacesService {
       );
 
       await workspaceAccessRequestsRepository.delete({
-        user: { email: In(emails) },
+        userId: In(filteredUsers.map(({ id }) => id)),
       });
-      await Promise.all(
+      return await Promise.all(
         filteredUsers.map((user) =>
           workspaceUsersRepository.addMember(workspace, user)
         )
       );
-
-      return await this.findUsers(workspace);
     });
   }
 
-  async removeMember(workspaceUser: WorkspaceUserEntity) {
-    return this.workspaceUsersRepository.removeMember(workspaceUser);
+  async joinWorkspace(user: UserEntity, workspace: WorkspaceEntity) {
+    return await this.workspaceUsersRepository.addMember(workspace, user);
   }
 
-  async joinWorkspace(workspace: WorkspaceEntity, user: UserEntity) {}
+  async removeMember(workspaceUser: WorkspaceUserEntity) {
+    return await this.workspaceUsersRepository.removeMember(workspaceUser);
+  }
 
   async requestAccess(workspace: WorkspaceEntity, user: UserEntity) {
     const requestAccess = await this.workspaceAccessRequestsRepository.findOne({

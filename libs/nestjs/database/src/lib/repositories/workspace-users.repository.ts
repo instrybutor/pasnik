@@ -18,7 +18,7 @@ export class WorkspaceUsersRepository extends Repository<WorkspaceUserEntity> {
     return this.save(workspaceUser);
   }
 
-  removeMember(workspaceUser: WorkspaceUserEntity) {
+  async removeMember(workspaceUser: WorkspaceUserEntity) {
     workspaceUser.isRemoved = true;
 
     return this.save(workspaceUser);

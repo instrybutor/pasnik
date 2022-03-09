@@ -26,7 +26,7 @@ export class WorkspacesMiddleware implements NestMiddleware {
     }
 
     const workspaceUser = await this.workspaceUsersRepository.findOne({
-      where: { workspace, user },
+      where: { workspace, user, isRemoved: false },
       relations: ['user', 'workspace'],
     });
 

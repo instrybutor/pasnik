@@ -35,7 +35,7 @@ export function Popover({
   );
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'bottom',
-    strategy: 'fixed',
+    strategy: 'absolute',
   });
 
   return (
@@ -47,6 +47,8 @@ export function Popover({
       <Portal>
         <div ref={popperElRef} style={styles.popper} {...attributes.popper}>
           <Transition
+            appear={true}
+            static={true}
             as={Fragment}
             enter="transition ease-out duration-200"
             enterFrom="opacity-0 translate-y-1"
@@ -54,13 +56,13 @@ export function Popover({
             leave="transition ease-in duration-150"
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
-            beforeEnter={() => setPopperElement(popperElRef.current ?? null)}
+            beforeEnter={() => setPopperElement(popperElRef.current)}
             afterLeave={() => setPopperElement(null)}
           >
             <HeadlessPopover.Panel
               focus={true}
-              children={panel}
               static={true}
+              children={panel}
               className="bg-white px-4 sm:px-0 rounded-lg"
             />
           </Transition>

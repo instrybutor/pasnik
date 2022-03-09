@@ -16,10 +16,10 @@ export function WorkspaceHeaderUsers() {
   const userPopoverElement = useCallback(
     ({ workspaceUser }: UsersPopoverElementProps) => (
       <div className="bg-white p-4 w-72">
-        <WorkspaceUserPopover user={workspaceUser} />
+        <WorkspaceUserPopover user={workspaceUser} slug={slug!} />
       </div>
     ),
-    []
+    [slug]
   );
 
   return (

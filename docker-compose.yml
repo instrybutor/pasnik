@@ -20,6 +20,7 @@ services:
     expose:
       - 6379
   api:
+    container_name: pasnik-api
     build:
       context: ""
       dockerfile: docker/serve.DockerFile
@@ -42,6 +43,7 @@ services:
     expose:
       - 3334
   bff:
+    container_name: pasnik-bff
     build:
       context: ""
       dockerfile: docker/serve.DockerFile

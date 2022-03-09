@@ -18,3 +18,4 @@ export * from './lib/drawer/drawer';
 export * from './lib/container/container';
 export * from './lib/panel/panel';
 export * from './lib/popover/popover';
+export * from './lib/confirm-button/confirm-button';

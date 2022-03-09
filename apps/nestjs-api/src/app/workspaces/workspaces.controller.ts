@@ -118,7 +118,7 @@ export class WorkspacesController {
       WorkspacesAction.Join,
       workspace
     );
-    return this.workspacesService.joinWorkspace(workspace, user);
+    return this.workspacesService.joinWorkspace(user, workspace);
   }
 
   @Get(':workspaceSlug/access-requests')
@@ -229,7 +229,7 @@ export class WorkspacesController {
 
   @Delete(':workspaceSlug/users/:id')
   async removeMemberFromWorkspace(
-    @Param(':id') workspaceUserId: string,
+    @Param('id') workspaceUserId: string,
     @CurrentAbility() ability: AppAbility
   ) {
     const workspaceUser = await this.workspacesService.findUserById(
@@ -239,6 +239,6 @@ export class WorkspacesController {
       WorkspaceUsersAction.Delete,
       workspaceUser
     );
-    return this.workspacesService.removeMember(workspaceUser);
+    return await this.workspacesService.removeMember(workspaceUser);
   }
 }

@@ -33,6 +33,9 @@ export class WorkspaceAccessRequestEntity
   @ManyToOne(() => UserEntity)
   user: UserEntity;
 
+  @Column()
+  userId: number;
+
   @Column({ type: 'varchar' })
   status: WorkspaceAccessRequestStatus;
 }

@@ -5,7 +5,7 @@ import { ReactElement } from 'react';
 export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg' | 'xxlg';
 
 export interface UserAvatarProps {
-  user?: UserModel | null;
+  user?: Partial<UserModel> | null;
   size?: UserAvatarSize;
   className?: string;
   fallback?: ReactElement | null;
@@ -17,10 +17,10 @@ export function UserAvatar({
   className,
   fallback,
 }: UserAvatarProps) {
-  const formatInitials = ({ givenName, familyName }: UserModel) =>
+  const formatInitials = ({ givenName, familyName }: Partial<UserModel>) =>
     `${givenName![0]}${familyName![0]}`;
 
-  const formatName = ({ givenName, familyName }: UserModel) =>
+  const formatName = ({ givenName, familyName }: Partial<UserModel>) =>
     `${givenName!} ${familyName!}`;
 
   const sizeClasses = classNames({

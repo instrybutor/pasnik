@@ -32,7 +32,6 @@ export enum WorkspaceUsersAction {
 
 export enum OrdersAction {
   Manage = 'manage',
-  Create = 'create',
   Read = 'read',
   Update = 'update',
   Delete = 'delete',
@@ -102,9 +101,9 @@ function defineWorkspaceUserRules(
   can(WorkspacesAction.Leave, 'WorkspaceModel');
   can(WorkspacesAction.Read, 'WorkspaceModel');
   cannot(WorkspacesAction.Join, 'WorkspaceModel');
+  can(WorkspacesAction.CreateOrder, 'WorkspaceModel');
 
   // OrderModel
-  can(OrdersAction.Create, 'OrderModel');
   can(OrdersAction.Read, 'OrderModel');
   can(OrdersAction.Update, 'OrderModel', {
     userId: workspaceUser.user!.id,
