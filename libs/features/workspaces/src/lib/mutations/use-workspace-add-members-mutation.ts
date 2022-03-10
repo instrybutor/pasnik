@@ -16,7 +16,7 @@ export const useWorkspaceAddMembersMutation = (slug: string) => {
   ];
   return useMutation(
     async (addMembersDto: AddMembersToWorkspaceDto) => {
-      const { data } = await axios.put<WorkspaceUserModel[]>(
+      const { data } = await axios.post<WorkspaceUserModel[]>(
         `/api/workspaces/${slug}/users`,
         addMembersDto
       );

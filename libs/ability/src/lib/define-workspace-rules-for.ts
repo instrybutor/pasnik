@@ -28,6 +28,8 @@ export enum WorkspaceUsersAction {
   Read = 'read',
   Update = 'update',
   Delete = 'delete',
+  Promote = 'promote',
+  Demote = 'demote',
 }
 
 export enum OrdersAction {
@@ -74,25 +76,39 @@ function defineWorkspaceOwnerRules(
   cannot(WorkspacesAction.Leave, 'WorkspaceModel');
 
   // WorkspaceUserModel
-  can(WorkspaceUsersAction.Manage, 'WorkspaceUserModel');
+  // can(WorkspaceUsersAction.Manage, 'WorkspaceUserModel');
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     id: workspaceUser.id,
+  });
+  // can(WorkspaceUsersAction.Manage, 'WorkspaceUserModel');
+
+  can(WorkspaceUsersAction.Promote, 'WorkspaceUserModel', {
+    role: WorkspaceUserRole.User,
   });
 
   // OrderModel
   can(OrdersAction.Manage, 'OrderModel');
 }
+
 function defineWorkspaceAdminRules(
   { can, cannot }: AppAbilityBuilder,
   workspaceUser: WorkspaceUserModel
 ) {
   can(WorkspacesAction.Update, 'WorkspaceModel');
 
-  can(WorkspaceUsersAction.Manage, 'WorkspaceUserModel');
+  can(WorkspaceUsersAction.Create, 'WorkspaceUserModel');
+  can(WorkspaceUsersAction.Demote, 'WorkspaceUserModel', {
+    role: WorkspaceUserRole.Admin,
+  });
+
+  can(WorkspaceUsersAction.Update, 'WorkspaceUserModel');
+
+  can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel');
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     id: workspaceUser.id,
   });
 }
+
 function defineWorkspaceUserRules(
   { can, cannot }: AppAbilityBuilder,
   workspaceUser: WorkspaceUserModel
@@ -131,6 +147,7 @@ function defineWorkspaceUserRules(
     status: OrderStatus.Delivered,
   });
 }
+
 function defineWorkspaceAnonymousRules({ can }: AppAbilityBuilder) {
   can(WorkspacesAction.Create, 'WorkspaceModel');
   can(WorkspacesAction.Read, 'WorkspaceModel', {
@@ -159,6 +176,7 @@ export function defineWorkspaceRulesFor(
   switch (workspaceUser?.role) {
     case WorkspaceUserRole.Owner:
       defineWorkspaceOwnerRules(builder, workspaceUser);
+      defineWorkspaceAdminRules(builder, workspaceUser);
       break;
     case WorkspaceUserRole.Admin:
       defineWorkspaceAdminRules(builder, workspaceUser);

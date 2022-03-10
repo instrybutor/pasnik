@@ -15,6 +15,7 @@ import {
   CreateOrderDto,
   CreateWorkspaceDto,
   UpdateWorkspaceDto,
+  UpdateWorkspaceUserDto,
   WorkspacePrivacy,
 } from '@pasnik/api/data-transfer';
 import { CurrentUser } from '@pasnik/nestjs/auth';
@@ -211,7 +212,7 @@ export class WorkspacesController {
     return this.workspacesService.findUsers(workspace);
   }
 
-  @Put(':workspaceSlug/users')
+  @Post(':workspaceSlug/users')
   addMembersToWorkspace(
     @Body() addMembersToWorkspaceDto: AddMembersToWorkspaceDto,
     @CurrentWorkspace() workspace: WorkspaceEntity,
@@ -240,5 +241,24 @@ export class WorkspacesController {
       workspaceUser
     );
     return await this.workspacesService.removeMember(workspaceUser);
+  }
+
+  @Put(':workspaceSlug/users/:id')
+  async updateMemberInWorkspace(
+    @Param('id') workspaceUserId: string,
+    @CurrentAbility() ability: AppAbility,
+    @Body() updateWorkspaceUserDto: UpdateWorkspaceUserDto
+  ) {
+    const workspaceUser = await this.workspacesService.findUserById(
+      workspaceUserId
+    );
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspaceUsersAction.Update,
+      workspaceUser
+    );
+    return await this.workspacesService.updateMember(
+      workspaceUser,
+      updateWorkspaceUserDto
+    );
   }
 }

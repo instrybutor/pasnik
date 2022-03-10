@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { Dialog } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { TrashIcon, XIcon } from '@heroicons/react/outline';
 import {
   CreateWorkspaceDto,
   updateWorkspaceValidator,
@@ -9,8 +9,15 @@ import {
 } from '@pasnik/api/data-transfer';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useWorkspaceUpdateMutation } from '../mutations';
+import {
+  useWorkspaceRemoveMutation,
+  useWorkspaceUpdateMutation,
+} from '../mutations';
 import { Drawer } from '@pasnik/components';
+import { Can, WorkspacesAction } from '@pasnik/ability';
+import { useUserStore } from '@pasnik/store';
+import { useWorkspaces } from '../queries';
+import { useNavigate } from 'react-router-dom';
 
 export interface UpdateWorkspaceDrawerProps {
   workspace: WorkspaceModel;
@@ -35,6 +42,10 @@ export const UpdateWorkspaceDrawer = ({
 
   const updateWorkspace = useWorkspaceUpdateMutation(workspace.slug);
   const nameInputLabel = useRef(null);
+  const { changeWorkspace } = useUserStore();
+  const { data: workspaces } = useWorkspaces();
+  const navigate = useNavigate();
+  const removeWorkspace = useWorkspaceRemoveMutation(workspace.slug);
 
   useEffect(() => {
     if (isOpen) {
@@ -51,6 +62,17 @@ export const UpdateWorkspaceDrawer = ({
     },
     [updateWorkspace, onSuccess]
   );
+
+  const onWorkspaceRemove = useCallback(async () => {
+    await removeWorkspace.mutateAsync();
+    const nextWorkspace = workspaces?.find(
+      (_workspace) => _workspace.id !== workspace.id
+    );
+    if (nextWorkspace) {
+      await changeWorkspace(nextWorkspace);
+      navigate(`/workspace/${nextWorkspace.slug}`);
+    }
+  }, [removeWorkspace, workspace, changeWorkspace, workspaces, navigate]);
 
   return (
     <Drawer show={isOpen} onClose={onCancel} initialFocus={nameInputLabel}>
@@ -189,21 +211,33 @@ export const UpdateWorkspaceDrawer = ({
             </div>
           </div>
         </div>
-        <div className="flex-shrink-0 px-4 py-4 flex justify-end">
-          <button
-            type="button"
-            className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-            onClick={onCancel}
-          >
-            Anuluj
-          </button>
-          <button
-            type="submit"
-            disabled={updateWorkspace.isLoading}
-            className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-          >
-            Zapisz
-          </button>
+        <div className="flex-shrink-0 px-4 py-4 flex justify-between">
+          <Can I={WorkspacesAction.Delete} this={workspace}>
+            <button
+              onClick={onWorkspaceRemove}
+              type="button"
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              <TrashIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              Usuń
+            </button>
+          </Can>
+          <div>
+            <button
+              type="button"
+              className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+              onClick={onCancel}
+            >
+              Anuluj
+            </button>
+            <button
+              type="submit"
+              disabled={updateWorkspace.isLoading}
+              className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+            >
+              Zapisz
+            </button>
+          </div>
         </div>
       </form>
     </Drawer>

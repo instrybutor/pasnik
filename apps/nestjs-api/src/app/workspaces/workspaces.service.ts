@@ -19,6 +19,7 @@ import {
   OrderAction,
   OrderStatus,
   UpdateWorkspaceDto,
+  UpdateWorkspaceUserDto,
 } from '@pasnik/api/data-transfer';
 import { Connection, In } from 'typeorm';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
@@ -223,5 +224,15 @@ export class WorkspacesService {
       where: { workspace },
       relations: ['user'],
     });
+  }
+
+  async updateMember(
+    workspaceUser: WorkspaceUserEntity,
+    updateUserDto: UpdateWorkspaceUserDto
+  ) {
+    return this.workspaceUsersRepository.updateMember(
+      workspaceUser,
+      updateUserDto
+    );
   }
 }

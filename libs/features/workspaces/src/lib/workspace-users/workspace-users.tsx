@@ -1,11 +1,5 @@
 import { WorkspaceUserModel } from '@pasnik/api/data-transfer';
-import {
-  ChangeEvent,
-  ReactElement,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import { WorkspaceUsersSkeleton } from './workspace-users-skeleton';
 import {
   Popover,
@@ -13,16 +7,16 @@ import {
   UserAvatarSize,
   UserName,
 } from '@pasnik/components';
+import {
+  WorkspaceUsersContainer,
+  WorkspaceUsersContainerProps,
+} from './workspace-users-container';
 
-export interface UsersPopoverElementProps {
-  workspaceUser: WorkspaceUserModel;
-}
-
-export interface UsersProps {
+export interface WorkspaceUsersProps {
   users?: WorkspaceUserModel[];
   avatarSize?: UserAvatarSize;
   usersToShow?: number;
-  popoverElement?: (props: UsersPopoverElementProps) => ReactElement;
+  popoverElement?: WorkspaceUsersContainerProps['popoverElement'];
 }
 
 export function WorkspaceUsers({
@@ -30,39 +24,14 @@ export function WorkspaceUsers({
   avatarSize,
   usersToShow,
   popoverElement,
-}: UsersProps) {
+}: WorkspaceUsersProps) {
   const [visibleUsers, setVisibleUsers] = useState<WorkspaceUserModel[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<WorkspaceUserModel[]>([]);
-  const [filterValue, setFilterValue] = useState('');
-  const [selectedUser, setSelectedUser] = useState<WorkspaceUserModel | null>(
-    null
-  );
 
   useEffect(() => {
     if (users) {
       setVisibleUsers(users.slice(0, usersToShow ?? users.length));
     }
   }, [usersToShow, users, setVisibleUsers]);
-
-  useEffect(() => {
-    if (users) {
-      setFilteredUsers(
-        users.filter(({ user }) =>
-          [user?.givenName, user?.familyName]
-            .join(' ')
-            .toLowerCase()
-            .includes(filterValue.toLowerCase())
-        )
-      );
-    }
-  }, [filterValue, users, setFilteredUsers]);
-
-  const onFilterChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setFilterValue(event.target.value ?? '');
-    },
-    [setFilterValue]
-  );
 
   return (
     <div className="flex items-center space-x-2">
@@ -72,7 +41,7 @@ export function WorkspaceUsers({
             <Popover
               panel={() => (
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                  {popoverElement({ workspaceUser })}
+                  {popoverElement({ user: workspaceUser })}
                 </div>
               )}
               key={workspaceUser.id}
@@ -106,33 +75,11 @@ export function WorkspaceUsers({
         {users && users.length > visibleUsers.length && (
           <Popover
             panel={() => (
-              <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 flex flex-wrap gap-2 max-w-xs">
-                {selectedUser && popoverElement
-                  ? popoverElement({ workspaceUser: selectedUser })
-                  : filteredUsers.map((workspaceUser) => (
-                      <div className="p-4">
-                        <input
-                          placeholder="Szukaj..."
-                          type="text"
-                          id="workspace-name"
-                          className="block w-full shadow-sm sm:text-sm focus:ring-cyan-500 focus:border-cyan-500 border-gray-300 rounded-md mb-2"
-                          onChange={onFilterChange}
-                        />
-                        <button
-                          key={workspaceUser.id}
-                          onClick={() => {
-                            setSelectedUser(workspaceUser);
-                          }}
-                        >
-                          <UserAvatar
-                            user={workspaceUser.user}
-                            size={avatarSize}
-                            className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
-                          />
-                        </button>
-                      </div>
-                    ))}
-              </div>
+              <WorkspaceUsersContainer
+                users={users}
+                popoverElement={popoverElement}
+                avatarSize={avatarSize}
+              />
             )}
             className="relative flex flex-col items-center group"
           >

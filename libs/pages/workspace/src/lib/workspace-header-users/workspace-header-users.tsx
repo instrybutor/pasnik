@@ -1,11 +1,11 @@
 import {
-  UsersPopoverElementProps,
   useWorkspaceUsers,
   WorkspaceUsers,
+  WorkspaceUsersPopoverElementProps,
 } from '@pasnik/features/workspaces';
 import { WorkspaceUserPopover } from '../workspace-user-popover/workspace-user-popover';
 import { useParams } from 'react-router-dom';
-import { useCallback } from 'react';
+import { ReactElement, useCallback } from 'react';
 import { WorkspaceUserInviteButton } from '../workspace-user-invite-button/workspace-user-invite-button';
 import { Can, WorkspaceUsersAction } from '@pasnik/ability';
 
@@ -14,9 +14,9 @@ export function WorkspaceHeaderUsers() {
   const { data: users } = useWorkspaceUsers(slug!);
 
   const userPopoverElement = useCallback(
-    ({ workspaceUser }: UsersPopoverElementProps) => (
+    ({ user }: WorkspaceUsersPopoverElementProps): ReactElement => (
       <div className="bg-white p-4 w-72">
-        <WorkspaceUserPopover user={workspaceUser} slug={slug!} />
+        <WorkspaceUserPopover user={user} slug={slug!} />
       </div>
     ),
     [slug]
