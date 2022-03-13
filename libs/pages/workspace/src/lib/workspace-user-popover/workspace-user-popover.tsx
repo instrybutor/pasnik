@@ -13,6 +13,7 @@ import {
   ChevronDoubleDownIcon,
   ChevronDoubleUpIcon,
 } from '@heroicons/react/outline';
+import { useMemo } from 'react';
 
 export interface WorkspaceUserPopoverProps {
   user: WorkspaceUserModel;
@@ -25,9 +26,20 @@ export function WorkspaceUserPopover({
 }: WorkspaceUserPopoverProps) {
   const deleteUser = useWorkspaceRemoveMembersMutation(slug);
   const updateUser = useWorkspaceUserUpdateMutation(slug, user.id);
+  const role = useMemo(() => {
+    switch (user.role) {
+      case WorkspaceUserRole.Admin:
+        return 'Admistrator';
+      case WorkspaceUserRole.Owner:
+        return 'Właściciel';
+      case WorkspaceUserRole.User:
+        return 'Użytkownik';
+    }
+    return user.role;
+  }, [user.role]);
   return (
     <div className="flex flex-row justify-between items-center">
-      <UserInfo user={user.user}>Rola: {user.role}</UserInfo>
+      <UserInfo user={user.user}>Rola: {role}</UserInfo>
       <div className="inline-flex gap-2">
         <Can I={WorkspaceUsersAction.Promote} this={user}>
           <button
