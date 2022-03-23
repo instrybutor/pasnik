@@ -81,11 +81,9 @@ export function WorkspaceUsers({
                 avatarSize={avatarSize}
               />
             )}
-            className="relative flex flex-col items-center group"
+            className="relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 h-8 w-8 max-w-none ring-2 ring-white"
           >
-            <button className="relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 h-8 w-8 max-w-none ring-2 ring-white">
-              + {users.length - visibleUsers.length}
-            </button>
+            + {users.length - visibleUsers.length}
           </Popover>
         )}
       </div>

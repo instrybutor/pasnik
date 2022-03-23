@@ -41,7 +41,7 @@ export function WorkspaceUsersContainer({
       {selectedUser && popoverElement
         ? popoverElement({ user: selectedUser })
         : filteredUsers.map((workspaceUser) => (
-            <div className="p-4">
+            <div className="p-4" key={workspaceUser.id}>
               <input
                 placeholder="Szukaj..."
                 type="text"

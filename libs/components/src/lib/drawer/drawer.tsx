@@ -14,7 +14,7 @@ export const Drawer = ({
   initialFocus,
 }: PropsWithChildren<DrawerProps>) => {
   return (
-    <Transition.Root show={show} as={Fragment} unmount={false}>
+    <Transition.Root show={show} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 overflow-hidden z-20"

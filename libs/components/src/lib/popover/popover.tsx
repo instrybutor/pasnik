@@ -1,14 +1,16 @@
-import { Popover as HeadlessPopover, Transition } from '@headlessui/react';
+// import { Popover as HeadlessPopover, Transition } from '@headlessui/react';
 import {
-  Fragment,
   FunctionComponent,
   MutableRefObject,
   PropsWithChildren,
   useRef,
-  useState,
 } from 'react';
-import { usePopper } from 'react-popper';
 import { Portal } from 'react-portal';
+import { useFloating } from '@floating-ui/react-dom';
+
+/* eslint @typescript-eslint/no-var-requires: "off" */
+const HeadlessPopover = require('@headlessui/react').Popover;
+const Transition = require('@headlessui/react').Transition;
 
 export interface PopoverPanelProps {
   open: boolean;
@@ -28,40 +30,40 @@ export function Popover({
   children,
 }: PropsWithChildren<PopoverProps>) {
   const popperElRef = useRef(null);
-  const [referenceElement, setReferenceElement] =
-    useState<HTMLButtonElement | null>(null);
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
-    null
-  );
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+
+  const { x, y, strategy, reference, floating } = useFloating({
     placement: 'bottom',
     strategy: 'absolute',
   });
 
   return (
     <HeadlessPopover className="relative">
-      <HeadlessPopover.Button className={className} ref={setReferenceElement}>
+      <HeadlessPopover.Button className={className} ref={reference}>
         {children}
       </HeadlessPopover.Button>
 
       <Portal>
-        <div ref={popperElRef} style={styles.popper} {...attributes.popper}>
+        <div
+          ref={popperElRef}
+          style={{
+            position: strategy,
+            top: y ?? '',
+            left: x ?? '',
+          }}
+        >
           <Transition
-            appear={true}
-            static={true}
-            as={Fragment}
             enter="transition ease-out duration-200"
             enterFrom="opacity-0 translate-y-1"
             enterTo="opacity-100 translate-y-0"
             leave="transition ease-in duration-150"
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
-            beforeEnter={() => setPopperElement(popperElRef.current)}
-            afterLeave={() => setPopperElement(null)}
+            beforeEnter={() => floating(popperElRef.current)}
+            afterLeave={() => floating(null)}
           >
             <HeadlessPopover.Panel
-              focus={true}
               static={true}
+              focus={true}
               children={panel}
               className="bg-white px-4 sm:px-0 rounded-lg"
             />

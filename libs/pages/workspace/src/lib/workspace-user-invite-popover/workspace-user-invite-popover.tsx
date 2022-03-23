@@ -20,12 +20,6 @@ export interface WorkspaceUserInvitePopoverProps extends PopoverPanelProps {
   slug: string;
 }
 
-// interface WorkspaceUserInviteForm {
-//   members: {
-//     user: Partial<UserModel>;
-//   }[];
-// }
-
 export function WorkspaceUserInvitePopover({
   open,
   slug,
