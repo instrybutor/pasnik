@@ -16,12 +16,12 @@ export const Drawer = ({
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog
-        as="div"
+        unmount={false}
         className="fixed inset-0 overflow-hidden z-20"
         onClose={onClose}
         initialFocus={initialFocus}
       >
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="inset-0 overflow-hidden">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

@@ -51,7 +51,7 @@ export function WorkspaceUserInvitePopover({
 
   const onSubmitButtonClick = useCallback(() => {
     const values = getValues();
-    if (values.members.length > 0) {
+    if (values.members?.length > 0) {
       addMembersMutation.mutate(values);
       close();
     }

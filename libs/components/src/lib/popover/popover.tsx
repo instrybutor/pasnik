@@ -1,4 +1,4 @@
-// import { Popover as HeadlessPopover, Transition } from '@headlessui/react';
+import { Popover as HeadlessPopover, Transition } from '@headlessui/react';
 import {
   FunctionComponent,
   MutableRefObject,
@@ -7,10 +7,6 @@ import {
 } from 'react';
 import { Portal } from 'react-portal';
 import { useFloating } from '@floating-ui/react-dom';
-
-/* eslint @typescript-eslint/no-var-requires: "off" */
-const HeadlessPopover = require('@headlessui/react').Popover;
-const Transition = require('@headlessui/react').Transition;
 
 export interface PopoverPanelProps {
   open: boolean;
