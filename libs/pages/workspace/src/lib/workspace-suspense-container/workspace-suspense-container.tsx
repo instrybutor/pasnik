@@ -11,7 +11,7 @@ export function WorkspaceSuspenseContainer() {
               <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-2xl sm:truncate bg-gray-300 h-8 w-2/6" />
               <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
                 <div className="mt-2 flex items-center text-sm text-gray-500">
-                  <WorkspaceUsers.Skeleton usersToShow={11} avatarSize="sm" />
+                  <WorkspaceUsers.Skeleton usersToShow={10} avatarSize="sm" />
                 </div>
               </div>
             </div>
