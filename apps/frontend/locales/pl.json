@@ -143,5 +143,36 @@
     "ordered": "zamówione",
     "delivered": "dostarczone",
     "canceled": "anulowane"
+  },
+  "workspace": {
+    "createDrawer": {
+      "title": "Nowa przestrzeń",
+      "subtitle": "Utwórz nową przestrzeń podając jej nazwę oraz wybierając stopień prywatności"
+    },
+    "updateDrawer": {
+      "title": "Edytuj przestrzeń",
+      "subtitle": "Edytuj przestrzeń zmieniając jej nazwę lub wybierając stopień prywatności"
+    },
+    "name": "Nazwa",
+    "privacy": {
+      "label": "Prywatność",
+      "public": {
+        "label": "Publiczna",
+        "description": "Każdy z linkiem może widzieć tą przestrzeń."
+      },
+      "privateToMembers": {
+        "label": "Prywatna dla członków",
+        "description": "Tylko członkowie tej przestrzeni mają do niej dostęp."
+      },
+      "privateToYou": {
+        "label": "Pywatna dla Ciebie",
+        "description": "Tylko ty masz dostęp do tej przestrzeni."
+      }
+    }
+  },
+  "actions": {
+    "cancel": "Anuluj",
+    "submit": "Zapisz",
+    "delete": "Usuń"
   }
 }

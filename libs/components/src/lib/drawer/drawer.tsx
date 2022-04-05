@@ -1,4 +1,4 @@
-import { Fragment, MutableRefObject, PropsWithChildren } from 'react';
+import { Fragment, MutableRefObject, PropsWithChildren, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
 export interface DrawerProps {
@@ -13,8 +13,19 @@ export const Drawer = ({
   show,
   initialFocus,
 }: PropsWithChildren<DrawerProps>) => {
+  const [showChildren, setShowChildren] = useState(false);
+
   return (
-    <Transition.Root show={show} as={Fragment}>
+    <Transition.Root
+      show={show}
+      as={Fragment}
+      beforeEnter={() => {
+        setShowChildren(true);
+      }}
+      afterLeave={() => {
+        setShowChildren(false);
+      }}
+    >
       <Dialog
         unmount={false}
         className="fixed inset-0 overflow-hidden z-20"
@@ -44,7 +55,9 @@ export const Drawer = ({
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
-              <div className="w-screen max-w-md">{children}</div>
+              <div className="w-screen max-w-md">
+                {showChildren && children}
+              </div>
             </Transition.Child>
           </div>
         </div>

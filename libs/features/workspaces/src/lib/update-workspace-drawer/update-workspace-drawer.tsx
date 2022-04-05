@@ -1,27 +1,13 @@
-import { useCallback, useEffect, useRef } from 'react';
 import { Dialog } from '@headlessui/react';
-import { TrashIcon, XIcon } from '@heroicons/react/outline';
-import {
-  CreateWorkspaceDto,
-  updateWorkspaceValidator,
-  WorkspaceModel,
-  WorkspacePrivacy,
-} from '@pasnik/api/data-transfer';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  useWorkspaceRemoveMutation,
-  useWorkspaceUpdateMutation,
-} from '../mutations';
+import { XIcon } from '@heroicons/react/outline';
+import { WorkspaceModel } from '@pasnik/api/data-transfer';
 import { Drawer } from '@pasnik/components';
-import { Can, WorkspacesAction } from '@pasnik/ability';
-import { useUserStore } from '@pasnik/store';
-import { useWorkspaces } from '../queries';
-import { useNavigate } from 'react-router-dom';
+import { UpdateWorkspaceForm } from '../update-workspace-form/update-workspace-form';
+import { useTranslation } from 'react-i18next';
 
 export interface UpdateWorkspaceDrawerProps {
-  workspace: WorkspaceModel;
   isOpen: boolean;
+  workspace: WorkspaceModel;
   onSuccess: (workspace: WorkspaceModel) => void;
   onCancel: () => void;
 }
@@ -32,59 +18,16 @@ export const UpdateWorkspaceDrawer = ({
   onSuccess,
   isOpen,
 }: UpdateWorkspaceDrawerProps) => {
-  const { register, handleSubmit, reset } = useForm<CreateWorkspaceDto>({
-    resolver: yupResolver(updateWorkspaceValidator),
-    defaultValues: {
-      name: workspace.name,
-      privacy: workspace.privacy,
-    },
-  });
-
-  const updateWorkspace = useWorkspaceUpdateMutation(workspace.slug);
-  const nameInputLabel = useRef(null);
-  const { changeWorkspace } = useUserStore();
-  const { data: workspaces } = useWorkspaces();
-  const navigate = useNavigate();
-  const removeWorkspace = useWorkspaceRemoveMutation(workspace.slug);
-
-  useEffect(() => {
-    if (isOpen) {
-      reset({
-        name: workspace.name,
-        privacy: workspace.privacy,
-      });
-    }
-  }, [isOpen, reset, workspace]);
-
-  const onSubmit = useCallback(
-    (data: CreateWorkspaceDto) => {
-      updateWorkspace.mutateAsync(data).then(onSuccess);
-    },
-    [updateWorkspace, onSuccess]
-  );
-
-  const onWorkspaceRemove = useCallback(async () => {
-    await removeWorkspace.mutateAsync();
-    const nextWorkspace = workspaces?.find(
-      (_workspace) => _workspace.id !== workspace.id
-    );
-    if (nextWorkspace) {
-      await changeWorkspace(nextWorkspace);
-      navigate(`/workspace/${nextWorkspace.slug}`);
-    }
-  }, [removeWorkspace, workspace, changeWorkspace, workspaces, navigate]);
+  const { t } = useTranslation();
 
   return (
-    <Drawer show={isOpen} onClose={onCancel} initialFocus={nameInputLabel}>
-      <form
-        className="h-full divide-y divide-gray-200 flex flex-col bg-white shadow-xl"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className="flex-1 h-0 overflow-y-auto">
+    <Drawer show={isOpen} onClose={onCancel}>
+      <div className="h-full divide-y divide-gray-200 flex flex-col bg-white shadow-xl">
+        <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="py-6 px-4 bg-cyan-700 sm:px-6">
             <div className="flex items-center justify-between">
               <Dialog.Title className="text-lg font-medium text-white">
-                Edytuj przestrzeń
+                {t('workspace.updateDrawer.title')}
               </Dialog.Title>
               <div className="ml-3 h-7 flex items-center">
                 <button
@@ -97,149 +40,20 @@ export const UpdateWorkspaceDrawer = ({
               </div>
             </div>
             <div className="mt-1">
-              <p className="text-sm text-cyan-300" />
+              <p className="text-sm text-cyan-300">
+                {t('workspace.updateDrawer.subtitle')}
+              </p>
             </div>
           </div>
-          <div className="flex-1 flex flex-col justify-between">
-            <div className="px-4 divide-y divide-gray-200 sm:px-6">
-              <div className="space-y-6 pt-6 pb-5">
-                <div>
-                  <label
-                    htmlFor="workspace-name"
-                    className="block text-sm font-medium text-gray-900"
-                    ref={nameInputLabel}
-                  >
-                    Nazwa
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="workspace-name"
-                      className="block w-full shadow-sm sm:text-sm focus:ring-cyan-500 focus:border-cyan-500 border-gray-300 rounded-md"
-                      {...register('name')}
-                    />
-                  </div>
-                </div>
-                <fieldset>
-                  <legend className="text-sm font-medium text-gray-900">
-                    Prywatność
-                  </legend>
-                  <div className="mt-2 space-y-5">
-                    <div className="relative flex items-start">
-                      <div className="absolute flex items-center h-5">
-                        <input
-                          {...register('privacy')}
-                          id="privacy-public"
-                          type="radio"
-                          className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
-                          value={WorkspacePrivacy.Public}
-                        />
-                      </div>
-                      <div className="pl-7 text-sm">
-                        <label
-                          htmlFor="privacy-public"
-                          className="font-medium text-gray-900"
-                        >
-                          Publiczna
-                        </label>
-                        <p
-                          id="privacy-public-description"
-                          className="text-gray-500"
-                        >
-                          Każdy z linkiem może widzieć tą przestrzeń.
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="relative flex items-start">
-                        <div className="absolute flex items-center h-5">
-                          <input
-                            {...register('privacy')}
-                            id="privacy-private-to-project"
-                            type="radio"
-                            className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
-                            value={WorkspacePrivacy.PrivateToMembers}
-                          />
-                        </div>
-                        <div className="pl-7 text-sm">
-                          <label
-                            htmlFor="privacy-private-to-project"
-                            className="font-medium text-gray-900"
-                          >
-                            Prywatna dla członków
-                          </label>
-                          <p
-                            id="privacy-private-to-project-description"
-                            className="text-gray-500"
-                          >
-                            Tylko członkowie tej przestrzeni mają do niej
-                            dostęp.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="relative flex items-start">
-                        <div className="absolute flex items-center h-5">
-                          <input
-                            {...register('privacy')}
-                            id="privacy-private"
-                            type="radio"
-                            className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
-                            value={WorkspacePrivacy.PrivateToYou}
-                          />
-                        </div>
-                        <div className="pl-7 text-sm">
-                          <label
-                            htmlFor="privacy-private"
-                            className="font-medium text-gray-900"
-                          >
-                            Prywatna dla ciebie
-                          </label>
-                          <p
-                            id="privacy-private-description"
-                            className="text-gray-500"
-                          >
-                            Tylko ty masz dostęp do tej przestrzeni.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-            </div>
+          <div className="flex-1 flex flex-col overflow-y-auto">
+            <UpdateWorkspaceForm
+              workspace={workspace}
+              onSuccess={onSuccess}
+              onCancel={onCancel}
+            />
           </div>
         </div>
-        <div className="flex-shrink-0 px-4 py-4 flex justify-between">
-          <Can I={WorkspacesAction.Delete} this={workspace}>
-            <button
-              onClick={onWorkspaceRemove}
-              type="button"
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              <TrashIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-              Usuń
-            </button>
-          </Can>
-          <div>
-            <button
-              type="button"
-              className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-              onClick={onCancel}
-            >
-              Anuluj
-            </button>
-            <button
-              type="submit"
-              disabled={updateWorkspace.isLoading}
-              className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-            >
-              Zapisz
-            </button>
-          </div>
-        </div>
-      </form>
+      </div>
     </Drawer>
   );
 };

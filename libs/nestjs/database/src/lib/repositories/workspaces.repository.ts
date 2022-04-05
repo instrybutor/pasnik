@@ -37,7 +37,7 @@ export class WorkspacesRepository extends Repository<WorkspaceEntity> {
   ) {
     const workspace = await this.findOneOrFail(id);
     if (updateWorkspaceDto && updateWorkspaceDto.name !== workspace.name) {
-      workspace.slug = slugify([workspace.name, nanoid(6)].join(' '), {
+      workspace.slug = slugify([updateWorkspaceDto.name, nanoid(6)].join(' '), {
         lower: true,
       });
     }
