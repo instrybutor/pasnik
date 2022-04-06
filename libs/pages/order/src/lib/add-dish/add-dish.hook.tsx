@@ -4,13 +4,21 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { addDishValidator } from '@pasnik/api/data-transfer';
 
+export interface UpdateDishModel {
+  name: string;
+  userId: number;
+  priceCents: number;
+}
+
 export const useAddDish = () => {
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<UpdateDishModel>({
     resolver: yupResolver(addDishValidator),
   });
 
@@ -20,6 +28,8 @@ export const useAddDish = () => {
     error,
     errors,
     register,
+    getValues,
+    setValue,
     setError,
     handleSubmit,
     reset,

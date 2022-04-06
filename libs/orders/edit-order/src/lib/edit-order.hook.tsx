@@ -21,7 +21,7 @@ export const useEditOrder = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     resolver: yupResolver(orderValidator),
   });
   const { updateOrder, fetchOrder } = useOrdersFacade();

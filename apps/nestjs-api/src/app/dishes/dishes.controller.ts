@@ -33,9 +33,9 @@ export class DishesController {
   create(
     @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() currentUser: UserEntity
   ) {
-    return this.dishesService.create(addDishDto, order, user);
+    return this.dishesService.create(addDishDto, order, currentUser);
   }
 
   @Delete(':id')
@@ -47,8 +47,9 @@ export class DishesController {
   update(
     @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
-    @Param('id') id: string
+    @Param('id') id: string,
+    @CurrentUser() user: UserEntity
   ) {
-    return this.dishesService.update(order, +id, addDishDto);
+    return this.dishesService.update(order, +id, addDishDto, user);
   }
 }

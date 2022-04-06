@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import {
   CheckIcon,
@@ -6,21 +7,23 @@ import {
   DuplicateIcon,
 } from '@heroicons/react/outline';
 import { PencilIcon, TrashIcon, XIcon } from '@heroicons/react/solid';
-import { DishModel } from '@pasnik/api/data-transfer';
-import OrderDishUser from '../order-dish-users/order-dish-user';
+import { AddDishDto, DishModel, UserModel } from '@pasnik/api/data-transfer';
 import { Price } from '@pasnik/components';
-import { Menu, Transition } from '@headlessui/react';
+
+import { UserSelection } from '../user-selection';
 
 export interface OrderDishProps {
   inProgress: boolean;
   dish: DishModel;
-  onDelete: (dish: DishModel) => void;
-  onEdit: (dish: DishModel) => void;
-  onDuplicate: (dish: DishModel) => void;
+  onUpdate(dishDto: AddDishDto, dish: DishModel): void;
+  onDelete(dish: DishModel): void;
+  onEdit(dish: DishModel): void;
+  onDuplicate(dish: DishModel): void;
 }
 export function OrderDish({
   dish,
   inProgress,
+  onUpdate,
   onDelete,
   onDuplicate,
   onEdit,
@@ -48,8 +51,25 @@ export function OrderDish({
     setIsDeleting(false);
   }, [inProgress]);
 
+  const onDishUpdate = useCallback(
+    (selectedUser: UserModel) => {
+      onUpdate(
+        {
+          userId: selectedUser.id,
+          name: dish.name,
+          priceCents: dish.priceCents / 100,
+        },
+        dish
+      );
+    },
+    [dish, onUpdate]
+  );
+
   return (
     <>
+      <div className="flex items-center">
+        <UserSelection type="slim" user={dish.user} selectUser={onDishUpdate} />
+      </div>
       <div className="flex-1 w-full pl-3">
         <div className="text-sm text-gray-500 min-w-0 flex-1">{dish.name}</div>
       </div>
@@ -76,8 +96,6 @@ export function OrderDish({
           </button>
         </div>
       )}
-
-      <OrderDishUser user={dish.user} />
 
       {inProgress && (
         <div className="py-4">

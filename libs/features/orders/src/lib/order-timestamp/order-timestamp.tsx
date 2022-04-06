@@ -24,25 +24,25 @@ export function OrderTimestamp({
   const { t } = useTranslation();
   const _iconClass = iconClass ?? 'flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400';
   return (
-    <p className="flex items-center">
+    <p className="flex items-center gap-1">
       {order.status === OrderStatus.InProgress && (
         <>
           {showIcon && <DocumentAddIcon className={_iconClass} />}
-          {showLabel && <span>{t('timestamp.created')} </span>}
+          {showLabel && <span>{t('timestamp.created')}</span>}
           <DateDistance date={order.createdAt} />
         </>
       )}
       {order.status === OrderStatus.Ordered && (
         <>
           {showIcon && <TruckIcon className={_iconClass} />}
-          {showLabel && <span>{t('timestamp.ordered')} </span>}
+          {showLabel && <span>{t('timestamp.ordered')}</span>}
           <DateDistance date={order.orderedAt} />
         </>
       )}
       {order.status === OrderStatus.Delivered && (
         <>
           {showIcon && <CheckCircleIcon className={_iconClass} />}
-          {showLabel && <span>{t('timestamp.delivered')} </span>}
+          {showLabel && <span>{t('timestamp.delivered')}</span>}
           <DateFormat date={order.deliveredAt} format="MM/dd/yyyy HH:mm" />
         </>
       )}
