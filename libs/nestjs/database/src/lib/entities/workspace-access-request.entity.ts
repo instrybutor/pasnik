@@ -10,7 +10,8 @@ import {
   WorkspaceAccessRequestModel,
   WorkspaceAccessRequestStatus,
 } from '@pasnik/api/data-transfer';
-import { UserEntity, WorkspaceEntity } from '@pasnik/nestjs/database';
+import { UserEntity } from './user.entity';
+import { WorkspaceEntity } from './workspace.entity';
 
 @Entity()
 export class WorkspaceAccessRequestEntity

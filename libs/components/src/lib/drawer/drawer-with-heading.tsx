@@ -1,4 +1,3 @@
-import { Drawer } from '@pasnik/components';
 import { Dialog } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import {
@@ -8,6 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { Drawer } from './drawer';
 
 export interface DrawerWithHeadingChildrenProps {
   lock: (locked: boolean) => void;
