@@ -150,7 +150,7 @@ export function WorkspaceUserInvitePopover({
           <UserAddIcon className="mx-auto h-12 w-12 text-gray-400" />
           <div>
             <h3 className="mt-2 text-sm font-medium text-gray-900">
-              {t('workspaces.inviteUsers')}
+              {t('workspace.inviteUsers')}
             </h3>
           </div>
         </div>
