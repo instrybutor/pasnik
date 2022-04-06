@@ -172,13 +172,32 @@
     "errors": {
       "name": "Nazwa nie może być pusta"
     },
-    "areYouSure": "Czy jesteś pewny?"
+    "roles": {
+      "owner": "Właściciel",
+      "admin": "Administrator",
+      "user": "Użytkownik"
+    },
+    "areYouSure": "Czy jesteś pewny?",
+    "inviteUsers": "Dodaj osoby za pomocą adresu email",
+    "requestAccess": {
+      "title": "Ta przestrzeń jest prywatna",
+      "subtitle": "Możesz poprosić o dostęp wysyłając prośbę o dołączenie.",
+      "action": "Wyślij prośbę"
+    },
+    "settings": "Ustawienia",
+    "active": "Aktywne",
+    "inactive": "Nieaktywne"
   },
   "actions": {
     "cancel": "Anuluj",
     "submit": "Zapisz",
     "delete": "Usuń",
     "yes": "Tak",
-    "no": "Nie"
+    "no": "Nie",
+    "back": "Wstecz",
+    "add": "Dodaj"
+  },
+  "forms": {
+    "email": "Email"
   }
 }

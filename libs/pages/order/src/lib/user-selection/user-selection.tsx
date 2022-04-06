@@ -1,12 +1,10 @@
-import { Fragment, useCallback } from 'react';
-import React from 'react';
+import React, { Fragment, useCallback } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { UserModel } from '@pasnik/api/data-transfer';
-import { UserAvatar, UserInfo, UserName } from '@pasnik/components';
+import { Select, UserAvatar, UserInfo, UserName } from '@pasnik/components';
 import { CheckIcon } from '@heroicons/react/outline';
-import { Select } from '@pasnik/components';
 import { useWorkspaceUsers } from '@pasnik/features/workspaces';
 import { useOrderFacade } from '../order-store/order.facade';
 
@@ -51,7 +49,7 @@ export const UserSelection: React.FC<UserSelectionProps> = ({
         keyExtraction={(item) => `${item?.id}`}
         onSelect={handleUserSelection}
         renderItem={({ selected, active, item }) => (
-          <>
+          <div className="rounded-full w-8">
             <div
               className={classNames(
                 {
@@ -77,7 +75,7 @@ export const UserSelection: React.FC<UserSelectionProps> = ({
                 <CheckIcon className="h-5 w-5" aria-hidden="true" />
               </span>
             ) : null}
-          </>
+          </div>
         )}
       >
         <Fragment>

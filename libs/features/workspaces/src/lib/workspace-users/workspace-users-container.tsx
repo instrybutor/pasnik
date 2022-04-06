@@ -1,6 +1,8 @@
 import { WorkspaceUserModel } from '@pasnik/api/data-transfer';
 import { ReactElement, useEffect, useState } from 'react';
 import { UserAvatar, UserAvatarSize } from '@pasnik/components';
+import { ArrowSmLeftIcon } from '@heroicons/react/outline';
+import { useTranslation } from 'react-i18next';
 
 export interface WorkspaceUsersPopoverElementProps {
   user: WorkspaceUserModel;
@@ -17,6 +19,7 @@ export function WorkspaceUsersContainer({
   avatarSize,
   popoverElement,
 }: WorkspaceUsersContainerProps) {
+  const { t } = useTranslation();
   const [filteredUsers, setFilteredUsers] = useState<WorkspaceUserModel[]>([]);
   const [filterValue, setFilterValue] = useState('');
   const [selectedUser, setSelectedUser] = useState<WorkspaceUserModel | null>(
@@ -39,7 +42,20 @@ export function WorkspaceUsersContainer({
   return (
     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5  max-w-xs">
       {selectedUser && popoverElement ? (
-        popoverElement({ user: selectedUser })
+        <div>
+          <button
+            onClick={() => setSelectedUser(null)}
+            type="button"
+            className="inline-flex items-center px-2 pt-2 ml-2 mt-2 border border-transparent text-sm leading-4 font-medium text-gray-500 bg-transparent hover:text-gray-700 focus:outline-none "
+          >
+            <ArrowSmLeftIcon
+              className="-ml-0.5 mr-2 h-4 w-4"
+              aria-hidden="true"
+            />
+            {t('actions.back')}
+          </button>
+          {popoverElement({ user: selectedUser })}
+        </div>
       ) : (
         <div className="p-4 flex flex-wrap gap-2">
           <input

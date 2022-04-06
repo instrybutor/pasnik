@@ -1,6 +1,7 @@
 import { UserInfo } from '@pasnik/components';
 import { Control, Controller } from 'react-hook-form';
 import { AddMembersToWorkspaceDto } from '@pasnik/api/data-transfer';
+import { useTranslation } from 'react-i18next';
 
 export interface WorkspaceUserInviteItemProps {
   control: Control<AddMembersToWorkspaceDto>;
@@ -13,6 +14,7 @@ export function WorkspaceUserInviteItem({
   name,
   remove,
 }: WorkspaceUserInviteItemProps) {
+  const { t } = useTranslation();
   return (
     <li className="py-3 flex justify-between items-center">
       <Controller
@@ -28,7 +30,7 @@ export function WorkspaceUserInviteItem({
               onClick={remove}
               className="ml-6 bg-white rounded-md text-sm font-medium text-cyan-600 hover:text-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
             >
-              Usuń
+              {t('actions.delete')}
             </button>
           </>
         )}

@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import { NavLink, To } from 'react-router-dom';
+import { NavLink, NavLinkProps, To } from 'react-router-dom';
 import React, { ReactElement } from 'react';
 import { Disclosure } from '@headlessui/react';
 
 export interface SidebarItemProps extends NavLinkProps {
-  children: ReactElement | ReactElement[];
+  children?: ReactElement | ReactElement[];
   icon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
   label: string;
   to: To;

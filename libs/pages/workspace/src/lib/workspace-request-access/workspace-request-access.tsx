@@ -1,5 +1,6 @@
 import { LockClosedIcon } from '@heroicons/react/outline';
 import { useWorkspaceRequestAccessMutation } from '@pasnik/features/workspaces';
+import { useTranslation } from 'react-i18next';
 
 export interface WorkspaceRequestAccessParams {
   slug: string;
@@ -10,6 +11,7 @@ export function WorkspaceRequestAccess({
   slug,
   retry,
 }: WorkspaceRequestAccessParams) {
+  const { t } = useTranslation();
   const { mutateAsync, isLoading } = useWorkspaceRequestAccessMutation(slug);
   return (
     <main className="my-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,11 +25,11 @@ export function WorkspaceRequestAccess({
           </div>
           <div className="mt-3 text-center sm:mt-5">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
-              Ta przestrzeń jest prywatna
+              {t('workspace.requestAccess.title')}
             </h3>
             <div className="mt-2">
               <p className="text-sm text-gray-500">
-                Możesz poprosić o dostęp wysyłając prośbę o dołączenie.
+                {t('workspace.request.access.subtitle')}
               </p>
             </div>
           </div>
@@ -42,7 +44,7 @@ export function WorkspaceRequestAccess({
             type="button"
             className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
           >
-            Wyślij prośbę
+            {t('workspace.requestAccess.action')}
           </button>
         </div>
       </div>

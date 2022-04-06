@@ -16,8 +16,10 @@ import {
   useWorkspace,
   WorkspaceAbilityProvider,
 } from '@pasnik/features/workspaces';
+import { useTranslation } from 'react-i18next';
 
 export function WorkspaceContainer() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { slug } = useParams<'slug'>();
 
@@ -48,9 +50,6 @@ export function WorkspaceContainer() {
         <div className="my-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white sm:rounded-md shadow">
             <div className="sm:hidden">
-              <label htmlFor="tabs" className="sr-only">
-                Wybierz zakładkę
-              </label>
               <select
                 value={currentPath}
                 onChange={onTabChange}
@@ -58,8 +57,8 @@ export function WorkspaceContainer() {
                 name="tabs"
                 className="mt-4 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm rounded-md"
               >
-                <option value=".">Aktywne</option>
-                <option value="./inactive">Zakończone</option>
+                <option value=".">{t('workspace.active')}</option>
+                <option value="./inactive">{t('workspace.inactive')}</option>
               </select>
             </div>
             <div className="hidden sm:block">
@@ -69,10 +68,10 @@ export function WorkspaceContainer() {
                   aria-label="Tabs"
                 >
                   <TabLink to="." end={true}>
-                    Aktywne
+                    {t('workspace.active')}
                   </TabLink>
                   <TabLink to="./inactive" end={true}>
-                    Nieaktywne
+                    {t('workspace.inactive')}
                   </TabLink>
                 </nav>
               </div>

@@ -1,5 +1,3 @@
-import { WorkspaceUserModel } from '@pasnik/api/data-transfer';
+import { WorkspaceUserModel } from '../models/workspace-user.model';
 
 export type UpdateWorkspaceUserDto = Partial<Pick<WorkspaceUserModel, 'role'>>;
-{
-}

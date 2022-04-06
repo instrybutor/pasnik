@@ -44,6 +44,7 @@ export function UserAvatar({
 
   return user?.avatarImg ? (
     <img
+      title={formatName(user)}
       className={classNames(
         sizeClasses,
         'inline-block rounded-full',

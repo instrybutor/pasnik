@@ -18,8 +18,6 @@ export function WorkspaceUserInviteButton() {
             {data.length}
           </span>
         )}
-
-        <span className="sr-only">Add team member</span>
         <PlusIcon className="h-5 w-5" aria-hidden="true" />
       </>
     </Popover>

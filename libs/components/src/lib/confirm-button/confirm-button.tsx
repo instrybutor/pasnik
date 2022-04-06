@@ -29,6 +29,7 @@ export function ConfirmButton({ onClick, ...props }: ConfirmButtonProps) {
       {isConfirm ? (
         <>
           <button
+            style={{ marginRight: '-2px' }}
             type="button"
             onClick={confirmClick}
             className="absolute right-10 inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"

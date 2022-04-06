@@ -76,14 +76,19 @@ function defineWorkspaceOwnerRules(
   cannot(WorkspacesAction.Leave, 'WorkspaceModel');
 
   // WorkspaceUserModel
-  // can(WorkspaceUsersAction.Manage, 'WorkspaceUserModel');
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     id: workspaceUser.id,
   });
-  // can(WorkspaceUsersAction.Manage, 'WorkspaceUserModel');
 
   can(WorkspaceUsersAction.Promote, 'WorkspaceUserModel', {
     role: WorkspaceUserRole.User,
+  });
+  can(WorkspaceUsersAction.Demote, 'WorkspaceUserModel', {
+    role: WorkspaceUserRole.Admin,
+  });
+  can(WorkspaceUsersAction.Update, 'WorkspaceUserModel');
+  cannot(WorkspaceUsersAction.Update, 'WorkspaceUserModel', {
+    id: workspaceUser.id,
   });
 
   // OrderModel
@@ -97,11 +102,6 @@ function defineWorkspaceAdminRules(
   can(WorkspacesAction.Update, 'WorkspaceModel');
 
   can(WorkspaceUsersAction.Create, 'WorkspaceUserModel');
-  can(WorkspaceUsersAction.Demote, 'WorkspaceUserModel', {
-    role: WorkspaceUserRole.Admin,
-  });
-
-  can(WorkspaceUsersAction.Update, 'WorkspaceUserModel');
 
   can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel');
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {

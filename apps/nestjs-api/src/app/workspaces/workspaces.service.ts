@@ -20,6 +20,7 @@ import {
   OrderStatus,
   UpdateWorkspaceDto,
   UpdateWorkspaceUserDto,
+  WorkspaceUserRole,
 } from '@pasnik/api/data-transfer';
 import { Connection, In } from 'typeorm';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
@@ -230,6 +231,9 @@ export class WorkspacesService {
     workspaceUser: WorkspaceUserEntity,
     updateUserDto: UpdateWorkspaceUserDto
   ) {
+    if (updateUserDto.role === WorkspaceUserRole.Owner) {
+      throw new HttpException('Cannot update to owner', HttpStatus.FORBIDDEN);
+    }
     return this.workspaceUsersRepository.updateMember(
       workspaceUser,
       updateUserDto

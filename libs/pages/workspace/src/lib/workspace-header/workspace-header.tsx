@@ -10,8 +10,10 @@ import { WorkspaceJoinLeaveButton } from '../workspace-join-leave-button/workspa
 import { useNavigate, useParams } from 'react-router-dom';
 import { WorkspaceHeaderUsers } from '../workspace-header-users/workspace-header-users';
 import { Can, WorkspacesAction } from '@pasnik/ability';
+import { useTranslation } from 'react-i18next';
 
 export const WorkspaceHeader = () => {
+  const { t } = useTranslation();
   const { slug } = useParams<'slug'>();
   const navigate = useNavigate();
   const [editWorkspace, setEditWorkspace] = useState(false);
@@ -60,7 +62,7 @@ export const WorkspaceHeader = () => {
                   className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                   aria-hidden="true"
                 />
-                Ustawienia
+                {t('workspace.settings')}
               </button>
             </span>
           </Can>

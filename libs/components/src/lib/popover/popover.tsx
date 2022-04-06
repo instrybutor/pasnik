@@ -69,3 +69,5 @@ export function Popover({
     </HeadlessPopover>
   );
 }
+
+Popover.Group = HeadlessPopover.Group;
