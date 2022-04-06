@@ -9,21 +9,22 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useWorkspaceCreateMutation } from '../mutations/use-workspace-create-mutation';
 import { useTranslation } from 'react-i18next';
+import classNames from 'classnames';
 
 export interface CreateWorkspaceFormProps {
   onSuccess: (workspace: WorkspaceModel) => void;
   onCancel: () => void;
-  initialFocus?: (node: HTMLElement | null) => void;
+  lock: (locked: boolean) => void;
 }
 
 export const CreateWorkspaceForm = ({
   onCancel,
   onSuccess,
-  initialFocus,
+  lock,
 }: CreateWorkspaceFormProps) => {
   const { t } = useTranslation();
 
-  const { register, handleSubmit } = useForm<CreateWorkspaceDto>({
+  const { register, handleSubmit, formState } = useForm<CreateWorkspaceDto>({
     resolver: yupResolver(createWorkspaceValidator),
     defaultValues: {
       privacy: WorkspacePrivacy.Public,
@@ -35,9 +36,15 @@ export const CreateWorkspaceForm = ({
 
   const onSubmit = useCallback(
     (data: CreateWorkspaceDto) => {
-      createWorkspace.mutateAsync(data).then(onSuccess);
+      lock(true);
+      createWorkspace
+        .mutateAsync(data)
+        .then(onSuccess)
+        .catch(() => {
+          lock(false);
+        });
     },
-    [createWorkspace, onSuccess]
+    [createWorkspace, onSuccess, lock]
   );
 
   return (
@@ -55,12 +62,26 @@ export const CreateWorkspaceForm = ({
               </label>
               <div className="mt-1">
                 <input
+                  disabled={createWorkspace.isLoading}
                   autoFocus={true}
                   type="text"
                   id="workspace-name"
-                  className="block w-full shadow-sm sm:text-sm focus:ring-cyan-500 focus:border-cyan-500 border-gray-300 rounded-md"
+                  className={classNames(
+                    'block w-full shadow-sm sm:text-sm rounded-md',
+                    {
+                      'focus:ring-cyan-500 focus:border-cyan-500 border-gray-300':
+                        !formState.errors.name,
+                      'border-red-300 focus:ring-red-500 focus:border-red-500':
+                        formState.errors.name,
+                    }
+                  )}
                   {...register('name')}
                 />
+                {formState.errors.name && (
+                  <p className="text-red-500 text-xs absolute mt-1">
+                    {t('workspace.errors.name')}
+                  </p>
+                )}
               </div>
             </div>
             <fieldset>
@@ -71,6 +92,7 @@ export const CreateWorkspaceForm = ({
                 <div className="relative flex items-start">
                   <div className="absolute flex items-center h-5">
                     <input
+                      disabled={createWorkspace.isLoading}
                       id="privacy-public"
                       aria-describedby="privacy-public-description"
                       type="radio"
@@ -99,6 +121,7 @@ export const CreateWorkspaceForm = ({
                   <div className="relative flex items-start">
                     <div className="absolute flex items-center h-5">
                       <input
+                        disabled={createWorkspace.isLoading}
                         id="privacy-private-to-project"
                         aria-describedby="privacy-private-to-project-description"
                         type="radio"
@@ -127,6 +150,7 @@ export const CreateWorkspaceForm = ({
                   <div className="relative flex items-start">
                     <div className="absolute flex items-center h-5">
                       <input
+                        disabled={createWorkspace.isLoading}
                         id="privacy-private"
                         aria-describedby="privacy-private-to-project-description"
                         type="radio"
@@ -158,6 +182,7 @@ export const CreateWorkspaceForm = ({
       </div>
       <div className="flex-shrink-0 px-4 py-4 flex justify-end">
         <button
+          disabled={createWorkspace.isLoading}
           type="button"
           className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
           onClick={onCancel}
@@ -165,6 +190,7 @@ export const CreateWorkspaceForm = ({
           {t('actions.cancel')}
         </button>
         <button
+          disabled={!createWorkspace.isIdle}
           type="submit"
           className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
         >

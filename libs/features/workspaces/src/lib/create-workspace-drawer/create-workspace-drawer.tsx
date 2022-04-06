@@ -1,8 +1,6 @@
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
-import { CreateWorkspaceForm } from '../create-workspace-form/create-workspace-form';
-import { Drawer } from '@pasnik/components';
-import { Dialog } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { CreateWorkspaceForm } from './create-workspace-form';
+import { DrawerWithHeading } from '@pasnik/components';
 import { useTranslation } from 'react-i18next';
 
 export interface CreateWorkspaceDrawerProps {
@@ -19,35 +17,19 @@ export const CreateWorkspaceDrawer = ({
   const { t } = useTranslation();
 
   return (
-    <Drawer show={isOpen} onClose={onCancel}>
-      <div className="h-full divide-y divide-gray-200 flex flex-col bg-white shadow-xl">
-        <div className="flex-1 flex flex-col overflow-y-auto">
-          <div className="py-6 px-4 bg-cyan-700 sm:px-6">
-            <div className="flex items-center justify-between">
-              <Dialog.Title className="text-lg font-medium text-white">
-                {t('workspace.createDrawer.title')}
-              </Dialog.Title>
-              <div className="ml-3 h-7 flex items-center">
-                <button
-                  type="button"
-                  className="bg-cyan-700 rounded-md text-cyan-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                  onClick={onCancel}
-                >
-                  <XIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-              </div>
-            </div>
-            <div className="mt-1">
-              <p className="text-sm text-cyan-300">
-                {t('workspace.createDrawer.subtitle')}
-              </p>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col overflow-y-auto">
-            <CreateWorkspaceForm onSuccess={onSuccess} onCancel={onCancel} />
-          </div>
-        </div>
-      </div>
-    </Drawer>
+    <DrawerWithHeading
+      title={t('workspace.createDrawer.title')}
+      subtitle={t('workspace.createDrawer.subtitle')}
+      show={isOpen}
+      onClose={onCancel}
+    >
+      {({ lock }) => (
+        <CreateWorkspaceForm
+          onSuccess={onSuccess}
+          onCancel={onCancel}
+          lock={lock}
+        />
+      )}
+    </DrawerWithHeading>
   );
 };

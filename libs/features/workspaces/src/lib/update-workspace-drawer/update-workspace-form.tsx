@@ -8,29 +8,28 @@ import {
 } from '@pasnik/api/data-transfer';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  useWorkspaceRemoveMutation,
-  useWorkspaceUpdateMutation,
-} from '../mutations';
+import { useWorkspaceUpdateMutation } from '../mutations';
 import { Can, WorkspacesAction } from '@pasnik/ability';
-import { useUserStore } from '@pasnik/store';
-import { useWorkspaces } from '../queries';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import classNames from 'classnames';
 
 export interface UpdateWorkspaceDrawerProps {
   workspace: WorkspaceModel;
   onSuccess: (workspace: WorkspaceModel) => void;
   onCancel: () => void;
+  onDelete: (workspace: WorkspaceModel) => void;
+  lock: (locked: boolean) => void;
 }
 
 export const UpdateWorkspaceForm = ({
   workspace,
   onCancel,
   onSuccess,
+  onDelete,
+  lock,
 }: UpdateWorkspaceDrawerProps) => {
   const { t } = useTranslation();
-  const { register, handleSubmit } = useForm<CreateWorkspaceDto>({
+  const { register, handleSubmit, formState } = useForm<CreateWorkspaceDto>({
     resolver: yupResolver(updateWorkspaceValidator),
     defaultValues: {
       name: workspace.name,
@@ -40,36 +39,19 @@ export const UpdateWorkspaceForm = ({
 
   const updateWorkspace = useWorkspaceUpdateMutation(workspace.slug);
   const nameInputLabel = useRef(null);
-  const { changeWorkspace } = useUserStore();
-  const { data: workspaces } = useWorkspaces();
-  const navigate = useNavigate();
-  const removeWorkspace = useWorkspaceRemoveMutation(workspace.slug);
 
   const onSubmit = useCallback(
     (data: CreateWorkspaceDto) => {
-      updateWorkspace.mutateAsync(data).then(onSuccess);
+      lock(true);
+      updateWorkspace
+        .mutateAsync(data)
+        .then(onSuccess)
+        .catch(() => {
+          lock(false);
+        });
     },
-    [updateWorkspace, onSuccess]
+    [updateWorkspace, onSuccess, lock]
   );
-
-  const onWorkspaceRemove = useCallback(async () => {
-    await removeWorkspace.mutateAsync();
-    const nextWorkspace = workspaces?.find(
-      (_workspace) => _workspace.id !== workspace.id
-    );
-    if (nextWorkspace) {
-      await changeWorkspace(nextWorkspace);
-      navigate(`/workspace/${nextWorkspace.slug}`);
-    }
-    onSuccess(workspace);
-  }, [
-    removeWorkspace,
-    workspace,
-    changeWorkspace,
-    workspaces,
-    navigate,
-    onSuccess,
-  ]);
 
   return (
     <form className="flex-1 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
@@ -86,12 +68,26 @@ export const UpdateWorkspaceForm = ({
               </label>
               <div className="mt-1">
                 <input
+                  disabled={updateWorkspace.isLoading}
                   autoFocus={true}
                   type="text"
                   id="workspace-name"
-                  className="block w-full shadow-sm sm:text-sm focus:ring-cyan-500 focus:border-cyan-500 border-gray-300 rounded-md"
+                  className={classNames(
+                    'block w-full shadow-sm sm:text-sm rounded-md',
+                    {
+                      'focus:ring-cyan-500 focus:border-cyan-500 border-gray-300':
+                        !formState.errors.name,
+                      'border-red-300 focus:ring-red-500 focus:border-red-500':
+                        formState.errors.name,
+                    }
+                  )}
                   {...register('name')}
                 />
+                {formState.errors.name && (
+                  <p className="text-red-500 text-xs absolute mt-1">
+                    {t('workspace.errors.name')}
+                  </p>
+                )}
               </div>
             </div>
             <fieldset>
@@ -188,7 +184,7 @@ export const UpdateWorkspaceForm = ({
         <div className="flex-shrink-0 px-4 py-4 flex justify-between">
           <Can I={WorkspacesAction.Delete} this={workspace}>
             <button
-              onClick={onWorkspaceRemove}
+              onClick={() => onDelete(workspace)}
               type="button"
               className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >

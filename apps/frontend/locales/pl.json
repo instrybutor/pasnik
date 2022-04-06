@@ -168,11 +168,17 @@
         "label": "Pywatna dla Ciebie",
         "description": "Tylko ty masz dostęp do tej przestrzeni."
       }
-    }
+    },
+    "errors": {
+      "name": "Nazwa nie może być pusta"
+    },
+    "areYouSure": "Czy jesteś pewny?"
   },
   "actions": {
     "cancel": "Anuluj",
     "submit": "Zapisz",
-    "delete": "Usuń"
+    "delete": "Usuń",
+    "yes": "Tak",
+    "no": "Nie"
   }
 }
