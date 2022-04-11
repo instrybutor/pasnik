@@ -30,7 +30,7 @@ export function Popover({
 
   const { x, y, strategy, reference, floating, update, refs } = useFloating({
     placement: 'bottom',
-    middleware: [shift()],
+    middleware: [shift({ padding: 5 })],
   });
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export function Popover({
               static={true}
               focus={true}
               children={panel}
-              className="bg-white px-4 sm:px-0 rounded-lg"
+              className="bg-white rounded-lg"
             />
           </Transition>
         </div>
