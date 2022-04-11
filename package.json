@@ -38,7 +38,8 @@
   "dependencies": {
     "@casl/ability": "^5.4.3",
     "@casl/react": "^2.3.0",
-    "@floating-ui/react-dom": "^0.6.0",
+    "@floating-ui/react-dom": "^0.6.1",
+    "@floating-ui/react-dom-interactions": "0.0.15",
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.5",
     "@hookform/resolvers": "^2.8.5",

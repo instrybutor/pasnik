@@ -56,7 +56,7 @@ export const Drawer = ({
               leaveTo="-translate-x-full"
             >
               <div className="w-screen max-w-md">
-                {showChildren && children}
+                {showChildren ? children : <div tabIndex={0} />}
               </div>
             </Transition.Child>
           </div>

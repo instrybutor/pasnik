@@ -3,10 +3,11 @@ import {
   FunctionComponent,
   MutableRefObject,
   PropsWithChildren,
+  useEffect,
   useRef,
 } from 'react';
-import { Portal } from 'react-portal';
-import { useFloating } from '@floating-ui/react-dom';
+import { autoUpdate, shift, useFloating } from '@floating-ui/react-dom';
+import { FloatingPortal } from '@floating-ui/react-dom-interactions';
 
 export interface PopoverPanelProps {
   open: boolean;
@@ -27,10 +28,18 @@ export function Popover({
 }: PropsWithChildren<PopoverProps>) {
   const popperElRef = useRef(null);
 
-  const { x, y, strategy, reference, floating } = useFloating({
+  const { x, y, strategy, reference, floating, update, refs } = useFloating({
     placement: 'bottom',
-    strategy: 'absolute',
+    middleware: [shift()],
   });
+
+  useEffect(() => {
+    if (!refs.reference.current || !refs.floating.current) {
+      return;
+    }
+
+    return autoUpdate(refs.reference.current, refs.floating.current, update);
+  }, [refs.reference.current, refs.floating.current, update]);
 
   return (
     <HeadlessPopover className="relative">
@@ -38,7 +47,7 @@ export function Popover({
         {children}
       </HeadlessPopover.Button>
 
-      <Portal>
+      <FloatingPortal>
         <div
           ref={popperElRef}
           style={{
@@ -65,7 +74,7 @@ export function Popover({
             />
           </Transition>
         </div>
-      </Portal>
+      </FloatingPortal>
     </HeadlessPopover>
   );
 }
