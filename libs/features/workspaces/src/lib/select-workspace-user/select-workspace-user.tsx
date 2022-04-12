@@ -64,7 +64,7 @@ export function SelectWorkspaceUser({
     }
 
     return autoUpdate(refs.reference.current, refs.floating.current, update);
-  }, [refs.reference, refs.floating, update]);
+  }, [refs.reference.current, refs.floating.current, update]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex items-center">

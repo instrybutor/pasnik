@@ -4,10 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { ExclamationIcon } from '@heroicons/react/outline';
 import { useCallback } from 'react';
 import { useUserStore } from '@pasnik/store';
-import {
-  useWorkspaceRemoveMutation,
-  useWorkspaces,
-} from '@pasnik/features/workspaces';
+import { useWorkspaces } from '../queries/use-workspaces';
+import { useWorkspaceRemoveMutation } from '../mutations/use-workspace-remove-mutation';
 
 export interface DeleteWorkspaceModalProps {
   workspace: WorkspaceModel;

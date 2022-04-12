@@ -63,7 +63,7 @@ export type AppAbility = Ability<
 
 type AppAbilityBuilder = AbilityBuilder<AppAbility>;
 
-function defineAdminRules({ can, cannot }: AppAbilityBuilder) {
+function defineAdminRules(_: AppAbilityBuilder) {
   // can('manage', 'all');
 }
 

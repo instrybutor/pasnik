@@ -39,7 +39,7 @@ export function Popover({
     }
 
     return autoUpdate(refs.reference.current, refs.floating.current, update);
-  }, [refs.reference.current, refs.floating.current, update]);
+  }, [refs.reference.current, refs.floating.current, update]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <HeadlessPopover className="relative">
