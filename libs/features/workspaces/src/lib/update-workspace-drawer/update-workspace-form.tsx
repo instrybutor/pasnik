@@ -1,17 +1,20 @@
-import { useCallback, useRef } from 'react';
-import { TrashIcon } from '@heroicons/react/outline';
+import { useCallback, useRef, useState } from 'react';
+import { RefreshIcon, TrashIcon, XIcon } from '@heroicons/react/outline';
 import {
-  CreateWorkspaceDto,
+  UpdateWorkspaceDto,
   updateWorkspaceValidator,
   WorkspaceModel,
   WorkspacePrivacy,
+  WorkspaceUserRole,
 } from '@pasnik/api/data-transfer';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useWorkspaceUpdateMutation } from '../mutations';
 import { Can, WorkspacesAction } from '@pasnik/ability';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { useWorkspaceUsers } from '../queries/use-workspace-users';
+import { SelectWorkspaceUser } from '../select-workspace-user/select-workspace-user';
 
 export interface UpdateWorkspaceDrawerProps {
   workspace: WorkspaceModel;
@@ -28,20 +31,21 @@ export const UpdateWorkspaceForm = ({
   onDelete,
   lock,
 }: UpdateWorkspaceDrawerProps) => {
+  const [changeOwner, setChangeOwner] = useState(false);
   const { t } = useTranslation();
-  const { register, handleSubmit, formState } = useForm<CreateWorkspaceDto>({
-    resolver: yupResolver(updateWorkspaceValidator),
-    defaultValues: {
-      name: workspace.name,
-      privacy: workspace.privacy,
-    },
-  });
-
+  const { register, handleSubmit, formState, setValue, control, resetField } =
+    useForm<UpdateWorkspaceDto>({
+      resolver: yupResolver(updateWorkspaceValidator),
+      defaultValues: {
+        name: workspace.name,
+        privacy: workspace.privacy,
+      },
+    });
   const updateWorkspace = useWorkspaceUpdateMutation(workspace.slug);
   const nameInputLabel = useRef(null);
 
   const onSubmit = useCallback(
-    (data: CreateWorkspaceDto) => {
+    (data: UpdateWorkspaceDto) => {
       lock(true);
       updateWorkspace
         .mutateAsync(data)
@@ -52,6 +56,16 @@ export const UpdateWorkspaceForm = ({
     },
     [updateWorkspace, onSuccess, lock]
   );
+
+  const { data: users } = useWorkspaceUsers(workspace.slug);
+
+  const changeOwnerClick = useCallback(() => {
+    const owner = users?.find((user) => user.role === WorkspaceUserRole.Owner);
+    if (owner) {
+      setChangeOwner(true);
+      setValue('workspaceOwnerId', owner.id);
+    }
+  }, [setChangeOwner, setValue, users]);
 
   return (
     <form className="flex-1 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
@@ -149,6 +163,7 @@ export const UpdateWorkspaceForm = ({
                     </div>
                   </div>
                 </div>
+
                 <div>
                   <div className="relative flex items-start">
                     <div className="absolute flex items-center h-5">
@@ -179,19 +194,74 @@ export const UpdateWorkspaceForm = ({
                 </div>
               </div>
             </fieldset>
+            <Can I={WorkspacesAction.ChangeOwner} this={workspace}>
+              <div>
+                <label
+                  htmlFor="workspace-owner"
+                  className="block text-sm font-medium text-gray-900 mb-1"
+                  ref={nameInputLabel}
+                >
+                  Właściciel
+                </label>
+                {!changeOwner ? (
+                  <button
+                    onClick={changeOwnerClick}
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    <RefreshIcon
+                      className="-ml-1 mr-2 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                    Zmień
+                  </button>
+                ) : (
+                  <div className="flex flex-row gap-2 items-center">
+                    <div className="flex-grow">
+                      <Controller
+                        control={control}
+                        name="workspaceOwnerId"
+                        render={({ field: { value, onChange } }) => (
+                          <SelectWorkspaceUser
+                            setUser={onChange}
+                            users={users ?? []}
+                            userId={value}
+                          />
+                        )}
+                      />
+                    </div>
+                    <button
+                      onClick={() => {
+                        resetField('workspaceOwnerId');
+                        setChangeOwner(false);
+                      }}
+                      type="button"
+                      className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    >
+                      <XIcon
+                        className="h-5 w-5 pointer-events-none"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </Can>
           </div>
         </div>
         <div className="flex-shrink-0 px-4 py-4 flex justify-between">
-          <Can I={WorkspacesAction.Delete} this={workspace}>
-            <button
-              onClick={() => onDelete(workspace)}
-              type="button"
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              <TrashIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-              {t('actions.delete')}
-            </button>
-          </Can>
+          <div>
+            <Can I={WorkspacesAction.Delete} this={workspace}>
+              <button
+                onClick={() => onDelete(workspace)}
+                type="button"
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                <TrashIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                {t('actions.delete')}
+              </button>
+            </Can>
+          </div>
           <div>
             <button
               type="button"

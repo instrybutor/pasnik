@@ -93,6 +93,12 @@ export class WorkspacesController {
       WorkspacesAction.Update,
       workspace
     );
+    if (updateWorkspaceDto.workspaceOwnerId) {
+      ForbiddenError.from(ability).throwUnlessCan(
+        WorkspacesAction.ChangeOwner,
+        workspace
+      );
+    }
 
     return this.workspacesService.update(workspace, updateWorkspaceDto);
   }

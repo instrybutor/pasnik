@@ -8,3 +8,4 @@ export * from './lib/workspace-users/workspace-users-container';
 export * from './lib/queries';
 export * from './lib/mutations';
 export * from './lib/workspace-ability-provider';
+export * from './lib/select-workspace-user/select-workspace-user';

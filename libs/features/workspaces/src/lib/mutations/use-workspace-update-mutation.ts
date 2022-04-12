@@ -31,7 +31,7 @@ export const useWorkspaceUpdateMutation = (slug: string) => {
       onError: (err, updateWorkspaceDto, context) => {
         queryClient.setQueryData(queryKey, context?.previousWorkspace);
       },
-      onSuccess: (updatedWorkspace) => {
+      onSuccess: (updatedWorkspace, updateWorkspaceDto) => {
         queryClient.invalidateQueries(queryKey, { refetchActive: false }); // in case of slug has changed
         queryClient.setQueryData(
           ['workspaces', updatedWorkspace.slug],
@@ -48,12 +48,6 @@ export const useWorkspaceUpdateMutation = (slug: string) => {
 
         renameQueryData(
           queryClient,
-          ['workspaces', slug, 'users'],
-          ['workspaces', updatedWorkspace.slug, 'users']
-        );
-
-        renameQueryData(
-          queryClient,
           ['workspaces', slug, 'orders', 'active'],
           ['workspaces', updatedWorkspace.slug, 'orders', 'active']
         );
@@ -63,6 +57,16 @@ export const useWorkspaceUpdateMutation = (slug: string) => {
           ['workspaces', slug, 'orders', 'inactive'],
           ['workspaces', updatedWorkspace.slug, 'orders', 'inactive']
         );
+
+        if (updateWorkspaceDto.workspaceOwnerId) {
+          queryClient.invalidateQueries(['workspaces', slug, 'users']);
+        } else {
+          renameQueryData(
+            queryClient,
+            ['workspaces', slug, 'users'],
+            ['workspaces', updatedWorkspace.slug, 'users']
+          );
+        }
       },
     }
   );

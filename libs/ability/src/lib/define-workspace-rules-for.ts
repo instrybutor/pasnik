@@ -20,6 +20,7 @@ export enum WorkspacesAction {
   CreateOrder = 'createOrder',
   RequestAccess = 'request-access',
   ApproveAccess = 'approve-access',
+  ChangeOwner = 'change-owner',
 }
 
 export enum WorkspaceUsersAction {
@@ -74,6 +75,7 @@ function defineWorkspaceOwnerRules(
   can(WorkspacesAction.Manage, 'WorkspaceModel');
   cannot(WorkspacesAction.Join, 'WorkspaceModel');
   cannot(WorkspacesAction.Leave, 'WorkspaceModel');
+  can(WorkspacesAction.ChangeOwner, 'WorkspaceModel');
 
   // WorkspaceUserModel
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
@@ -100,12 +102,16 @@ function defineWorkspaceAdminRules(
   workspaceUser: WorkspaceUserModel
 ) {
   can(WorkspacesAction.Update, 'WorkspaceModel');
+  can(WorkspacesAction.ChangeOwner, 'WorkspaceModel');
 
   can(WorkspaceUsersAction.Create, 'WorkspaceUserModel');
 
   can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel');
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     id: workspaceUser.id,
+  });
+  cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
+    role: WorkspaceUserRole.Owner,
   });
 }
 
@@ -117,7 +123,6 @@ function defineWorkspaceUserRules(
   can(WorkspacesAction.Leave, 'WorkspaceModel');
   can(WorkspacesAction.Read, 'WorkspaceModel');
   cannot(WorkspacesAction.Join, 'WorkspaceModel');
-  can(WorkspacesAction.CreateOrder, 'WorkspaceModel');
 
   // OrderModel
   can(OrdersAction.Read, 'OrderModel');

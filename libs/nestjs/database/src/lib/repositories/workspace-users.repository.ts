@@ -37,4 +37,19 @@ export class WorkspaceUsersRepository extends Repository<WorkspaceUserEntity> {
 
     return this.save(workspaceUser);
   }
+
+  async changeOwner(workspace: WorkspaceEntity, ownerId: number) {
+    await this.update(
+      { workspaceId: workspace.id, role: WorkspaceUserRole.Owner },
+      {
+        role: WorkspaceUserRole.Admin,
+      }
+    );
+    await this.update(
+      { workspaceId: workspace.id, id: ownerId },
+      {
+        role: WorkspaceUserRole.Owner,
+      }
+    );
+  }
 }

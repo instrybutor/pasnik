@@ -24,14 +24,14 @@ export const useWorkspaceAddMembersMutation = (slug: string) => {
     },
     {
       onSuccess: (workspaceUsers) => {
-        const workspaceUsersQueryData =
-          queryClient.getQueryData<WorkspaceUserModel[]>(
-            workspaceUsersQueryKey
-          ) ?? [];
-        queryClient.setQueryData(workspaceUsersQueryKey, [
-          ...workspaceUsersQueryData,
-          ...workspaceUsers,
-        ]);
+        // const workspaceUsersQueryData =
+        //   queryClient.getQueryData<WorkspaceUserModel[]>(
+        //     workspaceUsersQueryKey
+        //   ) ?? [];
+        // queryClient.setQueryData(workspaceUsersQueryKey, [
+        //   ...workspaceUsersQueryData,
+        //   ...workspaceUsers,
+        // ]);
 
         const workspaceAccessRequestsQueryData =
           queryClient.getQueryData<WorkspaceAccessRequestModel[]>(
@@ -45,6 +45,7 @@ export const useWorkspaceAddMembersMutation = (slug: string) => {
             )
           )
         );
+        queryClient.invalidateQueries(workspaceUsersQueryKey);
       },
     }
   );

@@ -130,11 +130,23 @@ export class WorkspacesService {
     workspace: WorkspaceEntity,
     updateWorkspaceDto: UpdateWorkspaceDto
   ) {
-    await this.workspaceRepository.updateWorkspace(
-      workspace,
-      updateWorkspaceDto
-    );
-    return this.findOne(workspace.id);
+    return await this.connection.transaction(async (manager) => {
+      const workspaceRepository =
+        manager.getCustomRepository(WorkspacesRepository);
+      const workspaceUsersRepository = manager.getCustomRepository(
+        WorkspaceUsersRepository
+      );
+      await workspaceRepository.updateWorkspace(workspace, updateWorkspaceDto);
+
+      if (updateWorkspaceDto.workspaceOwnerId) {
+        await workspaceUsersRepository.changeOwner(
+          workspace,
+          updateWorkspaceDto.workspaceOwnerId
+        );
+      }
+
+      return this.findOne(workspace.id);
+    });
   }
 
   async create(createWorkspaceDto: CreateWorkspaceDto, user: UserEntity) {
