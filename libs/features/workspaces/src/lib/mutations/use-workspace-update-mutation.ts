@@ -32,7 +32,7 @@ export const useWorkspaceUpdateMutation = (slug: string) => {
         queryClient.setQueryData(queryKey, context?.previousWorkspace);
       },
       onSuccess: (updatedWorkspace, updateWorkspaceDto) => {
-        queryClient.invalidateQueries(queryKey, { refetchActive: false }); // in case of slug has changed
+        // queryClient.invalidateQueries(queryKey, { refetchActive: false }); // in case of slug has changed
         queryClient.setQueryData(
           ['workspaces', updatedWorkspace.slug],
           updatedWorkspace
@@ -46,26 +46,28 @@ export const useWorkspaceUpdateMutation = (slug: string) => {
         newWorkspaces[previousWorkspaceIndex] = updatedWorkspace;
         queryClient.setQueryData(['workspaces'], newWorkspaces);
 
-        renameQueryData(
-          queryClient,
-          ['workspaces', slug, 'orders', 'active'],
-          ['workspaces', updatedWorkspace.slug, 'orders', 'active']
-        );
+        if (slug !== updatedWorkspace.slug) {
+          renameQueryData(
+            queryClient,
+            ['workspaces', slug, 'orders', 'active'],
+            ['workspaces', updatedWorkspace.slug, 'orders', 'active']
+          );
 
-        renameQueryData(
-          queryClient,
-          ['workspaces', slug, 'orders', 'inactive'],
-          ['workspaces', updatedWorkspace.slug, 'orders', 'inactive']
-        );
+          renameQueryData(
+            queryClient,
+            ['workspaces', slug, 'orders', 'inactive'],
+            ['workspaces', updatedWorkspace.slug, 'orders', 'inactive']
+          );
 
-        if (updateWorkspaceDto.workspaceOwnerId) {
-          queryClient.invalidateQueries(['workspaces', slug, 'users']);
-        } else {
           renameQueryData(
             queryClient,
             ['workspaces', slug, 'users'],
             ['workspaces', updatedWorkspace.slug, 'users']
           );
+        }
+
+        if (updateWorkspaceDto.workspaceOwnerId) {
+          queryClient.invalidateQueries(['workspaces', slug, 'users']);
         }
       },
     }

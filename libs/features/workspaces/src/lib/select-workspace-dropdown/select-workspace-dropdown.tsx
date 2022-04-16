@@ -19,13 +19,15 @@ export function SelectWorkspaceDropdown({
   const { data: workspaces } = useWorkspaces();
   const refButton = useRef<HTMLButtonElement | null>(null);
 
+  const onClickCapture = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button === 0 && event.ctrlKey) {
+      event.stopPropagation();
+    }
+  }, []);
+
   const onClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button === 0) {
-      if (event.ctrlKey) {
-        event.stopPropagation();
-      } else {
-        event.preventDefault();
-      }
+      event.nativeEvent.preventDefault();
     }
   }, []);
 
@@ -63,26 +65,28 @@ export function SelectWorkspaceDropdown({
                 leaveTo="opacity-0"
               >
                 <Listbox.Options
+                  as="div"
                   static={true}
                   className="focus:outline-none absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 sm:text-sm flex flex-col divide-y divide-gray-200"
                 >
                   <div className="overflow-auto">
                     {workspaces?.map((workspace) => (
                       <Listbox.Option
+                        as="a"
                         key={workspace.id}
                         className={({ active }) =>
                           classNames(
                             active ? 'text-white bg-cyan-600' : 'text-gray-900',
-                            'cursor-pointer select-none relative py-2 pl-3 pr-9'
+                            'cursor-pointer select-none relative py-2 pl-3 pr-9 block'
                           )
                         }
                         value={workspace}
+                        href={`/workspace/${workspace.slug}`}
+                        onClickCapture={onClickCapture}
+                        onClick={onClick}
                       >
                         {({ selected, active }) => (
-                          <a
-                            href={`/workspace/${workspace.slug}`}
-                            onClick={onClick}
-                          >
+                          <>
                             <span
                               className={classNames(
                                 selected ? 'font-semibold' : 'font-normal',
@@ -105,7 +109,7 @@ export function SelectWorkspaceDropdown({
                                 />
                               </span>
                             ) : null}
-                          </a>
+                          </>
                         )}
                       </Listbox.Option>
                     ))}

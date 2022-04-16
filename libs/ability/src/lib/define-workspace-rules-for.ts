@@ -6,7 +6,7 @@ import {
   WorkspaceModel,
   WorkspacePrivacy,
   WorkspaceUserModel,
-  WorkspaceUserRole,
+  WorkspaceUserRole
 } from '@pasnik/api/data-transfer';
 
 export enum WorkspacesAction {
@@ -63,8 +63,11 @@ export type AppAbility = Ability<
 
 type AppAbilityBuilder = AbilityBuilder<AppAbility>;
 
-function defineAdminRules(_: AppAbilityBuilder) {
+function defineAdminRules({can}: AppAbilityBuilder) {
   // can('manage', 'all');
+  can(WorkspacesAction.Update, 'WorkspaceModel');
+  can(WorkspacesAction.Delete, 'WorkspaceModel');
+  can(WorkspacesAction.Read, 'WorkspaceModel');
 }
 
 function defineWorkspaceOwnerRules(
@@ -78,8 +81,9 @@ function defineWorkspaceOwnerRules(
   can(WorkspacesAction.ChangeOwner, 'WorkspaceModel');
 
   // WorkspaceUserModel
+  can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel');
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
-    id: workspaceUser.id,
+    role: WorkspaceUserRole.Owner,
   });
 
   can(WorkspaceUsersAction.Promote, 'WorkspaceUserModel', {
@@ -92,26 +96,19 @@ function defineWorkspaceOwnerRules(
   cannot(WorkspaceUsersAction.Update, 'WorkspaceUserModel', {
     id: workspaceUser.id,
   });
-
-  // OrderModel
-  can(OrdersAction.Manage, 'OrderModel');
 }
 
 function defineWorkspaceAdminRules(
   { can, cannot }: AppAbilityBuilder,
   workspaceUser: WorkspaceUserModel
 ) {
-  can(WorkspacesAction.Update, 'WorkspaceModel');
-  can(WorkspacesAction.ChangeOwner, 'WorkspaceModel');
-
   can(WorkspaceUsersAction.Create, 'WorkspaceUserModel');
 
-  can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel');
-  cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
-    id: workspaceUser.id,
+  can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
+    role: WorkspaceUserRole.User
   });
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
-    role: WorkspaceUserRole.Owner,
+    id: workspaceUser.id,
   });
 }
 
@@ -120,6 +117,7 @@ function defineWorkspaceUserRules(
   workspaceUser: WorkspaceUserModel
 ) {
   can(WorkspacesAction.Create, 'WorkspaceModel');
+  can(WorkspacesAction.CreateOrder, 'WorkspaceModel');
   can(WorkspacesAction.Leave, 'WorkspaceModel');
   can(WorkspacesAction.Read, 'WorkspaceModel');
   cannot(WorkspacesAction.Join, 'WorkspaceModel');
@@ -182,6 +180,7 @@ export function defineWorkspaceRulesFor(
     case WorkspaceUserRole.Owner:
       defineWorkspaceOwnerRules(builder, workspaceUser);
       defineWorkspaceAdminRules(builder, workspaceUser);
+      defineWorkspaceUserRules(builder, workspaceUser);
       break;
     case WorkspaceUserRole.Admin:
       defineWorkspaceAdminRules(builder, workspaceUser);

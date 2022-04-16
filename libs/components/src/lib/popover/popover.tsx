@@ -68,7 +68,6 @@ export function Popover({
           >
             <HeadlessPopover.Panel
               static={true}
-              focus={true}
               children={panel}
               className="bg-white rounded-lg"
             />

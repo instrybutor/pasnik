@@ -40,7 +40,7 @@
     "@casl/react": "^2.3.0",
     "@floating-ui/react-dom": "^0.6.1",
     "@floating-ui/react-dom-interactions": "0.0.15",
-    "@headlessui/react": "0.0.0-insiders.ab6310c",
+    "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.5",
     "@hookform/resolvers": "^2.8.5",
     "@nestjs/common": "^8.0.0",

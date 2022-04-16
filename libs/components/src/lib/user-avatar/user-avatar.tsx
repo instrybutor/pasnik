@@ -9,6 +9,7 @@ export interface UserAvatarProps {
   size?: UserAvatarSize;
   className?: string;
   fallback?: ReactElement | null;
+  showInitials?: boolean;
 }
 
 export function UserAvatar({
@@ -16,12 +17,13 @@ export function UserAvatar({
   size,
   className,
   fallback,
+  showInitials,
 }: UserAvatarProps) {
   const formatInitials = ({ givenName, familyName }: Partial<UserModel>) =>
     `${givenName![0]}${familyName![0]}`;
 
-  const formatName = ({ givenName, familyName }: Partial<UserModel>) =>
-    `${givenName!} ${familyName!}`;
+  const formatName = ({ givenName, familyName, email }: Partial<UserModel>) =>
+    `${givenName!} ${familyName!} <${email}>`;
 
   const sizeClasses = classNames({
     'h-6 w-6': size === 'xsm',
@@ -42,7 +44,7 @@ export function UserAvatar({
     </svg>
   );
 
-  return user?.avatarImg ? (
+  return user?.avatarImg && !showInitials ? (
     <img
       title={formatName(user)}
       className={classNames(
@@ -61,6 +63,7 @@ export function UserAvatar({
         'inline-flex items-center justify-center rounded-full bg-gray-500',
         className
       )}
+      title={formatName(user)}
     >
       <span className="text-sm font-medium leading-none text-white">
         {formatInitials(user)}
