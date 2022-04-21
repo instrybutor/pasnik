@@ -17,6 +17,7 @@ export const useUpdateDish = () => {
     getValues,
     setValue,
     reset,
+    control,
     formState: { errors },
   } = useForm<UpdateDishModel>({
     resolver: yupResolver(addDishValidator),
@@ -33,5 +34,6 @@ export const useUpdateDish = () => {
     setError,
     handleSubmit,
     reset,
+    control,
   };
 };

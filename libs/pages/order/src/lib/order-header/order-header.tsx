@@ -150,7 +150,7 @@ export function OrderHeader({ order, dishes }: OrderHeaderProps) {
               </span>
             </Can>
 
-            <Can I={OrdersAction.MarkAsOpened} this={order}>
+            <Can I={OrdersAction.MarkAsOpen} this={order}>
               <span className="sm:ml-3">
                 <button
                   type="button"

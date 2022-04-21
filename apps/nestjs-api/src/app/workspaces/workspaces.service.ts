@@ -130,7 +130,7 @@ export class WorkspacesService {
     workspace: WorkspaceEntity,
     updateWorkspaceDto: UpdateWorkspaceDto
   ) {
-    return await this.connection.transaction(async (manager) => {
+    await this.connection.transaction(async (manager) => {
       const workspaceRepository =
         manager.getCustomRepository(WorkspacesRepository);
       const workspaceUsersRepository = manager.getCustomRepository(
@@ -144,9 +144,8 @@ export class WorkspacesService {
           updateWorkspaceDto.workspaceOwnerId
         );
       }
-
-      return this.findOne(workspace.id);
     });
+    return await this.findOne(workspace.id);
   }
 
   async create(createWorkspaceDto: CreateWorkspaceDto, user: UserEntity) {

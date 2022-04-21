@@ -11,18 +11,31 @@ import { CurrentUser } from '@pasnik/nestjs/auth';
 
 import { OrderService } from './order.service';
 import { CurrentOrder } from './current-order.decorator';
+import { CurrentAbility } from '../app-ability';
+import { AppAbility, OrdersAction } from '@pasnik/ability';
+import { ForbiddenError } from '@casl/ability';
 
 @Controller('orders/slug/:slug')
 export class OrderController {
   constructor(private readonly ordersService: OrderService) {}
 
   @Get()
-  findOne(@CurrentOrder() order: OrderEntity) {
+  findOne(
+    @CurrentOrder() order: OrderEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.Read, order);
+
     return this.ordersService.findOneById(order.id);
   }
 
   @Put()
-  update(@CurrentOrder() order: OrderEntity, @Body() payload: UpdateOrderDto) {
+  update(
+    @CurrentOrder() order: OrderEntity,
+    @Body() payload: UpdateOrderDto,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.Update, order);
     return this.ordersService.update(order, payload);
   }
 
@@ -30,24 +43,36 @@ export class OrderController {
   markAsOrdered(
     @CurrentOrder() order: OrderEntity,
     @Body() markAsOrderedDto: MarkAsOrderedDto,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      OrdersAction.MarkAsOrdered,
+      order
+    );
     return this.ordersService.markAsOrdered(order.id, markAsOrderedDto, user);
   }
 
   @Post('/mark-as-closed')
   markAsClosed(
     @CurrentOrder() order: OrderEntity,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      OrdersAction.MarkAsClosed,
+      order
+    );
     return this.ordersService.markAsClosed(order.id, user);
   }
 
   @Post('/mark-as-open')
-  markAsOpened(
+  markAsOpen(
     @CurrentOrder() order: OrderEntity,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.MarkAsOpen, order);
     return this.ordersService.markAsOpen(order.id, user);
   }
 
@@ -55,17 +80,24 @@ export class OrderController {
   markAsPaid(
     @CurrentOrder() order: OrderEntity,
     @Body() setPayerDto: SetPayerDto,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.SetPayer, order);
     return this.ordersService.setPayer(order.id, setPayerDto, user);
   }
 
   @Post('/mark-as-delivered')
   markAsDelivered(
     @CurrentOrder() order: OrderEntity,
-    @Body() markAsDeliveredDto: MarkAsDeliveredDto,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility,
+    @Body() markAsDeliveredDto: MarkAsDeliveredDto
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      OrdersAction.MarkAsDelivered,
+      order
+    );
     return this.ordersService.markAsDelivered(
       order.id,
       markAsDeliveredDto,

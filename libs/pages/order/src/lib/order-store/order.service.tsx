@@ -8,7 +8,7 @@ import {
 } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
 
-export const fetchOrder = (slug: string) =>
+export const fetchOrder = (slug: string): Promise<OrderModel> =>
   axios.get<OrderModel>(`/api/orders/slug/${slug}`).then(({ data }) => data);
 
 export const fetchDishes = (slug: string) =>

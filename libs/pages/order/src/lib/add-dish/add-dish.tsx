@@ -1,16 +1,14 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
-
-import { useUserStore } from '@pasnik/store';
-import { AddDishDto, UserModel } from '@pasnik/api/data-transfer';
-import { useWorkspaceUsers } from '@pasnik/features/workspaces';
-import { Input } from '@pasnik/components';
-import { Button } from '@pasnik/components';
+import { AddDishDto } from '@pasnik/api/data-transfer';
+import { Button, Input } from '@pasnik/components';
 
 import { useAddDish } from './add-dish.hook';
 import { UserSelection } from '../user-selection';
+import { Controller } from 'react-hook-form';
 import { useOrderFacade } from '../order-store/order.facade';
+import { useWorkspaceUsers } from '@pasnik/features/workspaces';
 
 export interface AddDishProps {
   onAdd(addDishDto: AddDishDto): void;
@@ -21,17 +19,14 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
   const {
     orderQuery: { data: order },
   } = useOrderFacade();
-  const { user } = useUserStore();
-  const { handleSubmit, register, errors, reset, getValues, setValue } =
+  const { data: workspaceUsers } = useWorkspaceUsers(order?.workspace?.slug);
+  const users = useMemo(
+    () => workspaceUsers?.map(({ user }) => user!) ?? [],
+    [workspaceUsers]
+  );
+  const { handleSubmit, register, errors, reset, getValues, control } =
     useAddDish();
   const { t } = useTranslation();
-  const { data: users } = useWorkspaceUsers(order?.workspace?.slug);
-
-  const selectedUser = useMemo(
-    () =>
-      users?.find((item) => item.userId === getValues('userId'))?.user ?? user,
-    [getValues, user, users]
-  );
 
   const onSubmit = useCallback(async () => {
     const data = getValues();
@@ -39,31 +34,23 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
     reset();
   }, [getValues, onAdd, reset]);
 
-  const onUserSelect = useCallback(
-    (pickedUser: UserModel) => {
-      setValue('userId', pickedUser.id);
-    },
-    [setValue]
-  );
-
-  useEffect(() => {
-    if (!selectedUser) {
-      return;
-    }
-
-    setValue('userId', selectedUser.id);
-  }, [selectedUser, setValue]);
-
   return (
     <form
       className="flex flex-col items-stretch py-3 pl-3 pr-6 gap-4 xsm:flex-row"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex items-center">
-        <UserSelection
-          type="slim"
-          user={selectedUser}
-          selectUser={onUserSelect}
+        <Controller
+          control={control}
+          name="userId"
+          render={({ field: { value, onChange } }) => (
+            <UserSelection
+              type="slim"
+              userId={value}
+              users={users}
+              selectUser={onChange}
+            />
+          )}
         />
       </div>
       <div className="text-sm text-gray-500 w-full">

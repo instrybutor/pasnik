@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
 import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
-import { Input } from '@pasnik/components';
-import { Button } from '@pasnik/components';
+import { Button, Input } from '@pasnik/components';
 
 import { useUpdateDish } from './update-dish.hook';
 import { UserSelection } from '../user-selection';
-import { useWorkspaceUsers } from '@pasnik/features/workspaces';
+import { Controller } from 'react-hook-form';
 import { useOrderFacade } from '../order-store/order.facade';
+import { useWorkspaceUsers } from '@pasnik/features/workspaces';
 
 export interface UpdateDishProps {
   dish: DishModel;
@@ -25,23 +25,14 @@ export function UpdateDish({
   const {
     orderQuery: { data: order },
   } = useOrderFacade();
-  const { handleSubmit, register, errors, reset, setValue, getValues } =
+  const { data: workspaceUsers } = useWorkspaceUsers(order?.workspace?.slug);
+  const users = useMemo(
+    () => workspaceUsers?.map(({ user }) => user!) ?? [],
+    [workspaceUsers]
+  );
+
+  const { handleSubmit, register, errors, reset, getValues, control } =
     useUpdateDish();
-  const { data: users } = useWorkspaceUsers(order?.workspace?.slug);
-
-  const selectedUser = useMemo(
-    () =>
-      users?.find((item) => item.userId === getValues('userId'))?.user ??
-      dish.user,
-    [getValues, users, dish.user]
-  );
-
-  const onUserSelect = useCallback(
-    (pickedUser) => {
-      setValue('userId', pickedUser.id);
-    },
-    [setValue]
-  );
 
   useEffect(() => {
     reset({
@@ -61,14 +52,21 @@ export function UpdateDish({
 
   return (
     <form
-      className="flex flex-col items-stretch py-3 gap-4 w-full xsm:flex-row"
+      className="flex flex-col items-stretch -my-1 gap-4 w-full xsm:flex-row"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex items-center">
-        <UserSelection
-          type="slim"
-          user={selectedUser}
-          selectUser={onUserSelect}
+        <Controller
+          control={control}
+          name="userId"
+          render={({ field: { value, onChange } }) => (
+            <UserSelection
+              type="slim"
+              users={users}
+              userId={value}
+              selectUser={onChange}
+            />
+          )}
         />
       </div>
       <div className="text-sm text-gray-500 w-full">

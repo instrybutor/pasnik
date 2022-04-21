@@ -19,13 +19,13 @@ export function SelectWorkspaceDropdown({
   const { data: workspaces } = useWorkspaces();
   const refButton = useRef<HTMLButtonElement | null>(null);
 
-  const onClickCapture = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+  const onClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button === 0 && event.ctrlKey) {
       event.stopPropagation();
     }
   }, []);
 
-  const onClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+  const onClickCapture = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button === 0) {
       event.nativeEvent.preventDefault();
     }

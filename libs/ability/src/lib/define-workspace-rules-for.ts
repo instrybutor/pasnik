@@ -6,7 +6,7 @@ import {
   WorkspaceModel,
   WorkspacePrivacy,
   WorkspaceUserModel,
-  WorkspaceUserRole
+  WorkspaceUserRole,
 } from '@pasnik/api/data-transfer';
 
 export enum WorkspacesAction {
@@ -42,7 +42,10 @@ export enum OrdersAction {
   MarkAsOrdered = 'markAsOrdered',
   MarkAsDelivered = 'markAsDelivered',
   MarkAsClosed = 'markAsClosed',
-  MarkAsOpened = 'markAsOpened',
+  MarkAsOpen = 'markAsOpen',
+  CreateDish = 'createDish',
+  ManageDish = 'ManageDish',
+  SetPayer = 'setPayer',
 }
 
 export enum UsersAction {
@@ -51,6 +54,7 @@ export enum UsersAction {
   Read = 'read',
   Update = 'update',
   Delete = 'delete',
+  SeeEmails = 'seeEmails',
 }
 
 export type AppAbility = Ability<
@@ -63,8 +67,10 @@ export type AppAbility = Ability<
 
 type AppAbilityBuilder = AbilityBuilder<AppAbility>;
 
-function defineAdminRules({can}: AppAbilityBuilder) {
+function defineAdminRules({ can }: AppAbilityBuilder) {
   // can('manage', 'all');
+  can(UsersAction.SeeEmails, 'UserModel');
+  can(UsersAction.Read, 'UserModel');
   can(WorkspacesAction.Update, 'WorkspaceModel');
   can(WorkspacesAction.Delete, 'WorkspaceModel');
   can(WorkspacesAction.Read, 'WorkspaceModel');
@@ -75,8 +81,6 @@ function defineWorkspaceOwnerRules(
   workspaceUser: WorkspaceUserModel
 ) {
   // WorkspaceModel
-  can(WorkspacesAction.Manage, 'WorkspaceModel');
-  cannot(WorkspacesAction.Join, 'WorkspaceModel');
   cannot(WorkspacesAction.Leave, 'WorkspaceModel');
   can(WorkspacesAction.ChangeOwner, 'WorkspaceModel');
 
@@ -105,10 +109,14 @@ function defineWorkspaceAdminRules(
   can(WorkspaceUsersAction.Create, 'WorkspaceUserModel');
 
   can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
-    role: WorkspaceUserRole.User
+    role: WorkspaceUserRole.User,
   });
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     id: workspaceUser.id,
+  });
+
+  can(OrdersAction.MarkAsOrdered, 'OrderModel', {
+    status: OrderStatus.Delivered,
   });
 }
 
@@ -137,10 +145,10 @@ function defineWorkspaceUserRules(
   cannot(OrdersAction.MarkAsOrdered, 'OrderModel', {
     dishes: { $size: 0 },
   });
-  can(OrdersAction.MarkAsOpened, 'OrderModel', {
+  can(OrdersAction.MarkAsOpen, 'OrderModel', {
     status: OrderStatus.Canceled,
   });
-  can(OrdersAction.MarkAsOpened, 'OrderModel', {
+  can(OrdersAction.MarkAsOpen, 'OrderModel', {
     status: OrderStatus.Ordered,
   });
   can(OrdersAction.MarkAsDelivered, 'OrderModel', {
@@ -148,6 +156,12 @@ function defineWorkspaceUserRules(
   });
   can(OrdersAction.Duplicate, 'OrderModel', {
     status: OrderStatus.Delivered,
+  });
+  can(OrdersAction.CreateDish, 'OrderModel', {
+    status: OrderStatus.InProgress,
+  });
+  can(OrdersAction.ManageDish, 'OrderModel', {
+    status: OrderStatus.InProgress,
   });
 }
 
@@ -178,13 +192,13 @@ export function defineWorkspaceRulesFor(
 
   switch (workspaceUser?.role) {
     case WorkspaceUserRole.Owner:
-      defineWorkspaceOwnerRules(builder, workspaceUser);
-      defineWorkspaceAdminRules(builder, workspaceUser);
       defineWorkspaceUserRules(builder, workspaceUser);
+      defineWorkspaceAdminRules(builder, workspaceUser);
+      defineWorkspaceOwnerRules(builder, workspaceUser);
       break;
     case WorkspaceUserRole.Admin:
-      defineWorkspaceAdminRules(builder, workspaceUser);
       defineWorkspaceUserRules(builder, workspaceUser);
+      defineWorkspaceAdminRules(builder, workspaceUser);
       break;
     case WorkspaceUserRole.User:
       defineWorkspaceUserRules(builder, workspaceUser);

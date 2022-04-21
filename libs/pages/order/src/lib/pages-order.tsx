@@ -35,6 +35,8 @@ export function PagesOrder() {
                 <OrderSectionLoading className="h-52" />
               ) : order?.status === OrderStatus.InProgress ? (
                 <OrderDishes order={order} dishes={dishes!} />
+              ) : order?.status === OrderStatus.Canceled ? (
+                <OrderDishes order={order} dishes={dishes!} />
               ) : (
                 <OrderSummary dishes={dishes!} order={order!} />
               )}

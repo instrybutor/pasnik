@@ -30,7 +30,7 @@ export class OrderMiddleware implements NestMiddleware {
     }
     const workspaceUser = await this.workspaceUsersRepository.findOne({
       where: { workspace: order.workspace, user, isRemoved: false },
-      relations: ['workspace'],
+      relations: ['user', 'workspace'],
     });
 
     if (!workspaceUser) {

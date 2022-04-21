@@ -35,7 +35,7 @@ export function SidebarItem({
           aria-hidden="true"
         />
       ) : null}
-      {label}
+      <span className="truncate">{label}</span>
     </NavLink>
   ) : (
     <Disclosure as="div" className="space-y-1">

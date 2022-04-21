@@ -6,6 +6,7 @@ export interface DishModel {
   priceCents: number;
   createdAt: string;
   updatedAt: string;
+  userId: number;
   user: UserModel;
   createdBy: UserModel;
 }
