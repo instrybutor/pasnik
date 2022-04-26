@@ -11,8 +11,10 @@ export enum OrderStatus {
 }
 
 export interface OrderModel {
+  kind: 'OrderModel';
   id: string;
   user: UserModel;
+  userId: number;
   status: OrderStatus;
   from: string;
   slug: string;

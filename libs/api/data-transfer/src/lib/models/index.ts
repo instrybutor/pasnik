@@ -7,4 +7,5 @@ export * from './invitation.model';
 export * from './payment.model';
 export * from './workspace-user.model';
 export * from './workspace.model';
+export * from './workspace-access-request.model';
 export * from './notification.model';

@@ -4,5 +4,8 @@ export * from './lib/create-workspace-drawer/create-workspace-drawer';
 export * from './lib/redirect-to-current-workspace';
 export * from './lib/workspace-name';
 export * from './lib/workspace-users/workspace-users';
+export * from './lib/workspace-users/workspace-users-container';
 export * from './lib/queries';
 export * from './lib/mutations';
+export * from './lib/workspace-ability-provider';
+export * from './lib/select-workspace-user/select-workspace-user';

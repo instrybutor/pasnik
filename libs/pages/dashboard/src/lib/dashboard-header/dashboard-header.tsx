@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { OfficeBuildingIcon } from '@heroicons/react/outline';
 import { useUserStore } from '@pasnik/store';
 import { UserAvatar, UserName } from '@pasnik/components';
+import { useCurrentWorkspaceById } from '@pasnik/features/workspaces';
 
 /* eslint-disable-next-line */
 export interface DashboardHeaderProps {}
@@ -9,6 +10,7 @@ export interface DashboardHeaderProps {}
 export function DashboardHeader(props: DashboardHeaderProps) {
   const { t } = useTranslation();
   const { user } = useUserStore();
+  const workspace = useCurrentWorkspaceById(user?.currentWorkspaceId);
 
   return (
     <div className="bg-white shadow">
@@ -20,7 +22,7 @@ export function DashboardHeader(props: DashboardHeaderProps) {
               <div className="hidden sm:block">
                 <UserAvatar user={user!} size="xxlg" />
               </div>
-              <div>
+              <div className="max-w-full">
                 <div className="flex items-center">
                   <div className="sm:hidden">
                     <UserAvatar user={user!} size="xxlg" />
@@ -29,14 +31,14 @@ export function DashboardHeader(props: DashboardHeaderProps) {
                     {t('dashboard.header.hello')}, <UserName user={user} />
                   </h1>
                 </div>
-                <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
+                <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap max-w-full">
                   <dt className="sr-only">Company</dt>
-                  <dd className="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6">
+                  <dd className="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6 truncate">
                     <OfficeBuildingIcon
                       className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                       aria-hidden="true"
                     />
-                    Instrybutor
+                    <span className="truncate">{workspace?.name}</span>
                   </dd>
                 </dl>
               </div>

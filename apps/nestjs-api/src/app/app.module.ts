@@ -18,6 +18,8 @@ import { AuthJwtMiddleware } from './auth-jwt.middleware';
 import { WorkspacesMiddleware } from './workspaces/workspaces.middleware';
 import { OrderModule } from './order';
 import { NotificationsModule } from './notifications/notifications.module';
+import { APP_FILTER } from '@nestjs/core';
+import { CaslExceptionFilter } from './casl-exception.filter';
 
 @Module({
   imports: [
@@ -37,6 +39,12 @@ import { NotificationsModule } from './notifications/notifications.module';
       WorkspaceUsersRepository,
       OrdersRepository,
     ]),
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: CaslExceptionFilter,
+    },
   ],
 })
 export class AppModule {

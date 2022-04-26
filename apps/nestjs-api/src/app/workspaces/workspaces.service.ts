@@ -6,24 +6,30 @@ import {
   OrdersRepository,
   UserEntity,
   UsersRepository,
+  WorkspaceAccessRequestsRepository,
   WorkspaceEntity,
   WorkspacesRepository,
   WorkspaceUserEntity,
   WorkspaceUsersRepository,
 } from '@pasnik/nestjs/database';
 import {
+  AddMembersToWorkspaceDto,
   CreateOrderDto,
   CreateWorkspaceDto,
   OrderAction,
   OrderStatus,
   UpdateWorkspaceDto,
+  UpdateWorkspaceUserDto,
+  WorkspaceUserRole,
 } from '@pasnik/api/data-transfer';
-import { Connection } from 'typeorm';
+import { Connection, In } from 'typeorm';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 @Injectable()
 export class WorkspacesService {
   constructor(
+    @InjectRepository(WorkspaceAccessRequestsRepository)
+    private workspaceAccessRequestsRepository: WorkspaceAccessRequestsRepository,
     @InjectRepository(WorkspacesRepository)
     private workspaceRepository: WorkspacesRepository,
     @InjectRepository(WorkspaceUsersRepository)
@@ -55,6 +61,12 @@ export class WorkspacesService {
       );
 
       return order;
+    });
+  }
+
+  findUserById(workspaceUserId: number | string) {
+    return this.workspaceUsersRepository.findOneOrFail(workspaceUserId, {
+      relations: ['user'],
     });
   }
 
@@ -118,11 +130,22 @@ export class WorkspacesService {
     workspace: WorkspaceEntity,
     updateWorkspaceDto: UpdateWorkspaceDto
   ) {
-    await this.workspaceRepository.updateWorkspace(
-      workspace,
-      updateWorkspaceDto
-    );
-    return this.findOne(workspace.id);
+    await this.connection.transaction(async (manager) => {
+      const workspaceRepository =
+        manager.getCustomRepository(WorkspacesRepository);
+      const workspaceUsersRepository = manager.getCustomRepository(
+        WorkspaceUsersRepository
+      );
+      await workspaceRepository.updateWorkspace(workspace, updateWorkspaceDto);
+
+      if (updateWorkspaceDto.workspaceOwnerId) {
+        await workspaceUsersRepository.changeOwner(
+          workspace,
+          updateWorkspaceDto.workspaceOwnerId
+        );
+      }
+    });
+    return await this.findOne(workspace.id);
   }
 
   async create(createWorkspaceDto: CreateWorkspaceDto, user: UserEntity) {
@@ -139,30 +162,92 @@ export class WorkspacesService {
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
 
-  async addMember(workspace: WorkspaceEntity, email: string) {
+  async addMembers(
+    workspace: WorkspaceEntity,
+    { members }: AddMembersToWorkspaceDto
+  ) {
+    const emails = members.map((member) => member.email);
     return this.connection.transaction(async (manager) => {
       const usersRepository = manager.getCustomRepository(UsersRepository);
       const workspaceUsersRepository = manager.getCustomRepository(
         WorkspaceUsersRepository
       );
+      const workspaceAccessRequestsRepository = manager.getCustomRepository(
+        WorkspaceAccessRequestsRepository
+      );
 
-      const user = await usersRepository.findOneOrFail({ where: { email } });
-      const workspaceUser = await workspaceUsersRepository.findOne({
-        where: { user },
-        relations: ['user'],
+      const users = await usersRepository.find({
+        where: { email: In(emails) },
       });
-      if (workspaceUser.isRemoved === false) {
-        return workspaceUser;
-      }
-      const { id } = await workspaceUsersRepository.addMember(workspace, user);
-      return workspaceUsersRepository.findOne(id, { relations: ['user'] });
+      const workspaceUsers = await workspaceUsersRepository.find({
+        where: {
+          userId: In(users.map(({ id }) => id)),
+          workspace,
+          isRemoved: false,
+        },
+      });
+      const filteredUsers = users.filter(
+        (user) =>
+          !workspaceUsers.some(
+            (workspaceUser) => workspaceUser.userId === user.id
+          )
+      );
+
+      await workspaceAccessRequestsRepository.delete({
+        userId: In(filteredUsers.map(({ id }) => id)),
+      });
+      return await Promise.all(
+        filteredUsers.map((user) =>
+          workspaceUsersRepository.addMember(workspace, user)
+        )
+      );
     });
   }
 
-  async removeMember(workspace: WorkspaceEntity, userId: number) {
-    const workspaceUser = await this.workspaceUsersRepository.findOneOrFail({
-      where: { workspace, userId, isRemoved: false },
+  async joinWorkspace(user: UserEntity, workspace: WorkspaceEntity) {
+    return await this.workspaceUsersRepository.addMember(workspace, user);
+  }
+
+  async removeMember(workspaceUser: WorkspaceUserEntity) {
+    return await this.workspaceUsersRepository.removeMember(workspaceUser);
+  }
+
+  async requestAccess(workspace: WorkspaceEntity, user: UserEntity) {
+    const requestAccess = await this.workspaceAccessRequestsRepository.findOne({
+      where: { workspace, user },
     });
-    return this.workspaceUsersRepository.removeMember(workspaceUser);
+    if (requestAccess) {
+      return;
+    }
+    return await this.workspaceAccessRequestsRepository.createAccessRequest(
+      workspace,
+      user
+    );
+  }
+
+  async findAccessRequest(workspace: WorkspaceEntity, user: UserEntity) {
+    return await this.workspaceAccessRequestsRepository.findOne({
+      where: { workspace, user },
+    });
+  }
+
+  async findAccessRequests(workspace: WorkspaceEntity) {
+    return await this.workspaceAccessRequestsRepository.find({
+      where: { workspace },
+      relations: ['user'],
+    });
+  }
+
+  async updateMember(
+    workspaceUser: WorkspaceUserEntity,
+    updateUserDto: UpdateWorkspaceUserDto
+  ) {
+    if (updateUserDto.role === WorkspaceUserRole.Owner) {
+      throw new HttpException('Cannot update to owner', HttpStatus.FORBIDDEN);
+    }
+    return this.workspaceUsersRepository.updateMember(
+      workspaceUser,
+      updateUserDto
+    );
   }
 }

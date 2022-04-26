@@ -46,7 +46,9 @@ export const useWorkspaceLeaveMutation = (slug: string) => {
 
         queryClient.setQueryData(workspacesQueryKey, filteredWorkspaces);
 
-        await changeWorkspace(filteredWorkspaces[0]);
+        if (filteredWorkspaces[0]) {
+          await changeWorkspace(filteredWorkspaces[0]);
+        }
       },
     }
   );

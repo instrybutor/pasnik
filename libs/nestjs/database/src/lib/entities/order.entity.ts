@@ -17,6 +17,8 @@ import { WorkspaceEntity } from './workspace.entity';
 
 @Entity()
 export class OrderEntity implements OrderModel {
+  readonly kind = 'OrderModel';
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -25,6 +27,9 @@ export class OrderEntity implements OrderModel {
 
   @ManyToOne(() => UserEntity)
   user: UserEntity;
+
+  @Column()
+  userId: number;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   payer?: UserEntity;

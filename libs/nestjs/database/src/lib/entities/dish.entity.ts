@@ -29,6 +29,9 @@ export class DishEntity implements DishModel {
   @Column()
   orderId: string;
 
+  @Column()
+  userId: number;
+
   @ManyToOne(() => UserEntity)
   user: UserEntity;
 

@@ -21,8 +21,6 @@ export const useWorkspace = (
       onError: (err: AxiosError) => {
         onError?.(err);
       },
-      useErrorBoundary: false,
-      suspense: !!onError,
       refetchOnMount: false,
     }
   );

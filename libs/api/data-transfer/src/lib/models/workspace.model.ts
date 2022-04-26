@@ -5,6 +5,8 @@ export enum WorkspacePrivacy {
 }
 
 export interface WorkspaceModel {
+  kind: 'WorkspaceModel';
+
   id: number;
   slug: string;
   createdAt: string;

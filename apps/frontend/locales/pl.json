@@ -123,7 +123,8 @@
     "orderedBy": "Zamówione przez",
     "payedBy": "Opłacone przez",
     "deliveredBy": "Odebrane przez",
-    "canceledBy": "Usunięte przez"
+    "canceledBy": "Anulowane przez",
+    "openBy": "Otwarte przez"
   },
   "timestamp": {
     "created": "Utworzone",
@@ -143,5 +144,61 @@
     "ordered": "zamówione",
     "delivered": "dostarczone",
     "canceled": "anulowane"
+  },
+  "workspace": {
+    "createDrawer": {
+      "title": "Nowa przestrzeń",
+      "subtitle": "Utwórz nową przestrzeń podając jej nazwę oraz wybierając stopień prywatności"
+    },
+    "updateDrawer": {
+      "title": "Edytuj przestrzeń",
+      "subtitle": "Edytuj przestrzeń zmieniając jej nazwę lub wybierając stopień prywatności"
+    },
+    "name": "Nazwa",
+    "privacy": {
+      "label": "Prywatność",
+      "public": {
+        "label": "Publiczna",
+        "description": "Każdy z linkiem może widzieć tą przestrzeń."
+      },
+      "privateToMembers": {
+        "label": "Prywatna dla członków",
+        "description": "Tylko członkowie tej przestrzeni mają do niej dostęp."
+      },
+      "privateToYou": {
+        "label": "Pywatna dla Ciebie",
+        "description": "Tylko ty masz dostęp do tej przestrzeni."
+      }
+    },
+    "errors": {
+      "name": "Nazwa nie może być pusta"
+    },
+    "roles": {
+      "owner": "Właściciel",
+      "admin": "Administrator",
+      "user": "Użytkownik"
+    },
+    "areYouSure": "Czy jesteś pewny?",
+    "inviteUsers": "Dodaj osoby za pomocą adresu email",
+    "requestAccess": {
+      "title": "Ta przestrzeń jest prywatna",
+      "subtitle": "Możesz poprosić o dostęp wysyłając prośbę o dołączenie.",
+      "action": "Wyślij prośbę"
+    },
+    "settings": "Ustawienia",
+    "active": "Aktywne",
+    "inactive": "Nieaktywne"
+  },
+  "actions": {
+    "cancel": "Anuluj",
+    "submit": "Zapisz",
+    "delete": "Usuń",
+    "yes": "Tak",
+    "no": "Nie",
+    "back": "Wstecz",
+    "add": "Dodaj"
+  },
+  "forms": {
+    "email": "Email"
   }
 }

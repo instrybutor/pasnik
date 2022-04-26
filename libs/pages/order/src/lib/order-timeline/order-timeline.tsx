@@ -10,7 +10,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
-import { DateFormat, UserName } from '@pasnik/components';
+import { DateFormat, UserAvatar } from '@pasnik/components';
 
 const typesMap = {
   [OrderAction.Created]: {
@@ -18,8 +18,7 @@ const typesMap = {
     bgColorClass: 'bg-gray-400',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.createdBy</Trans>{' '}
-        <UserName user={user} initials={true} />
+        <Trans>timeline.createdBy</Trans> <UserAvatar size="xsm" user={user} />
       </>
     ),
   },
@@ -28,8 +27,7 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.canceledBy</Trans>{' '}
-        <UserName user={user} initials={true} />
+        <Trans>timeline.canceledBy</Trans> <UserAvatar size="xsm" user={user} />
       </>
     ),
   },
@@ -39,7 +37,7 @@ const typesMap = {
     text: ({ actionUser }: OrderActionModel) => (
       <>
         <Trans>timeline.payedBy</Trans>{' '}
-        <UserName user={actionUser!} initials={true} />
+        <UserAvatar size="xsm" user={actionUser} />
       </>
     ),
   },
@@ -49,7 +47,7 @@ const typesMap = {
     text: ({ user }: OrderActionModel) => (
       <>
         <Trans>timeline.deliveredBy</Trans>{' '}
-        <UserName user={user} initials={true} />
+        <UserAvatar size="xsm" user={user} />
       </>
     ),
   },
@@ -58,7 +56,7 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        Otwarte przez <UserName user={user} initials={true} />
+        <Trans>timeline.openBy</Trans> <UserAvatar size="xsm" user={user} />
       </>
     ),
   },
@@ -67,8 +65,7 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.orderedBy</Trans>{' '}
-        <UserName user={user} initials={true} />
+        <Trans>timeline.orderedBy</Trans> <UserAvatar size="xsm" user={user} />
       </>
     ),
   },

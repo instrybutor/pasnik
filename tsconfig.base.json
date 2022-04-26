@@ -17,6 +17,7 @@
     "baseUrl": ".",
     "typeRoots": ["./custom_typings", "./node_modules/@types"],
     "paths": {
+      "@pasnik/ability": ["libs/ability/src/index.ts"],
       "@pasnik/api/data-transfer": ["libs/api/data-transfer/src/index.ts"],
       "@pasnik/auth": ["libs/auth/src/index.ts"],
       "@pasnik/axios": ["libs/axios/src/index.ts"],

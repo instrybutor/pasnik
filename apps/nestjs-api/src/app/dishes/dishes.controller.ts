@@ -14,6 +14,9 @@ import { AddDishDto } from '@pasnik/api/data-transfer';
 
 import { DishesService } from './dishes.service';
 import { CurrentOrder } from '../order/current-order.decorator';
+import { CurrentAbility } from '../app-ability';
+import { AppAbility, OrdersAction } from '@pasnik/ability';
+import { ForbiddenError } from '@casl/ability';
 
 @Controller('orders/slug/:slug/dishes')
 export class DishesController {
@@ -33,13 +36,20 @@ export class DishesController {
   create(
     @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
-    @CurrentUser() currentUser: UserEntity
+    @CurrentUser() currentUser: UserEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.CreateDish, order);
     return this.dishesService.create(addDishDto, order, currentUser);
   }
 
   @Delete(':id')
-  delete(@CurrentOrder() order: OrderEntity, @Param('id') id: string) {
+  delete(
+    @CurrentOrder() order: OrderEntity,
+    @Param('id') id: string,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.ManageDish, order);
     return this.dishesService.delete(order, +id);
   }
 
@@ -48,8 +58,10 @@ export class DishesController {
     @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
     @Param('id') id: string,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.ManageDish, order);
     return this.dishesService.update(order, +id, addDishDto, user);
   }
 }

@@ -1,25 +1,22 @@
 import { WorkspaceUserModel } from '@pasnik/api/data-transfer';
-import {
-  ChangeEvent,
-  Fragment,
-  ReactElement,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import { Popover, Transition } from '@headlessui/react';
+import { useEffect, useState } from 'react';
 import { WorkspaceUsersSkeleton } from './workspace-users-skeleton';
-import { UserAvatar, UserAvatarSize, UserName } from '@pasnik/components';
+import {
+  Popover,
+  UserAvatar,
+  UserAvatarSize,
+  UserName,
+} from '@pasnik/components';
+import {
+  WorkspaceUsersContainer,
+  WorkspaceUsersContainerProps,
+} from './workspace-users-container';
 
-export interface UsersPopoverElementProps {
-  workspaceUser: WorkspaceUserModel;
-}
-
-export interface UsersProps {
+export interface WorkspaceUsersProps {
   users?: WorkspaceUserModel[];
   avatarSize?: UserAvatarSize;
   usersToShow?: number;
-  popoverElement?: (props: UsersPopoverElementProps) => ReactElement;
+  popoverElement?: WorkspaceUsersContainerProps['popoverElement'];
 }
 
 export function WorkspaceUsers({
@@ -27,10 +24,8 @@ export function WorkspaceUsers({
   avatarSize,
   usersToShow,
   popoverElement,
-}: UsersProps) {
+}: WorkspaceUsersProps) {
   const [visibleUsers, setVisibleUsers] = useState<WorkspaceUserModel[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<WorkspaceUserModel[]>([]);
-  const [filterValue, setFilterValue] = useState('');
 
   useEffect(() => {
     if (users) {
@@ -38,58 +33,25 @@ export function WorkspaceUsers({
     }
   }, [usersToShow, users, setVisibleUsers]);
 
-  useEffect(() => {
-    if (users) {
-      setFilteredUsers(
-        users.filter(({ user }) =>
-          [user?.givenName, user?.familyName]
-            .join(' ')
-            .toLowerCase()
-            .includes(filterValue.toLowerCase())
-        )
-      );
-    }
-  }, [filterValue, users, setFilteredUsers]);
-
-  const onFilterChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setFilterValue(event.target.value ?? '');
-    },
-    [setFilterValue]
-  );
-
   return (
     <div className="flex items-center space-x-2">
       <div className="flex flex-shrink-0 -space-x-1">
         {visibleUsers.map((workspaceUser) =>
           popoverElement ? (
             <Popover
+              panel={() => (
+                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                  {popoverElement({ user: workspaceUser })}
+                </div>
+              )}
               key={workspaceUser.id}
               className="relative flex flex-col items-center group"
             >
-              <Popover.Button>
-                <UserAvatar
-                  user={workspaceUser.user}
-                  size={avatarSize}
-                  className="max-w-none ring-2 ring-white"
-                />
-              </Popover.Button>
-
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-200"
-                enterFrom="opacity-0 translate-y-1"
-                enterTo="opacity-100 translate-y-0"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 translate-y-1"
-              >
-                <Popover.Panel className="absolute z-30 px-4 mt-3 top-full transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
-                  <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                    {popoverElement({ workspaceUser })}
-                  </div>
-                </Popover.Panel>
-              </Transition>
+              <UserAvatar
+                user={workspaceUser.user}
+                size={avatarSize}
+                className="max-w-none ring-2 ring-white"
+              />
             </Popover>
           ) : (
             <div
@@ -111,41 +73,17 @@ export function WorkspaceUsers({
           )
         )}
         {users && users.length > visibleUsers.length && (
-          <Popover className="relative flex flex-col items-center group">
-            <Popover.Button className="relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 h-8 w-8 max-w-none ring-2 ring-white">
-              + {users.length - visibleUsers.length}
-            </Popover.Button>
-
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <Popover.Panel className="absolute z-30 w-56 bg-white px-4 mt-3 top-full transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
-                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 flex flex-wrap p-4 gap-2">
-                  <input
-                    placeholder="Szukaj..."
-                    type="text"
-                    id="workspace-name"
-                    className="block w-full shadow-sm sm:text-sm focus:ring-cyan-500 focus:border-cyan-500 border-gray-300 rounded-md mb-2"
-                    onChange={onFilterChange}
-                  />
-                  {filteredUsers.map((workspaceUser) => (
-                    <button key={workspaceUser.id}>
-                      <UserAvatar
-                        user={workspaceUser.user}
-                        size={avatarSize}
-                        className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
-                      />
-                    </button>
-                  ))}
-                </div>
-              </Popover.Panel>
-            </Transition>
+          <Popover
+            panel={() => (
+              <WorkspaceUsersContainer
+                users={users}
+                popoverElement={popoverElement}
+                avatarSize={avatarSize}
+              />
+            )}
+            className="relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 h-8 w-8 max-w-none ring-2 ring-white"
+          >
+            + {users.length - visibleUsers.length}
           </Popover>
         )}
       </div>

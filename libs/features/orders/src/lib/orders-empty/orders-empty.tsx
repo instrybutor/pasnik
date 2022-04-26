@@ -15,7 +15,6 @@ export function OrdersEmpty() {
           {t('dashboard.starting_info')}
         </span>
       </div>
-
       <Link
         to="/create-order"
         className="bg-cyan-500 hover:bg-cyan-600 text-white py-2 text-sm rounded px-10 mt-4"

@@ -1,14 +1,10 @@
-import { Fragment, useCallback } from 'react';
-import React from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { UserModel } from '@pasnik/api/data-transfer';
-import { UserAvatar, UserInfo, UserName } from '@pasnik/components';
+import { Select, UserAvatar, UserInfo, UserName } from '@pasnik/components';
 import { CheckIcon } from '@heroicons/react/outline';
-import { Select } from '@pasnik/components';
-import { useWorkspaceUsers } from '@pasnik/features/workspaces';
-import { useOrderFacade } from '../order-store/order.facade';
 
 enum SelectionType {
   SLIM = 'slim',
@@ -16,31 +12,33 @@ enum SelectionType {
 }
 
 interface UserSelectionProps {
-  user?: UserModel;
+  userId?: number;
+  users: UserModel[];
   type?: string;
-  selectUser(user: UserModel): void;
+  selectUser(userId: number): void;
 }
 
 export const UserSelection: React.FC<UserSelectionProps> = ({
-  user,
+  userId,
+  users,
   type = SelectionType.DEFAULT,
   children,
   selectUser,
 }) => {
-  const {
-    orderQuery: { data: order },
-  } = useOrderFacade();
-  const { data } = useWorkspaceUsers(order?.workspace?.slug);
   const { t } = useTranslation();
-  const users = data?.map((item) => item.user) ?? [];
 
   const handleUserSelection = useCallback(
     (selectedUser: UserModel) => {
-      if (selectedUser.id !== user?.id) {
-        selectUser(selectedUser);
+      if (selectedUser.id !== userId) {
+        selectUser(selectedUser.id);
       }
     },
-    [user?.id, selectUser]
+    [userId, selectUser]
+  );
+
+  const user = useMemo(
+    () => users.find(({ id }) => id === userId),
+    [userId, users]
   );
 
   return (
@@ -82,13 +80,13 @@ export const UserSelection: React.FC<UserSelectionProps> = ({
       >
         <Fragment>
           <UserAvatar user={user} size="sm" />
-          {type === SelectionType.DEFAULT ? (
+          {type === SelectionType.DEFAULT && (
             <div className="ml-3 truncate">
               <UserName user={user} fallbackValue={t('dish.paying.pick_payer')}>
                 {children}
               </UserName>
             </div>
-          ) : null}
+          )}
         </Fragment>
       </Select>
     </div>

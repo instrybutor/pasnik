@@ -1,6 +1,7 @@
 import { WorkspaceModel } from './workspace.model';
 
 export interface UserModel {
+  kind: 'UserModel';
   id: number;
   isAdmin: boolean;
   givenName?: string;

@@ -29,11 +29,11 @@ async function bootstrap() {
     session({
       store: new RedisStore({ client: redisClient }),
       secret: configService.get('SESSION_SECRET'),
-      resave: false,
-      saveUninitialized: false,
+      resave: true,
+      saveUninitialized: true,
       rolling: true, // keep session alive
       cookie: {
-        maxAge: 30 * 60 * 1000, // session expires in 1hr, refreshed by `rolling: true` option.
+        maxAge: 60 * 60 * 1000, // session expires in 1hr, refreshed by `rolling: true` option.
         httpOnly: true, // so that cookie can't be accessed via client-side script
       },
     })

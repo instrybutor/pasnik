@@ -40,6 +40,16 @@ export function OrderSummaryDishes({
                         </td>
                       </tr>
                     ))}
+                    {summary.shipping > 0 && (
+                      <tr>
+                        <td className="px-6 py-4 text-sm text-gray-500 w-11/12">
+                          Dostawa
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12">
+                          <Price priceCents={summary.shipping} />
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

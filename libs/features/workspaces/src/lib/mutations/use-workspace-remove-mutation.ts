@@ -16,6 +16,7 @@ export const useWorkspaceRemoveMutation = (slug: string) => {
     {
       onMutate: async () => {
         await queryClient.cancelQueries(queryKey);
+        await queryClient.cancelQueries(usersQueryKey);
 
         const previousUsers =
           queryClient.getQueryData<WorkspaceUserModel[]>(usersQueryKey);
@@ -23,10 +24,19 @@ export const useWorkspaceRemoveMutation = (slug: string) => {
         const previousWorkspace =
           queryClient.getQueryData<WorkspaceModel>(queryKey);
 
-        queryClient.invalidateQueries(queryKey);
-        queryClient.invalidateQueries(usersQueryKey);
+        await queryClient.invalidateQueries(queryKey);
+        await queryClient.invalidateQueries(usersQueryKey);
 
         return { previousUsers, previousWorkspace };
+      },
+      onSuccess: (removedWorkspace) => {
+        const workspacesQueryKey = ['workspaces'];
+        const workspaces =
+          queryClient.getQueryData<WorkspaceModel[]>(workspacesQueryKey) ?? [];
+        const updatedWorkspaces = workspaces.filter(
+          (workspace) => workspace.id !== removedWorkspace.id
+        );
+        queryClient.setQueryData(workspacesQueryKey, updatedWorkspaces);
       },
       onError: (err, _, context) => {
         queryClient.setQueryData(queryKey, context?.previousWorkspace);

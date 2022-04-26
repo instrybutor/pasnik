@@ -3,16 +3,20 @@ import { PropsWithChildren } from 'react';
 import classNames from 'classnames';
 
 export interface UserNameProps {
-  user?: UserModel | null;
+  user?: Partial<UserModel> | null;
   initials?: boolean;
   fallbackValue?: string;
 }
 
-const formatName = ({ givenName, familyName, email }: UserModel) =>
+const formatName = ({ givenName, familyName, email }: Partial<UserModel>) =>
   givenName && familyName ? `${givenName} ${familyName}` : email;
 
-const formatInitials = ({ givenName, familyName, email }: UserModel) =>
-  givenName && familyName ? `${givenName[0]}${familyName[0]}` : email[0];
+const formatInitials = ({ givenName, familyName, email }: Partial<UserModel>) =>
+  givenName && familyName
+    ? `${givenName[0]}${familyName[0]}`
+    : email
+    ? email[0]
+    : '?';
 
 export function UserName({
   user,

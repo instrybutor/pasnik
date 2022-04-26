@@ -4,6 +4,8 @@ import { UserEntity } from '@pasnik/nestjs/database';
 import { CurrentUser } from '@pasnik/nestjs/auth';
 
 import { UsersService } from './users.service';
+import { CurrentAbility } from '../app-ability';
+import { AppAbility, UsersAction } from '@pasnik/ability';
 
 @Controller('users')
 export class UsersController {
@@ -15,8 +17,12 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@CurrentAbility() ability: AppAbility) {
+    if (ability.can(UsersAction.Read, 'UserModel')) {
+      return this.usersService.findAll();
+    } else {
+      return [];
+    }
   }
 
   @Put('/notifications-seen')

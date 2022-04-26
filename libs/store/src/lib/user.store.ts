@@ -56,7 +56,10 @@ export const useUserStore = create<UserState>((set, get) => ({
     }
   },
   resetState: () => {
-    set(initialState);
+    set({
+      ...initialState,
+      userCallState: LoadingState.LOADED,
+    });
   },
   updateLastNotificationDate: async () => {
     try {

@@ -1,7 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { WorkspaceUserEntity } from '../entities/workspace-user.entity';
 import { UserEntity, WorkspaceEntity } from '../entities';
-import { WorkspaceUserRole } from '@pasnik/api/data-transfer';
+import {
+  UpdateWorkspaceUserDto,
+  WorkspaceUserRole,
+} from '@pasnik/api/data-transfer';
 
 @EntityRepository(WorkspaceUserEntity)
 export class WorkspaceUsersRepository extends Repository<WorkspaceUserEntity> {
@@ -18,9 +21,35 @@ export class WorkspaceUsersRepository extends Repository<WorkspaceUserEntity> {
     return this.save(workspaceUser);
   }
 
-  removeMember(workspaceUser: WorkspaceUserEntity) {
+  async removeMember(workspaceUser: WorkspaceUserEntity) {
     workspaceUser.isRemoved = true;
 
     return this.save(workspaceUser);
+  }
+
+  async updateMember(
+    { id }: WorkspaceUserEntity,
+    updateWorkspaceUserDto: UpdateWorkspaceUserDto
+  ) {
+    const workspaceUser = await this.findOneOrFail(id);
+
+    workspaceUser.role = updateWorkspaceUserDto.role ?? workspaceUser.role;
+
+    return this.save(workspaceUser);
+  }
+
+  async changeOwner(workspace: WorkspaceEntity, ownerId: number) {
+    await this.update(
+      { workspaceId: workspace.id, role: WorkspaceUserRole.Owner },
+      {
+        role: WorkspaceUserRole.Admin,
+      }
+    );
+    await this.update(
+      { workspaceId: workspace.id, id: ownerId },
+      {
+        role: WorkspaceUserRole.Owner,
+      }
+    );
   }
 }

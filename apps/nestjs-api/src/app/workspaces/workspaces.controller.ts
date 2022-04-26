@@ -11,11 +11,12 @@ import {
 
 import { WorkspacesService } from './workspaces.service';
 import {
-  AddMemberToWorkspaceDto,
+  AddMembersToWorkspaceDto,
   CreateOrderDto,
   CreateWorkspaceDto,
   UpdateWorkspaceDto,
-  WorkspaceUserRole,
+  UpdateWorkspaceUserDto,
+  WorkspacePrivacy,
 } from '@pasnik/api/data-transfer';
 import { CurrentUser } from '@pasnik/nestjs/auth';
 import {
@@ -24,7 +25,14 @@ import {
   WorkspaceUserEntity,
 } from '@pasnik/nestjs/database';
 import { CurrentWorkspace } from './current-workspace.decorator';
-import { CurrentWorkspaceUser } from '../current-workspace-user.decorator';
+import {
+  AppAbility,
+  WorkspacesAction,
+  WorkspaceUsersAction,
+} from '@pasnik/ability';
+import { ForbiddenError } from '@casl/ability';
+import { CurrentAbility } from '../app-ability';
+import { CurrentWorkspaceUser } from './current-workspace-user.decorator';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 @Controller('workspaces')
@@ -37,32 +45,73 @@ export class WorkspacesController {
   }
 
   @Get(':workspaceSlug')
-  findOne(@CurrentWorkspace() workspace: WorkspaceEntity) {
-    return workspace;
+  async findOne(
+    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity,
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility,
+    @CurrentUser() user: UserEntity
+  ) {
+    if (workspaceUser) {
+      ForbiddenError.from(ability).throwUnlessCan(
+        WorkspacesAction.Read,
+        workspace
+      );
+      return workspace;
+    } else if (workspace.privacy === WorkspacePrivacy.Public) {
+      return workspace;
+    }
+    const accessRequest = await this.workspacesService.findAccessRequest(
+      workspace,
+      user
+    );
+    if (accessRequest) {
+      throw new HttpException('Pending', HttpStatus.FOUND);
+    }
+    throw new HttpException('Not invited', HttpStatus.FORBIDDEN);
   }
 
   @Post()
   createWorkspace(
     @Body() createWorkspaceDto: CreateWorkspaceDto,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Create,
+      'WorkspaceModel'
+    );
     return this.workspacesService.create(createWorkspaceDto, user);
   }
 
   @Put(':workspaceSlug')
   updateWorkspace(
-    @CurrentWorkspace() workspace: WorkspaceEntity,
     @Body() updateWorkspaceDto: UpdateWorkspaceDto,
-    @CurrentWorkspaceUser() user: WorkspaceUserEntity
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
-    if (user && user.role !== WorkspaceUserRole.User) {
-      return this.workspacesService.update(workspace, updateWorkspaceDto);
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Update,
+      workspace
+    );
+    if (updateWorkspaceDto.workspaceOwnerId) {
+      ForbiddenError.from(ability).throwUnlessCan(
+        WorkspacesAction.ChangeOwner,
+        workspace
+      );
     }
-    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+
+    return this.workspacesService.update(workspace, updateWorkspaceDto);
   }
 
   @Delete(':workspaceSlug')
-  removeWorkspace(@CurrentWorkspace() workspace: WorkspaceEntity) {
+  removeWorkspace(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Delete,
+      workspace
+    );
     return this.workspacesService.removeWorkspace(workspace);
   }
 
@@ -70,23 +119,50 @@ export class WorkspacesController {
   joinWorkspace(
     @CurrentUser() user: UserEntity,
     @CurrentWorkspace() workspace: WorkspaceEntity,
-    @CurrentWorkspaceUser() workspaceUser?: WorkspaceUserEntity
+    @CurrentAbility() ability: AppAbility
   ) {
-    if (workspaceUser?.isRemoved === false) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-    return this.workspacesService.addMember(workspace, user.email);
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Join,
+      workspace
+    );
+    return this.workspacesService.joinWorkspace(user, workspace);
+  }
+
+  @Get(':workspaceSlug/access-requests')
+  accessRequests(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.ApproveAccess,
+      workspace
+    );
+    return this.workspacesService.findAccessRequests(workspace);
+  }
+
+  @Put(':workspaceSlug/request-access')
+  requestAccess(
+    @CurrentUser() user: UserEntity,
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.RequestAccess,
+      workspace
+    );
+    return this.workspacesService.requestAccess(workspace, user);
   }
 
   @Put(':workspaceSlug/leave')
-  leaveWorkspace(@CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity) {
-    if (workspaceUser.role === WorkspaceUserRole.Owner) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-    return this.workspacesService.removeMember(
-      workspaceUser.workspace,
-      workspaceUser.userId
+  leaveWorkspace(
+    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Leave,
+      workspaceUser.workspace
     );
+    return this.workspacesService.removeMember(workspaceUser);
   }
 
   // Orders
@@ -94,49 +170,101 @@ export class WorkspacesController {
   @Post(':workspaceSlug/orders')
   createOrder(
     @Body() createOrderDto: CreateOrderDto,
-    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity
+    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity,
+    @CurrentAbility() ability: AppAbility
   ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.CreateOrder,
+      workspaceUser?.workspace
+    );
     return this.workspacesService.createOrder(createOrderDto, workspaceUser);
   }
 
   @Get(':workspaceSlug/orders/active')
-  findActiveOrders(@CurrentWorkspace() workspace: WorkspaceEntity) {
+  findActiveOrders(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Read,
+      workspace
+    );
     return this.workspacesService.findActiveOrders(workspace);
   }
 
   @Get(':workspaceSlug/orders/inactive')
-  findInactiveOrders(@CurrentWorkspace() workspace: WorkspaceEntity) {
+  findInactiveOrders(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Read,
+      workspace
+    );
     return this.workspacesService.findInactiveOrders(workspace);
   }
 
   // WorkspaceUsers
 
   @Get(':workspaceSlug/users')
-  findUsers(@CurrentWorkspace() workspace: WorkspaceEntity) {
+  findUsers(
+    @CurrentWorkspace() workspace: WorkspaceEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspacesAction.Read,
+      workspace
+    );
     return this.workspacesService.findUsers(workspace);
   }
 
-  @Put(':workspaceSlug/users')
-  addMemberToWorkspace(
-    @Body() { email }: AddMemberToWorkspaceDto,
+  @Post(':workspaceSlug/users')
+  addMembersToWorkspace(
+    @Body() addMembersToWorkspaceDto: AddMembersToWorkspaceDto,
     @CurrentWorkspace() workspace: WorkspaceEntity,
-    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity
+    @CurrentAbility() ability: AppAbility
   ) {
-    if (workspaceUser.role === WorkspaceUserRole.User) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-    return this.workspacesService.addMember(workspace, email);
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspaceUsersAction.Create,
+      'WorkspaceUserModel'
+    );
+    return this.workspacesService.addMembers(
+      workspace,
+      addMembersToWorkspaceDto
+    );
   }
 
-  @Delete(':workspaceSlug/users/:userId')
-  removeMemberFromWorkspace(
-    @Param('userId') userId: string,
-    @CurrentWorkspace() workspace: WorkspaceEntity,
-    @CurrentWorkspaceUser() workspaceUser: WorkspaceUserEntity
+  @Delete(':workspaceSlug/users/:id')
+  async removeMemberFromWorkspace(
+    @Param('id') workspaceUserId: string,
+    @CurrentAbility() ability: AppAbility
   ) {
-    if (workspaceUser.role === WorkspaceUserRole.User) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-    return this.workspacesService.removeMember(workspace, +userId);
+    const workspaceUser = await this.workspacesService.findUserById(
+      workspaceUserId
+    );
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspaceUsersAction.Delete,
+      workspaceUser
+    );
+    return await this.workspacesService.removeMember(workspaceUser);
+  }
+
+  @Put(':workspaceSlug/users/:id')
+  async updateMemberInWorkspace(
+    @Param('id') workspaceUserId: string,
+    @CurrentAbility() ability: AppAbility,
+    @Body() updateWorkspaceUserDto: UpdateWorkspaceUserDto
+  ) {
+    const workspaceUser = await this.workspacesService.findUserById(
+      workspaceUserId
+    );
+    ForbiddenError.from(ability).throwUnlessCan(
+      WorkspaceUsersAction.Update,
+      workspaceUser
+    );
+    return await this.workspacesService.updateMember(
+      workspaceUser,
+      updateWorkspaceUserDto
+    );
   }
 }

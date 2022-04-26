@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { BeakerIcon, PlusIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
-
-import { DishModel, OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
+import { Can, OrdersAction } from '@pasnik/ability';
+import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
 
 import OrderDish from '../order-dish/order-dish';
 import AddDish from '../add-dish/add-dish';
@@ -23,7 +23,6 @@ const sortByCreateAt = (dish: DishModel, nextDish: DishModel) =>
 export function OrderDishes({ dishes, order }: OrderDishesProps) {
   const {
     isAdding,
-    inProgress,
     updateId,
 
     onAddCancel,
@@ -45,7 +44,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
             <h2 id="notes-title" className="text-lg font-medium text-gray-900">
               {t('dish.title')}
             </h2>
-            {inProgress && (
+            <Can I={OrdersAction.CreateDish} this={order}>
               <div className="flex">
                 <button
                   onClick={addDishClickHandler}
@@ -55,7 +54,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
                   <PlusIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
               </div>
-            )}
+            </Can>
           </div>
           <ul className="divide-y divide-gray-200">
             {dishes && dishes.length === 0 && (
@@ -71,7 +70,7 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
                 as="li"
                 key={dish.id}
                 show
-                className="flex items-center gap-4 pr-6 pl-3"
+                className="flex items-center gap-4 pr-6 pl-3 py-4"
                 enter="transition ease-out duration-[1000ms]"
                 enterFrom="transform opacity-0 scale-95"
                 enterTo="transform opacity-100 scale-100"
@@ -88,7 +87,6 @@ export function OrderDishes({ dishes, order }: OrderDishesProps) {
                   />
                 ) : (
                   <OrderDish
-                    inProgress={order?.status === OrderStatus.InProgress}
                     key={dish.id}
                     dish={dish}
                     onUpdate={updateDishHandler}

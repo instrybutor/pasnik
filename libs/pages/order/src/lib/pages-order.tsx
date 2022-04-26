@@ -1,5 +1,3 @@
-import { Fragment } from 'react';
-
 import { OrderStatus } from '@pasnik/api/data-transfer';
 
 import OrderHeader from './order-header/order-header';
@@ -10,6 +8,7 @@ import OrderHeaderLoading from './order-header-loading/order-header-loading';
 import OrderSectionLoading from './order-section-loading/order-section-loading';
 
 import { useOrderFacade } from './order-store/order.facade';
+import { WorkspaceAbilityProvider } from '@pasnik/features/workspaces';
 
 export type PagesOrderProps = 'slug';
 
@@ -20,7 +19,7 @@ export function PagesOrder() {
   const { data: dishes, isLoading: areDishesLoading } = dishesQuery;
 
   return (
-    <Fragment>
+    <WorkspaceAbilityProvider slug={order?.workspace?.slug}>
       <header className="bg-white shadow">
         {isOrderLoading || areDishesLoading ? (
           <OrderHeaderLoading />
@@ -36,6 +35,8 @@ export function PagesOrder() {
                 <OrderSectionLoading className="h-52" />
               ) : order?.status === OrderStatus.InProgress ? (
                 <OrderDishes order={order} dishes={dishes!} />
+              ) : order?.status === OrderStatus.Canceled ? (
+                <OrderDishes order={order} dishes={dishes!} />
               ) : (
                 <OrderSummary dishes={dishes!} order={order!} />
               )}
@@ -48,7 +49,7 @@ export function PagesOrder() {
           </div>
         </div>
       </main>
-    </Fragment>
+    </WorkspaceAbilityProvider>
   );
 }
 

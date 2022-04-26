@@ -11,6 +11,8 @@ import { WorkspaceEntity } from './workspace.entity';
 
 @Entity()
 export class UserEntity implements UserModel {
+  readonly kind = 'UserModel';
+
   @PrimaryGeneratedColumn()
   id: number;
 
