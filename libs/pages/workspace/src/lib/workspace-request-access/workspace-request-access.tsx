@@ -29,7 +29,7 @@ export function WorkspaceRequestAccess({
             </h3>
             <div className="mt-2">
               <p className="text-sm text-gray-500">
-                {t('workspace.request.access.subtitle')}
+                {t('workspace.requestAccess.subtitle')}
               </p>
             </div>
           </div>
