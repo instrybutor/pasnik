@@ -1,5 +1,5 @@
 import { WorkspaceUserModel } from '@pasnik/api/data-transfer';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { UserAvatar, UserAvatarSize } from '@pasnik/components';
 import { ArrowSmLeftIcon } from '@heroicons/react/outline';
 import { useTranslation } from 'react-i18next';
@@ -22,8 +22,11 @@ export function WorkspaceUsersContainer({
   const { t } = useTranslation();
   const [filteredUsers, setFilteredUsers] = useState<WorkspaceUserModel[]>([]);
   const [filterValue, setFilterValue] = useState('');
-  const [selectedUser, setSelectedUser] = useState<WorkspaceUserModel | null>(
-    null
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
+  const selectedUser = useMemo(
+    () => users?.find(({ id }) => selectedUserId === id),
+    [users, selectedUserId]
   );
 
   useEffect(() => {
@@ -44,7 +47,7 @@ export function WorkspaceUsersContainer({
       {selectedUser && popoverElement ? (
         <div>
           <button
-            onClick={() => setSelectedUser(null)}
+            onClick={() => setSelectedUserId(null)}
             type="button"
             className="inline-flex items-center px-2 pt-2 ml-2 mt-2 border border-transparent text-sm leading-4 font-medium text-gray-500 bg-transparent hover:text-gray-700 focus:outline-none "
           >
@@ -71,7 +74,7 @@ export function WorkspaceUsersContainer({
             <button
               key={workspaceUser.id}
               onClick={() => {
-                setSelectedUser(workspaceUser);
+                setSelectedUserId(workspaceUser.id);
               }}
             >
               <UserAvatar

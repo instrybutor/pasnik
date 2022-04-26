@@ -29,8 +29,6 @@ export enum WorkspaceUsersAction {
   Read = 'read',
   Update = 'update',
   Delete = 'delete',
-  Promote = 'promote',
-  Demote = 'demote',
 }
 
 export enum OrdersAction {
@@ -74,6 +72,7 @@ function defineAdminRules({ can }: AppAbilityBuilder) {
   can(WorkspacesAction.Update, 'WorkspaceModel');
   can(WorkspacesAction.Delete, 'WorkspaceModel');
   can(WorkspacesAction.Read, 'WorkspaceModel');
+  can(WorkspaceUsersAction.Update, 'WorkspaceUserModel');
 }
 
 function defineWorkspaceOwnerRules(
@@ -90,12 +89,6 @@ function defineWorkspaceOwnerRules(
     role: WorkspaceUserRole.Owner,
   });
 
-  can(WorkspaceUsersAction.Promote, 'WorkspaceUserModel', {
-    role: WorkspaceUserRole.User,
-  });
-  can(WorkspaceUsersAction.Demote, 'WorkspaceUserModel', {
-    role: WorkspaceUserRole.Admin,
-  });
   can(WorkspaceUsersAction.Update, 'WorkspaceUserModel');
   cannot(WorkspaceUsersAction.Update, 'WorkspaceUserModel', {
     id: workspaceUser.id,
