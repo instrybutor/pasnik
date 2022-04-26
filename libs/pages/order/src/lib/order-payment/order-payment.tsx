@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
 import currency from 'currency.js';
-
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { Price, UserAvatar, UserName } from '@pasnik/components';
+import { Can, OrdersAction } from '@pasnik/ability';
 import {
   SwitchHorizontalIcon,
   SwitchVerticalIcon,
@@ -49,15 +49,34 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
           <div className="py-5 px-4 sm:px-6">
             <div className="flex flex-col xsm:flex-row xsm:items-center xsm:justify-between">
               <div className="flex justify-center">
-                <OrderSelectPayer
-                  payer={order.payer}
-                  totalCents={
-                    currency(-userDishesSummary.total).subtract(
-                      userDishesSummary.shipping
-                    ).value
-                  }
-                  setPayer={setPayer}
-                />
+                <Can I={OrdersAction.SetPayer} this={order}>
+                  <OrderSelectPayer
+                    payer={order.payer}
+                    totalCents={
+                      currency(-userDishesSummary.total).subtract(
+                        userDishesSummary.shipping
+                      ).value
+                    }
+                    setPayer={setPayer}
+                  />
+                </Can>
+                <Can not I={OrdersAction.SetPayer} this={order}>
+                  <UserAvatar user={order.payer} />
+                  <div className="ml-3 truncate">
+                    <UserName
+                      user={order.payer}
+                      fallbackValue={t('dish.paying.pick_payer')}
+                    >
+                      <Price
+                        priceCents={
+                          currency(-userDishesSummary.total).subtract(
+                            userDishesSummary.shipping
+                          ).value
+                        }
+                      />
+                    </UserName>
+                  </div>
+                </Can>
               </div>
               <div className="flex my-3 xsm:my-0 xsm:mx-3 justify-center">
                 <button

@@ -14,11 +14,11 @@ import {
 import {
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
-  MarkAsPaidDto,
   OrderAction,
+  SetPayerDto,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
-import { OrderStatusChangedEvent, EventName } from '../notifications';
+import { EventName, OrderStatusChangedEvent } from '../notifications';
 
 @Injectable()
 export class OrderService {
@@ -142,32 +142,21 @@ export class OrderService {
     return this.findOneById(orderId);
   }
 
-  async setPayer(
-    orderId: string,
-    { payerId }: MarkAsPaidDto,
-    user: UserEntity
-  ) {
+  async setPayer(orderId: string, { payerId }: SetPayerDto) {
     await this.connection.transaction(async (manager) => {
       const usersRepository = manager.getCustomRepository(UsersRepository);
       const ordersRepository = manager.getCustomRepository(OrdersRepository);
-      const orderActionsRepository = manager.getCustomRepository(
-        OrderActionsRepository
-      );
 
       const payer = await usersRepository.findOneOrFail(payerId);
       const order = await this.findOneById(orderId);
+
+      console.log(payer.id, payerId, order.payer.id);
 
       if (order.payer?.id === payer.id) {
         return;
       }
 
       await ordersRepository.markAsPaid(order, payer);
-      await orderActionsRepository.createAction(
-        user,
-        order,
-        OrderAction.Paid,
-        payer
-      );
     });
     return this.findOneById(orderId);
   }

@@ -80,11 +80,10 @@ export class OrderController {
   markAsPaid(
     @CurrentOrder() order: OrderEntity,
     @Body() setPayerDto: SetPayerDto,
-    @CurrentUser() user: UserEntity,
     @CurrentAbility() ability: AppAbility
   ) {
     ForbiddenError.from(ability).throwUnlessCan(OrdersAction.SetPayer, order);
-    return this.ordersService.setPayer(order.id, setPayerDto, user);
+    return this.ordersService.setPayer(order.id, setPayerDto);
   }
 
   @Post('/mark-as-delivered')

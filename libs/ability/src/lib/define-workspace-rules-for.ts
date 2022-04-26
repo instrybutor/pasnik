@@ -133,7 +133,6 @@ function defineWorkspaceUserRules(
   // OrderModel
   can(OrdersAction.Read, 'OrderModel');
   can(OrdersAction.Update, 'OrderModel', {
-    userId: workspaceUser.user!.id,
     status: OrderStatus.InProgress,
   });
   can(OrdersAction.MarkAsClosed, 'OrderModel', {
@@ -162,6 +161,9 @@ function defineWorkspaceUserRules(
   });
   can(OrdersAction.ManageDish, 'OrderModel', {
     status: OrderStatus.InProgress,
+  });
+  can(OrdersAction.SetPayer, 'OrderModel', {
+    status: OrderStatus.Ordered,
   });
 }
 
