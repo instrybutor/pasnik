@@ -56,6 +56,7 @@ services:
       - DB_PASSWORD=pasnik
       - DB_DATABASE=pasnik
       - DB_PORT=5432
+      - REDIS_URL=redis://redis:6379
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - JWT_SECRET=$JWT_SECRET
