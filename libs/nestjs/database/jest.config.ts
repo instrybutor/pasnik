@@ -1,14 +1,16 @@
 module.exports = {
-  displayName: 'axios',
-  preset: '../../jest.preset.js',
+  displayName: 'nestjs-database',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
+  testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/axios',
+  coverageDirectory: '../../../coverage/libs/nestjs/database',
+  preset: '../../../jest.preset.ts',
 };

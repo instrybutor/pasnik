@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'nestjs-bff',
-  preset: '../../jest.preset.js',
+  displayName: 'nestjs-api',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,5 +11,6 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/nestjs-bff',
+  coverageDirectory: '../../coverage/apps/nestjs-api',
+  preset: '../../jest.preset.ts',
 };

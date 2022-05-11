@@ -1,9 +1,10 @@
 module.exports = {
   displayName: 'features-notifications',
-  preset: '../../../jest.preset.js',
+
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../../coverage/libs/features/notifications',
+  preset: '../../../jest.preset.ts',
 };

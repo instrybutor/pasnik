@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'nestjs-core',
-  preset: '../../../jest.preset.js',
+  displayName: 'nestjs-common',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,5 +11,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/libs/nestjs/core',
+  coverageDirectory: '../../../coverage/libs/nestjs/common',
+  preset: '../../../jest.preset.ts',
 };

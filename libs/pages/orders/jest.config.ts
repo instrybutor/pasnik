@@ -1,9 +1,10 @@
 module.exports = {
-  displayName: 'pages-login',
-  preset: '../../../jest.preset.js',
+  displayName: 'pages-orders',
+
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/libs/pages/login',
+  coverageDirectory: '../../../coverage/libs/pages/orders',
+  preset: '../../../jest.preset.ts',
 };
