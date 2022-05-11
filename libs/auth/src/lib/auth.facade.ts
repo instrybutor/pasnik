@@ -20,7 +20,7 @@ export function useAuthFacade() {
     navigate('/login');
   }, [navigate, resetState]);
 
-  const requestAccess = useCallback((requestToken) => {
+  const requestAccess = useCallback((requestToken: string) => {
     return axios
       .post('/auth/request-access', { requestToken })
       .then(() => undefined);

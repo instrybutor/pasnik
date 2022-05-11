@@ -1,15 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, PropsWithChildren } from 'react';
 import { Listbox, Portal, Transition } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 import classNames from 'classnames';
 import { CheckIcon } from '@heroicons/react/outline';
 
-export interface Props<T extends unknown> {
+export interface Props<T> {
   items: T[];
   selected?: T;
   keyExtraction(item: T): string;
   onSelect(item: T): void;
-  children: React.ReactChildren | React.ReactChild;
   renderItem({
     selected,
     active,
@@ -21,14 +20,14 @@ export interface Props<T extends unknown> {
   }): JSX.Element;
 }
 
-export const Select = <T extends unknown>({
+export const Select = <T,>({
   selected: selectedItem,
   onSelect,
   items,
   keyExtraction,
   children,
   renderItem,
-}: Props<T>) => {
+}: PropsWithChildren<Props<T>>) => {
   const popperElRef = React.useRef<HTMLDivElement>(null);
   const [targetElement, setTargetElement] = React.useState<HTMLElement | null>(
     null

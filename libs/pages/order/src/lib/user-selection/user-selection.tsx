@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo } from 'react';
+import { Fragment, PropsWithChildren, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -18,13 +18,13 @@ interface UserSelectionProps {
   selectUser(userId: number): void;
 }
 
-export const UserSelection: React.FC<UserSelectionProps> = ({
+export const UserSelection = ({
   userId,
   users,
   type = SelectionType.DEFAULT,
   children,
   selectUser,
-}) => {
+}: PropsWithChildren<UserSelectionProps>) => {
   const { t } = useTranslation();
 
   const handleUserSelection = useCallback(

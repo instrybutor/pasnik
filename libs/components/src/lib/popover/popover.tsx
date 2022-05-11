@@ -1,8 +1,9 @@
 import { Popover as HeadlessPopover, Transition } from '@headlessui/react';
 import {
-  FunctionComponent,
   MutableRefObject,
   PropsWithChildren,
+  ReactElement,
+  ReactNode,
   useEffect,
   useRef,
 } from 'react';
@@ -18,7 +19,7 @@ export interface PopoverPanelProps {
 
 export interface PopoverProps {
   className?: string;
-  panel: FunctionComponent<PopoverPanelProps>;
+  panel: ReactNode | ((bag: PopoverPanelProps) => ReactElement);
 }
 
 export function Popover({

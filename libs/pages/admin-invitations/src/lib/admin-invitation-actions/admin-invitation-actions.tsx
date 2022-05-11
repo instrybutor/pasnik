@@ -1,4 +1,4 @@
-import { Fragment, useCallback } from 'react';
+import { Fragment, MouseEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
@@ -15,8 +15,8 @@ export default function AdminInvitationActions({
   email,
 }: AdminInvitationActionsProps) {
   const changeStatusHandler = useCallback(
-    (event) => {
-      const newStatus = event.currentTarget.value;
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const newStatus = event.currentTarget.value as InvitationStatus;
       changeStatus(email, newStatus);
     },
     [changeStatus, email]
