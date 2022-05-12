@@ -21,7 +21,7 @@ async function bootstrap() {
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({
     url: configService.get<string>('REDIS_URL'),
-    legacyMode: true,
+    legacyMode: true, // TODO: Make sure it is still needed in the future
   });
 
   redisClient.connect().catch(console.error);

@@ -19,7 +19,7 @@ export interface PopoverPanelProps {
 
 export interface PopoverProps {
   className?: string;
-  panel: ReactNode | ((bag: PopoverPanelProps) => ReactElement);
+  panel: ReactNode | ((props: PopoverPanelProps) => ReactElement);
 }
 
 export function Popover({
