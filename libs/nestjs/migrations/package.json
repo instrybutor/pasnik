@@ -4,7 +4,10 @@
     "typeorm": "typeorm"
   },
   "dependencies": {
-    "dotenv": "^10.0.0",
-    "pg": "^8.7.1"
+    "dotenv": "^16.0.1",
+    "pg": "^8.7.3",
+    "typeorm": "^0.2.45",
+    "slugify": "^1.6.5",
+    "nanoid": "^3.3.4"
   }
 }
