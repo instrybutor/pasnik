@@ -1,9 +1,10 @@
 module.exports = {
-  displayName: 'layout',
-  preset: '../../jest.preset.js',
+  displayName: 'pages-order',
+
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/layout',
+  coverageDirectory: '../../../coverage/libs/pages/order',
+  preset: '../../../jest.preset.ts',
 };

@@ -1,6 +1,12 @@
 import { CheckIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
-import { ButtonHTMLAttributes, useCallback, useRef, useState } from 'react';
+import {
+  ButtonHTMLAttributes,
+  MouseEvent,
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 
 export type ConfirmButtonProps = {
   color?: 'red' | 'green';
@@ -10,7 +16,7 @@ export function ConfirmButton({ onClick, ...props }: ConfirmButtonProps) {
   const btnRef = useRef<HTMLButtonElement>(null);
   const [isConfirm, setIsConfirm] = useState(false);
   const confirmClick = useCallback(
-    (event) => {
+    (event: MouseEvent<HTMLButtonElement>) => {
       setIsConfirm(false);
       onClick && onClick(event);
       btnRef?.current?.focus();

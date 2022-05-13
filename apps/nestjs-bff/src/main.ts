@@ -20,10 +20,11 @@ async function bootstrap() {
   const port = configService.get<number>('PORT', 3334);
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({
-    host: configService.get<string>('REDIS_HOST'),
-    port: configService.get<number>('REDIS_PORT'),
-    path: configService.get<string>('REDIS_PATH'),
+    url: configService.get<string>('REDIS_URL'),
+    legacyMode: true, // TODO: Make sure it is still needed in the future
   });
+
+  redisClient.connect().catch(console.error);
 
   app.use(
     session({

@@ -22,6 +22,10 @@ export interface WorkspaceUserInvitePopoverProps extends PopoverPanelProps {
   slug: string;
 }
 
+interface EmailForm {
+  email: string;
+}
+
 export function WorkspaceUserInvitePopover({
   open,
   slug,
@@ -31,7 +35,7 @@ export function WorkspaceUserInvitePopover({
   const { data: requestAccesses } = useWorkspaceRequestAccesses(slug);
   const addMembersMutation = useWorkspaceAddMembersMutation(slug);
 
-  const { register, handleSubmit, reset, formState } = useForm({
+  const { register, handleSubmit, reset, formState } = useForm<EmailForm>({
     resolver: yupResolver(
       yup.object().shape({
         email: emailValidator,
@@ -61,7 +65,7 @@ export function WorkspaceUserInvitePopover({
   }, [close, getValues, addMembersMutation]);
 
   const onSubmit = useCallback(
-    (data) => {
+    (data: EmailForm) => {
       if (data.email.length > 0) {
         insert(0, data);
         reset();

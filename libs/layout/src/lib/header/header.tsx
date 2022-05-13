@@ -1,5 +1,4 @@
 import { Fragment, useCallback } from 'react';
-import i18next from 'i18next';
 import { Menu, Transition } from '@headlessui/react';
 import { MenuAlt1Icon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
@@ -12,6 +11,7 @@ import { UserAvatar, UserName } from '@pasnik/components';
 import { NotificationsDropdown } from '../containers/notifications-dropdown';
 import { Can, WorkspacesAction } from '@pasnik/ability';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export interface HeaderProps {
   sidebarOpen: boolean;
@@ -21,6 +21,7 @@ export interface HeaderProps {
 export function Header({ openSidebar }: HeaderProps) {
   const { signOut } = useAuth();
   const { user } = useUserStore();
+  const { t } = useTranslation();
 
   const openSidebarHandler = useCallback(() => {
     openSidebar();
@@ -50,7 +51,7 @@ export function Header({ openSidebar }: HeaderProps) {
                 to="/create-order"
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
               >
-                {i18next.t('header.create_order')}
+                {t('header.create_order')}
               </NavLink>
             </div>
           </Can>

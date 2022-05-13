@@ -30,7 +30,7 @@ export function OrderPayment({ order, userDishesSummary }: OrderPaymentProps) {
   );
 
   const setPayer = useCallback(
-    async (payerId) => {
+    async (payerId: number) => {
       await payerUpdate.mutateAsync(payerId);
       orderQuery.refetch();
     },

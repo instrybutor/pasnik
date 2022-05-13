@@ -4,7 +4,7 @@ import { executeSqlQuery } from './execute-sql-query';
 const [email] = process.argv.slice(2);
 
 if (!email) {
-  console.log('Usage: npm run approve-user <email>');
+  console.log('Usage: yarn run approve-user <email>');
   process.exit(255);
 }
 

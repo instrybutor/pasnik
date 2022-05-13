@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import i18next from 'i18next';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import { isAfter } from 'date-fns';
@@ -15,6 +14,7 @@ import {
 import { OrderStatus } from '@pasnik/api/data-transfer';
 import { useNotificationsDropdown } from './notifications-dropdown.hook';
 import { DateDistance } from '@pasnik/components';
+import { useTranslation } from 'react-i18next';
 
 const NOTIFICATION_ICON_MAPPER: Record<string, JSX.Element> = {
   [OrderStatus.Ordered]: (
@@ -40,6 +40,7 @@ const NotificationIcon = ({ status }: { status?: OrderStatus }) => {
 };
 
 export const NotificationsDropdown = () => {
+  const { t } = useTranslation();
   const {
     hasNewNotifications,
     notifications,
@@ -99,11 +100,9 @@ export const NotificationsDropdown = () => {
                       : 'font-light'
                   )}
                 >
-                  {i18next.t('notifications.orderStatusChanged', {
+                  {t('notifications.orderStatusChanged', {
                     placeName: notification.data?.from,
-                    status: i18next.t(
-                      `orderStatus.${notification.data?.status}`
-                    ),
+                    status: t(`orderStatus.${notification.data?.status}`),
                   })}
                 </div>
                 <div className="text-xs text-gray-400 font-thin">
