@@ -38,7 +38,7 @@
     "@casl/ability": "^5.4.3",
     "@casl/react": "^2.3.0",
     "@floating-ui/react-dom": "^0.7.0",
-    "@floating-ui/react-dom-interactions": "^0.5.0",
+    "@floating-ui/react-dom-interactions": "^0.6.0",
     "@headlessui/react": "^1.6.1",
     "@heroicons/react": "^1.0.6",
     "@hookform/resolvers": "^2.8.8",
