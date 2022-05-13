@@ -18,7 +18,8 @@ const typesMap = {
     bgColorClass: 'bg-gray-400',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.createdBy</Trans> <UserAvatar size="xsm" user={user} />
+        <Trans>timeline.createdBy</Trans>{' '}
+        <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
   },
@@ -27,7 +28,8 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.canceledBy</Trans> <UserAvatar size="xsm" user={user} />
+        <Trans>timeline.canceledBy</Trans>{' '}
+        <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
   },
@@ -37,7 +39,7 @@ const typesMap = {
     text: ({ actionUser }: OrderActionModel) => (
       <>
         <Trans>timeline.payedBy</Trans>{' '}
-        <UserAvatar size="xsm" user={actionUser} />
+        <UserAvatar showTooltip={true} size="xsm" user={actionUser} />
       </>
     ),
   },
@@ -47,7 +49,7 @@ const typesMap = {
     text: ({ user }: OrderActionModel) => (
       <>
         <Trans>timeline.deliveredBy</Trans>{' '}
-        <UserAvatar size="xsm" user={user} />
+        <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
   },
@@ -56,7 +58,8 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.openBy</Trans> <UserAvatar size="xsm" user={user} />
+        <Trans>timeline.openBy</Trans>{' '}
+        <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
   },
@@ -65,7 +68,8 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.orderedBy</Trans> <UserAvatar size="xsm" user={user} />
+        <Trans>timeline.orderedBy</Trans>{' '}
+        <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
   },

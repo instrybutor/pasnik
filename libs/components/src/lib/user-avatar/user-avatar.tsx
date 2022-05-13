@@ -1,6 +1,7 @@
 import { UserModel } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
 import { ReactElement } from 'react';
+import { Tooltip } from '../tooltip/tooltip';
 
 export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg' | 'xxlg';
 
@@ -10,6 +11,7 @@ export interface UserAvatarProps {
   className?: string;
   fallback?: ReactElement | null;
   showInitials?: boolean;
+  showTooltip?: boolean;
 }
 
 export function UserAvatar({
@@ -18,12 +20,23 @@ export function UserAvatar({
   className,
   fallback,
   showInitials,
+  showTooltip,
 }: UserAvatarProps) {
   const formatInitials = ({ givenName, familyName }: Partial<UserModel>) =>
     `${givenName![0]}${familyName![0]}`;
 
-  const formatName = ({ givenName, familyName, email }: Partial<UserModel>) =>
-    `${givenName!} ${familyName!} <${email}>`;
+  const formatName = ({ givenName, familyName, email }: Partial<UserModel>) => (
+    <span className="text-center">
+      <div>
+        {givenName!} {familyName!}
+      </div>
+      <div>
+        &lt;
+        {email}
+        &gt;
+      </div>
+    </span>
+  );
 
   const sizeClasses = classNames({
     'h-6 w-6': size === 'xsm',
@@ -45,30 +58,31 @@ export function UserAvatar({
   );
 
   return user?.avatarImg && !showInitials ? (
-    <img
-      title={formatName(user)}
-      className={classNames(
-        sizeClasses,
-        'inline-block rounded-full',
-        className
-      )}
-      referrerPolicy="no-referrer"
-      src={user.avatarImg}
-      alt={formatName(user)}
-    />
+    <Tooltip title={formatName(user)} disabled={!showTooltip}>
+      <img
+        className={classNames(
+          sizeClasses,
+          'inline-block rounded-full',
+          className
+        )}
+        referrerPolicy="no-referrer"
+        src={user.avatarImg}
+      />
+    </Tooltip>
   ) : user && user.familyName && user.givenName ? (
-    <span
-      className={classNames(
-        sizeClasses,
-        'inline-flex items-center justify-center rounded-full bg-gray-500',
-        className
-      )}
-      title={formatName(user)}
-    >
-      <span className="text-sm font-medium leading-none text-white">
-        {formatInitials(user)}
+    <Tooltip title={formatName(user)} disabled={!showTooltip}>
+      <span
+        className={classNames(
+          sizeClasses,
+          'inline-flex items-center justify-center rounded-full bg-gray-500',
+          className
+        )}
+      >
+        <span className="text-sm font-medium leading-none text-white">
+          {formatInitials(user)}
+        </span>
       </span>
-    </span>
+    </Tooltip>
   ) : (
     <span
       className={classNames(

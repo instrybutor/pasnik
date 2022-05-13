@@ -9,7 +9,6 @@ import {
   useState,
 } from 'react';
 import { Popover, Transition } from '@headlessui/react';
-import { UserName } from '../user-name/user-name';
 import { UsersSkeleton } from './users-skeleton';
 
 export interface UsersPopoverElementProps {
@@ -102,13 +101,8 @@ export function Users({
                 user={user}
                 size={avatarSize}
                 className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"
+                showTooltip={true}
               />
-              <div className="absolute bottom-0 flex flex-col items-center hidden mb-6 group-hover:flex">
-                <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg">
-                  <UserName user={user} />
-                </span>
-                <div className="w-3 h-3 -mt-2 transform rotate-45 bg-black" />
-              </div>
             </div>
           )
         )}
