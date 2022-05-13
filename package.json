@@ -5,12 +5,11 @@
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
-    "start:api": "npm run docker-compose up",
-    "start:api:detached": "npm run docker-compose up -- -d",
+    "start:api": "yarn run docker-compose up",
+    "start:api:detached": "yarn run docker-compose up -- -d",
     "dev": "run-p start start:api",
     "build": "nx build",
-    "build:docker": "npm run docker-compose build --no-cache --force-recreate",
-    "install:api": "docker exec pasnik-api npm install",
+    "build:docker": "yarn run docker-compose build --no-cache --force-recreate",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
@@ -148,5 +147,9 @@
       "prettier --write"
     ],
     "*.format:write": "prettier --write"
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.19.1"
   }
 }

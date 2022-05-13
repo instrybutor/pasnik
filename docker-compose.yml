@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 
 services:
   postgres:
@@ -38,8 +38,12 @@ services:
       - /app/dist
       - node-modules:/app/node_modules
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+      updater:
+        condition: service_completed_successfully
     expose:
       - 3334
   bff:
@@ -73,8 +77,19 @@ services:
       - /app/dist
       - node-modules:/app/node_modules
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+      updater:
+        condition: service_completed_successfully
+  updater:
+    build:
+      context: ""
+      dockerfile: docker/install.DockerFile
+    volumes:
+      - ./:/app
+      - node-modules:/app/node_modules
   phppgadmin:
     image: 'bitnami/phppgadmin'
     environment:
