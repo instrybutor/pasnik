@@ -4,11 +4,11 @@ import classNames from 'classnames';
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: boolean;
-  errorMessage?: JSX.Element;
+  errorIcon?: JSX.Element;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ error, className, errorMessage, ...props }, ref) => {
+  ({ error, className, errorIcon, ...props }, ref) => {
     return (
       <div className="relative rounded-md shadow-sm">
         <input
@@ -28,8 +28,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
         {error && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            {errorMessage ? (
-              errorMessage
+            {errorIcon ? (
+              errorIcon
             ) : (
               <ExclamationCircleIcon
                 className="h-5 w-5 text-red-500"

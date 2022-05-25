@@ -747,6 +747,29 @@
       },
       "tags": []
     },
+    "pages-v2-order": {
+      "root": "libs/pages/v2-order",
+      "sourceRoot": "libs/pages/v2-order/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/pages/v2-order/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/v2-order"],
+          "options": {
+            "jestConfig": "libs/pages/v2-order/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "pages-workspace": {
       "root": "libs/pages/workspace",
       "sourceRoot": "libs/pages/workspace/src",

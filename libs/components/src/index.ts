@@ -25,3 +25,5 @@ export * from './lib/popover/popover';
 export * from './lib/confirm-button/confirm-button';
 export * from './lib/modal/confirm-modal';
 export * from './lib/tooltip/tooltip';
+export * from './lib/header/header';
+export * from './lib/form-field/form-field';

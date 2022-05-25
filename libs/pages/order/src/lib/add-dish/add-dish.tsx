@@ -71,7 +71,7 @@ export function AddDish({ onAdd, onCancel }: AddDishProps) {
             error={Boolean(errors.priceCents)}
             aria-describedby="price-currency"
             className="text-right"
-            errorMessage={
+            errorIcon={
               <span className="text-gray-500 xsm:text-sm" id="price-currency">
                 zł
               </span>

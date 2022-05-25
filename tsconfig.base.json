@@ -45,6 +45,7 @@
       "@pasnik/pages/login": ["libs/pages/login/src/index.ts"],
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
       "@pasnik/pages/orders": ["libs/pages/orders/src/index.ts"],
+      "@pasnik/pages/v2-order": ["libs/pages/v2-order/src/index.ts"],
       "@pasnik/pages/workspace": ["libs/pages/workspace/src/index.ts"],
       "@pasnik/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@pasnik/store": ["libs/store/src/index.ts"]
