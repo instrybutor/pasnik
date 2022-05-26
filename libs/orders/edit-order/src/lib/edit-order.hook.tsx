@@ -7,8 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import {
   CreateOrderDto,
+  createOrderValidator,
   OrderModel,
-  orderValidator,
 } from '@pasnik/api/data-transfer';
 
 interface FormData extends Omit<CreateOrderDto, 'shippingCents'> {
@@ -22,7 +22,7 @@ export const useEditOrder = () => {
     reset,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: yupResolver(orderValidator),
+    resolver: yupResolver(createOrderValidator),
   });
   const { updateOrder, fetchOrder } = useOrdersFacade();
   const { slug } = useParams<'slug'>();

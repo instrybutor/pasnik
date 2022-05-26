@@ -9,7 +9,7 @@ import {
 import { Dialog, Transition } from '@headlessui/react';
 import { Portal } from 'react-portal';
 
-export interface ModalProps {
+export interface ConfirmModalProps {
   onClose: () => void;
   title: ReactNode;
   subtitle?: ReactNode;
@@ -22,7 +22,7 @@ export const ConfirmModal = ({
   subtitle,
   children,
   icon: Icon,
-}: PropsWithChildren<ModalProps>) => {
+}: PropsWithChildren<ConfirmModalProps>) => {
   const [isOpen, setIsOpen] = useState(true);
   return (
     <Portal>

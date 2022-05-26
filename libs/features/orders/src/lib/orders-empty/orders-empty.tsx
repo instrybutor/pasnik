@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { BeakerIcon } from '@heroicons/react/outline';
+import { CreateOrderModal } from '../create-order-modal/create-order-modal';
+import { ModalButton } from '@pasnik/components';
 
 export function OrdersEmpty() {
   const { t } = useTranslation();
@@ -15,12 +16,12 @@ export function OrdersEmpty() {
           {t('dashboard.starting_info')}
         </span>
       </div>
-      <Link
-        to="/create-order"
+      <ModalButton
         className="bg-cyan-500 hover:bg-cyan-600 text-white py-2 text-sm rounded px-10 mt-4"
+        modal={CreateOrderModal}
       >
         {t('dashboard.create_order')}
-      </Link>
+      </ModalButton>
     </div>
   );
 }

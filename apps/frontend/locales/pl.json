@@ -200,5 +200,10 @@
   },
   "forms": {
     "email": "Email"
+  },
+  "validation": {
+    "required": "To pole jest wymagane",
+    "invalid": "To pole jest niepoprawne",
+    "positive": "Liczba musi być dodatnia"
   }
 }

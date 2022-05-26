@@ -87,11 +87,11 @@ export function UpdateDish({
             error={Boolean(errors.priceCents)}
             aria-describedby="price-currency"
             className="text-right"
-            errorIcon={
-              <span className="text-gray-500 xsm:text-sm" id="price-currency">
-                zł
-              </span>
-            }
+            // errorIcon={
+            //   <span className="text-gray-500 xsm:text-sm" id="price-currency">
+            //     zł
+            //   </span>
+            // }
             {...register('priceCents')}
           />
         </div>

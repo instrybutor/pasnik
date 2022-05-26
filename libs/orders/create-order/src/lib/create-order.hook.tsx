@@ -7,8 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useOrdersFacade } from '@pasnik/orders-data-access';
 import {
   CreateOrderDto,
+  createOrderValidator,
   OrderModel,
-  orderValidator,
 } from '@pasnik/api/data-transfer';
 import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 
@@ -26,7 +26,7 @@ export const useCreateOrder = () => {
     reset,
     formState: { errors, isSubmitting, isSubmitted },
   } = useForm<FormData>({
-    resolver: yupResolver(orderValidator),
+    resolver: yupResolver(createOrderValidator),
   });
   const { createOrder } = useOrdersFacade();
   const watchAll = watch();

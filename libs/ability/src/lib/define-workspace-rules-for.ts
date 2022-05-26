@@ -82,6 +82,8 @@ function defineWorkspaceOwnerRules(
   // WorkspaceModel
   cannot(WorkspacesAction.Leave, 'WorkspaceModel');
   can(WorkspacesAction.ChangeOwner, 'WorkspaceModel');
+  can(WorkspacesAction.Update, 'WorkspaceModel');
+  can(WorkspacesAction.Delete, 'WorkspaceModel');
 
   // WorkspaceUserModel
   can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel');
@@ -100,6 +102,7 @@ function defineWorkspaceAdminRules(
   workspaceUser: WorkspaceUserModel
 ) {
   can(WorkspaceUsersAction.Create, 'WorkspaceUserModel');
+  can(WorkspacesAction.ApproveAccess, 'WorkspaceModel');
 
   can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     role: WorkspaceUserRole.User,
