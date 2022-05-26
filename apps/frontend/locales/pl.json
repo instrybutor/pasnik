@@ -133,7 +133,8 @@
     "canceled": "Usunięto"
   },
   "errors": {
-    "login": "Problem z logowaniem"
+    "login": "Problem z logowaniem",
+    "server": "Problem z serwerem"
   },
   "notifications": {
     "orderStatusChanged": "Zamówienie z {{placeName}} zostało {{status}}.",

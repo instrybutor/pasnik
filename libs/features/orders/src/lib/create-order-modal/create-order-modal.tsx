@@ -5,16 +5,36 @@ import {
 } from '@pasnik/api/data-transfer';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
+import { useOrderCreateMutation } from '../mutations/use-order-create-mutation';
+import { useCurrentWorkspace } from '@pasnik/features/workspaces';
+import currency from 'currency.js';
+import { useNavigate } from 'react-router-dom';
 
-export function CreateOrderModal({ close }: ModalProps) {
+export interface CreateOrderModelProps extends ModalProps {
+  workspaceSlug?: string;
+}
+
+export function CreateOrderModal({
+  close,
+  workspaceSlug,
+}: CreateOrderModelProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const workspace = useCurrentWorkspace();
+  const { mutateAsync } = useOrderCreateMutation(workspace!.slug);
   return (
     <Modal>
       <Modal.Title>{t('order.create_order')}</Modal.Title>
       <Form<CreateOrderDto>
         resolver={yupResolver(createOrderValidator)}
-        onSubmit={(data) => {
-          console.log(data);
+        onSubmit={async (data) => {
+          const { slug } = await mutateAsync({
+            ...data,
+            shippingCents: currency(data.shippingCents ?? 0).multiply(100)
+              .value,
+          });
+          navigate(`/order/${slug}`);
+          close();
         }}
       >
         <FormField
@@ -24,7 +44,7 @@ export function CreateOrderModal({ close }: ModalProps) {
         >
           <Input placeholder={t('order.form.restaurant_placeholder')} />
         </FormField>
-        <FormField label={t('order.form.menu_label')} name="menuURL">
+        <FormField label={t('order.form.menu_label')} name="menuUrl">
           <Input placeholder={t('order.form.menu_placeholder')} />
         </FormField>
         <FormField
