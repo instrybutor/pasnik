@@ -45,10 +45,7 @@ export class OrderService {
   }
 
   async update(order: OrderEntity, payload: UpdateOrderDto) {
-    return await this.ordersRepository.save({
-      ...order,
-      ...payload,
-    });
+    return await this.ordersRepository.updateOrder(payload, order);
   }
 
   async markAsOrdered(

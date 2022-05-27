@@ -122,6 +122,18 @@ export class OrdersRepository extends Repository<OrderEntity> {
     return this.save(order);
   }
 
+  async updateOrder(createOrderDto: CreateOrderDto, order: OrderEntity) {
+    order.slug =
+      createOrderDto.from !== order.from
+        ? slugify([createOrderDto.from, nanoid(6)].join(' '), { lower: true })
+        : order.slug;
+    order.from = createOrderDto.from;
+    order.shippingCents = createOrderDto.shippingCents;
+    order.menuUrl = createOrderDto.menuUrl;
+
+    return this.save(order);
+  }
+
   async markAsOrdered(order: OrderEntity, { shippingCents }: MarkAsOrderedDto) {
     if (order.dishes.length === 0) {
       throw new HttpException('No dishes found', HttpStatus.FORBIDDEN);

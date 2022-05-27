@@ -45,6 +45,7 @@
   },
   "order": {
     "create_order": "Tworzenie zamówienia",
+    "edit_order": "Edycja zamówienia",
     "request_failed": "Coś poszło nie tak.",
 
     "form": {

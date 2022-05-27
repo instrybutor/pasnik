@@ -2,6 +2,7 @@ import { OrderModel } from '@pasnik/api/data-transfer';
 import { Header, HeaderBreadcrumbs } from '@pasnik/components';
 import { useCallback } from 'react';
 import { OrderStatusBadge } from '@pasnik/features/orders';
+import { OrderHeaderActions } from '../order-header-actions/order-header-actions';
 
 export interface OrderHeaderProps {
   order: OrderModel;
@@ -35,6 +36,7 @@ export function OrderHeader({ order }: OrderHeaderProps) {
           </h1>
         </>
       }
+      right={<OrderHeaderActions order={order} />}
     />
   );
 }

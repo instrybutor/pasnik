@@ -1,4 +1,5 @@
 import currency from 'currency.js';
+
 export interface PriceProps {
   priceCents?: number | string | null;
 }
@@ -8,10 +9,12 @@ export function Price({ priceCents }: PriceProps) {
     fromCents: true,
     pattern: '# !',
     negativePattern: '-# !',
-  }).format({
-    precision: 2,
-    symbol: 'zł',
-  });
+  })
+    .format({
+      precision: 2,
+      symbol: 'zł',
+    })
+    .replace('.00', '');
 
   return <span>{price}</span>;
 }
