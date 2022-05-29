@@ -8,13 +8,15 @@ export function Price({ priceCents }: PriceProps) {
   const price = currency(priceCents ?? 0, {
     fromCents: true,
     pattern: '# !',
+    separator: ' ',
+    decimal: ',',
     negativePattern: '-# !',
   })
     .format({
       precision: 2,
       symbol: 'zł',
     })
-    .replace('.00', '');
+    .replace(',00', '');
 
   return <span>{price}</span>;
 }

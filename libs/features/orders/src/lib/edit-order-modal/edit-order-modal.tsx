@@ -25,18 +25,11 @@ export function EditOrderModal({
     <Modal>
       <Modal.Title>{t('order.edit_order')}</Modal.Title>
       <Form<CreateOrderDto>
-        defaultValues={{
-          from: order.from,
-          orderAt: order.orderedAt,
-          menuUrl: order.menuUrl,
-          shippingCents: order.shippingCents,
-        }}
         resolver={yupResolver(createOrderValidator)}
         onSubmit={async (data) => {
           const { slug } = await mutateAsync({
             ...data,
-            shippingCents: currency(data.shippingCents ?? 0).multiply(100)
-              .value,
+            shippingCents: currency(data.shippingCents ?? 0).value,
           });
           navigate(`/v2/order/${slug}`);
           close();
@@ -46,16 +39,37 @@ export function EditOrderModal({
           required
           label={t('order.form.restaurant_label')}
           name="from"
+          defaultValue={order.from}
         >
           <Input placeholder={t('order.form.restaurant_placeholder')} />
         </FormField>
-        <FormField label={t('order.form.menu_label')} name="menuUrl">
+        <FormField
+          defaultValue={order.menuUrl}
+          label={t('order.form.menu_label')}
+          name="menuUrl"
+        >
           <Input placeholder={t('order.form.menu_placeholder')} />
         </FormField>
         <FormField
+          defaultValue={order.shippingCents}
           label={t('order.form.delivery_price_label')}
           name="shippingCents"
           suffix="zł"
+          transform={{
+            output: (value: string) =>
+              currency(value ?? 0, {
+                symbol: '',
+                decimal: ',',
+                separator: '',
+              }).format(),
+            input: (value: number) =>
+              currency(value ?? 0, {
+                fromCents: true,
+                symbol: '',
+                decimal: ',',
+                separator: '',
+              }).format(),
+          }}
         >
           <Input placeholder={t('order.form.delivery_price_placeholder')} />
         </FormField>

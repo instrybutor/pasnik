@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { UserModel } from '@pasnik/api/data-transfer';
 import { Select, UserAvatar, UserInfo, UserName } from '@pasnik/components';
-import { CheckIcon } from '@heroicons/react/outline';
 
 enum SelectionType {
   SLIM = 'slim',
@@ -49,33 +48,17 @@ export const UserSelection = ({
         keyExtraction={(item) => `${item?.id}`}
         onSelect={handleUserSelection}
         renderItem={({ selected, active, item }) => (
-          <>
-            <div
-              className={classNames(
-                {
-                  'font-semibold': selected,
-                  'font-normal': !selected,
-                },
-                'flex items-center'
-              )}
-            >
-              <UserInfo user={item} size="xsm" />
-            </div>
-
-            {selected ? (
-              <span
-                className={classNames(
-                  {
-                    'text-white': active,
-                    'text-cyan-600': !active,
-                  },
-                  'absolute inset-y-0 right-0 flex items-center pr-4'
-                )}
-              >
-                <CheckIcon className="h-5 w-5" aria-hidden="true" />
-              </span>
-            ) : null}
-          </>
+          <div
+            className={classNames(
+              {
+                'font-semibold': selected,
+                'font-normal': !selected,
+              },
+              'flex items-center'
+            )}
+          >
+            <UserInfo user={item} size="xsm" />
+          </div>
         )}
       >
         <Fragment>

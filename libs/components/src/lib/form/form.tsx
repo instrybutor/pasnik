@@ -1,35 +1,38 @@
 import {
+  FieldValues,
+  FormProvider,
   SubmitHandler,
   UnpackNestedValue,
   useForm,
   UseFormProps,
 } from 'react-hook-form';
-import {
-  Children,
-  createElement,
-  ReactElement,
-  useCallback,
-  useState,
-} from 'react';
+import { ReactElement, useCallback, useState } from 'react';
 import Spinner from '../spinner/spinner';
 import { useTranslation } from 'react-i18next';
+import classNames from 'classnames';
 
-export interface FormProps<TFormValues> extends UseFormProps<TFormValues> {
+export interface FormProps<TFormValues extends FieldValues, TContext>
+  extends UseFormProps<TFormValues, TContext> {
   onSubmit: SubmitHandler<TFormValues>;
   children: ReactElement | ReactElement[];
+  className?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const Form = <TFormValues extends Record<string, any>>({
+export const Form = <
+  TFormValues extends FieldValues = FieldValues,
+  TContext = any
+>({
   onSubmit,
   children,
+  className,
   ...formProps
-}: FormProps<TFormValues>) => {
+}: FormProps<TFormValues, TContext>) => {
   const { t } = useTranslation();
   const [hasServerError, setHasServerError] = useState(false);
-  const methods = useForm<TFormValues>(formProps);
+  const methods = useForm<TFormValues, TContext>(formProps);
 
-  const { handleSubmit, register, control, formState } = methods;
+  const { handleSubmit, formState } = methods;
 
   const _onSubmit = useCallback(
     (data: UnpackNestedValue<TFormValues>) => {
@@ -45,33 +48,26 @@ export const Form = <TFormValues extends Record<string, any>>({
     [setHasServerError]
   );
   return (
-    <form
-      onSubmit={(event) => handleSubmit(_onSubmit)(event).catch(_onError)}
-      className="relative"
-    >
-      {formState.isSubmitting && (
-        <div className="absolute z-10 h-full w-full flex-1 flex-col flex justify-center">
-          <div className="absolute h-full w-full bg-white opacity-70" />
-          <Spinner />
-        </div>
-      )}
-      <div className="flex flex-1 flex-col space-y-6">
-        {hasServerError && (
-          <span className="text-center text-red-500">{t('errors.server')}</span>
+    <FormProvider {...methods}>
+      <form
+        onSubmit={(event) => handleSubmit(_onSubmit)(event).catch(_onError)}
+        className={classNames('relative', className)}
+      >
+        {formState.isSubmitting && (
+          <div className="absolute z-10 h-full w-full flex-1 flex-col flex justify-center">
+            <div className="absolute h-full w-full bg-white opacity-70" />
+            <Spinner />
+          </div>
         )}
-        {Children.map(children, (child) => {
-          return child.props.name
-            ? createElement(child.type, {
-                ...{
-                  ...child.props,
-                  key: child.props.name,
-                  register,
-                  control,
-                },
-              })
-            : child;
-        })}
-      </div>
-    </form>
+        <div className="flex flex-1 flex-col space-y-6">
+          {hasServerError && (
+            <span className="text-center text-red-500">
+              {t('errors.server')}
+            </span>
+          )}
+          {children}
+        </div>
+      </form>
+    </FormProvider>
   );
 };

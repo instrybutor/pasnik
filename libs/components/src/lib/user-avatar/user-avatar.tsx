@@ -57,41 +57,34 @@ export function UserAvatar({
     </svg>
   );
 
-  return user?.avatarImg && !showInitials ? (
-    <Tooltip title={formatName(user)} disabled={!showTooltip}>
-      <img
-        className={classNames(
-          sizeClasses,
-          'inline-block rounded-full',
-          className
-        )}
-        referrerPolicy="no-referrer"
-        src={user.avatarImg}
-      />
-    </Tooltip>
-  ) : user && user.familyName && user.givenName ? (
-    <Tooltip title={formatName(user)} disabled={!showTooltip}>
-      <span
-        className={classNames(
-          sizeClasses,
-          'inline-flex items-center justify-center rounded-full bg-gray-500',
-          className
-        )}
-      >
-        <span className="text-sm font-medium leading-none text-white">
-          {formatInitials(user)}
-        </span>
-      </span>
-    </Tooltip>
-  ) : (
+  return (
     <span
       className={classNames(
         sizeClasses,
-        'inline-block rounded-full overflow-hidden bg-gray-100',
+        'inline-block rounded-full overflow-hidden',
         className
       )}
+      tabIndex={0}
     >
-      {fallback ?? defaultFallback}
+      {user?.avatarImg && !showInitials ? (
+        <Tooltip title={formatName(user)} disabled={!showTooltip}>
+          <img
+            referrerPolicy="no-referrer"
+            src={user.avatarImg}
+            alt={formatInitials(user)}
+          />
+        </Tooltip>
+      ) : user && user.familyName && user.givenName ? (
+        <Tooltip title={formatName(user)} disabled={!showTooltip}>
+          <span className="text-sm font-medium leading-none text-white">
+            {formatInitials(user)}
+          </span>
+        </Tooltip>
+      ) : (
+        <span className="inline-block bg-gray-100">
+          {fallback ?? defaultFallback}
+        </span>
+      )}
     </span>
   );
 }

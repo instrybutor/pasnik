@@ -18,6 +18,7 @@ export interface TooltipProps {
   title: ReactNode;
   disabled?: boolean;
   placement?: Placement;
+  className?: string;
 }
 
 export const Tooltip = ({
@@ -25,6 +26,7 @@ export const Tooltip = ({
   title,
   disabled,
   placement = 'top',
+  className,
 }: PropsWithChildren<TooltipProps>) => {
   const [open, setOpen] = useState(false);
 
@@ -45,7 +47,7 @@ export const Tooltip = ({
 
   return (
     <>
-      <span ref={reference} {...getReferenceProps()}>
+      <span ref={reference} {...getReferenceProps({ className })}>
         {children}
       </span>
       <FloatingPortal>

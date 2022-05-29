@@ -23,7 +23,7 @@ export function DashboardOrderList({ orders }: DashboardOrderListProps) {
           key={order.id}
           wrapper={({ children }) => (
             <NavLink
-              to={`/order/${order.slug}`}
+              to={`/v2/order/${order.slug}`}
               className="block hover:bg-gray-50"
             >
               {children}

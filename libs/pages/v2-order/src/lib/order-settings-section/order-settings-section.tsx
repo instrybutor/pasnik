@@ -5,6 +5,10 @@ export interface OrderSettingsSectionProps {
   order: OrderModel;
 }
 
-export function OrderSettingsSection() {
-  return <OrderSection title="Ustawienia"></OrderSection>;
+export function OrderSettingsSection({ order }: OrderSettingsSectionProps) {
+  return (
+    <OrderSection defaultOpen={false} header="Ustawienia" action="accordion">
+      Section
+    </OrderSection>
+  );
 }

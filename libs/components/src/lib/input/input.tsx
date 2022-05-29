@@ -12,9 +12,9 @@ export const Input = React.forwardRef<HTMLInputElement, FormFieldInputProps>(
           {
             'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500':
               error,
-            'focus:ring-cyan-500 focus:border-cyan-500': !error,
+            'focus:ring-cyan-500 focus:border-cyan-500 border-gray-300': !error,
           },
-          'block w-full pr-8 xsm:text-sm rounded-md border-gray-300 focus:outline-none',
+          'block w-full pr-8 xsm:text-sm rounded-md focus:outline-none',
           className
         )}
         {...props}

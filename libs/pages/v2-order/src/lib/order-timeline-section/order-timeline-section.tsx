@@ -12,7 +12,7 @@ export function OrderTimelineSection({ order }: OrderHistoryProps) {
   const [enabled, setEnabled] = useState(false);
   return (
     <OrderSection
-      title="Timeline"
+      header="Timeline"
       action={
         <Switch.Group as="div" className="flex items-center">
           <Switch.Label as="span" className="mr-3">
