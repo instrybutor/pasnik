@@ -19,6 +19,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { FieldPathValue } from 'react-hook-form/dist/types';
 import { Tooltip } from '../tooltip/tooltip';
+import { Label } from './label';
 
 export interface FormFieldInputProps extends React.HTMLProps<HTMLInputElement> {
   error?: boolean;
@@ -42,6 +43,7 @@ export interface FormFieldProps<
   };
   defaultValue?: FieldPathValue<TFieldValues, TName>;
   errorTooltip?: boolean;
+  labelClassName?: string;
 }
 
 let nextId = 0;
@@ -56,6 +58,7 @@ export function FormField<TFieldValues extends FieldValues>({
   defaultValue,
   required,
   errorTooltip,
+  labelClassName,
 }: FormFieldProps<TFieldValues>) {
   const { control } = useFormContext<TFieldValues>();
   const { t } = useTranslation();
@@ -65,37 +68,33 @@ export function FormField<TFieldValues extends FieldValues>({
   return (
     <div>
       {label && (
-        <label
-          htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
+        <Label className={labelClassName} required={required}>
           {label}
-          {required && <span className="text-red-500">*</span>}
-        </label>
+        </Label>
       )}
       <div className="relative rounded-md shadow-sm">
         <Controller
           control={control}
           name={name}
           defaultValue={defaultValue}
-          render={({ field, fieldState: { isDirty } }) =>
-            cloneElement(children, {
+          render={({ field, fieldState: { isDirty } }) => {
+            return cloneElement(children, {
               error: Boolean(error),
-              onBlur: (e: ChangeEvent<HTMLInputElement>) =>
+              onBlur: (e: ChangeEvent<HTMLInputElement>) => {
+                field.onBlur();
+              },
+              onChange: (e: ChangeEvent<HTMLInputElement>) =>
                 field.onChange(
                   transform?.output
                     ? transform.output(e.currentTarget.value)
-                    : e.target.value
+                    : e.currentTarget.value
                 ),
-              onChange: (e: ChangeEvent<HTMLInputElement>) =>
-                field.onChange(e.target.value),
-              value:
-                transform?.input && !isDirty
-                  ? transform.input(field.value)
-                  : field.value,
+              value: transform?.input
+                ? transform.input(field.value)
+                : field.value,
               id: inputId,
-            })
-          }
+            });
+          }}
         />
 
         {(error || suffix) && (

@@ -2,20 +2,20 @@ import {
   FieldValues,
   FormProvider,
   SubmitHandler,
-  UnpackNestedValue,
   useForm,
   UseFormProps,
 } from 'react-hook-form';
-import { ReactElement, useCallback, useState } from 'react';
-import Spinner from '../spinner/spinner';
-import { useTranslation } from 'react-i18next';
+import { ReactElement, useCallback } from 'react';
 import classNames from 'classnames';
+import { useToast } from '../toast';
+import { useTranslation } from 'react-i18next';
 
 export interface FormProps<TFormValues extends FieldValues, TContext>
   extends UseFormProps<TFormValues, TContext> {
   onSubmit: SubmitHandler<TFormValues>;
   children: ReactElement | ReactElement[];
   className?: string;
+  successMessage?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,26 +26,37 @@ export const Form = <
   onSubmit,
   children,
   className,
+  successMessage,
   ...formProps
 }: FormProps<TFormValues, TContext>) => {
+  const methods = useForm<TFormValues, TContext>({
+    reValidateMode: 'onBlur',
+    ...formProps,
+  });
+  const { toast } = useToast();
   const { t } = useTranslation();
-  const [hasServerError, setHasServerError] = useState(false);
-  const methods = useForm<TFormValues, TContext>(formProps);
 
-  const { handleSubmit, formState } = methods;
+  const { handleSubmit } = methods;
 
-  const _onSubmit = useCallback(
-    (data: UnpackNestedValue<TFormValues>) => {
-      setHasServerError(false);
-      return onSubmit(data);
+  const _onSubmit: SubmitHandler<TFormValues> = useCallback(
+    (data, event) => {
+      if (successMessage) {
+        toast({ type: 'success', title: successMessage });
+      }
+      onSubmit(data, event);
     },
-    [onSubmit]
+    [successMessage, onSubmit, toast]
   );
+
   const _onError = useCallback(
     (error: Error) => {
-      setHasServerError(true);
+      toast({
+        type: 'error',
+        title: t('errors.server'),
+        autoClose: 3000,
+      });
     },
-    [setHasServerError]
+    [toast, t]
   );
   return (
     <FormProvider {...methods}>
@@ -53,20 +64,7 @@ export const Form = <
         onSubmit={(event) => handleSubmit(_onSubmit)(event).catch(_onError)}
         className={classNames('relative', className)}
       >
-        {formState.isSubmitting && (
-          <div className="absolute z-10 h-full w-full flex-1 flex-col flex justify-center">
-            <div className="absolute h-full w-full bg-white opacity-70" />
-            <Spinner />
-          </div>
-        )}
-        <div className="flex flex-1 flex-col space-y-6">
-          {hasServerError && (
-            <span className="text-center text-red-500">
-              {t('errors.server')}
-            </span>
-          )}
-          {children}
-        </div>
+        {children}
       </form>
     </FormProvider>
   );

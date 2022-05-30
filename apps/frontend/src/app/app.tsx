@@ -10,45 +10,52 @@ import { PagesAdminInvitations } from '@pasnik/pages/admin-invitations';
 import { PagesWorkspace } from '@pasnik/pages/workspace';
 import { RedirectToCurrentWorkspace } from '@pasnik/features/workspaces';
 import { PagesV2Order } from '@pasnik/pages/v2-order';
+import { ToastContainer } from '@pasnik/components';
 
 export function App() {
   const version = process.env.NX_VERSION;
 
   return (
-    <BrowserRouter>
-      <ProvideAuth>
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <PublicOnly>
-                <PagesLogin />
-              </PublicOnly>
-            }
-          />
+    <>
+      <BrowserRouter>
+        <ProvideAuth>
+          <Routes>
+            <Route
+              path="/login"
+              element={
+                <PublicOnly>
+                  <PagesLogin />
+                </PublicOnly>
+              }
+            />
 
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Layout version={version} />
-              </RequireAuth>
-            }
-          >
-            <Route index element={<PagesDashboard />} />
-            <Route path="/history" element={<PagesOrders />} />
-            <Route path="/workspace" element={<RedirectToCurrentWorkspace />} />
-            <Route path="/workspace/:slug/*" element={<PagesWorkspace />} />
-            <Route path="/order/*" element={<PagesOrder />} />
-            <Route path="/admin" element={<RequireAuth admin={true} />}>
-              <Route path="invitations" element={<PagesAdminInvitations />} />
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <Layout version={version} />
+                </RequireAuth>
+              }
+            >
+              <Route index element={<PagesDashboard />} />
+              <Route path="/history" element={<PagesOrders />} />
+              <Route
+                path="/workspace"
+                element={<RedirectToCurrentWorkspace />}
+              />
+              <Route path="/workspace/:slug/*" element={<PagesWorkspace />} />
+              <Route path="/order/*" element={<PagesOrder />} />
+              <Route path="/admin" element={<RequireAuth admin={true} />}>
+                <Route path="invitations" element={<PagesAdminInvitations />} />
+              </Route>
+
+              <Route path="/v2/order/*" element={<PagesV2Order />} />
             </Route>
-
-            <Route path="/v2/order/*" element={<PagesV2Order />} />
-          </Route>
-        </Routes>
-      </ProvideAuth>
-    </BrowserRouter>
+          </Routes>
+        </ProvideAuth>
+      </BrowserRouter>
+      <ToastContainer />
+    </>
   );
 }
 

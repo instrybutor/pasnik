@@ -12,6 +12,7 @@ export const useOrder = (slug: string) => {
     {
       retry: false,
       refetchOnMount: false,
+      refetchInterval: 5000,
     }
   );
 };

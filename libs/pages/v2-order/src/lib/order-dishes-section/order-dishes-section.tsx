@@ -3,9 +3,9 @@ import { OrderSection } from '../order-section/order-section';
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { useOrderDishes } from '@pasnik/features/orders';
 import { useState } from 'react';
-import { OrderDishAdd } from '../order-dish-add/order-dish-add';
 import { OrderDishes } from '../order-dishes/order-dishes';
 import { Spinner } from '@pasnik/components';
+import { OrderDishManage } from '../order-dish-add/order-dish-manage';
 
 export interface OrderDishesProps {
   order: OrderModel;
@@ -13,14 +13,14 @@ export interface OrderDishesProps {
 
 export function OrderDishesSection({ order }: OrderDishesProps) {
   const { data } = useOrderDishes(order);
-  const [isAdding, setIsAdding] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
   return (
     <OrderSection
       noPadding={true}
       header="Zamówienie"
       footer={
         isAdding && (
-          <OrderDishAdd order={order} onClose={() => setIsAdding(false)} />
+          <OrderDishManage order={order} onClose={() => setIsAdding(false)} />
         )
       }
       action={
@@ -33,7 +33,11 @@ export function OrderDishesSection({ order }: OrderDishesProps) {
         </button>
       }
     >
-      {data ? <OrderDishes order={order} dishes={data} /> : <Spinner />}
+      {data ? (
+        <OrderDishes isAdding={isAdding} order={order} dishes={data} />
+      ) : (
+        <Spinner />
+      )}
     </OrderSection>
   );
 }

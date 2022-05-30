@@ -14,6 +14,7 @@ export function useOrderDishes(order: OrderModel) {
     {
       retry: false,
       refetchOnMount: false,
+      refetchInterval: 5000,
     }
   );
 }

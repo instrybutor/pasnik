@@ -2,6 +2,7 @@ import { CheckIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 import {
   ButtonHTMLAttributes,
+  FocusEvent,
   MouseEvent,
   useCallback,
   useRef,
@@ -30,20 +31,29 @@ export function ConfirmButton({ onClick, ...props }: ConfirmButtonProps) {
     }, 0);
   }, [btnRef, setIsConfirm]);
 
+  const onBlur = useCallback(
+    (event: FocusEvent) => {
+      const currentTarget = event.currentTarget as HTMLDivElement;
+      const relatedTarget = event.relatedTarget as HTMLElement;
+      if (!currentTarget.contains?.(relatedTarget)) {
+        setIsConfirm(false);
+      }
+    },
+    [setIsConfirm]
+  );
+
   return (
-    <div className="inline-flex gap-2 relative">
-      {isConfirm ? (
-        <>
-          <div className="bg-white absolute w-24 -right-3 p-2 -mt-2 rounded-md">
-            <button
-              style={{ marginRight: '-2px' }}
-              type="button"
-              onClick={confirmClick}
-              className="inline-flex items-center ml-1 p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              <CheckIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
+    <div className="inline-flex gap-2 relative" onBlur={onBlur}>
+      {isConfirm && (
+        <div className="absolute whitespace-nowrap space-x-2 flex-shrink-0 right-0">
+          <button
+            type="button"
+            onClick={confirmClick}
+            className="inline-flex items-center ml-1 p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+
           <button
             autoFocus={true}
             onClick={denyClick}
@@ -52,10 +62,9 @@ export function ConfirmButton({ onClick, ...props }: ConfirmButtonProps) {
           >
             <XIcon className="h-5 w-5" aria-hidden="true" />
           </button>
-        </>
-      ) : (
-        <button ref={btnRef} onClick={() => setIsConfirm(true)} {...props} />
+        </div>
       )}
+      <button ref={btnRef} onClick={() => setIsConfirm(true)} {...props} />
     </div>
   );
 }

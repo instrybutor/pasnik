@@ -2,49 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.raise {
-  &:hover {
-    transform: translateY(-0.25em);
-  }
+@import 'react-toastify/dist/ReactToastify.css';
+:root {
+  --toastify-toast-min-height: 0;
 }
-
-.formSquare {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-  margin-top: 30px;
+.Toastify__toast-body {
+  margin: 0;
 }
-
-.form {
-  max-width: 830px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  background: white;
-  padding: 20px;
-  margin-top: 30px;
-}
-
-.loader {
-  border-top-color: #3498db;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-@-webkit-keyframes spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.Toastify__toast-container {
+  max-width: 24rem;
+  width: 100%;
 }
