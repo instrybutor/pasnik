@@ -28,15 +28,17 @@ export function Users({
   usersToShow,
   popoverElement,
 }: UsersProps) {
-  const [visibleUsers, setVisibleUsers] = useState<UserModel[]>([]);
+  const trimUsers = useCallback(() => {
+    return users?.slice(0, usersToShow ?? users?.length) ?? [];
+  }, [users, usersToShow]);
+
+  const [visibleUsers, setVisibleUsers] = useState<UserModel[]>(trimUsers());
   const [filteredUsers, setFilteredUsers] = useState<UserModel[]>([]);
   const [filterValue, setFilterValue] = useState('');
 
   useEffect(() => {
-    if (users) {
-      setVisibleUsers(users.slice(0, usersToShow ?? users.length));
-    }
-  }, [usersToShow, users, setVisibleUsers]);
+    setVisibleUsers(trimUsers());
+  }, [trimUsers, setVisibleUsers]);
 
   useEffect(() => {
     if (users) {

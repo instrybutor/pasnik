@@ -18,7 +18,7 @@ export interface OrderModel {
   status: OrderStatus;
   from: string;
   slug: string;
-  menuUrl: string;
+  menuUrl?: string;
   shippingCents?: number;
   createdAt: string;
   updatedAt: string;

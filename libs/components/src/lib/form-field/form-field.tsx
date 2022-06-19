@@ -80,18 +80,12 @@ export function FormField<TFieldValues extends FieldValues>({
           render={({ field, fieldState: { isDirty } }) => {
             return cloneElement(children, {
               error: Boolean(error),
-              onBlur: (e: ChangeEvent<HTMLInputElement>) => {
-                field.onBlur();
-              },
+              ref: field.ref,
+              name: field.name,
+              onBlur: () => field.onBlur(),
               onChange: (e: ChangeEvent<HTMLInputElement>) =>
-                field.onChange(
-                  transform?.output
-                    ? transform.output(e.currentTarget.value)
-                    : e.currentTarget.value
-                ),
-              value: transform?.input
-                ? transform.input(field.value)
-                : field.value,
+                field.onChange(e.currentTarget.value),
+              value: field.value,
               id: inputId,
             });
           }}

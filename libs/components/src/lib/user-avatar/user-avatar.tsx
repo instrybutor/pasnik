@@ -61,7 +61,7 @@ export function UserAvatar({
     <span
       className={classNames(
         sizeClasses,
-        'inline-block rounded-full overflow-hidden',
+        'inline-block rounded-full overflow-hidden flex-shrink-0',
         className
       )}
       tabIndex={0}

@@ -38,15 +38,11 @@ export const Form = <
 
   const { handleSubmit } = methods;
 
-  const _onSubmit: SubmitHandler<TFormValues> = useCallback(
-    (data, event) => {
-      if (successMessage) {
-        toast({ type: 'success', title: successMessage });
-      }
-      onSubmit(data, event);
-    },
-    [successMessage, onSubmit, toast]
-  );
+  const _onSuccess = useCallback(() => {
+    if (successMessage) {
+      toast({ type: 'success', title: successMessage });
+    }
+  }, [successMessage, toast]);
 
   const _onError = useCallback(
     (error: Error) => {
@@ -61,7 +57,9 @@ export const Form = <
   return (
     <FormProvider {...methods}>
       <form
-        onSubmit={(event) => handleSubmit(_onSubmit)(event).catch(_onError)}
+        onSubmit={(event) =>
+          handleSubmit(onSubmit)(event).then(_onSuccess).catch(_onError)
+        }
         className={classNames('relative', className)}
       >
         {children}

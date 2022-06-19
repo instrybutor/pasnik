@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowJs": true,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -17,6 +18,7 @@
     "baseUrl": ".",
     "typeRoots": ["./custom_typings", "./node_modules/@types"],
     "paths": {
+      "@pasnik/theme": ["theme.mjs"],
       "@pasnik/ability": ["libs/ability/src/index.ts"],
       "@pasnik/api/data-transfer": ["libs/api/data-transfer/src/index.ts"],
       "@pasnik/auth": ["libs/auth/src/index.ts"],

@@ -46,6 +46,7 @@ export interface SidebarProps {
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
   const { user } = useUserStore();
   const {
+    currentWorkspaceIdContext,
     showAddWorkspaceModal,
     hideAddWorkspaceModal,
     addWorkspaceModalOpen,
@@ -145,6 +146,9 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                       to={`/workspace/${currentWorkspace.slug}`}
                       icon={OfficeBuildingIcon}
                       label={currentWorkspace.name}
+                      forceActive={
+                        currentWorkspace.id === currentWorkspaceIdContext
+                      }
                     />
                   )}
                   <SidebarItem
@@ -249,6 +253,9 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                     to={`/workspace/${currentWorkspace.slug}`}
                     icon={OfficeBuildingIcon}
                     label={currentWorkspace.name}
+                    forceActive={
+                      currentWorkspace.id === currentWorkspaceIdContext
+                    }
                   />
                 )}
                 <SidebarItem

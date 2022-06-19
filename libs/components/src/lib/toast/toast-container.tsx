@@ -22,6 +22,8 @@ export function ToastContainer() {
       toastClassName="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden p-4 flex items-start"
       bodyClassName="w-0 flex-1 p-0"
       closeButton={CloseButton}
+      hideProgressBar={true}
+      autoClose={2000}
     />
   );
 }

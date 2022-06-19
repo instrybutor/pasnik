@@ -1,16 +1,19 @@
-import { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode, useMemo } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
+import { Spinner, useBreakpoint } from '@pasnik/components';
 
 export interface OrderSectionProps {
   header: string | ReactNode;
   footer?: string | ReactNode;
   subTitle?: string | ReactNode;
   action?: ReactNode | 'accordion';
+  accordion?: 'always' | 'mobile';
   className?: string;
-  defaultOpen?: boolean;
+  defaultOpen?: 'mobile' | 'desktop' | boolean;
   noPadding?: boolean;
+  isLoading?: boolean;
 }
 
 export function OrderSection({
@@ -22,13 +25,21 @@ export function OrderSection({
   defaultOpen,
   noPadding,
   footer,
+  isLoading,
+  accordion,
 }: PropsWithChildren<OrderSectionProps>) {
+  const { breakpoint } = useBreakpoint();
+  const _defaultOpen = useMemo(() => {
+    if (defaultOpen === 'mobile') {
+      return breakpoint === 'sm';
+    } else if (defaultOpen === 'desktop') {
+      return breakpoint !== 'sm';
+    }
+    return defaultOpen ?? true;
+  }, [breakpoint, defaultOpen]);
+
   return (
-    <Disclosure
-      as="section"
-      defaultOpen={defaultOpen ?? true}
-      className={className}
-    >
+    <Disclosure as="section" defaultOpen={_defaultOpen} className={className}>
       {({ open }) => (
         <div className="bg-white shadow sm:rounded-lg overflow-hidden">
           <div className="px-4 py-4 sm:px-6 flex items-center justify-between">
@@ -42,8 +53,17 @@ export function OrderSection({
                 </p>
               )}
             </div>
-            {action === 'accordion' ? (
-              <Disclosure.Button className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+            <div className="inline-flex gap-2">
+              {action}
+              <Disclosure.Button
+                className={classNames(
+                  'inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+                  {
+                    'sm:hidden': accordion === 'mobile',
+                    hidden: !accordion,
+                  }
+                )}
+              >
                 <ChevronDownIcon
                   className={classNames(
                     open ? '-rotate-180' : 'rotate-0',
@@ -52,9 +72,7 @@ export function OrderSection({
                   aria-hidden="true"
                 />
               </Disclosure.Button>
-            ) : (
-              action
-            )}
+            </div>
           </div>
           <Disclosure.Panel
             as="div"
@@ -62,7 +80,7 @@ export function OrderSection({
               'px-4 py-5 sm:px-6': !noPadding,
             })}
           >
-            {children}
+            {isLoading ? <Spinner /> : children}
           </Disclosure.Panel>
           {footer && <div className="border-t border-gray-200">{footer}</div>}
         </div>

@@ -1,4 +1,11 @@
-import { Form, FormField, Input, Modal, ModalProps } from '@pasnik/components';
+import {
+  currencyTransform,
+  Form,
+  FormField,
+  Input,
+  Modal,
+  ModalProps,
+} from '@pasnik/components';
 import {
   CreateOrderDto,
   createOrderValidator,
@@ -9,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import { useOrderUpdateMutation } from '../mutations/use-order-update-mutation';
 import currency from 'currency.js';
 import { useNavigate } from 'react-router-dom';
-import { currencyTransform } from '@pasnik/shared/utils';
 
 export interface EditOrderModelProps {
   order: OrderModel;

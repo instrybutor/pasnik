@@ -40,8 +40,8 @@ export class OrderEntity implements OrderModel {
   @Column()
   from: string;
 
-  @Column()
-  menuUrl: string;
+  @Column({ nullable: true })
+  menuUrl?: string;
 
   @Column({ default: 0 })
   shippingCents: number;

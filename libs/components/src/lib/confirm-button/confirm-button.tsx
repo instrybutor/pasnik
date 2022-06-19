@@ -64,7 +64,17 @@ export function ConfirmButton({ onClick, ...props }: ConfirmButtonProps) {
           </button>
         </div>
       )}
-      <button ref={btnRef} onClick={() => setIsConfirm(true)} {...props} />
+      <button
+        ref={btnRef}
+        onClick={(e) => {
+          if (e.ctrlKey) {
+            confirmClick(e);
+          } else {
+            setIsConfirm(true);
+          }
+        }}
+        {...props}
+      />
     </div>
   );
 }

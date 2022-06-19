@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 import {
   Button,
+  currencyTransform,
   Form,
   FormField,
   FormSpinner,
@@ -26,7 +27,6 @@ import {
   useDishAddMutation,
   useDishUpdateMutation,
 } from '@pasnik/features/orders';
-import { currencyTransform } from '@pasnik/shared/utils';
 
 export interface OrderDishAddProps {
   onClose: () => void;
@@ -90,7 +90,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
             )}
           />
         </div>
-        <div className="text-sm text-gray-500 w-full">
+        <div className="text-sm text-gray-500 w-full -ml-[1px]">
           <FormField
             label={t('dish.form.name')}
             labelClassName="xsm:hidden block"

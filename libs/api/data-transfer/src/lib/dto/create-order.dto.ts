@@ -1,6 +1,6 @@
 export interface CreateOrderDto {
   from: string;
-  menuUrl: string;
+  menuUrl?: string;
   orderAt?: string;
   shippingCents?: number;
 }
