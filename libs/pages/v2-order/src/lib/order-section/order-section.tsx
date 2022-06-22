@@ -42,8 +42,8 @@ export function OrderSection({
     <Disclosure as="section" defaultOpen={_defaultOpen} className={className}>
       {({ open }) => (
         <div className="bg-white shadow sm:rounded-lg overflow-hidden">
-          <div className="px-4 py-4 sm:px-6 flex items-center justify-between">
-            <div className="">
+          <div className="px-4 py-4 sm:px-6 flex items-center">
+            <div className="flex-grow">
               <h2 className="text-lg leading-6 font-medium text-gray-900">
                 {header}
               </h2>
@@ -53,11 +53,11 @@ export function OrderSection({
                 </p>
               )}
             </div>
-            <div className="inline-flex gap-2">
+            <div className="inline-flex gap-2 -my-1">
               {action}
               <Disclosure.Button
                 className={classNames(
-                  'inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
+                  'items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500',
                   {
                     'sm:hidden': accordion === 'mobile',
                     hidden: !accordion,

@@ -74,6 +74,28 @@ export class OrderService {
     return this.findOneById(orderId);
   }
 
+  async markAsProcessing(orderId: string, user: UserEntity) {
+    await this.connection.transaction(async (manager) => {
+      const ordersRepository = manager.getCustomRepository(OrdersRepository);
+      const orderActionsRepository = manager.getCustomRepository(
+        OrderActionsRepository
+      );
+
+      const order = await ordersRepository.findOneOrFail(orderId, {
+        relations: ['dishes'],
+      });
+      await ordersRepository.markAsProcessing(order);
+      await orderActionsRepository.createAction(
+        user,
+        order,
+        OrderAction.Ordered
+      );
+
+      this.dispatchNotification(order);
+    });
+    return this.findOneById(orderId);
+  }
+
   async markAsDelivered(
     orderId: string,
     markAsDeliveredDto: MarkAsDeliveredDto,
@@ -146,8 +168,6 @@ export class OrderService {
 
       const payer = await usersRepository.findOneOrFail(payerId);
       const order = await this.findOneById(orderId);
-
-      console.log(payer.id, payerId, order.payer.id);
 
       if (order.payer?.id === payer.id) {
         return;

@@ -4,6 +4,7 @@ import React, { PropsWithChildren } from 'react';
 export interface LabelProps {
   className?: string;
   required?: boolean;
+  htmlFor?: string;
 }
 
 export const Label = React.forwardRef<
@@ -12,10 +13,7 @@ export const Label = React.forwardRef<
 >(({ className, required, children, ...props }, ref) => {
   return (
     <label
-      className={classNames(
-        'text-sm font-medium text-gray-700 mb-1',
-        className
-      )}
+      className={classNames('text-sm font-medium', className)}
       ref={ref}
       {...props}
     >

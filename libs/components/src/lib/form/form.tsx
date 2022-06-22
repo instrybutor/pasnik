@@ -12,11 +12,14 @@ import { useTranslation } from 'react-i18next';
 
 export interface FormProps<TFormValues extends FieldValues, TContext>
   extends UseFormProps<TFormValues, TContext> {
-  onSubmit: SubmitHandler<TFormValues>;
+  onSubmit?: SubmitHandler<TFormValues>;
   children: ReactElement | ReactElement[];
   className?: string;
   successMessage?: string;
 }
+
+// eslint-disable-next-line
+const noop = () => {};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Form = <
@@ -58,7 +61,9 @@ export const Form = <
     <FormProvider {...methods}>
       <form
         onSubmit={(event) =>
-          handleSubmit(onSubmit)(event).then(_onSuccess).catch(_onError)
+          handleSubmit(onSubmit ?? noop)(event)
+            .then(_onSuccess)
+            .catch(_onError)
         }
         className={classNames('relative', className)}
       >

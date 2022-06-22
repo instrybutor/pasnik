@@ -97,6 +97,7 @@
       "edit": "Edytuj",
       "open": "Otwórz",
       "order": "Zamów",
+      "ordered": "Zamówione",
       "delivered": "Dostarczone",
       "more": "Więcej",
       "duplicate": "Ponów"
@@ -142,10 +143,12 @@
     "openOrder": "Kliknij i sprawdz zamówienie."
   },
   "orderStatus": {
-    "in-progress": "otwarte",
-    "ordered": "zamówione",
-    "delivered": "dostarczone",
-    "canceled": "anulowane"
+    "in-progress": "W trakcie",
+    "processing": "Zamawiane",
+    "ordered": "Zamówione",
+    "delivered": "Dostarczone",
+    "canceled": "Anulowane",
+    "unknown": "Nieznane"
   },
   "workspace": {
     "createDrawer": {

@@ -1,29 +1,54 @@
-import React from 'react';
-import classNames from 'classnames';
-import { currencyTransform, FormFieldInputProps } from '../form-field';
+import React, {
+  ChangeEventHandler,
+  FocusEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import { FormFieldInputProps } from '../form-field';
+import Input from './input';
 
-export const Input = React.forwardRef<HTMLInputElement, FormFieldInputProps>(
-  ({ error, value, className, type, ...props }, ref) => {
-    return (
-      <input
-        ref={ref}
-        type={type ?? 'text'}
-        onBlur={(e) =>
-          (e.currentTarget.value = currencyTransform.input(value as number))
-        }
-        className={classNames(
-          {
-            'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500':
-              error,
-            'focus:ring-cyan-500 focus:border-cyan-500 border-gray-300': !error,
-          },
-          'block w-full pr-8 xsm:text-sm rounded-md focus:outline-none',
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
+export const CurrencyInput = React.forwardRef<
+  HTMLInputElement,
+  FormFieldInputProps
+>(({ error, value, onBlur, onFocus, onChange, ref, ...props }) => {
+  const [_value, setValue] = useState<string | undefined>(String(value));
+  const [hasFocus, setHasFocus] = useState(false);
+  const _onBlur: FocusEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      setHasFocus(false);
+      return onBlur?.(e);
+    },
+    [setHasFocus, onBlur]
+  );
+  const _onChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      onChange?.(e);
+      setValue(e.currentTarget.value);
+    },
+    [onChange, setValue]
+  );
+  const _onFocus: FocusEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      setHasFocus(true);
+      onFocus?.(e);
+    },
+    [setHasFocus, onFocus]
+  );
+  useEffect(() => {
+    if (!hasFocus) {
+      setValue(String(value));
+    }
+  }, [value, setValue, hasFocus]);
+  return (
+    <Input
+      onBlur={_onBlur}
+      onFocus={_onFocus}
+      value={_value}
+      onChange={_onChange}
+      {...props}
+    />
+  );
+});
 
-export default Input;
+export default CurrencyInput;

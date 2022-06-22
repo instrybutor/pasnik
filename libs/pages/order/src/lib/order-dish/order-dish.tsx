@@ -77,7 +77,7 @@ export function OrderDish({
   return (
     <>
       <div className="flex items-center">
-        <Can I={OrdersAction.ManageDish} this={order}>
+        <Can I={OrdersAction.UpdateDish} this={order}>
           <UserSelection
             type="slim"
             users={users}
@@ -85,7 +85,7 @@ export function OrderDish({
             selectUser={onDishUpdate}
           />
         </Can>
-        <Can not I={OrdersAction.ManageDish} this={order}>
+        <Can not I={OrdersAction.UpdateDish} this={order}>
           <UserAvatar user={dish.user} size="sm" />
         </Can>
       </div>
@@ -117,7 +117,7 @@ export function OrderDish({
         </div>
       )}
 
-      <Can I={OrdersAction.ManageDish} this={order}>
+      <Can I={OrdersAction.UpdateDish} this={order}>
         <div className="hidden sm:block whitespace-nowrap space-x-2 flex-shrink-0">
           {isDeleting ? (
             <Fragment>

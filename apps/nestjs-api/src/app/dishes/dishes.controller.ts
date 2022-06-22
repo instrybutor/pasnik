@@ -49,7 +49,7 @@ export class DishesController {
     @Param('id') id: string,
     @CurrentAbility() ability: AppAbility
   ) {
-    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.ManageDish, order);
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.DeleteDish, order);
     return this.dishesService.delete(order, +id);
   }
 
@@ -61,7 +61,7 @@ export class DishesController {
     @CurrentUser() user: UserEntity,
     @CurrentAbility() ability: AppAbility
   ) {
-    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.ManageDish, order);
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.UpdateDish, order);
     return this.dishesService.update(order, +id, addDishDto, user);
   }
 }

@@ -6,7 +6,7 @@ export const currencyTransform = {
       symbol: '',
       decimal: ',',
       separator: '',
-    }).multiply(100).value,
+    }).multiply(100).value || 0,
   input: (value?: number) =>
     currency(value ?? 0, {
       fromCents: true,

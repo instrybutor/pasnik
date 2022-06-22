@@ -3,23 +3,25 @@ import React, {
   cloneElement,
   ReactElement,
   ReactNode,
+  useEffect,
   useMemo,
 } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
 import {
-  Control,
   Controller,
   FieldError,
   FieldPath,
   FieldValues,
+  useForm,
   useFormContext,
-  UseFormRegister,
   useFormState,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { FieldPathValue } from 'react-hook-form/dist/types';
 import { Tooltip } from '../tooltip/tooltip';
 import { Label } from './label';
+import classNames from 'classnames';
+import { Resolver } from 'react-hook-form/dist/types/resolvers';
 
 export interface FormFieldInputProps extends React.HTMLProps<HTMLInputElement> {
   error?: boolean;
@@ -33,8 +35,6 @@ export interface FormFieldProps<
   label?: string;
   children: ReactElement<FormFieldInputProps>;
   errorIcon?: JSX.Element;
-  register?: UseFormRegister<TFieldValues>;
-  control?: Control<TFieldValues>;
   suffix?: ReactNode;
   required?: boolean;
   transform?: {
@@ -44,6 +44,9 @@ export interface FormFieldProps<
   defaultValue?: FieldPathValue<TFieldValues, TName>;
   errorTooltip?: boolean;
   labelClassName?: string;
+  onChange?: (value: FieldPathValue<TFieldValues, TName>) => void;
+  vertical?: boolean;
+  resolver?: Resolver<TFieldValues>;
 }
 
 let nextId = 0;
@@ -59,16 +62,31 @@ export function FormField<TFieldValues extends FieldValues>({
   required,
   errorTooltip,
   labelClassName,
+  onChange,
+  vertical,
+  resolver,
 }: FormFieldProps<TFieldValues>) {
-  const { control } = useFormContext<TFieldValues>();
+  const formContext = useFormContext<TFieldValues>();
+  const form = useForm({ resolver, mode: 'onChange' });
+  const { control, watch } = formContext ?? form;
+  const currentValue = watch(name);
   const { t } = useTranslation();
   const state = useFormState({ control, name });
   const error: FieldError | undefined = state?.errors[name];
   const inputId = useMemo(() => `form-field-id:${nextId++}`, []);
+
+  useEffect(() => {
+    onChange?.(currentValue);
+  }, [onChange, currentValue]);
   return (
-    <div>
+    <div
+      className={classNames('flex', {
+        'flex-col gap-1': !vertical,
+        'flex-row gap-4 items-center': vertical,
+      })}
+    >
       {label && (
-        <Label className={labelClassName} required={required}>
+        <Label className={labelClassName} required={required} htmlFor={inputId}>
           {label}
         </Label>
       )}
@@ -77,15 +95,18 @@ export function FormField<TFieldValues extends FieldValues>({
           control={control}
           name={name}
           defaultValue={defaultValue}
-          render={({ field, fieldState: { isDirty } }) => {
+          render={({ field }) => {
             return cloneElement(children, {
               error: Boolean(error),
               ref: field.ref,
               name: field.name,
               onBlur: () => field.onBlur(),
               onChange: (e: ChangeEvent<HTMLInputElement>) =>
-                field.onChange(e.currentTarget.value),
-              value: field.value,
+                field.onChange(
+                  transform?.output?.(e.currentTarget.value) ??
+                    e.currentTarget.value
+                ),
+              value: transform?.input?.(field.value) ?? field.value,
               id: inputId,
             });
           }}

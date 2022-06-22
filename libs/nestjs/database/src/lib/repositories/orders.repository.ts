@@ -42,6 +42,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
         new Brackets((db) => {
           const query = db
             .where(`order.status = '${OrderStatus.InProgress}'`)
+            .orWhere(`order.status = '${OrderStatus.Processing}'`)
             .orWhere(`order.status = '${OrderStatus.Ordered}'`);
           if (showRecentlyClosed) {
             query.orWhere(
@@ -96,7 +97,11 @@ export class OrdersRepository extends Repository<OrderEntity> {
         'dish.userId = participant.id'
       )
       .where(
-        `order.status != '${OrderStatus.InProgress}' AND order.status != '${OrderStatus.Ordered}'`
+        new Brackets((db) => {
+          db.where(`order.status != '${OrderStatus.InProgress}'`)
+            .andWhere(`order.status != '${OrderStatus.Processing}'`)
+            .andWhere(`order.status != '${OrderStatus.Ordered}'`);
+        })
       )
       .groupBy('order.id')
       .addGroupBy('user.id')
@@ -160,6 +165,14 @@ export class OrdersRepository extends Repository<OrderEntity> {
     return await this.save(order);
   }
 
+  async markAsProcessing(order: OrderEntity) {
+    if (order.dishes.length === 0) {
+      throw new HttpException('No dishes found', HttpStatus.FORBIDDEN);
+    }
+    order.status = OrderStatus.Processing;
+    return await this.save(order);
+  }
+
   async markAsClosed(order: OrderEntity) {
     order.status = OrderStatus.Canceled;
     return await this.save(order);
@@ -168,6 +181,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
   async markAsOpen(order: OrderEntity) {
     order.status = OrderStatus.InProgress;
     order.orderedAt = null;
+    order.deliveredAt = null;
     return await this.save(order);
   }
 

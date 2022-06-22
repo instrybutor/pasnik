@@ -103,4 +103,17 @@ export class OrderController {
       user
     );
   }
+
+  @Post('/mark-as-processing')
+  markAsProcessing(
+    @CurrentOrder() order: OrderEntity,
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(
+      OrdersAction.MarkAsProcessing,
+      order
+    );
+    return this.ordersService.markAsProcessing(order.id, user);
+  }
 }

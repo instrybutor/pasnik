@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 import {
   Button,
+  CurrencyInput,
   currencyTransform,
   Form,
   FormField,
@@ -44,11 +45,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
   return (
     <Form<AddDishDto>
       resolver={yupResolver(addDishValidator)}
-      onSubmit={async (data) => {
-        const formData: AddDishDto = {
-          ...data,
-          priceCents: data.priceCents * 100,
-        };
+      onSubmit={async (formData) => {
         if (dish) {
           mutateDishAsync(formData).then(() =>
             toast({ type: 'success', title: 'Zmodyfikowano pozycję' })
@@ -117,7 +114,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
             suffix="zł"
             transform={currencyTransform}
           >
-            <Input
+            <CurrencyInput
               type="text"
               inputMode="numeric"
               placeholder="0.00"

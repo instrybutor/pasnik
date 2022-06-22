@@ -1,4 +1,5 @@
 import {
+  CurrencyInput,
   currencyTransform,
   Form,
   FormField,
@@ -66,7 +67,9 @@ export function EditOrderModal({
             suffix="zł"
             transform={currencyTransform}
           >
-            <Input placeholder={t('order.form.delivery_price_placeholder')} />
+            <CurrencyInput
+              placeholder={t('order.form.delivery_price_placeholder')}
+            />
           </FormField>
           <div className="block flex-grow sm:hidden" />
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
