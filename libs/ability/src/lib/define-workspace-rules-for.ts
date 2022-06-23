@@ -40,6 +40,7 @@ export enum OrdersAction {
   MarkAsProcessing = 'markAsProcessing',
   MarkAsOrdered = 'markAsOrdered',
   MarkAsDelivered = 'markAsDelivered',
+  SetETA = 'setETA',
   MarkAsClosed = 'markAsClosed',
   MarkAsOpen = 'markAsOpen',
   CreateDish = 'createDish',
@@ -113,10 +114,6 @@ function defineWorkspaceAdminRules(
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     id: workspaceUser.id,
   });
-
-  can(OrdersAction.MarkAsOrdered, 'OrderModel', {
-    status: OrderStatus.Delivered,
-  });
 }
 
 function defineWorkspaceUserRules(
@@ -179,6 +176,9 @@ function defineWorkspaceUserRules(
     status: OrderStatus.InProgress,
   });
   can(OrdersAction.SetPayer, 'OrderModel', {
+    status: OrderStatus.Ordered,
+  });
+  can(OrdersAction.SetETA, 'OrderModel', {
     status: OrderStatus.Ordered,
   });
 }

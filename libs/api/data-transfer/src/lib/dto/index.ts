@@ -15,3 +15,4 @@ export * from './add-members-to-workspace.dto';
 export * from './notifications';
 export * from './update-user.dto';
 export * from './update-workspace-user.dto';
+export * from './set-eta.dto';

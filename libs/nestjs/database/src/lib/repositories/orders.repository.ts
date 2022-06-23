@@ -9,7 +9,7 @@ import {
   OrderStatus,
 } from '@pasnik/api/data-transfer';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { sub } from 'date-fns';
+import { addMinutes, sub } from 'date-fns';
 import { OrderEntity, UserEntity, WorkspaceEntity } from '../entities';
 
 @EntityRepository(OrderEntity)
@@ -187,6 +187,14 @@ export class OrdersRepository extends Repository<OrderEntity> {
 
   async markAsPaid(order: OrderEntity, payer: UserEntity) {
     order.payer = payer;
+    return await this.save(order);
+  }
+
+  async setETA(order: OrderEntity, eta: number) {
+    order.deliveredAt = addMinutes(
+      new Date(order.orderedAt),
+      eta
+    ).toISOString();
     return await this.save(order);
   }
 }

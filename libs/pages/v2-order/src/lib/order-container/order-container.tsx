@@ -10,6 +10,8 @@ import { useSidebarContext } from '@pasnik/layout';
 import { OrderStatus } from '@pasnik/api/data-transfer';
 import { OrderProcessSection } from '../order-process-section/order-process-section';
 import { useOrderState } from '../order-state/order-state';
+import { OrderSummarySection } from '../order-summary-section/order-summary-section';
+import { OrderETASection } from '../order-eta-section/order-eta-section';
 
 export interface OrderContainerProps {
   slug: string;
@@ -51,7 +53,15 @@ export function OrderContainer({ slug }: OrderContainerProps) {
           ) : order.status === OrderStatus.Processing ? (
             <OrderProcessSection order={order} />
           ) : (
-            <>D</>
+            <>
+              {order.status === OrderStatus.Ordered ? (
+                <OrderETASection order={order} />
+              ) : (
+                <></>
+              )}
+
+              <OrderSummarySection order={order} />
+            </>
           )}
         </div>
         <div className="space-y-6 xl:col-start-3 xl:col-span-1">

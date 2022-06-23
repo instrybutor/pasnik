@@ -15,6 +15,7 @@ import {
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
   OrderAction,
+  SetETADto,
   SetPayerDto,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
@@ -174,6 +175,17 @@ export class OrderService {
       }
 
       await ordersRepository.markAsPaid(order, payer);
+    });
+    return this.findOneById(orderId);
+  }
+
+  async setETA(orderId: string, { eta }: SetETADto) {
+    await this.connection.transaction(async (manager) => {
+      const ordersRepository = manager.getCustomRepository(OrdersRepository);
+
+      const order = await this.findOneById(orderId);
+
+      await ordersRepository.setETA(order, eta);
     });
     return this.findOneById(orderId);
   }

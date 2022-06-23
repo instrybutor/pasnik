@@ -4,6 +4,7 @@ import { OrderEntity, UserEntity } from '@pasnik/nestjs/database';
 import {
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
+  SetETADto,
   SetPayerDto,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
@@ -84,6 +85,18 @@ export class OrderController {
   ) {
     ForbiddenError.from(ability).throwUnlessCan(OrdersAction.SetPayer, order);
     return this.ordersService.setPayer(order.id, setPayerDto);
+  }
+
+  @Post('/set-eta')
+  setEta(
+    @CurrentOrder() order: OrderEntity,
+    @CurrentUser() user: UserEntity,
+    @CurrentAbility() ability: AppAbility,
+    @Body() setETADto: SetETADto
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.SetETA, order);
+
+    return this.ordersService.setETA(order.id, setETADto);
   }
 
   @Post('/mark-as-delivered')

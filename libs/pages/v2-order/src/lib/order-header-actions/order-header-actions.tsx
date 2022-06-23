@@ -2,6 +2,7 @@ import { Can, OrdersAction } from '@pasnik/ability';
 import { ButtonMutate, ModalButton } from '@pasnik/components';
 import {
   EditOrderModal,
+  useOrderMarkAsDeliveredMutation,
   useOrderMarkAsOpenMutation,
   useOrderMarkAsOrderedMutation,
   useOrderMarkAsProcessingMutation,
@@ -29,6 +30,7 @@ export function OrderHeaderActions({ order }: OrderHeaderActionsProps) {
   const markAsProcessingMutation = useOrderMarkAsProcessingMutation(order);
   const markAsOpenMutation = useOrderMarkAsOpenMutation(order);
   const markAsOrderedMutation = useOrderMarkAsOrderedMutation(order);
+  const markAsDeliveredMutation = useOrderMarkAsDeliveredMutation(order);
 
   return (
     <div className="flex space-x-3">
@@ -81,6 +83,18 @@ export function OrderHeaderActions({ order }: OrderHeaderActionsProps) {
           >
             <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             {t('dish.header_menu.ordered')}
+          </ButtonMutate>
+        </span>
+      </Can>
+      <Can I={OrdersAction.MarkAsDelivered} this={order}>
+        <span className="ml-3">
+          <ButtonMutate
+            type="button"
+            mutation={markAsDeliveredMutation}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          >
+            <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            {t('dish.header_menu.delivered')}
           </ButtonMutate>
         </span>
       </Can>
