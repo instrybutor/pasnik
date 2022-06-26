@@ -48,6 +48,7 @@ export function WorkspaceUsers({
               className="relative flex flex-col items-center group"
             >
               <UserAvatar
+                showTooltip={true}
                 user={workspaceUser.user}
                 size={avatarSize}
                 className="max-w-none ring-2 ring-white"
@@ -59,6 +60,7 @@ export function WorkspaceUsers({
               className="hover:relative flex flex-col items-center group"
             >
               <UserAvatar
+                showTooltip={true}
                 user={workspaceUser.user}
                 size={avatarSize}
                 className="max-w-none h-6 w-6 rounded-full ring-2 ring-white"

@@ -89,7 +89,7 @@ export class OrderService {
       await orderActionsRepository.createAction(
         user,
         order,
-        OrderAction.Ordered
+        OrderAction.Processing
       );
 
       this.dispatchNotification(order);
@@ -117,11 +117,6 @@ export class OrderService {
         order,
         OrderAction.Delivered
       );
-      order.totalPrice = order.dishes.reduce(
-        (acc, cur) => acc + cur.priceCents,
-        0
-      );
-      await ordersRepository.save(order);
 
       this.dispatchNotification(order);
     });

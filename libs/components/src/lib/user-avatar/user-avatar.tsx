@@ -5,6 +5,16 @@ import { Tooltip } from '../tooltip/tooltip';
 
 export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg' | 'xxlg';
 
+export const getSizeClass = (size?: UserAvatarSize) =>
+  classNames({
+    'h-6 w-6': size === 'xsm',
+    'h-8 w-8': size === 'sm',
+    'h-10 w-10': size === 'md' || !size,
+    'h-12 w-12': size === 'lg',
+    'h-14 w-14': size === 'xlg',
+    'h-16 w-16': size === 'xxlg',
+  });
+
 export interface UserAvatarProps {
   user?: Partial<UserModel> | null;
   size?: UserAvatarSize;
@@ -38,15 +48,6 @@ export function UserAvatar({
     </span>
   );
 
-  const sizeClasses = classNames({
-    'h-6 w-6': size === 'xsm',
-    'h-8 w-8': size === 'sm',
-    'h-10 w-10': size === 'md' || !size,
-    'h-12 w-12': size === 'lg',
-    'h-14 w-14': size === 'xlg',
-    'h-16 w-16': size === 'xxlg',
-  });
-
   const defaultFallback = (
     <svg
       className="h-full w-full text-gray-300"
@@ -60,7 +61,7 @@ export function UserAvatar({
   return (
     <span
       className={classNames(
-        sizeClasses,
+        getSizeClass(size),
         'inline-block rounded-full overflow-hidden flex-shrink-0',
         className
       )}

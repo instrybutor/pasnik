@@ -19,7 +19,8 @@ const typesMap = {
     bgColorClass: 'bg-gray-400',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.createdBy</Trans>{' '}
+        <Trans>v2-order.timeline.created</Trans>{' '}
+        <Trans>v2-order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -29,7 +30,8 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.canceledBy</Trans>{' '}
+        <Trans>v2-order.timeline.canceled</Trans>{' '}
+        <Trans>v2-order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -39,7 +41,8 @@ const typesMap = {
     bgColorClass: 'bg-yellow-500',
     text: ({ actionUser }: OrderActionModel) => (
       <>
-        <Trans>timeline.payedBy</Trans>{' '}
+        <Trans>v2-order.timeline.paid</Trans>{' '}
+        <Trans>v2-order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={actionUser} />
       </>
     ),
@@ -49,7 +52,8 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.deliveredBy</Trans>{' '}
+        <Trans>v2-order.timeline.delivered</Trans>{' '}
+        <Trans>v2-order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -59,7 +63,8 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.openBy</Trans>{' '}
+        <Trans>v2-order.timeline.opened</Trans>{' '}
+        <Trans>v2-order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -69,7 +74,19 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.orderedBy</Trans>{' '}
+        <Trans>v2-order.timeline.ordered</Trans>{' '}
+        <Trans>v2-order.timeline.by</Trans>{' '}
+        <UserAvatar showTooltip={true} size="xsm" user={user} />
+      </>
+    ),
+  },
+  [OrderAction.Processing]: {
+    icon: LockClosedIcon,
+    bgColorClass: 'bg-red-500',
+    text: ({ user }: OrderActionModel) => (
+      <>
+        <Trans>v2-order.timeline.processing</Trans>{' '}
+        <Trans>v2-order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),

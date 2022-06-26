@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { QueryErrorResetBoundary } from 'react-query';
 import { PagesOrderDetails } from './pages-order-details';
-import { PagesOrderEdit } from './pages-order-edit';
 
 export function PagesV2Order() {
   return (
@@ -10,7 +9,6 @@ export function PagesV2Order() {
         <Routes>
           <Route path="/" element={<Navigate to="./create" />} />
           <Route path="/:slug" element={<PagesOrderDetails />} />
-          <Route path="/:slug/edit" element={<PagesOrderEdit />} />
         </Routes>
       </QueryErrorResetBoundary>
     </div>

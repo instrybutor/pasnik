@@ -51,7 +51,7 @@ export const Form = <
     (error: Error) => {
       toast({
         type: 'error',
-        title: t('errors.server'),
+        title: t('errors.server.title'),
         autoClose: 3000,
       });
     },

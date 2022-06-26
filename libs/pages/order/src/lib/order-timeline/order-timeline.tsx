@@ -38,7 +38,7 @@ const typesMap = {
     bgColorClass: 'bg-yellow-500',
     text: ({ actionUser }: OrderActionModel) => (
       <>
-        <Trans>timeline.payedBy</Trans>{' '}
+        <Trans>timeline.paiddBy</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={actionUser} />
       </>
     ),
@@ -69,6 +69,16 @@ const typesMap = {
     text: ({ user }: OrderActionModel) => (
       <>
         <Trans>timeline.orderedBy</Trans>{' '}
+        <UserAvatar showTooltip={true} size="xsm" user={user} />
+      </>
+    ),
+  },
+  [OrderAction.Processing]: {
+    icon: LockClosedIcon,
+    bgColorClass: 'bg-red-500',
+    text: ({ user }: OrderActionModel) => (
+      <>
+        <Trans>timeline.processingBy</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),

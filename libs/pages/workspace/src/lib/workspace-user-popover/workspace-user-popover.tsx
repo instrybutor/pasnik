@@ -40,6 +40,7 @@ export function WorkspaceUserPopover({
       <UserInfo user={user.user}>
         <Can I={WorkspaceUsersAction.Update} this={user}>
           <select
+            autoFocus={true}
             name="role"
             className="block w-36 pl-1 pr-0 py-0 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
             value={user.role}

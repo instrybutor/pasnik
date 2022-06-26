@@ -13,13 +13,13 @@ export function OrderTimelineSection({ order }: OrderHistoryProps) {
   const [isDetailed, setIsDetailed] = useState(false);
   return (
     <OrderSection
-      header="Timeline"
+      header="Historia"
       accordion="mobile"
       defaultOpen="desktop"
       action={
         <Switch.Group as="div" className="flex items-center">
           <Switch.Label as="span" className="mr-3">
-            <span className="text-sm text-gray-500">Detailed</span>
+            <span className="text-sm text-gray-500">Szczegółowa</span>
           </Switch.Label>
           <Switch
             checked={isDetailed}

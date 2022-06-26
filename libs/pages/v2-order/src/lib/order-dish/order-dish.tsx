@@ -10,7 +10,7 @@ import {
   useDishAddMutation,
   useDishDeleteMutation,
 } from '@pasnik/features/orders';
-import { Float } from 'headlessui-float-react';
+import { Float } from '@headlessui-float/react';
 
 export interface OrderDishProps {
   dish: DishModel;
@@ -32,7 +32,7 @@ export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
         toast({ type: 'success', title: 'Zduplikowano pozycję' });
       })
       .catch(() => {
-        toast({ type: 'error', title: t('errors.server') });
+        toast({ type: 'error', title: t('errors.server.title') });
       });
   }, [t, dish, addDishAsync, toast]);
 

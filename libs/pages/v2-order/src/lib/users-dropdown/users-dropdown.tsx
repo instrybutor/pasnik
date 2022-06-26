@@ -3,7 +3,7 @@ import { Combobox } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/solid';
 import { UserModel } from '@pasnik/api/data-transfer';
 import { UserInfo } from '@pasnik/components';
-import { Float } from 'headlessui-float-react';
+import { Float } from '@headlessui-float/react';
 
 export interface UsersDropdownButtonProps {
   user?: UserModel;

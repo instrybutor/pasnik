@@ -6,6 +6,7 @@ export interface UserNameProps {
   user?: Partial<UserModel> | null;
   initials?: boolean;
   fallbackValue?: string;
+  className?: string;
 }
 
 const formatName = ({ givenName, familyName, email }: Partial<UserModel>) =>
@@ -23,6 +24,7 @@ export function UserName({
   children,
   initials,
   fallbackValue,
+  className,
 }: PropsWithChildren<UserNameProps>) {
   const formatUser = () => {
     if (!user) {
@@ -34,7 +36,7 @@ export function UserName({
 
   return (
     <div
-      className={classNames('overflow-hidden', {
+      className={classNames(className, 'overflow-hidden', {
         'inline-flex': !children,
         'flex flex-col': Boolean(children),
       })}

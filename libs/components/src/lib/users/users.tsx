@@ -1,5 +1,9 @@
 import { UserModel } from '@pasnik/api/data-transfer';
-import { UserAvatar, UserAvatarSize } from '../user-avatar/user-avatar';
+import {
+  getSizeClass,
+  UserAvatar,
+  UserAvatarSize,
+} from '../user-avatar/user-avatar';
 import {
   ChangeEvent,
   Fragment,
@@ -10,6 +14,7 @@ import {
 } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { UsersSkeleton } from './users-skeleton';
+import classNames from 'classnames';
 
 export interface UsersPopoverElementProps {
   user: UserModel;
@@ -71,6 +76,7 @@ export function Users({
             >
               <Popover.Button>
                 <UserAvatar
+                  showTooltip={true}
                   key={user.id}
                   user={user}
                   size={avatarSize}
@@ -110,7 +116,12 @@ export function Users({
         )}
         {users && users.length > visibleUsers.length && (
           <Popover className="relative flex flex-col items-center group">
-            <Popover.Button className="relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 h-8 w-8 max-w-none ring-2 ring-white">
+            <Popover.Button
+              className={classNames(
+                getSizeClass(avatarSize),
+                'relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 max-w-none ring-2 ring-white'
+              )}
+            >
               + {users.length - visibleUsers.length}
             </Popover.Button>
 

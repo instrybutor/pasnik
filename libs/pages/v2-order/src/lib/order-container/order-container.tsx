@@ -12,6 +12,7 @@ import { OrderProcessSection } from '../order-process-section/order-process-sect
 import { useOrderState } from '../order-state/order-state';
 import { OrderSummarySection } from '../order-summary-section/order-summary-section';
 import { OrderETASection } from '../order-eta-section/order-eta-section';
+import { OrderBalanceSection } from '../order-balance-section/order-balance-section';
 
 export interface OrderContainerProps {
   slug: string;
@@ -57,7 +58,7 @@ export function OrderContainer({ slug }: OrderContainerProps) {
               {order.status === OrderStatus.Ordered ? (
                 <OrderETASection order={order} />
               ) : (
-                <></>
+                <OrderBalanceSection order={order} />
               )}
 
               <OrderSummarySection order={order} />

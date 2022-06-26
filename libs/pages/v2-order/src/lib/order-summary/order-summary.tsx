@@ -19,12 +19,12 @@ export function OrderSummary({ order, dishes }: OrderSummaryProps) {
   }, [dishes, setDishes]);
 
   return (
-    <>
+    <div className="divide-y divide-gray-200">
       {groupedSummaries?.map((summary, index) => (
-        <Disclosure key={summary.user.id} defaultOpen={index === 0}>
+        <Disclosure key={summary.user.id}>
           {({ open }) => (
-            <div className="py-5 px-6">
-              <div className="flex flex-1 flex-row px-5">
+            <div className="py-5 px-3 sm:px-6">
+              <div className="flex flex-1 flex-row">
                 <div className="flex flex-1 items-center">
                   <UserInfo user={summary.user}>
                     <Price priceCents={summary.total + summary.shipping} />
@@ -43,25 +43,25 @@ export function OrderSummary({ order, dishes }: OrderSummaryProps) {
                 </div>
               </div>
               <Disclosure.Panel>
-                <div className="mt-4 text-base italic text-gray-600">
+                <div className="mt-4 text-base italic text-gray-600 px-4">
                   <table className="min-w-full divide-y divide-gray-200">
                     <tbody className="bg-white divide-y divide-gray-200">
                       {summary.dishes?.map((dish) => (
                         <tr key={dish.id}>
-                          <td className="px-6 py-4 text-sm text-gray-500 w-11/12">
+                          <td className="pl-8 py-4 text-sm text-gray-500 w-11/12">
                             {dish.name}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12 text-right">
+                          <td className="pr-8 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12 text-right">
                             <Price priceCents={dish.priceCents} />
                           </td>
                         </tr>
                       ))}
                       {summary.shipping > 0 && (
                         <tr>
-                          <td className="px-6 py-4 text-sm text-gray-500 w-11/12">
+                          <td className="pl-8 py-4 text-sm text-gray-500 w-11/12">
                             Dostawa
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12">
+                          <td className="pr-8 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12 text-right">
                             <Price priceCents={summary.shipping} />
                           </td>
                         </tr>
@@ -107,6 +107,6 @@ export function OrderSummary({ order, dishes }: OrderSummaryProps) {
         //   </div>
         // </div>
       ))}
-    </>
+    </div>
   );
 }

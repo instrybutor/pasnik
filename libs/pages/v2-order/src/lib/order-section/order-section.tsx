@@ -31,9 +31,9 @@ export function OrderSection({
   const { breakpoint } = useBreakpoint();
   const _defaultOpen = useMemo(() => {
     if (defaultOpen === 'mobile') {
-      return breakpoint === 'sm';
+      return !breakpoint || ['sm', 'xsm'].includes(breakpoint);
     } else if (defaultOpen === 'desktop') {
-      return breakpoint !== 'sm';
+      return !breakpoint || !['sm', 'xsm'].includes(breakpoint);
     }
     return defaultOpen ?? true;
   }, [breakpoint, defaultOpen]);
@@ -77,7 +77,7 @@ export function OrderSection({
           <Disclosure.Panel
             as="div"
             className={classNames('border-t border-gray-200', {
-              'px-4 py-5 sm:px-6': !noPadding,
+              'px-4 py-4 sm:px-5': !noPadding,
             })}
           >
             {isLoading ? <Spinner /> : children}

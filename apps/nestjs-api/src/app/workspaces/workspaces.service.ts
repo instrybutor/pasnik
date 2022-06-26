@@ -17,7 +17,6 @@ import {
   CreateOrderDto,
   CreateWorkspaceDto,
   OrderAction,
-  OrderStatus,
   UpdateWorkspaceDto,
   UpdateWorkspaceUserDto,
   WorkspaceUserRole,
@@ -94,13 +93,12 @@ export class WorkspacesService {
   }
 
   findInactiveOrders(workspace: WorkspaceEntity) {
-    return this.ordersRepository.find({
-      where: [
-        { status: OrderStatus.Canceled, workspace },
-        { status: OrderStatus.Delivered, workspace },
-      ],
-      relations: ['user'],
-    });
+    return this.ordersRepository
+      .findAllInactive()
+      .andWhere('order.workspaceId = :workspaceId', {
+        workspaceId: workspace.id,
+      })
+      .getMany();
   }
 
   findAllForUser(user: UserEntity) {

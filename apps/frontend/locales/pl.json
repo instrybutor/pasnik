@@ -43,6 +43,29 @@
     "send_request": "Wyślij zapytanie",
     "cancel": "Anuluj"
   },
+  "v2-order": {
+    "actions": {
+      "edit": "Edytuj",
+      "open": "Otwórz",
+      "close": "Zamknij",
+      "order": "Zamów",
+      "ordered": "Zamówione",
+      "delivered": "Dostarczone",
+      "duplicate": "Ponów"
+    },
+    "timeline": {
+      "title": "Historia",
+      "processing": "Zamawiane",
+      "detailed": "Szczegółowa",
+      "created": "Utworzone",
+      "ordered": "Zamówione",
+      "paid": "Opłacone",
+      "delivered": "Odebrane",
+      "canceled": "Anulowane",
+      "open": "Otwarte",
+      "by": "przez"
+    }
+  },
   "order": {
     "create_order": "Tworzenie zamówienia",
     "edit_order": "Edycja zamówienia",
@@ -123,7 +146,7 @@
     "title": "Historia",
     "createdBy": "Utworzone przez",
     "orderedBy": "Zamówione przez",
-    "payedBy": "Opłacone przez",
+    "paidBy": "Opłacone przez",
     "deliveredBy": "Odebrane przez",
     "canceledBy": "Anulowane przez",
     "openBy": "Otwarte przez"
@@ -136,7 +159,11 @@
   },
   "errors": {
     "login": "Problem z logowaniem",
-    "server": "Problem z serwerem"
+    "server": {
+      "title": "Problem z serwerem",
+      "No dishes found": "Brak pozycji w zamówieniu",
+      "No permission": "Brak uprawnień"
+    }
   },
   "notifications": {
     "orderStatusChanged": "Zamówienie z {{placeName}} zostało {{status}}.",
