@@ -5,9 +5,10 @@ import { OrderActionModel, OrderModel } from '@pasnik/api/data-transfer';
 export function useOrderActions(order: OrderModel) {
   return useQuery(
     ['orders', order.slug, 'actions'],
-    async () => {
+    async ({ signal }) => {
       const { data } = await axios.get<OrderActionModel[]>(
-        `/api/orders/slug/${order.slug}/actions`
+        `/api/orders/slug/${order.slug}/actions`,
+        { signal }
       );
       return data;
     },

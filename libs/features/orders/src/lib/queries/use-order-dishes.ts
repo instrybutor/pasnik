@@ -5,9 +5,10 @@ import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
 export function useOrderDishes(order: OrderModel) {
   return useQuery(
     ['orders', order.slug, 'dishes'],
-    async () => {
+    async ({ signal }) => {
       const { data } = await axios.get<DishModel[]>(
-        `/api/orders/slug/${order.slug}/dishes`
+        `/api/orders/slug/${order.slug}/dishes`,
+        { signal }
       );
       return data;
     },

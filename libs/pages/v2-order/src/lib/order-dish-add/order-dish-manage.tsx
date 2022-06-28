@@ -75,8 +75,8 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
                     <span className="xsm:flex hidden">
                       <UserAvatar size="sm" user={user} />
                     </span>
-                    <span className="xsm:hidden flex">
-                      <Label className="text-left block">
+                    <span className="xsm:hidden flex flex-col gap-1">
+                      <Label className="text-left block text-gray-500">
                         Nazwa użytkownika
                       </Label>
                       <UserInfo size="sm" user={user} />

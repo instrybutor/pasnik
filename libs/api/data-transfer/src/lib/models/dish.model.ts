@@ -9,4 +9,5 @@ export interface DishModel {
   userId: number;
   user: UserModel;
   createdBy: UserModel;
+  createdById: number;
 }

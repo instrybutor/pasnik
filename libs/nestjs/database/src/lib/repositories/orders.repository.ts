@@ -11,7 +11,7 @@ import {
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { addMinutes, sub } from 'date-fns';
 import { OrderEntity, UserEntity, WorkspaceEntity } from '../entities';
-import normalizeUrl from 'normalize-url';
+import * as normalizeUrl from 'normalize-url';
 
 @EntityRepository(OrderEntity)
 export class OrdersRepository extends Repository<OrderEntity> {
@@ -101,9 +101,12 @@ export class OrdersRepository extends Repository<OrderEntity> {
     order.user = user;
     order.from = createOrderDto.from;
     order.shippingCents = createOrderDto.shippingCents;
-    order.menuUrl = normalizeUrl(createOrderDto.menuUrl, {
-      defaultProtocol: 'https',
-    });
+    console.log(createOrderDto.menuUrl);
+    order.menuUrl = createOrderDto.menuUrl
+      ? normalizeUrl(createOrderDto.menuUrl, {
+          defaultProtocol: 'https://',
+        })
+      : null;
     order.slug = slugify([order.from, nanoid(6)].join(' '), { lower: true });
     order.payer = user;
 
@@ -117,9 +120,11 @@ export class OrdersRepository extends Repository<OrderEntity> {
         : order.slug;
     order.from = createOrderDto.from;
     order.shippingCents = createOrderDto.shippingCents;
-    order.menuUrl = normalizeUrl(createOrderDto.menuUrl, {
-      defaultProtocol: 'https',
-    });
+    order.menuUrl = createOrderDto.menuUrl
+      ? normalizeUrl(createOrderDto.menuUrl, {
+          defaultProtocol: 'https://',
+        })
+      : null;
 
     return this.save(order);
   }

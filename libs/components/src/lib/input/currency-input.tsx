@@ -11,7 +11,7 @@ import Input from './input';
 export const CurrencyInput = React.forwardRef<
   HTMLInputElement,
   FormFieldInputProps
->(({ error, value, onBlur, onFocus, onChange, ref, ...props }) => {
+>(({ value, onBlur, onFocus, onChange, ref, ...props }) => {
   const [_value, setValue] = useState<string | undefined>(String(value));
   const [hasFocus, setHasFocus] = useState(false);
   const _onBlur: FocusEventHandler<HTMLInputElement> = useCallback(
@@ -31,6 +31,7 @@ export const CurrencyInput = React.forwardRef<
   const _onFocus: FocusEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       setHasFocus(true);
+      e.target.select();
       onFocus?.(e);
     },
     [setHasFocus, onFocus]

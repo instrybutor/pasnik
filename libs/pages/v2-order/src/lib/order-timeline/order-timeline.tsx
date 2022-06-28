@@ -82,7 +82,7 @@ const typesMap = {
   },
   [OrderAction.Processing]: {
     icon: LockClosedIcon,
-    bgColorClass: 'bg-red-500',
+    bgColorClass: 'bg-yellow-500',
     text: ({ user }: OrderActionModel) => (
       <>
         <Trans>v2-order.timeline.processing</Trans>{' '}

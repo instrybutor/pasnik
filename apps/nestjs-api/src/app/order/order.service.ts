@@ -46,7 +46,8 @@ export class OrderService {
   }
 
   async update(order: OrderEntity, payload: UpdateOrderDto) {
-    return await this.ordersRepository.updateOrder(payload, order);
+    await this.ordersRepository.updateOrder(payload, order);
+    return await this.findOneById(order.id);
   }
 
   async markAsOrdered(

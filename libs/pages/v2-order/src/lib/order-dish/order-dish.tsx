@@ -4,7 +4,13 @@ import { useCallback } from 'react';
 import { DotsHorizontalIcon, DuplicateIcon } from '@heroicons/react/outline';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
-import { ConfirmButton, Price, UserAvatar, useToast } from '@pasnik/components';
+import {
+  ConfirmButton,
+  Price,
+  UserAvatar,
+  UserName,
+  useToast,
+} from '@pasnik/components';
 import { Can, OrdersAction } from '@pasnik/ability';
 import {
   useDishAddMutation,
@@ -39,7 +45,22 @@ export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
   return (
     <div className="flex items-center gap-6 px-6 py-4">
       <div className="flex items-center">
-        <UserAvatar user={dish.user} size="sm" />
+        <div className="flex relative">
+          <UserAvatar showTooltip={true} user={dish.user} size="sm" />
+          {dish.createdBy && dish.createdById !== dish.userId && (
+            <UserAvatar
+              showTooltip={(user) => (
+                <span className="flex flex-col text-center">
+                  Dodane przez <br />
+                  <UserName user={user} />
+                </span>
+              )}
+              className="absolute right-0 bottom-0"
+              user={dish.createdBy}
+              size="xxsm"
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex-1 w-full">

@@ -73,39 +73,6 @@ export function OrderSummary({ order, dishes }: OrderSummaryProps) {
             </div>
           )}
         </Disclosure>
-        // <div key={summary.user.id} className="py-5 px-6">
-        //   <div className="flex items-center px-5">
-        //     <UserInfo user={summary.user}>
-        //       <Price priceCents={summary.total + summary.shipping} />
-        //     </UserInfo>
-        //   </div>
-        //   <div className="mt-4 text-base italic text-gray-600">
-        //     <table className="min-w-full divide-y divide-gray-200">
-        //       <tbody className="bg-white divide-y divide-gray-200">
-        //         {summary.dishes?.map((dish) => (
-        //           <tr key={dish.id}>
-        //             <td className="px-6 py-4 text-sm text-gray-500 w-11/12">
-        //               {dish.name}
-        //             </td>
-        //             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12">
-        //               <Price priceCents={dish.priceCents} />
-        //             </td>
-        //           </tr>
-        //         ))}
-        //         {summary.shipping > 0 && (
-        //           <tr>
-        //             <td className="px-6 py-4 text-sm text-gray-500 w-11/12">
-        //               Dostawa
-        //             </td>
-        //             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12">
-        //               <Price priceCents={summary.shipping} />
-        //             </td>
-        //           </tr>
-        //         )}
-        //       </tbody>
-        //     </table>
-        //   </div>
-        // </div>
       ))}
     </div>
   );

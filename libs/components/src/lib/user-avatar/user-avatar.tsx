@@ -1,12 +1,21 @@
 import { UserModel } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
-import { ReactElement } from 'react';
+import { ReactElement, useMemo } from 'react';
 import { Tooltip } from '../tooltip/tooltip';
+import { UserName } from '../user-name/user-name';
 
-export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg' | 'xxlg';
+export type UserAvatarSize =
+  | 'xxsm'
+  | 'xsm'
+  | 'sm'
+  | 'md'
+  | 'lg'
+  | 'xlg'
+  | 'xxlg';
 
 export const getSizeClass = (size?: UserAvatarSize) =>
   classNames({
+    'h-4 w-4': size === 'xxsm',
     'h-6 w-6': size === 'xsm',
     'h-8 w-8': size === 'sm',
     'h-10 w-10': size === 'md' || !size,
@@ -21,7 +30,7 @@ export interface UserAvatarProps {
   className?: string;
   fallback?: ReactElement | null;
   showInitials?: boolean;
-  showTooltip?: boolean;
+  showTooltip?: boolean | ((user: Partial<UserModel>) => ReactElement);
 }
 
 export function UserAvatar({
@@ -35,19 +44,6 @@ export function UserAvatar({
   const formatInitials = ({ givenName, familyName }: Partial<UserModel>) =>
     `${givenName![0]}${familyName![0]}`;
 
-  const formatName = ({ givenName, familyName, email }: Partial<UserModel>) => (
-    <span className="text-center">
-      <div>
-        {givenName!} {familyName!}
-      </div>
-      <div>
-        &lt;
-        {email}
-        &gt;
-      </div>
-    </span>
-  );
-
   const defaultFallback = (
     <svg
       className="h-full w-full text-gray-300"
@@ -57,6 +53,13 @@ export function UserAvatar({
       <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
     </svg>
   );
+
+  const tooltipTitle = useMemo(() => {
+    if (showTooltip instanceof Function) {
+      return showTooltip(user!);
+    }
+    return <UserName user={user} />;
+  }, [user, showTooltip]);
 
   return (
     <span
@@ -68,7 +71,7 @@ export function UserAvatar({
       tabIndex={0}
     >
       {user?.avatarImg && !showInitials ? (
-        <Tooltip title={formatName(user)} disabled={!showTooltip}>
+        <Tooltip title={tooltipTitle} disabled={!showTooltip}>
           <img
             referrerPolicy="no-referrer"
             src={user.avatarImg}
@@ -76,9 +79,9 @@ export function UserAvatar({
           />
         </Tooltip>
       ) : user && user.familyName && user.givenName ? (
-        <Tooltip title={formatName(user)} disabled={!showTooltip}>
+        <Tooltip title={tooltipTitle} disabled={!showTooltip}>
           <span className="text-sm font-medium leading-none text-white">
-            {formatInitials(user)}
+            <UserName initials={true} user={user} />
           </span>
         </Tooltip>
       ) : (

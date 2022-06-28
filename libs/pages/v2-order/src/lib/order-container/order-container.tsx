@@ -1,6 +1,5 @@
 import { useOrder } from '@pasnik/features/orders';
 import { Navigate } from 'react-router-dom';
-import { Spinner } from '@pasnik/components';
 import { WorkspaceAbilityProvider } from '@pasnik/features/workspaces';
 import { OrderHeader } from '../order-header/order-header';
 import { OrderDishesSection } from '../order-dishes-section/order-dishes-section';
@@ -13,6 +12,7 @@ import { useOrderState } from '../order-state/order-state';
 import { OrderSummarySection } from '../order-summary-section/order-summary-section';
 import { OrderETASection } from '../order-eta-section/order-eta-section';
 import { OrderBalanceSection } from '../order-balance-section/order-balance-section';
+import { OrderContainerSkeleton } from '../order-container-skeleton/order-container-skeleton';
 
 export interface OrderContainerProps {
   slug: string;
@@ -37,7 +37,7 @@ export function OrderContainer({ slug }: OrderContainerProps) {
   }, [order?.shippingCents, setShippingCents]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <OrderContainerSkeleton />;
   }
 
   if (!order || !order.workspace) {

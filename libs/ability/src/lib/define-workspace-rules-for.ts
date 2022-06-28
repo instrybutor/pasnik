@@ -166,11 +166,9 @@ function defineWorkspaceUserRules(
   });
   can(OrdersAction.UpdateDish, 'OrderModel', {
     status: OrderStatus.Processing,
-    userId: workspaceUser.id,
   });
   can(OrdersAction.DeleteDish, 'OrderModel', {
     status: OrderStatus.Processing,
-    userId: workspaceUser.id,
   });
   can(OrdersAction.DeleteDish, 'OrderModel', {
     status: OrderStatus.InProgress,

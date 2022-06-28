@@ -1,10 +1,8 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
-import { useOrderDishes } from '../queries';
 
 export const useDishAddMutation = (order: OrderModel) => {
-  const dishesQuery = useOrderDishes(order);
   const queryClient = useQueryClient();
   const queryKey = ['orders', order.slug, 'dishes'];
   return useMutation(
@@ -34,9 +32,6 @@ export const useDishAddMutation = (order: OrderModel) => {
         );
 
         return { prevDishes };
-      },
-      onSuccess: () => {
-        dishesQuery.refetch();
       },
       onSettled: () => {
         queryClient.invalidateQueries(queryKey);

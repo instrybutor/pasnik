@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Spinner, useBreakpoint } from '@pasnik/components';
 
 export interface OrderSectionProps {
-  header: string | ReactNode;
+  header?: string | ReactNode;
   footer?: string | ReactNode;
   subTitle?: string | ReactNode;
   action?: ReactNode | 'accordion';
