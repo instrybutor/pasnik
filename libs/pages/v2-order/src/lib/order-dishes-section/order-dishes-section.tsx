@@ -6,22 +6,25 @@ import { useMemo, useState } from 'react';
 import { OrderDishes } from '../order-dishes/order-dishes';
 import { Price, Spinner } from '@pasnik/components';
 import { OrderDishManage } from '../order-dish-add/order-dish-manage';
+import { useTranslation } from 'react-i18next';
 
 export interface OrderDishesProps {
   order: OrderModel;
 }
 
 export function OrderDishesSection({ order }: OrderDishesProps) {
+  const { t } = useTranslation();
   const { data } = useOrderDishes(order);
   const [isAdding, setIsAdding] = useState(false);
   const totalCents = useMemo(
     () => data?.reduce((acc, dish) => acc + dish.priceCents, 0),
     [data]
   );
+
   return (
     <OrderSection
       noPadding={true}
-      header="Zamówienie"
+      header={t('v2-order.order')}
       footer={
         <div className="divide-y divide-gray-200">
           {isAdding && (
@@ -30,10 +33,13 @@ export function OrderDishesSection({ order }: OrderDishesProps) {
           {!!data?.length && (
             <div className="px-4 py-4 sm:px-6 flex items-center space-between">
               <span className="text-sm text-gray-500 flex-1">
-                Ilość pozycji: {data.length}
+                {t('v2-order.position_count')}: {data.length}
               </span>
-              <span className="text-sm text-gray-500 mr-32 pr-1">
-                Suma: <Price className="font-bold" priceCents={totalCents} />
+              <span className="text-sm text-gray-500 pr-1 flex-row flex">
+                <Price className="font-bold" priceCents={totalCents} />
+                <div className="w-32 pl-1">
+                  + <Price priceCents={order.shippingCents} />
+                </div>
               </span>
             </div>
           )}

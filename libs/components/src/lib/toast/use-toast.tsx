@@ -2,12 +2,12 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/outline';
-import { useCallback } from 'react';
+import { ReactElement, useCallback } from 'react';
 import { toast as toastify, ToastOptions } from 'react-toastify';
 
 export interface ToastProps {
   title: string;
-  subTitle?: string;
+  subTitle?: string | ReactElement;
   type?: 'success' | 'error';
 }
 

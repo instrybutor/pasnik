@@ -58,6 +58,7 @@ export const FlipDate = ({ endAt, className }: FlipDateProps) => {
     if (tickRef.current) {
       tickRef.current.value = tickValue;
     }
+    console.log(tickValue.days);
   }, [tickValue]);
 
   return (

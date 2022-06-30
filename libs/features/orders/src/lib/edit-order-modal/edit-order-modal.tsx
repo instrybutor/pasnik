@@ -7,16 +7,12 @@ import {
   Modal,
   ModalProps,
 } from '@pasnik/components';
-import {
-  CreateOrderDto,
-  createOrderValidator,
-  OrderModel,
-} from '@pasnik/api/data-transfer';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
 import { useOrderUpdateMutation } from '../mutations/use-order-update-mutation';
 import currency from 'currency.js';
 import { useNavigate } from 'react-router-dom';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 
 export interface EditOrderModelProps {
   order: OrderModel;
@@ -34,7 +30,7 @@ export function EditOrderModal({
       <Modal.Title>{t('order.edit_order')}</Modal.Title>
       <Form<CreateOrderDto>
         successMessage="Sukces"
-        resolver={yupResolver(createOrderValidator)}
+        resolver={classValidatorResolver(CreateOrderDto)}
         onSubmit={async (data) => {
           const { slug } = await mutateAsync({
             ...data,

@@ -44,6 +44,20 @@
     "cancel": "Anuluj"
   },
   "v2-order": {
+    "order": "Zamówienie",
+    "added_by": "Dodane przez",
+    "order_placed": "Zamówienie złożone",
+    "estimated_delivery": "Szacowana dostawa",
+    "order_summary": "Podsumowanie zamówienia",
+    "position_count": "Ilość pozycji",
+    "detailed": "Szczegółowa",
+    "total": "Suma",
+    "form": {
+      "name": "Nazwa",
+      "price": "Cena",
+      "user_name": "Nazwa użytkownika",
+      "shipping": "Dostawa"
+    },
     "actions": {
       "edit": "Edytuj",
       "open": "Otwórz",
@@ -51,7 +65,9 @@
       "order": "Zamów",
       "ordered": "Zamówione",
       "delivered": "Dostarczone",
-      "duplicate": "Ponów"
+      "re_order": "Ponów",
+      "duplicate": "Duplikuj",
+      "delete": "Usuń"
     },
     "timeline": {
       "title": "Historia",
@@ -65,6 +81,14 @@
       "canceled": "Anulowane",
       "open": "Otwarte",
       "by": "przez"
+    },
+    "toast": {
+      "duplicate_dish": "Zduplikowano pozycję",
+      "delete_dish": "Usunięto pozycję",
+      "add_dish": "Utworzono pozycję"
+    },
+    "common": {
+      "no_dishes": "Brak pozycji w zamówieniu"
     }
   },
   "order": {
@@ -237,6 +261,10 @@
   "validation": {
     "required": "To pole jest wymagane",
     "invalid": "To pole jest niepoprawne",
-    "positive": "Liczba musi być dodatnia"
+    "positive": "Liczba musi być dodatnia",
+    "length": "Długość pola od {{ min }} do  {{ max }} znaków"
+  },
+  "components": {
+    "not_found": "Nie znaleziono"
   }
 }

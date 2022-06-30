@@ -4,22 +4,26 @@ import { Switch } from '@headlessui/react';
 import { useState } from 'react';
 import classNames from 'classnames';
 import { OrderTimeline } from '../order-timeline/order-timeline';
+import { useTranslation } from 'react-i18next';
 
 export interface OrderHistoryProps {
   order: OrderModel;
 }
 
 export function OrderTimelineSection({ order }: OrderHistoryProps) {
+  const { t } = useTranslation();
   const [isDetailed, setIsDetailed] = useState(false);
   return (
     <OrderSection
-      header="Historia"
+      header={t('v2-order.timeline.title')}
       accordion="mobile"
       defaultOpen="desktop"
       action={
         <Switch.Group as="div" className="flex items-center">
           <Switch.Label as="span" className="mr-3">
-            <span className="text-sm text-gray-500">Szczegółowa</span>
+            <span className="text-sm text-gray-500">
+              {t('v2-order.detailed')}
+            </span>
           </Switch.Label>
           <Switch
             checked={isDetailed}

@@ -9,6 +9,8 @@ import { ReactElement, useCallback } from 'react';
 import classNames from 'classnames';
 import { useToast } from '../toast';
 import { useTranslation } from 'react-i18next';
+import { AxiosError } from 'axios';
+import { FormFieldErrors } from '../form-field';
 
 export interface FormProps<TFormValues extends FieldValues, TContext>
   extends UseFormProps<TFormValues, TContext> {
@@ -17,9 +19,6 @@ export interface FormProps<TFormValues extends FieldValues, TContext>
   className?: string;
   successMessage?: string;
 }
-
-// eslint-disable-next-line
-const noop = () => {};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Form = <
@@ -41,30 +40,42 @@ export const Form = <
 
   const { handleSubmit } = methods;
 
-  const _onSuccess = useCallback(() => {
-    if (successMessage) {
-      toast({ type: 'success', title: successMessage });
-    }
-  }, [successMessage, toast]);
-
   const _onError = useCallback(
-    (error: Error) => {
-      toast({
-        type: 'error',
-        title: t('errors.server.title'),
-        autoClose: 3000,
-      });
+    (error: AxiosError<any>) => {
+      if (error.isAxiosError && error.response?.status === 400) {
+        toast({
+          type: 'error',
+          title: t('errors.server.title'),
+          subTitle: (
+            <FormFieldErrors messages={error?.response?.data?.message} />
+          ),
+          autoClose: 3000,
+        });
+      } else {
+        toast({
+          type: 'error',
+          title: t('errors.server.title'),
+          autoClose: 3000,
+        });
+      }
     },
     [toast, t]
   );
+
+  const submitHandler: SubmitHandler<TFormValues> = useCallback(
+    (...args) => {
+      onSubmit?.(...args);
+      if (successMessage) {
+        toast({ type: 'success', title: successMessage });
+      }
+    },
+    [onSubmit, successMessage, toast]
+  );
+
   return (
     <FormProvider {...methods}>
       <form
-        onSubmit={(event) =>
-          handleSubmit(onSubmit ?? noop)(event)
-            .then(_onSuccess)
-            .catch(_onError)
-        }
+        onSubmit={(event) => handleSubmit(submitHandler)(event).catch(_onError)}
         className={classNames('relative', className)}
       >
         {children}

@@ -7,41 +7,31 @@ import {
   Modal,
   ModalProps,
 } from '@pasnik/components';
-import {
-  CreateOrderDto,
-  createOrderValidator,
-} from '@pasnik/api/data-transfer';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateOrderDto, WorkspaceModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
 import { useOrderCreateMutation } from '../mutations/use-order-create-mutation';
-import { useCurrentWorkspace } from '@pasnik/features/workspaces';
-import currency from 'currency.js';
 import { useNavigate } from 'react-router-dom';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 
 export interface CreateOrderModelProps {
-  workspaceSlug?: string;
+  workspace: WorkspaceModel;
 }
 
 export function CreateOrderModal({
   close,
-  workspaceSlug,
+  workspace,
 }: ModalProps<CreateOrderModelProps>) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const workspace = useCurrentWorkspace();
-  const { mutateAsync } = useOrderCreateMutation(workspace!.slug);
+  const { mutateAsync } = useOrderCreateMutation(workspace.slug);
   return (
     <Modal>
       <Modal.Title>{t('order.create_order')}</Modal.Title>
       <Form<CreateOrderDto>
         successMessage="Sukces"
-        resolver={yupResolver(createOrderValidator)}
+        resolver={classValidatorResolver(CreateOrderDto)}
         onSubmit={async (data) => {
-          const { slug } = await mutateAsync({
-            ...data,
-            shippingCents: currency(data.shippingCents ?? 0).multiply(100)
-              .value,
-          });
+          const { slug } = await mutateAsync(data);
           navigate(`/order/${slug}`);
           close();
         }}

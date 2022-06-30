@@ -1,9 +1,9 @@
 import { useLayoutStore } from '../layout.store';
 
 export function useSidebarContext() {
-  const { setCurrentWorkspaceIdContext } = useLayoutStore();
+  const { setCurrentWorkspaceSlugContext } = useLayoutStore();
 
   return {
-    setCurrentWorkspaceIdContext,
+    setCurrentWorkspaceSlugContext,
   };
 }

@@ -5,6 +5,7 @@ import { useOrderSummary } from './order-summary.hook';
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 export interface OrderSummaryProps {
   order: OrderModel;
@@ -12,6 +13,7 @@ export interface OrderSummaryProps {
 }
 
 export function OrderSummary({ order, dishes }: OrderSummaryProps) {
+  const { t } = useTranslation();
   const { groupedSummaries, setDishes } = useOrderSummary(order);
 
   useEffect(() => {
@@ -59,7 +61,7 @@ export function OrderSummary({ order, dishes }: OrderSummaryProps) {
                       {summary.shipping > 0 && (
                         <tr>
                           <td className="pl-8 py-4 text-sm text-gray-500 w-11/12">
-                            Dostawa
+                            {t('v2-order.common.total')}
                           </td>
                           <td className="pr-8 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12 text-right">
                             <Price priceCents={summary.shipping} />

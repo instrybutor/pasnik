@@ -1,22 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Menu } from '@headlessui/react';
-import { useCallback } from 'react';
 import { DotsHorizontalIcon, DuplicateIcon } from '@heroicons/react/outline';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
-import {
-  ConfirmButton,
-  Price,
-  UserAvatar,
-  UserName,
-  useToast,
-} from '@pasnik/components';
+import { ConfirmButton, Price, UserAvatar, UserName } from '@pasnik/components';
 import { Can, OrdersAction } from '@pasnik/ability';
-import {
-  useDishAddMutation,
-  useDishDeleteMutation,
-} from '@pasnik/features/orders';
 import { Float } from '@headlessui-float/react';
+import { useOrderDish } from './order-dish.hook';
 
 export interface OrderDishProps {
   dish: DishModel;
@@ -25,22 +15,7 @@ export interface OrderDishProps {
 }
 export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
   const { t } = useTranslation();
-  const { toast } = useToast();
-  const { mutateAsync: deleteDishAsync } = useDishDeleteMutation(order, dish);
-  const { mutateAsync: addDishAsync } = useDishAddMutation(order);
-
-  const onDuplicate = useCallback(() => {
-    addDishAsync({
-      priceCents: dish.priceCents,
-      name: dish.name,
-    })
-      .then(() => {
-        toast({ type: 'success', title: 'Zduplikowano pozycję' });
-      })
-      .catch(() => {
-        toast({ type: 'error', title: t('errors.server.title') });
-      });
-  }, [t, dish, addDishAsync, toast]);
+  const { onDuplicate, onDelete } = useOrderDish(order, dish);
 
   return (
     <div className="flex items-center gap-6 px-6 py-4">
@@ -51,7 +26,7 @@ export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
             <UserAvatar
               showTooltip={(user) => (
                 <span className="flex flex-col text-center">
-                  Dodane przez <br />
+                  {t('v2-order.added_by')} <br />
                   <UserName user={user} />
                 </span>
               )}
@@ -92,11 +67,7 @@ export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
         </Can>
         <Can I={OrdersAction.DeleteDish} this={order}>
           <ConfirmButton
-            onClick={() =>
-              deleteDishAsync().then(() =>
-                toast({ type: 'success', title: 'Usunięto pozycję' })
-              )
-            }
+            onClick={onDelete}
             type="button"
             className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
@@ -131,7 +102,7 @@ export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
                   className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                   aria-hidden="true"
                 />
-                {t('dish.form.duplicate')}
+                {t('v2-order.actions.duplicate')}
               </button>
             </Menu.Item>
             <Menu.Item>
@@ -144,7 +115,7 @@ export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
                   className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                   aria-hidden="true"
                 />
-                {t('dish.form.edit')}
+                {t('v2-order.actions.edit')}
               </button>
             </Menu.Item>
             <Menu.Item>
@@ -153,7 +124,7 @@ export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
                 className="w-full inline-flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50"
               >
                 <TrashIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                {t('dish.form.delete')}
+                {t('v2-order.actions.delete')}
               </button>
             </Menu.Item>
           </Menu.Items>

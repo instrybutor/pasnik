@@ -40,6 +40,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
   const { toast } = useToast();
   const { user } = useUserStore();
   const users = useUsersInWorkspace(order.workspace?.slug);
+
   const { mutateAsync: mutateAddAsync } = useDishAddMutation(order);
   const { mutateAsync: mutateDishAsync } = useDishUpdateMutation(order, dish!);
   return (
@@ -48,11 +49,14 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
       onSubmit={async (formData) => {
         if (dish) {
           mutateDishAsync(formData).then(() =>
-            toast({ type: 'success', title: 'Zmodyfikowano pozycję' })
+            toast({
+              type: 'success',
+              title: t('v2-order.toast.duplicate_dish'),
+            })
           );
         } else {
           mutateAddAsync(formData).then(() =>
-            toast({ type: 'success', title: 'Dodano pozycję' })
+            toast({ type: 'success', title: t('v2-order.toast.add_dish') })
           );
         }
         onClose();
@@ -77,7 +81,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
                     </span>
                     <span className="xsm:hidden flex flex-col gap-1">
                       <Label className="text-left block text-gray-500">
-                        Nazwa użytkownika
+                        {t('v2-order.form.user_name')}
                       </Label>
                       <UserInfo size="sm" user={user} />
                     </span>
@@ -89,7 +93,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
         </div>
         <div className="text-sm text-gray-500 w-full -ml-[1px]">
           <FormField
-            label={t('dish.form.name')}
+            label={t('v2-order.form.name')}
             labelClassName="xsm:hidden block"
             name="name"
             errorTooltip={true}
@@ -98,7 +102,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
             <Input
               type="text"
               autoFocus={true}
-              placeholder={t('dish.form.name')}
+              placeholder={t('v2-order.form.name')}
             />
           </FormField>
         </div>
@@ -106,7 +110,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
       <div className="flex items-center gap-4 xsm:flex-row flex-col">
         <div className="text-sm text-gray-500 w-full xsm:w-32">
           <FormField
-            label={t('dish.price')}
+            label={t('v2-order.form.price')}
             labelClassName="xsm:hidden block"
             defaultValue={dish?.priceCents}
             name="priceCents"
@@ -118,7 +122,6 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
               type="text"
               inputMode="numeric"
               placeholder="0.00"
-              aria-describedby="price-currency"
               className="text-right"
             />
           </FormField>

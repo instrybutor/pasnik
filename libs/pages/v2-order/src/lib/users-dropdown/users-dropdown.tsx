@@ -4,6 +4,7 @@ import { CheckIcon } from '@heroicons/react/solid';
 import { UserModel } from '@pasnik/api/data-transfer';
 import { UserInfo } from '@pasnik/components';
 import { Float } from '@headlessui-float/react';
+import { useTranslation } from 'react-i18next';
 
 export interface UsersDropdownButtonProps {
   user?: UserModel;
@@ -22,6 +23,7 @@ export function UsersDropdown({
   button,
   onChange,
 }: UsersDropdownProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState(userId);
   const [query, setQuery] = useState('');
 
@@ -73,7 +75,7 @@ export function UsersDropdown({
             />
             {filteredPeople.length === 0 && query !== '' ? (
               <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                Nothing found.
+                {t('components.not_found')}
               </div>
             ) : (
               filteredPeople.map((user) => (

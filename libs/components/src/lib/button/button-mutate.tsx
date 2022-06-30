@@ -4,6 +4,7 @@ import { useToast } from '../toast';
 import { UseMutationResult } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { AxiosForbiddenError } from '@pasnik/axios';
+import { FormFieldErrors } from '../form-field';
 
 export interface ButtonMutateProps<TData, TError, TVariables, TContext>
   extends Omit<ButtonProps, 'onClick'> {
@@ -31,16 +32,16 @@ export const ButtonMutate = <TData, TError, TVariables, TContext>({
         toast({ type: 'success', title: successMessage });
       }
     },
-    [successMessage, toast]
+    [successMessage, toast, mutationSuccess]
   );
 
   const _onError = useCallback(
     (error: AxiosForbiddenError) => {
-      if (error.message) {
+      if (error.prompt) {
         toast({
           type: 'error',
           title: t('errors.server.title'),
-          subTitle: t(`errors.server.${error.message}`),
+          subTitle: <FormFieldErrors messages={error.message} />,
           autoClose: 3000,
         });
         return;

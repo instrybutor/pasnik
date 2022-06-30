@@ -4,12 +4,14 @@ import { ButtonMutate, DateDistance, FlipDate } from '@pasnik/components';
 import { TruckIcon } from '@heroicons/react/outline';
 import { Can, OrdersAction } from '@pasnik/ability';
 import { useOrderSetETAMutation } from '@pasnik/features/orders';
+import { useTranslation } from 'react-i18next';
 
 export interface OrderETASectionProps {
   order: OrderModel;
 }
 
 export function OrderETASection({ order }: OrderETASectionProps) {
+  const { t } = useTranslation();
   const eta = [15, 30, 45, 60, 90, 120];
   const setOrderETAMutation = useOrderSetETAMutation(order);
   return (
@@ -22,17 +24,18 @@ export function OrderETASection({ order }: OrderETASectionProps) {
           )}
         </div>
         <h3 className="text-sm font-medium text-gray-900">
-          Zamówienie złożone <DateDistance date={order.orderedAt} />
+          {t('v2-order.order_placed')} <DateDistance date={order.orderedAt} />
         </h3>
         {order.deliveredAt && (
           <h3 className="text-sm font-medium text-gray-900">
-            Szacowana dostawa <DateDistance date={order.deliveredAt} />
+            {t('v2-order.estimated_delivery')}{' '}
+            <DateDistance date={order.deliveredAt} />
           </h3>
         )}
         <Can I={OrdersAction.SetETA} this={order}>
           {!order.deliveredAt && (
             <h3 className="text-sm font-medium text-gray-900">
-              Szacowana dostawa
+              {t('v2-order.estimated_delivery')}
             </h3>
           )}
           <div className="flex flex-1 justify-center gap-3">

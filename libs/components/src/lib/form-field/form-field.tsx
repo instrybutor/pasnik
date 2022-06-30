@@ -22,6 +22,7 @@ import { Tooltip } from '../tooltip/tooltip';
 import { Label } from './label';
 import classNames from 'classnames';
 import { Resolver } from 'react-hook-form/dist/types/resolvers';
+import { FormFieldError } from './form-field-error';
 
 export interface FormFieldInputProps extends React.HTMLProps<HTMLInputElement> {
   error?: boolean;
@@ -134,10 +135,12 @@ export function FormField<TFieldValues extends FieldValues>({
             )}
           </div>
         )}
+        {error?.message && !errorTooltip && (
+          <p className="absolute mt-1 text-sm text-red-600">
+            <FormFieldError message={error.message} />
+          </p>
+        )}
       </div>
-      {error?.message && !errorTooltip && (
-        <p className="absolute mt-1 text-sm text-red-600">{t(error.message)}</p>
-      )}
     </div>
   );
 }
