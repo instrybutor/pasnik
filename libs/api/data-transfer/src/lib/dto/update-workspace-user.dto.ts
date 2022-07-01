@@ -1,3 +1,11 @@
-import { WorkspaceUserModel } from '../models/workspace-user.model';
+import { WorkspaceUserRole } from '../models/workspace-user.model';
+import { IsDefined, IsIn } from 'class-validator';
 
-export type UpdateWorkspaceUserDto = Partial<Pick<WorkspaceUserModel, 'role'>>;
+export class UpdateWorkspaceUserDto {
+  @IsIn(
+    [WorkspaceUserRole.User, WorkspaceUserRole.Owner, WorkspaceUserRole.Admin],
+    { message: 'validation.invalid' }
+  )
+  @IsDefined({ message: 'validation.required' })
+  role!: WorkspaceUserRole;
+}

@@ -1,15 +1,14 @@
 import { useCallback, useRef } from 'react';
 import {
   CreateWorkspaceDto,
-  createWorkspaceValidator,
   WorkspaceModel,
   WorkspacePrivacy,
 } from '@pasnik/api/data-transfer';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useWorkspaceCreateMutation } from '../mutations/use-workspace-create-mutation';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 
 export interface CreateWorkspaceFormProps {
   onSuccess: (workspace: WorkspaceModel) => void;
@@ -25,7 +24,7 @@ export const CreateWorkspaceForm = ({
   const { t } = useTranslation();
 
   const { register, handleSubmit, formState } = useForm<CreateWorkspaceDto>({
-    resolver: yupResolver(createWorkspaceValidator),
+    resolver: classValidatorResolver(CreateWorkspaceDto),
     defaultValues: {
       privacy: WorkspacePrivacy.Public,
     },

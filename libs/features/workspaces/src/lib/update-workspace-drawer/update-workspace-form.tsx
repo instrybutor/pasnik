@@ -2,19 +2,18 @@ import { useCallback, useRef, useState } from 'react';
 import { RefreshIcon, TrashIcon, XIcon } from '@heroicons/react/outline';
 import {
   UpdateWorkspaceDto,
-  updateWorkspaceValidator,
   WorkspaceModel,
   WorkspacePrivacy,
   WorkspaceUserRole,
 } from '@pasnik/api/data-transfer';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useWorkspaceUpdateMutation } from '../mutations';
 import { Can, WorkspacesAction } from '@pasnik/ability';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { useWorkspaceUsers } from '../queries/use-workspace-users';
 import { SelectWorkspaceUser } from '../select-workspace-user/select-workspace-user';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 
 export interface UpdateWorkspaceDrawerProps {
   workspace: WorkspaceModel;
@@ -35,7 +34,7 @@ export const UpdateWorkspaceForm = ({
   const { t } = useTranslation();
   const { register, handleSubmit, formState, setValue, control, resetField } =
     useForm<UpdateWorkspaceDto>({
-      resolver: yupResolver(updateWorkspaceValidator),
+      resolver: classValidatorResolver(UpdateWorkspaceDto),
       defaultValues: {
         name: workspace.name,
         privacy: workspace.privacy,

@@ -131,8 +131,12 @@ function defineWorkspaceUserRules(
   can(OrdersAction.Update, 'OrderModel', {
     status: OrderStatus.InProgress,
   });
-  can(OrdersAction.MarkAsClosed, 'OrderModel', {
-    status: OrderStatus.InProgress,
+  can(OrdersAction.MarkAsClosed, 'OrderModel');
+  cannot(OrdersAction.MarkAsClosed, 'OrderModel', {
+    status: OrderStatus.Delivered,
+  });
+  cannot(OrdersAction.MarkAsClosed, 'OrderModel', {
+    status: OrderStatus.Canceled,
   });
   can(OrdersAction.MarkAsProcessing, 'OrderModel', {
     status: OrderStatus.InProgress,
