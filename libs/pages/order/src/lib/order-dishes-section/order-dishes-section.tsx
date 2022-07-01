@@ -35,9 +35,9 @@ export function OrderDishesSection({ order }: OrderDishesProps) {
               <span className="text-sm text-gray-500 flex-1">
                 {t('order.position_count')}: {data.length}
               </span>
-              <span className="text-sm text-gray-500 pr-1 flex-row flex">
+              <span className="text-sm text-gray-500 pr-2 flex-row flex sm:pr-0.5">
                 <Price className="font-bold" priceCents={totalCents} />
-                <div className="w-32 pl-1">
+                <div className="w-18 sm:w-32 pl-1">
                   + <Price priceCents={order.shippingCents} />
                 </div>
               </span>
