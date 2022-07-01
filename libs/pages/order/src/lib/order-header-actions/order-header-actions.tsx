@@ -88,7 +88,7 @@ export function OrderHeaderActions({ order }: OrderHeaderActionsProps) {
             {t('order.actions.order')}
           </ButtonMutate>
         ) : (
-          <Tooltip title="Brak pozycji w zamówieniu">
+          <Tooltip title={t('order.no_dishes')}>
             <Button
               disabled
               className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-300"

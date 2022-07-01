@@ -61,7 +61,7 @@ export function OrderSummary({ order, dishes }: OrderSummaryProps) {
                       {summary.shipping > 0 && (
                         <tr>
                           <td className="pl-8 py-4 text-sm text-gray-500 w-11/12">
-                            {t('order.common.total')}
+                            {t('order.shipping')}
                           </td>
                           <td className="pr-8 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12 text-right">
                             <Price priceCents={summary.shipping} />

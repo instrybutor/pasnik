@@ -10,7 +10,6 @@ import {
 import { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
 import { useOrderUpdateMutation } from '../mutations/use-order-update-mutation';
-import currency from 'currency.js';
 import { useNavigate } from 'react-router-dom';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 
@@ -32,10 +31,7 @@ export function EditOrderModal({
         successMessage={t('order.create_form.order_updated')}
         resolver={classValidatorResolver(CreateOrderDto)}
         onSubmit={async (data) => {
-          const { slug } = await mutateAsync({
-            ...data,
-            shippingCents: currency(data.shippingCents ?? 0).value,
-          });
+          const { slug } = await mutateAsync(data);
           navigate(`/order/${slug}`);
           close();
         }}

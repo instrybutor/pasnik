@@ -1,4 +1,11 @@
-import { IsDefined, IsOptional, Length, Matches, Min } from 'class-validator';
+import {
+  IsDefined,
+  IsNumber,
+  IsOptional,
+  Length,
+  Matches,
+  Min,
+} from 'class-validator';
 
 export class CreateOrderDto {
   @IsDefined({ message: 'validation.required' })
@@ -15,6 +22,7 @@ export class CreateOrderDto {
   menuUrl?: string;
 
   @Min(0, { message: 'validation.positive' })
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'validation.invalid' })
   @IsOptional()
   shippingCents?: number;
 }

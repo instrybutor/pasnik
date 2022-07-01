@@ -54,6 +54,7 @@
     "position_count": "Ilość pozycji",
     "detailed": "Szczegółowa",
     "total": "Suma",
+    "no_dishes": "Brak pozycji w zamówieniu",
     "form": {
       "name": "Nazwa",
       "price": "Cena",
@@ -89,9 +90,6 @@
       "delete_dish": "Usunięto pozycję",
       "add_dish": "Utworzono pozycję"
     },
-    "common": {
-      "no_dishes": "Brak pozycji w zamówieniu"
-    },
     "create_form": {
       "restaurant_label": "Restauracja",
       "restaurant_placeholder": "Nazwa restauracji",
@@ -125,36 +123,6 @@
       "transfers": "Oczekujące transfery",
       "see_all": "Zobacz wszystko"
     }
-  },
-  "dish": {
-    "title": "Zamówienie",
-    "header_menu": {
-      "title": "menu",
-      "cancel": "Anuluj",
-      "edit": "Edytuj",
-      "open": "Otwórz",
-      "order": "Zamów",
-      "ordered": "Zamówione",
-      "delivered": "Dostarczone",
-      "more": "Więcej",
-      "duplicate": "Ponów"
-    },
-    "paying": {
-      "title": "Change published status",
-      "myself": "mnie",
-      "payed_by": "Opłacone przez",
-      "you_paid": "Twój wkład",
-      "pick_payer": "Wybierz płacącego"
-    },
-    "delivery": "dostawa",
-    "form": {
-      "name": "Nazwa",
-      "duplicate": "Duplikuj",
-      "edit": "Edit",
-      "delete": "Usuń"
-    },
-    "empty": "Brak pozycji w zamówieniu",
-    "price": "Cena"
   },
   "timeline": {
     "title": "Historia",
