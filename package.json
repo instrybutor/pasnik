@@ -50,7 +50,7 @@
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.0.0",
-    "@nestjs/typeorm": "^8.0.2",
+    "@nestjs/typeorm": "8.0.4",
     "@pqina/flip": "^1.7.7",
     "@tailwindcss/forms": "^0.5.1",
     "autoprefixer": "^10.3.7",
@@ -156,4 +156,3 @@
     "yarn": ">= 1.19.1"
   }
 }
-
