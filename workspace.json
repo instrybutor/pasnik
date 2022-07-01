@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "ability": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/ability",
       "sourceRoot": "libs/ability/src",
       "projectType": "library",
@@ -25,6 +26,7 @@
       "tags": []
     },
     "api-data-transfer": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/api/data-transfer",
       "sourceRoot": "libs/api/data-transfer/src",
       "projectType": "library",
@@ -48,6 +50,7 @@
       "tags": []
     },
     "auth": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/auth",
       "sourceRoot": "libs/auth/src",
       "projectType": "library",
@@ -71,6 +74,7 @@
       "tags": []
     },
     "axios": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/axios",
       "sourceRoot": "libs/axios/src",
       "projectType": "library",
@@ -94,6 +98,7 @@
       "tags": []
     },
     "components": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/components",
       "sourceRoot": "libs/components/src",
       "projectType": "library",
@@ -117,6 +122,7 @@
       "tags": []
     },
     "features-notifications": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/features/notifications",
       "sourceRoot": "libs/features/notifications/src",
       "projectType": "library",
@@ -142,6 +148,7 @@
       }
     },
     "features-orders": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/features/orders",
       "sourceRoot": "libs/features/orders/src",
       "projectType": "library",
@@ -165,6 +172,7 @@
       }
     },
     "features-workspaces": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/features/workspaces",
       "sourceRoot": "libs/features/workspaces/src",
       "projectType": "library",
@@ -190,6 +198,7 @@
       }
     },
     "frontend": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/frontend",
       "sourceRoot": "apps/frontend/src",
       "projectType": "application",
@@ -283,6 +292,7 @@
       "tags": []
     },
     "layout": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/layout",
       "sourceRoot": "libs/layout/src",
       "projectType": "library",
@@ -306,6 +316,7 @@
       "tags": []
     },
     "nestjs-api": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/nestjs-api",
       "sourceRoot": "apps/nestjs-api/src",
       "projectType": "application",
@@ -370,6 +381,7 @@
       "tags": []
     },
     "nestjs-auth": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/nestjs/auth",
       "sourceRoot": "libs/nestjs/auth/src",
       "projectType": "library",
@@ -393,6 +405,7 @@
       "tags": []
     },
     "nestjs-bff": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/nestjs-bff",
       "sourceRoot": "apps/nestjs-bff/src",
       "projectType": "application",
@@ -456,6 +469,7 @@
       "tags": []
     },
     "nestjs-common": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/nestjs/common",
       "sourceRoot": "libs/nestjs/common/src",
       "projectType": "library",
@@ -479,6 +493,7 @@
       "tags": []
     },
     "nestjs-core": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/nestjs/core",
       "sourceRoot": "libs/nestjs/core/src",
       "projectType": "library",
@@ -502,6 +517,7 @@
       "tags": []
     },
     "nestjs-database": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/nestjs/database",
       "sourceRoot": "libs/nestjs/database/src",
       "projectType": "library",
@@ -525,6 +541,7 @@
       "tags": []
     },
     "nestjs-migrations": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/nestjs/migrations",
       "sourceRoot": "libs/nestjs/migrations/src",
       "projectType": "library",
@@ -560,6 +577,7 @@
       "tags": []
     },
     "orders-data-access": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/orders/data-access",
       "sourceRoot": "libs/orders/data-access/src",
       "projectType": "library",
@@ -583,6 +601,7 @@
       "tags": []
     },
     "orders-edit-order": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/orders/edit-order",
       "sourceRoot": "libs/orders/edit-order/src",
       "projectType": "library",
@@ -606,6 +625,7 @@
       "tags": []
     },
     "pages-admin-invitations": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/pages/admin-invitations",
       "sourceRoot": "libs/pages/admin-invitations/src",
       "projectType": "library",
@@ -631,6 +651,7 @@
       "tags": []
     },
     "pages-dashboard": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/pages/dashboard",
       "sourceRoot": "libs/pages/dashboard/src",
       "projectType": "library",
@@ -654,6 +675,7 @@
       "tags": []
     },
     "pages-login": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/pages/login",
       "sourceRoot": "libs/pages/login/src",
       "projectType": "library",
@@ -677,6 +699,7 @@
       "tags": []
     },
     "pages-order": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/pages/order",
       "sourceRoot": "libs/pages/order/src",
       "projectType": "library",
@@ -700,6 +723,7 @@
       "tags": []
     },
     "pages-orders": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/pages/orders",
       "sourceRoot": "libs/pages/orders/src",
       "projectType": "library",
@@ -723,6 +747,7 @@
       "tags": []
     },
     "pages-workspace": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/pages/workspace",
       "sourceRoot": "libs/pages/workspace/src",
       "projectType": "library",
@@ -746,6 +771,7 @@
       }
     },
     "shared-utils": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/shared/utils",
       "sourceRoot": "libs/shared/utils/src",
       "projectType": "library",
@@ -769,6 +795,7 @@
       "tags": []
     },
     "store": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/store",
       "sourceRoot": "libs/store/src",
       "projectType": "library",
@@ -791,5 +818,6 @@
         }
       }
     }
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   displayName: 'pages-admin-invitation',
 
   transform: {
@@ -6,5 +6,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../../coverage/libs/pages/admin-invitation',
-  preset: '../../../jest.preset.ts',
+  preset: '../../../jest.preset.js',
 };
