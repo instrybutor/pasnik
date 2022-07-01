@@ -1,7 +1,7 @@
 import { OrderSection } from '../order-section/order-section';
 import {
   DishModel,
-  markAsOrderedValidator,
+  MarkAsOrderedDto,
   OrderModel,
   UserModel,
 } from '@pasnik/api/data-transfer';
@@ -14,9 +14,9 @@ import {
 } from '@pasnik/components';
 import { OrderProcess } from '../order-process/order-process';
 import { useOrderState } from '../order-state/order-state';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useOrderProcessSection } from './order-process-section.hook';
 import { useTranslation } from 'react-i18next';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 
 export interface OrderDishesProps {
   order: OrderModel;
@@ -52,7 +52,7 @@ export function OrderProcessSection({ order }: OrderDishesProps) {
                 suffix="zł"
                 transform={currencyTransform}
                 onChange={setShippingCents}
-                resolver={yupResolver(markAsOrderedValidator)}
+                resolver={classValidatorResolver(MarkAsOrderedDto)}
                 vertical
                 errorTooltip
               >

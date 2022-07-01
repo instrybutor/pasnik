@@ -45,6 +45,8 @@
   },
   "order": {
     "order": "Zamówienie",
+    "order_create": "Tworzenie zamówienia",
+    "order_edit": "Edycja zamówienia",
     "added_by": "Dodane przez",
     "order_placed": "Zamówienie złożone",
     "estimated_delivery": "Szacowana dostawa",

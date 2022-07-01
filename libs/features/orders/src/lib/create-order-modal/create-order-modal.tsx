@@ -26,7 +26,7 @@ export function CreateOrderModal({
   const { mutateAsync } = useOrderCreateMutation(workspace.slug);
   return (
     <Modal>
-      <Modal.Title>{t('order.create_order')}</Modal.Title>
+      <Modal.Title>{t('order.order_create')}</Modal.Title>
       <Form<CreateOrderDto>
         successMessage={t('order.create_form.order_created')}
         resolver={classValidatorResolver(CreateOrderDto)}

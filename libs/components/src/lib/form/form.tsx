@@ -63,8 +63,8 @@ export const Form = <
   );
 
   const submitHandler: SubmitHandler<TFormValues> = useCallback(
-    (...args) => {
-      onSubmit?.(...args);
+    async (...args) => {
+      await onSubmit?.(...args);
       if (successMessage) {
         toast({ type: 'success', title: successMessage });
       }

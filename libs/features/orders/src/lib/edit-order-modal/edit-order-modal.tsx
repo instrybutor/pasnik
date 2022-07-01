@@ -27,7 +27,7 @@ export function EditOrderModal({
   const { mutateAsync } = useOrderUpdateMutation(order);
   return (
     <Modal>
-      <Modal.Title>{t('order.edit_order')}</Modal.Title>
+      <Modal.Title>{t('order.order_edit')}</Modal.Title>
       <Form<CreateOrderDto>
         successMessage={t('order.create_form.order_updated')}
         resolver={classValidatorResolver(CreateOrderDto)}
