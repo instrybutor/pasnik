@@ -94,7 +94,7 @@ jobs:
       - run:
           name: Set commit hash as a build version
           command: echo 'export NX_VERSION="${CIRCLE_SHA1::7}"' >> $BASH_ENV
-      - run: yarn run affected:build -- ${AFFECTED_ARGS} --parallel=3 --configuration production --sourceMap false
+      - run: yarn run affected:build ${AFFECTED_ARGS} --parallel=3 --configuration production --sourceMap false
       - save_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
@@ -111,7 +111,7 @@ jobs:
           <<: *set_env
       - restore_cache:
           <<: *npm_cache
-      - run: yarn run affected:test -- ${AFFECTED_ARGS} --parallel=3 -- --ci --code-coverage
+      - run: yarn run affected:test ${AFFECTED_ARGS} --parallel=3 --ci --code-coverage
   e2e:
     <<: *defaults
     steps:
@@ -122,7 +122,7 @@ jobs:
           <<: *set_env
       - restore_cache:
           <<: *npm_cache
-      - run: yarn run affected:e2e -- ${AFFECTED_ARGS} --configuration production -- --headless
+      - run: yarn run affected:e2e ${AFFECTED_ARGS} --configuration production --headless
       - store_artifacts:
           path: dist/cypress
   deploy:
@@ -137,7 +137,7 @@ jobs:
           <<: *npm_cache
       - restore_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
-      - run: yarn run affected -- --target deploy ${AFFECTED_ARGS}
+      - run: yarn run affected --target deploy ${AFFECTED_ARGS}
       - run: git rev-parse HEAD > dist/last-deploy.txt
       - save_cache:
           key: last-deploy-sha-{{ .Environment.BASE_URL }}
