@@ -8,6 +8,6 @@ export interface DishModel {
   updatedAt: string;
   userId: number;
   user: UserModel;
-  createdBy: UserModel;
-  createdById: number;
+  createdBy?: UserModel;
+  createdById?: number;
 }
