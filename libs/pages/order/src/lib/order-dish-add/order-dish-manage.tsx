@@ -13,13 +13,7 @@ import {
   UserInfo,
   useToast,
 } from '@pasnik/components';
-import {
-  AddDishDto,
-  addDishValidator,
-  DishModel,
-  OrderModel,
-} from '@pasnik/api/data-transfer';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
 import { Controller } from 'react-hook-form';
 import { useUsersInWorkspace } from '@pasnik/features/workspaces';
 import { useUserStore } from '@pasnik/store';
@@ -28,6 +22,7 @@ import {
   useDishAddMutation,
   useDishUpdateMutation,
 } from '@pasnik/features/orders';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 
 export interface OrderDishAddProps {
   onClose: () => void;
@@ -45,7 +40,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
   const { mutateAsync: mutateDishAsync } = useDishUpdateMutation(order, dish!);
   return (
     <Form<AddDishDto>
-      resolver={yupResolver(addDishValidator)}
+      resolver={classValidatorResolver(AddDishDto)}
       onSubmit={async (formData) => {
         if (dish) {
           mutateDishAsync(formData).then(() =>

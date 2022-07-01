@@ -3,13 +3,7 @@ import { PlusIcon } from '@heroicons/react/outline';
 import { PopoverPanelProps, UserInfo } from '@pasnik/components';
 import { UserAddIcon } from '@heroicons/react/solid';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import * as yup from 'yup';
-import {
-  AddMembersToWorkspaceDto,
-  addMembersToWorkspaceValidator,
-  emailValidator,
-} from '@pasnik/api/data-transfer';
+import { AddMembersToWorkspaceDto } from '@pasnik/api/data-transfer';
 import {
   useWorkspaceAddMembersMutation,
   useWorkspaceRequestAccesses,
@@ -17,13 +11,17 @@ import {
 import { WorkspaceUserInviteItem } from '../workspace-user-invite-item/workspace-user-invite-item';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { IsEmail, IsOptional } from 'class-validator';
 
 export interface WorkspaceUserInvitePopoverProps extends PopoverPanelProps {
   slug: string;
 }
 
-interface EmailForm {
-  email: string;
+class EmailForm {
+  @IsOptional()
+  @IsEmail()
+  email?: string;
 }
 
 export function WorkspaceUserInvitePopover({
@@ -36,11 +34,7 @@ export function WorkspaceUserInvitePopover({
   const addMembersMutation = useWorkspaceAddMembersMutation(slug);
 
   const { register, handleSubmit, reset, formState } = useForm<EmailForm>({
-    resolver: yupResolver(
-      yup.object().shape({
-        email: emailValidator,
-      })
-    ),
+    resolver: classValidatorResolver(EmailForm),
   });
 
   const {
@@ -48,7 +42,7 @@ export function WorkspaceUserInvitePopover({
     getValues,
     reset: resetMembers,
   } = useForm<AddMembersToWorkspaceDto>({
-    resolver: yupResolver(addMembersToWorkspaceValidator),
+    resolver: classValidatorResolver(AddMembersToWorkspaceDto),
   });
 
   const { fields, insert, remove } = useFieldArray({
@@ -66,7 +60,7 @@ export function WorkspaceUserInvitePopover({
 
   const onSubmit = useCallback(
     (data: EmailForm) => {
-      if (data.email.length > 0) {
+      if (data.email && data.email.length > 0) {
         insert(0, data);
         reset();
       } else {
@@ -95,7 +89,9 @@ export function WorkspaceUserInvitePopover({
               {t('forms.email')}
             </label>
             <input
-              {...register('email')}
+              {...register('email', {
+                setValueAs: (value) => (value === '' ? null : value),
+              })}
               autoFocus={true}
               type="text"
               id="invite-user-email"
