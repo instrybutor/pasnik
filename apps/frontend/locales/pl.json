@@ -43,7 +43,7 @@
     "send_request": "Wyślij zapytanie",
     "cancel": "Anuluj"
   },
-  "v2-order": {
+  "order": {
     "order": "Zamówienie",
     "added_by": "Dodane przez",
     "order_placed": "Zamówienie złożone",
@@ -89,14 +89,8 @@
     },
     "common": {
       "no_dishes": "Brak pozycji w zamówieniu"
-    }
-  },
-  "order": {
-    "create_order": "Tworzenie zamówienia",
-    "edit_order": "Edycja zamówienia",
-    "request_failed": "Coś poszło nie tak.",
-
-    "form": {
+    },
+    "create_form": {
       "restaurant_label": "Restauracja",
       "restaurant_placeholder": "Nazwa restauracji",
 
@@ -107,16 +101,9 @@
       "delivery_price_placeholder": "Podaj kwotę dostawy",
 
       "create": "Utwórz",
-      "save": "Zapisz"
-    },
-    "closed": {
-      "title": "Brak zakończonych zamówień"
-    },
-    "history": {
-      "title": "Historia zamówień"
-    },
-    "summary": {
-      "title": "Podsumowanie zamówienia"
+      "save": "Zapisz",
+      "order_created": "Utworzono zamówienie",
+      "order_updated": "Zaktualizowano zamówienie"
     }
   },
   "dashboard": {
@@ -185,7 +172,7 @@
   "errors": {
     "login": "Problem z logowaniem",
     "server": {
-      "title": "Problem z serwerem",
+      "title": "Coś poszło nie tak.",
       "No dishes found": "Brak pozycji w zamówieniu",
       "No permission": "Brak uprawnień"
     }

@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import classNames from 'classnames';
 import {
   CashIcon,
@@ -11,6 +11,12 @@ import {
 } from '@heroicons/react/outline';
 import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
 import { DateFormat, UserAvatar } from '@pasnik/components';
+import { useMemo } from 'react';
+
+const sortHistory = (actionA: OrderActionModel, actionB: OrderActionModel) =>
+  new Date(actionB.createdAt).getTime() > new Date(actionA.createdAt).getTime()
+    ? -1
+    : 1;
 
 const typesMap = {
   [OrderAction.Created]: {
@@ -18,7 +24,7 @@ const typesMap = {
     bgColorClass: 'bg-gray-400',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.createdBy</Trans>{' '}
+        <Trans>order.timeline.created</Trans> <Trans>order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -28,7 +34,7 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.canceledBy</Trans>{' '}
+        <Trans>order.timeline.canceled</Trans> <Trans>order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -38,7 +44,7 @@ const typesMap = {
     bgColorClass: 'bg-yellow-500',
     text: ({ actionUser }: OrderActionModel) => (
       <>
-        <Trans>timeline.paiddBy</Trans>{' '}
+        <Trans>order.timeline.paid</Trans> <Trans>order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={actionUser} />
       </>
     ),
@@ -48,7 +54,7 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.deliveredBy</Trans>{' '}
+        <Trans>order.timeline.delivered</Trans> <Trans>order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -58,7 +64,7 @@ const typesMap = {
     bgColorClass: 'bg-green-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.openBy</Trans>{' '}
+        <Trans>order.timeline.opened</Trans> <Trans>order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -68,17 +74,18 @@ const typesMap = {
     bgColorClass: 'bg-red-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.orderedBy</Trans>{' '}
+        <Trans>order.timeline.ordered</Trans> <Trans>order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
   },
   [OrderAction.Processing]: {
     icon: LockClosedIcon,
-    bgColorClass: 'bg-red-500',
+    bgColorClass: 'bg-yellow-500',
     text: ({ user }: OrderActionModel) => (
       <>
-        <Trans>timeline.processingBy</Trans>{' '}
+        <Trans>order.timeline.processing</Trans>{' '}
+        <Trans>order.timeline.by</Trans>{' '}
         <UserAvatar showTooltip={true} size="xsm" user={user} />
       </>
     ),
@@ -86,77 +93,76 @@ const typesMap = {
 };
 
 export interface OrderTimelineProps {
-  actions?: OrderActionModel[] | null;
+  actions: OrderActionModel[];
+  isDetailed: boolean;
 }
 
-export function OrderTimeline({ actions }: OrderTimelineProps) {
-  const { t } = useTranslation();
+export function OrderTimeline({ actions, isDetailed }: OrderTimelineProps) {
+  const filteredActions = useMemo(() => {
+    return (() => {
+      if (isDetailed) {
+        return actions;
+      }
+      const acts = new Map<OrderAction, OrderActionModel>();
+      actions.forEach((acc) => {
+        acts.delete(acc.action);
+        acts.set(acc.action, acc);
+      });
+      return Array.from(acts.values());
+    })().sort(sortHistory);
+  }, [actions, isDetailed]);
 
   return (
-    <section
-      aria-labelledby="timeline-title"
-      className="lg:col-start-3 lg:col-span-1"
-    >
-      <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
-        <h2 id="timeline-title" className="text-lg font-medium text-gray-900">
-          {t('timeline.title')}
-        </h2>
+    <ul className="-mb-8">
+      {filteredActions.map((item, itemIdx, arr) => {
+        const ActionIcon = typesMap[item.action]?.icon;
+        const message = typesMap[item.action]?.text(item) ?? item.action;
 
-        <div className="mt-6 flow-root">
-          <ul className="-mb-8">
-            {actions?.map((item, itemIdx) => {
-              const ActionIcon = typesMap[item.action]?.icon;
-              const message = typesMap[item.action]?.text(item) ?? item.action;
-
-              return (
-                <li key={item.id}>
-                  <div className="relative pb-8">
-                    {itemIdx !== actions.length - 1 ? (
-                      <span
-                        className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+        return (
+          <li key={item.id}>
+            <div className="relative pb-8">
+              {itemIdx !== arr.length - 1 ? (
+                <span
+                  className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+                  aria-hidden="true"
+                />
+              ) : null}
+              <div className="relative flex space-x-3 items-center">
+                <div>
+                  <span
+                    className={classNames(
+                      typesMap[item.action]?.bgColorClass ??
+                        'bg-black text-white',
+                      'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white'
+                    )}
+                  >
+                    {typesMap[item.action] ? (
+                      <ActionIcon
+                        className="w-5 h-5 text-white"
                         aria-hidden="true"
                       />
-                    ) : null}
-                    <div className="relative flex space-x-3">
-                      <div>
-                        <span
-                          className={classNames(
-                            typesMap[item.action]?.bgColorClass ??
-                              'bg-black text-white',
-                            'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white'
-                          )}
-                        >
-                          {typesMap[item.action] ? (
-                            <ActionIcon
-                              className="w-5 h-5 text-white"
-                              aria-hidden="true"
-                            />
-                          ) : (
-                            <QuestionMarkCircleIcon
-                              className="w-5 h-5 text-white"
-                              aria-hidden="true"
-                            />
-                          )}
-                        </span>
-                      </div>
-                      <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                        <div className="text-sm text-gray-500">{message}</div>
-                        <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                          <DateFormat
-                            date={item.createdAt}
-                            format="dd LLL, HH:mm"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    ) : (
+                      <QuestionMarkCircleIcon
+                        className="w-5 h-5 text-white"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1 flex justify-between space-x-4 items-center">
+                  <div className="text-sm text-gray-500 flex items-center gap-1 pt-0.5">
+                    {message}
                   </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
-    </section>
+                  <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                    <DateFormat date={item.createdAt} format="dd LLL, HH:mm" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

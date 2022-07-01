@@ -22,7 +22,7 @@ export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
           key={order.id}
           wrapper={({ children }) => (
             <NavLink
-              to={`/v2/order/${order.slug}`}
+              to={`/order/${order.slug}`}
               className="block hover:bg-gray-50"
             >
               {children}

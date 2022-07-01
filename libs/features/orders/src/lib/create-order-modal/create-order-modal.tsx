@@ -28,7 +28,7 @@ export function CreateOrderModal({
     <Modal>
       <Modal.Title>{t('order.create_order')}</Modal.Title>
       <Form<CreateOrderDto>
-        successMessage="Sukces"
+        successMessage={t('order.create_form.order_created')}
         resolver={classValidatorResolver(CreateOrderDto)}
         onSubmit={async (data) => {
           const { slug } = await mutateAsync(data);
@@ -39,22 +39,24 @@ export function CreateOrderModal({
         <div className="flex flex-1 flex-col space-y-6">
           <FormField
             required
-            label={t('order.form.restaurant_label')}
+            label={t('order.create_form.restaurant_label')}
             name="from"
           >
-            <Input placeholder={t('order.form.restaurant_placeholder')} />
+            <Input
+              placeholder={t('order.create_form.restaurant_placeholder')}
+            />
           </FormField>
-          <FormField label={t('order.form.menu_label')} name="menuUrl">
-            <Input placeholder={t('order.form.menu_placeholder')} />
+          <FormField label={t('order.create_form.menu_label')} name="menuUrl">
+            <Input placeholder={t('order.create_form.menu_placeholder')} />
           </FormField>
           <FormField
-            label={t('order.form.delivery_price_label')}
+            label={t('order.create_form.delivery_price_label')}
             name="shippingCents"
             suffix="zł"
             transform={currencyTransform}
           >
             <CurrencyInput
-              placeholder={t('order.form.delivery_price_placeholder')}
+              placeholder={t('order.create_form.delivery_price_placeholder')}
             />
           </FormField>
           <div className="block flex-grow sm:hidden" />
