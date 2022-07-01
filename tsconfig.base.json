@@ -36,7 +36,6 @@
       "@pasnik/nestjs/entities": ["libs/nestjs/entities/src/index.ts"],
       "@pasnik/nestjs/migrations": ["libs/nestjs/migrations/src/index.ts"],
       "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
-      "@pasnik/orders/edit-order": ["libs/orders/edit-order/src/index.ts"],
       "@pasnik/pages/admin-invitations": [
         "libs/pages/admin-invitations/src/index.ts"
       ],
