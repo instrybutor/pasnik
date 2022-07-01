@@ -7,7 +7,7 @@ import {
 } from 'react';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { Portal } from 'react-portal';
+import { FloatingPortal } from '@floating-ui/react-dom-interactions';
 
 export interface ConfirmModalProps {
   onClose: () => void;
@@ -25,7 +25,7 @@ export const ConfirmModal = ({
 }: PropsWithChildren<ConfirmModalProps>) => {
   const [isOpen, setIsOpen] = useState(true);
   return (
-    <Portal>
+    <FloatingPortal>
       <Transition.Root
         show={isOpen}
         as={Fragment}
@@ -96,6 +96,6 @@ export const ConfirmModal = ({
           </div>
         </Dialog>
       </Transition.Root>
-    </Portal>
+    </FloatingPortal>
   );
 };
