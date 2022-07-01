@@ -20,7 +20,7 @@ export function PagesOrderDetails() {
   const { setCurrentWorkspaceSlugContext } = useSidebarContext();
 
   useEffect(() => {
-    setCurrentWorkspaceSlugContext(order?.slug ?? null);
+    setCurrentWorkspaceSlugContext(order?.workspace?.slug ?? null);
     return () => {
       setCurrentWorkspaceSlugContext(null);
     };

@@ -4,6 +4,7 @@ import { Spinner } from '@pasnik/components';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { DashboardOrderList } from '../dashboard-order-list/dashboard-order-list';
 import { OrdersEmpty } from '@pasnik/features/orders';
+import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 
 const sortOrder = (order: OrderModel, nextOrder: OrderModel) =>
   new Date(order.createdAt).getTime() > new Date(nextOrder.createdAt).getTime()
@@ -34,6 +35,7 @@ export function DashboardOrders() {
     archivedOrders: getArchivedOrders(Object.values(state.entities ?? {})),
   }));
   const isFetching = useDashboardStore((state) => state.isFetching);
+  const workspace = useCurrentWorkspace();
   const { t } = useTranslation();
 
   return (
@@ -48,7 +50,7 @@ export function DashboardOrders() {
           ) : activeOrders.length ? (
             <DashboardOrderList orders={activeOrders} />
           ) : (
-            <OrdersEmpty />
+            <OrdersEmpty workspace={workspace} />
           )}
         </div>
       </div>

@@ -23,7 +23,7 @@ export function WorkspaceContainer() {
   const navigate = useNavigate();
   const { slug } = useParams<'slug'>();
 
-  useWorkspace(slug!, (error) => {
+  const { data: workspace } = useWorkspace(slug!, (error) => {
     if (error.response?.status === 404) {
       navigate('/');
     }
@@ -84,7 +84,7 @@ export function WorkspaceContainer() {
                       index
                       element={
                         <WorkspaceOrders
-                          empty={<OrdersEmpty />}
+                          empty={<OrdersEmpty workspace={workspace} />}
                           type="active"
                         />
                       }
