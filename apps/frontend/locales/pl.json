@@ -55,11 +55,11 @@
     "detailed": "Szczegółowa",
     "total": "Suma",
     "no_dishes": "Brak pozycji w zamówieniu",
+    "shipping": "Dostawa",
     "form": {
       "name": "Nazwa",
       "price": "Cena",
-      "user_name": "Nazwa użytkownika",
-      "shipping": "Dostawa"
+      "user_name": "Nazwa użytkownika"
     },
     "actions": {
       "edit": "Edytuj",

@@ -47,7 +47,7 @@ export function OrderProcessSection({ order }: OrderDishesProps) {
             <div className="flex items-center">
               <FormField
                 defaultValue={shippingCents}
-                label={t('order.form.shipping')}
+                label={t('order.shipping')}
                 name="shippingCents"
                 suffix="zł"
                 transform={currencyTransform}

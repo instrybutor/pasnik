@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   displayName: 'pages-login',
 
   transform: {
@@ -6,5 +6,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../../coverage/libs/pages/login',
-  preset: '../../../jest.preset.ts',
+  preset: '../../../jest.preset.js',
 };
