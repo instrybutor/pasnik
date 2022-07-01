@@ -1,5 +1,6 @@
 export * from './use-current-workspace';
 export * from './use-current-workspace-user';
+export * from './use-users-in-workspace';
 export * from './use-workspace-by-id';
 export * from './use-workspaces';
 export * from './use-workspace';

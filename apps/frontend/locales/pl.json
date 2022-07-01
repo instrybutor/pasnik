@@ -44,10 +44,53 @@
     "cancel": "Anuluj"
   },
   "order": {
-    "create_order": "Tworzenie zamówienia",
-    "request_failed": "Coś poszło nie tak.",
-
+    "order": "Zamówienie",
+    "order_create": "Tworzenie zamówienia",
+    "order_edit": "Edycja zamówienia",
+    "added_by": "Dodane przez",
+    "order_placed": "Zamówienie złożone",
+    "estimated_delivery": "Szacowana dostawa",
+    "order_summary": "Podsumowanie zamówienia",
+    "position_count": "Ilość pozycji",
+    "detailed": "Szczegółowa",
+    "total": "Suma",
+    "no_dishes": "Brak pozycji w zamówieniu",
     "form": {
+      "name": "Nazwa",
+      "price": "Cena",
+      "user_name": "Nazwa użytkownika",
+      "shipping": "Dostawa"
+    },
+    "actions": {
+      "edit": "Edytuj",
+      "open": "Otwórz",
+      "close": "Zamknij",
+      "order": "Zamów",
+      "ordered": "Zamówione",
+      "delivered": "Dostarczone",
+      "re_order": "Ponów",
+      "duplicate": "Duplikuj",
+      "delete": "Usuń"
+    },
+    "timeline": {
+      "title": "Historia",
+      "processing": "Zamawiane",
+      "detailed": "Szczegółowa",
+      "created": "Utworzone",
+      "ordered": "Zamówione",
+      "opened": "Otwarte",
+      "paid": "Opłacone",
+      "delivered": "Odebrane",
+      "canceled": "Anulowane",
+      "open": "Otwarte",
+      "by": "przez"
+    },
+    "toast": {
+      "duplicate_dish": "Zduplikowano pozycję",
+      "delete_dish": "Usunięto pozycję",
+      "add_dish": "Utworzono pozycję"
+    },
+    "create_form": {
       "restaurant_label": "Restauracja",
       "restaurant_placeholder": "Nazwa restauracji",
 
@@ -58,16 +101,9 @@
       "delivery_price_placeholder": "Podaj kwotę dostawy",
 
       "create": "Utwórz",
-      "save": "Zapisz"
-    },
-    "closed": {
-      "title": "Brak zakończonych zamówień"
-    },
-    "history": {
-      "title": "Historia zamówień"
-    },
-    "summary": {
-      "title": "Podsumowanie zamówienia"
+      "save": "Zapisz",
+      "order_created": "Utworzono zamówienie",
+      "order_updated": "Zaktualizowano zamówienie"
     }
   },
   "dashboard": {
@@ -88,40 +124,11 @@
       "see_all": "Zobacz wszystko"
     }
   },
-  "dish": {
-    "title": "Zamówienie",
-    "header_menu": {
-      "title": "menu",
-      "cancel": "Anuluj",
-      "edit": "Edytuj",
-      "open": "Otwórz",
-      "order": "Zamów",
-      "delivered": "Dostarczone",
-      "more": "Więcej",
-      "duplicate": "Ponów"
-    },
-    "paying": {
-      "title": "Change published status",
-      "myself": "mnie",
-      "payed_by": "Opłacone przez",
-      "you_paid": "Twój wkład",
-      "pick_payer": "Wybierz płacącego"
-    },
-    "delivery": "dostawa",
-    "form": {
-      "name": "Nazwa",
-      "duplicate": "Duplikuj",
-      "edit": "Edit",
-      "delete": "Usuń"
-    },
-    "empty": "Brak pozycji w zamówieniu",
-    "price": "Cena"
-  },
   "timeline": {
     "title": "Historia",
     "createdBy": "Utworzone przez",
     "orderedBy": "Zamówione przez",
-    "payedBy": "Opłacone przez",
+    "paidBy": "Opłacone przez",
     "deliveredBy": "Odebrane przez",
     "canceledBy": "Anulowane przez",
     "openBy": "Otwarte przez"
@@ -133,17 +140,24 @@
     "canceled": "Usunięto"
   },
   "errors": {
-    "login": "Problem z logowaniem"
+    "login": "Problem z logowaniem",
+    "server": {
+      "title": "Coś poszło nie tak.",
+      "No dishes found": "Brak pozycji w zamówieniu",
+      "No permission": "Brak uprawnień"
+    }
   },
   "notifications": {
     "orderStatusChanged": "Zamówienie z {{placeName}} zostało {{status}}.",
     "openOrder": "Kliknij i sprawdz zamówienie."
   },
   "orderStatus": {
-    "in-progress": "otwarte",
-    "ordered": "zamówione",
-    "delivered": "dostarczone",
-    "canceled": "anulowane"
+    "in-progress": "W trakcie",
+    "processing": "Zamawiane",
+    "ordered": "Zamówione",
+    "delivered": "Dostarczone",
+    "canceled": "Anulowane",
+    "unknown": "Nieznane"
   },
   "workspace": {
     "createDrawer": {
@@ -200,5 +214,14 @@
   },
   "forms": {
     "email": "Email"
+  },
+  "validation": {
+    "required": "To pole jest wymagane",
+    "invalid": "To pole jest niepoprawne",
+    "positive": "Liczba musi być dodatnia",
+    "length": "Długość pola od {{ min }} do  {{ max }} znaków"
+  },
+  "components": {
+    "not_found": "Nie znaleziono"
   }
 }

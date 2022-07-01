@@ -43,10 +43,10 @@ export function SelectWorkspaceUser({
       flip(),
       shift({ padding: 5 }),
       size({
-        apply({ rects }) {
+        apply({ reference }) {
           if (popperElRef.current) {
             Object.assign(popperElRef.current.style, {
-              width: `${rects.reference.width}px`,
+              width: `${reference.width}px`,
             });
           }
         },

@@ -20,7 +20,7 @@ export class DishesService {
   findAll(order: OrderEntity) {
     return this.dishesRepository.find({
       where: { order },
-      relations: ['user'],
+      relations: ['user', 'createdBy'],
       order: {
         createdAt: 'ASC',
       },

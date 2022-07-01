@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { HttpStatus, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
@@ -13,6 +13,11 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.enableCors();
   app.setGlobalPrefix(globalPrefix);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      errorHttpStatusCode: HttpStatus.BAD_REQUEST,
+    })
+  );
 
   const port = process.env.PORT || 3333;
   await app.listen(port, () => {

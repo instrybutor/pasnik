@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowJs": true,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -35,19 +36,18 @@
       "@pasnik/nestjs/entities": ["libs/nestjs/entities/src/index.ts"],
       "@pasnik/nestjs/migrations": ["libs/nestjs/migrations/src/index.ts"],
       "@pasnik/orders-data-access": ["libs/orders/data-access/src/index.ts"],
-      "@pasnik/orders/create-order": ["libs/orders/create-order/src/index.ts"],
       "@pasnik/orders/edit-order": ["libs/orders/edit-order/src/index.ts"],
       "@pasnik/pages/admin-invitations": [
         "libs/pages/admin-invitations/src/index.ts"
       ],
-      "@pasnik/pages/create-order": ["libs/pages/create-order/src/index.ts"],
       "@pasnik/pages/dashboard": ["libs/pages/dashboard/src/index.ts"],
       "@pasnik/pages/login": ["libs/pages/login/src/index.ts"],
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
       "@pasnik/pages/orders": ["libs/pages/orders/src/index.ts"],
       "@pasnik/pages/workspace": ["libs/pages/workspace/src/index.ts"],
       "@pasnik/shared/utils": ["libs/shared/utils/src/index.ts"],
-      "@pasnik/store": ["libs/store/src/index.ts"]
+      "@pasnik/store": ["libs/store/src/index.ts"],
+      "@pasnik/theme": ["theme.mjs"]
     }
   },
   "exclude": ["node_modules", "tmp"]

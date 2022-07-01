@@ -13,7 +13,11 @@ const sortOrder = (order: OrderModel, nextOrder: OrderModel) =>
 const getActiveOrder = (orders: OrderModel[]) =>
   orders
     .filter((order) =>
-      [OrderStatus.InProgress, OrderStatus.Ordered].includes(order.status)
+      [
+        OrderStatus.InProgress,
+        OrderStatus.Ordered,
+        OrderStatus.Processing,
+      ].includes(order.status)
     )
     .sort(sortOrder);
 

@@ -8,6 +8,7 @@ export interface SidebarItemProps extends NavLinkProps {
   icon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
   label: string;
   to: To;
+  forceActive?: boolean;
 }
 
 export function SidebarItem({
@@ -15,6 +16,7 @@ export function SidebarItem({
   children,
   label,
   to,
+  forceActive,
 }: SidebarItemProps) {
   return !children ? (
     <NavLink
@@ -23,8 +25,9 @@ export function SidebarItem({
         classNames(
           'group flex items-center px-2 py-2 text-base font-medium rounded-md',
           {
-            'bg-cyan-800 text-white': isActive,
-            'text-cyan-100 hover:text-white hover:bg-cyan-600': !isActive,
+            'bg-cyan-800 text-white': forceActive || isActive,
+            'text-cyan-100 hover:text-white hover:bg-cyan-600':
+              !isActive && !forceActive,
           }
         )
       }

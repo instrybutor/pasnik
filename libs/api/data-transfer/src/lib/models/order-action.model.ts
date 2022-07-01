@@ -3,11 +3,12 @@ import { OrderModel } from './order.model';
 
 export enum OrderAction {
   Created = 'created',
+  Processing = 'processing',
   Ordered = 'ordered',
   Paid = 'paid',
   Delivered = 'delivered',
   Cancel = 'canceled',
-  Open = 'open'
+  Open = 'open',
 }
 
 export interface OrderActionModel {

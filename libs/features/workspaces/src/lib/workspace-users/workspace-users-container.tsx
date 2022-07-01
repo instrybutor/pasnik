@@ -62,6 +62,7 @@ export function WorkspaceUsersContainer({
       ) : (
         <div className="p-4 flex flex-wrap gap-2">
           <input
+            autoFocus={true}
             placeholder="Szukaj..."
             type="text"
             id="workspace-name"

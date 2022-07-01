@@ -15,7 +15,7 @@ export function WorkspaceUsersSkeleton({
 
   useEffect(() => {
     setVisibleUsers(Array(usersToShow).fill(null));
-  }, [usersToShow, setVisibleUsers, visibleUsers]);
+  }, [usersToShow, setVisibleUsers]);
 
   return (
     <div className="flex items-center space-x-2">

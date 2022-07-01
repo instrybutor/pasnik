@@ -1,8 +1,28 @@
 import { UserModel } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
-import { ReactElement } from 'react';
+import { ReactElement, useMemo } from 'react';
+import { Tooltip } from '../tooltip/tooltip';
+import { UserName } from '../user-name/user-name';
 
-export type UserAvatarSize = 'xsm' | 'sm' | 'md' | 'lg' | 'xlg' | 'xxlg';
+export type UserAvatarSize =
+  | 'xxsm'
+  | 'xsm'
+  | 'sm'
+  | 'md'
+  | 'lg'
+  | 'xlg'
+  | 'xxlg';
+
+export const getSizeClass = (size?: UserAvatarSize) =>
+  classNames({
+    'h-4 w-4': size === 'xxsm',
+    'h-6 w-6': size === 'xsm',
+    'h-8 w-8': size === 'sm',
+    'h-10 w-10': size === 'md' || !size,
+    'h-12 w-12': size === 'lg',
+    'h-14 w-14': size === 'xlg',
+    'h-16 w-16': size === 'xxlg',
+  });
 
 export interface UserAvatarProps {
   user?: Partial<UserModel> | null;
@@ -10,6 +30,7 @@ export interface UserAvatarProps {
   className?: string;
   fallback?: ReactElement | null;
   showInitials?: boolean;
+  showTooltip?: boolean | ((user: Partial<UserModel>) => ReactElement);
 }
 
 export function UserAvatar({
@@ -18,21 +39,10 @@ export function UserAvatar({
   className,
   fallback,
   showInitials,
+  showTooltip,
 }: UserAvatarProps) {
   const formatInitials = ({ givenName, familyName }: Partial<UserModel>) =>
     `${givenName![0]}${familyName![0]}`;
-
-  const formatName = ({ givenName, familyName, email }: Partial<UserModel>) =>
-    `${givenName!} ${familyName!} <${email}>`;
-
-  const sizeClasses = classNames({
-    'h-6 w-6': size === 'xsm',
-    'h-8 w-8': size === 'sm',
-    'h-10 w-10': size === 'md' || !size,
-    'h-12 w-12': size === 'lg',
-    'h-14 w-14': size === 'xlg',
-    'h-16 w-16': size === 'xxlg',
-  });
 
   const defaultFallback = (
     <svg
@@ -44,40 +54,41 @@ export function UserAvatar({
     </svg>
   );
 
-  return user?.avatarImg && !showInitials ? (
-    <img
-      title={formatName(user)}
-      className={classNames(
-        sizeClasses,
-        'inline-block rounded-full',
-        className
-      )}
-      referrerPolicy="no-referrer"
-      src={user.avatarImg}
-      alt={formatName(user)}
-    />
-  ) : user && user.familyName && user.givenName ? (
+  const tooltipTitle = useMemo(() => {
+    if (showTooltip instanceof Function) {
+      return showTooltip(user!);
+    }
+    return <UserName user={user} />;
+  }, [user, showTooltip]);
+
+  return (
     <span
       className={classNames(
-        sizeClasses,
-        'inline-flex items-center justify-center rounded-full bg-gray-500',
+        getSizeClass(size),
+        'inline-block rounded-full overflow-hidden flex-shrink-0',
         className
       )}
-      title={formatName(user)}
+      tabIndex={0}
     >
-      <span className="text-sm font-medium leading-none text-white">
-        {formatInitials(user)}
-      </span>
-    </span>
-  ) : (
-    <span
-      className={classNames(
-        sizeClasses,
-        'inline-block rounded-full overflow-hidden bg-gray-100',
-        className
+      {user?.avatarImg && !showInitials ? (
+        <Tooltip title={tooltipTitle} disabled={!showTooltip}>
+          <img
+            referrerPolicy="no-referrer"
+            src={user.avatarImg}
+            alt={formatInitials(user)}
+          />
+        </Tooltip>
+      ) : user && user.familyName && user.givenName ? (
+        <Tooltip title={tooltipTitle} disabled={!showTooltip}>
+          <span className="text-sm font-medium leading-none text-white">
+            <UserName initials={true} user={user} />
+          </span>
+        </Tooltip>
+      ) : (
+        <span className="inline-block bg-gray-100">
+          {fallback ?? defaultFallback}
+        </span>
       )}
-    >
-      {fallback ?? defaultFallback}
     </span>
   );
 }

@@ -5,6 +5,7 @@ import { WorkspaceModel } from './workspace.model';
 
 export enum OrderStatus {
   InProgress = 'in-progress',
+  Processing = 'processing',
   Ordered = 'ordered',
   Delivered = 'delivered',
   Canceled = 'canceled',
@@ -18,7 +19,7 @@ export interface OrderModel {
   status: OrderStatus;
   from: string;
   slug: string;
-  menuUrl: string;
+  menuUrl?: string;
   shippingCents?: number;
   createdAt: string;
   updatedAt: string;
@@ -31,19 +32,4 @@ export interface OrderModel {
   workspace?: WorkspaceModel;
   workspaceId: number;
   participants?: UserModel[];
-}
-
-export function getOrderStatus(order: OrderModel) {
-  switch (order.status) {
-    case OrderStatus.InProgress:
-      return 'W trakcie';
-    case OrderStatus.Ordered:
-      return 'Zamówione';
-    case OrderStatus.Delivered:
-      return 'Dostarczone';
-    case OrderStatus.Canceled:
-      return 'Anulowane';
-    default:
-      return 'Nieznany';
-  }
 }

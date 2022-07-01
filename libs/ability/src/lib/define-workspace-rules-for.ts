@@ -37,12 +37,16 @@ export enum OrdersAction {
   Update = 'update',
   Delete = 'delete',
   Duplicate = 'duplicate',
+  MarkAsProcessing = 'markAsProcessing',
   MarkAsOrdered = 'markAsOrdered',
   MarkAsDelivered = 'markAsDelivered',
+  SetETA = 'setETA',
   MarkAsClosed = 'markAsClosed',
   MarkAsOpen = 'markAsOpen',
   CreateDish = 'createDish',
-  ManageDish = 'ManageDish',
+  UpdateDish = 'updateDish',
+  DeleteDish = 'deleteDish',
+  UpdateDishOwner = 'updateDishOwner',
   SetPayer = 'setPayer',
 }
 
@@ -82,6 +86,8 @@ function defineWorkspaceOwnerRules(
   // WorkspaceModel
   cannot(WorkspacesAction.Leave, 'WorkspaceModel');
   can(WorkspacesAction.ChangeOwner, 'WorkspaceModel');
+  can(WorkspacesAction.Update, 'WorkspaceModel');
+  can(WorkspacesAction.Delete, 'WorkspaceModel');
 
   // WorkspaceUserModel
   can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel');
@@ -100,16 +106,13 @@ function defineWorkspaceAdminRules(
   workspaceUser: WorkspaceUserModel
 ) {
   can(WorkspaceUsersAction.Create, 'WorkspaceUserModel');
+  can(WorkspacesAction.ApproveAccess, 'WorkspaceModel');
 
   can(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     role: WorkspaceUserRole.User,
   });
   cannot(WorkspaceUsersAction.Delete, 'WorkspaceUserModel', {
     id: workspaceUser.id,
-  });
-
-  can(OrdersAction.MarkAsOrdered, 'OrderModel', {
-    status: OrderStatus.Delivered,
   });
 }
 
@@ -131,8 +134,11 @@ function defineWorkspaceUserRules(
   can(OrdersAction.MarkAsClosed, 'OrderModel', {
     status: OrderStatus.InProgress,
   });
-  can(OrdersAction.MarkAsOrdered, 'OrderModel', {
+  can(OrdersAction.MarkAsProcessing, 'OrderModel', {
     status: OrderStatus.InProgress,
+  });
+  can(OrdersAction.MarkAsOrdered, 'OrderModel', {
+    status: OrderStatus.Processing,
   });
   cannot(OrdersAction.MarkAsOrdered, 'OrderModel', {
     dishes: { $size: 0 },
@@ -143,6 +149,9 @@ function defineWorkspaceUserRules(
   can(OrdersAction.MarkAsOpen, 'OrderModel', {
     status: OrderStatus.Ordered,
   });
+  can(OrdersAction.MarkAsOpen, 'OrderModel', {
+    status: OrderStatus.Processing,
+  });
   can(OrdersAction.MarkAsDelivered, 'OrderModel', {
     status: OrderStatus.Ordered,
   });
@@ -152,10 +161,22 @@ function defineWorkspaceUserRules(
   can(OrdersAction.CreateDish, 'OrderModel', {
     status: OrderStatus.InProgress,
   });
-  can(OrdersAction.ManageDish, 'OrderModel', {
+  can(OrdersAction.UpdateDish, 'OrderModel', {
+    status: OrderStatus.InProgress,
+  });
+  can(OrdersAction.UpdateDish, 'OrderModel', {
+    status: OrderStatus.Processing,
+  });
+  can(OrdersAction.DeleteDish, 'OrderModel', {
+    status: OrderStatus.Processing,
+  });
+  can(OrdersAction.DeleteDish, 'OrderModel', {
     status: OrderStatus.InProgress,
   });
   can(OrdersAction.SetPayer, 'OrderModel', {
+    status: OrderStatus.Ordered,
+  });
+  can(OrdersAction.SetETA, 'OrderModel', {
     status: OrderStatus.Ordered,
   });
 }

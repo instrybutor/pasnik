@@ -6,12 +6,13 @@ import classNames from 'classnames';
 
 import { useAuth } from '@pasnik/auth';
 import { useUserStore } from '@pasnik/store';
-import { UserAvatar, UserName } from '@pasnik/components';
+import { ModalButton, UserAvatar, UserName } from '@pasnik/components';
 
 import { NotificationsDropdown } from '../containers/notifications-dropdown';
 import { Can, WorkspacesAction } from '@pasnik/ability';
-import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CreateOrderModal } from '@pasnik/features/orders';
+import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 
 export interface HeaderProps {
   sidebarOpen: boolean;
@@ -22,6 +23,7 @@ export function Header({ openSidebar }: HeaderProps) {
   const { signOut } = useAuth();
   const { user } = useUserStore();
   const { t } = useTranslation();
+  const workspace = useCurrentWorkspace();
 
   const openSidebarHandler = useCallback(() => {
     openSidebar();
@@ -46,13 +48,13 @@ export function Header({ openSidebar }: HeaderProps) {
         <div className="flex items-center ml-4 md:ml-6">
           <Can I={WorkspacesAction.CreateOrder} on="WorkspaceModel">
             <div className="flex space-x-3 md:ml-4">
-              <NavLink
-                type="button"
-                to="/create-order"
+              <ModalButton
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                modal={CreateOrderModal}
+                props={{ workspace }}
               >
-                {t('header.create_order')}
-              </NavLink>
+                {t('dashboard.create_order')}
+              </ModalButton>
             </div>
           </Can>
 

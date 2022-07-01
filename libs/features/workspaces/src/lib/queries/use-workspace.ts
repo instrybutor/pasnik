@@ -18,9 +18,6 @@ export const useWorkspace = (
     {
       retry: false,
       enabled: Boolean(slug),
-      onError: (err: AxiosError) => {
-        onError?.(err);
-      },
       refetchOnMount: false,
     }
   );

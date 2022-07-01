@@ -15,6 +15,7 @@ import {
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
   OrderAction,
+  SetETADto,
   SetPayerDto,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
@@ -45,10 +46,8 @@ export class OrderService {
   }
 
   async update(order: OrderEntity, payload: UpdateOrderDto) {
-    return await this.ordersRepository.save({
-      ...order,
-      ...payload,
-    });
+    await this.ordersRepository.updateOrder(payload, order);
+    return await this.findOneById(order.id);
   }
 
   async markAsOrdered(
@@ -77,6 +76,28 @@ export class OrderService {
     return this.findOneById(orderId);
   }
 
+  async markAsProcessing(orderId: string, user: UserEntity) {
+    await this.connection.transaction(async (manager) => {
+      const ordersRepository = manager.getCustomRepository(OrdersRepository);
+      const orderActionsRepository = manager.getCustomRepository(
+        OrderActionsRepository
+      );
+
+      const order = await ordersRepository.findOneOrFail(orderId, {
+        relations: ['dishes'],
+      });
+      await ordersRepository.markAsProcessing(order);
+      await orderActionsRepository.createAction(
+        user,
+        order,
+        OrderAction.Processing
+      );
+
+      this.dispatchNotification(order);
+    });
+    return this.findOneById(orderId);
+  }
+
   async markAsDelivered(
     orderId: string,
     markAsDeliveredDto: MarkAsDeliveredDto,
@@ -97,11 +118,6 @@ export class OrderService {
         order,
         OrderAction.Delivered
       );
-      order.totalPrice = order.dishes.reduce(
-        (acc, cur) => acc + cur.priceCents,
-        0
-      );
-      await ordersRepository.save(order);
 
       this.dispatchNotification(order);
     });
@@ -150,13 +166,22 @@ export class OrderService {
       const payer = await usersRepository.findOneOrFail(payerId);
       const order = await this.findOneById(orderId);
 
-      console.log(payer.id, payerId, order.payer.id);
-
       if (order.payer?.id === payer.id) {
         return;
       }
 
       await ordersRepository.markAsPaid(order, payer);
+    });
+    return this.findOneById(orderId);
+  }
+
+  async setETA(orderId: string, { eta }: SetETADto) {
+    await this.connection.transaction(async (manager) => {
+      const ordersRepository = manager.getCustomRepository(OrdersRepository);
+
+      const order = await this.findOneById(orderId);
+
+      await ordersRepository.setETA(order, eta);
     });
     return this.findOneById(orderId);
   }

@@ -1,110 +1,63 @@
-import { useTranslation } from 'react-i18next';
-import { BeakerIcon, PlusIcon } from '@heroicons/react/outline';
-import { Transition } from '@headlessui/react';
-import { Can, OrdersAction } from '@pasnik/ability';
-import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
-
+import { BeakerIcon } from '@heroicons/react/outline';
 import OrderDish from '../order-dish/order-dish';
-import AddDish from '../add-dish/add-dish';
-
-import UpdateDish from '../update-dish/update-dish';
-import { useOrderDishes } from './use-order-dishes';
+import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import { useTranslation } from 'react-i18next';
+import { Transition } from '@headlessui/react';
+import { useEffect, useState } from 'react';
+import { OrderDishManage } from '../order-dish-add/order-dish-manage';
 
 export interface OrderDishesProps {
-  dishes: DishModel[] | null;
-  order: OrderModel | null;
+  order: OrderModel;
+  dishes: DishModel[];
+  isAdding: boolean;
 }
 
-const sortByCreateAt = (dish: DishModel, nextDish: DishModel) =>
-  new Date(dish.createdAt).getTime() > new Date(nextDish.createdAt).getTime()
-    ? 1
-    : -1;
-
-export function OrderDishes({ dishes, order }: OrderDishesProps) {
-  const {
-    isAdding,
-    updateId,
-
-    onAddCancel,
-    duplicateDish,
-    addDishClickHandler,
-    addDishHandler,
-    cancelUpdateHandler,
-    deleteDishHandler,
-    editClickHandler,
-    updateDishHandler,
-  } = useOrderDishes({ order });
+export function OrderDishes({ dishes, order, isAdding }: OrderDishesProps) {
   const { t } = useTranslation();
+  const [updateId, setUpdateId] = useState(-1);
 
-  return (
-    <section aria-labelledby="notes-title">
-      <div className="bg-white shadow sm:rounded-lg sm:overflow-hidden">
-        <div className="divide-y divide-gray-200">
-          <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
-            <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-              {t('dish.title')}
-            </h2>
-            <Can I={OrdersAction.CreateDish} this={order}>
-              <div className="flex">
-                <button
-                  onClick={addDishClickHandler}
-                  type="button"
-                  className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                >
-                  <PlusIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
-              </div>
-            </Can>
-          </div>
-          <ul className="divide-y divide-gray-200">
-            {dishes && dishes.length === 0 && (
-              <div className="text-center bg-white px-4 py-12">
-                <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900">
-                  {t('dish.empty')}
-                </h3>
-              </div>
-            )}
-            {dishes?.sort(sortByCreateAt).map((dish) => (
-              <Transition
-                as="li"
-                key={dish.id}
-                show
-                className="flex items-center gap-4 pr-6 pl-3 py-4"
-                enter="transition ease-out duration-[1000ms]"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-[1000ms]"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                {updateId === dish.id ? (
-                  <UpdateDish
-                    key={dish.id}
-                    onUpdateDish={updateDishHandler}
-                    dish={dish}
-                    onCancelUpdate={cancelUpdateHandler}
-                  />
-                ) : (
-                  <OrderDish
-                    key={dish.id}
-                    dish={dish}
-                    onUpdate={updateDishHandler}
-                    onDelete={deleteDishHandler}
-                    onDuplicate={duplicateDish}
-                    onEdit={editClickHandler}
-                  />
-                )}
-              </Transition>
-            ))}
-          </ul>
-          {isAdding && (
-            <AddDish onAdd={addDishHandler} onCancel={onAddCancel} />
+  useEffect(() => {
+    if (isAdding) {
+      setUpdateId(-1); // exit update if adding new entry
+    }
+  }, [isAdding]);
+
+  return dishes.length === 0 ? (
+    <div className="text-center bg-white px-4 py-12">
+      <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
+      <h3 className="mt-2 text-sm font-medium text-gray-900">
+        {t('order.no_dishes')}
+      </h3>
+    </div>
+  ) : (
+    <ul className="divide-y divide-gray-200">
+      {dishes.map((dish) => (
+        <Transition
+          as="li"
+          key={dish.id}
+          show
+          enter="transition ease-out duration-[1000ms]"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-[1000ms]"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          {dish.id === updateId ? (
+            <OrderDishManage
+              onClose={() => setUpdateId(-1)}
+              order={order}
+              dish={dish}
+            />
+          ) : (
+            <OrderDish
+              dish={dish}
+              order={order}
+              onUpdate={() => setUpdateId(dish.id)}
+            />
           )}
-        </div>
-      </div>
-    </section>
+        </Transition>
+      ))}
+    </ul>
   );
 }
-
-export default OrderDishes;
