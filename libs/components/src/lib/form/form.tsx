@@ -23,7 +23,7 @@ export interface FormProps<TFormValues extends FieldValues, TContext>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Form = <
   TFormValues extends FieldValues = FieldValues,
-  TContext = any
+  TContext extends object = object
 >({
   onSubmit,
   children,

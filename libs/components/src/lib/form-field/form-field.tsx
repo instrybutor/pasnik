@@ -9,7 +9,6 @@ import React, {
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
 import {
   Controller,
-  FieldError,
   FieldPath,
   FieldValues,
   useForm,
@@ -17,7 +16,7 @@ import {
   useFormState,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FieldPathValue, UnpackNestedValue } from 'react-hook-form/dist/types';
+import { FieldPathValue } from 'react-hook-form/dist/types';
 import { Tooltip } from '../tooltip/tooltip';
 import { Label } from './label';
 import classNames from 'classnames';
@@ -39,12 +38,8 @@ export interface FormFieldProps<
   suffix?: ReactNode;
   required?: boolean;
   transform?: {
-    input?: (
-      value: UnpackNestedValue<FieldPathValue<TFieldValues, TName>>
-    ) => string;
-    output?: (
-      value: string
-    ) => UnpackNestedValue<FieldPathValue<TFieldValues, TName>>;
+    input?: (value: FieldPathValue<TFieldValues, TName>) => string;
+    output?: (value: string) => FieldPathValue<TFieldValues, TName>;
   };
   defaultValue?: FieldPathValue<TFieldValues, TName>;
   errorTooltip?: boolean;
@@ -77,7 +72,7 @@ export function FormField<TFieldValues extends FieldValues>({
   const currentValue = watch(name);
   const { t } = useTranslation();
   const state = useFormState({ control, name });
-  const error: FieldError | undefined = state?.errors[name];
+  const error = state?.errors[name];
   const inputId = useMemo(() => `form-field-id:${nextId++}`, []);
 
   useEffect(() => {
@@ -121,7 +116,7 @@ export function FormField<TFieldValues extends FieldValues>({
           <div className="absolute inset-y-0 right-0 pr-2 flex items-center">
             {error?.message && errorTooltip ? (
               <span className="ml-1">
-                <Tooltip title={t(error.message)}>
+                <Tooltip title={t(String(error.message))}>
                   {errorIcon ? (
                     errorIcon
                   ) : (
@@ -141,7 +136,7 @@ export function FormField<TFieldValues extends FieldValues>({
         )}
         {error?.message && !errorTooltip && (
           <p className="absolute mt-1 text-sm text-red-600">
-            <FormFieldError message={error.message} />
+            <FormFieldError message={t(String(error.message))} />
           </p>
         )}
       </div>
