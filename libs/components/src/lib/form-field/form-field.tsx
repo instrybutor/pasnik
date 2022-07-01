@@ -17,7 +17,7 @@ import {
   useFormState,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FieldPathValue } from 'react-hook-form/dist/types';
+import { FieldPathValue, UnpackNestedValue } from 'react-hook-form/dist/types';
 import { Tooltip } from '../tooltip/tooltip';
 import { Label } from './label';
 import classNames from 'classnames';
@@ -39,8 +39,12 @@ export interface FormFieldProps<
   suffix?: ReactNode;
   required?: boolean;
   transform?: {
-    input?: (value: any) => string;
-    output?: (value: string) => any;
+    input?: (
+      value: UnpackNestedValue<FieldPathValue<TFieldValues, TName>>
+    ) => string;
+    output?: (
+      value: string
+    ) => UnpackNestedValue<FieldPathValue<TFieldValues, TName>>;
   };
   defaultValue?: FieldPathValue<TFieldValues, TName>;
   errorTooltip?: boolean;

@@ -41,7 +41,7 @@ export const Form = <
   const { handleSubmit } = methods;
 
   const _onError = useCallback(
-    (error: AxiosError<any>) => {
+    (error: AxiosError<{ message: string }>) => {
       if (error.isAxiosError && error.response?.status === 400) {
         toast({
           type: 'error',

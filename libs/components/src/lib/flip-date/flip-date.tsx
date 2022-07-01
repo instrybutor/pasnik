@@ -36,7 +36,7 @@ export const FlipDate = ({ endAt, className }: FlipDateProps) => {
     const counter = Tick.count.down(new Date(endAt), {
       format: ['d', 'h', 'm', 's'],
     });
-    counter.onupdate = function (value: any) {
+    counter.onupdate = function (value: number[]) {
       setTickValue({
         days: value[0],
         hours: value[1],
