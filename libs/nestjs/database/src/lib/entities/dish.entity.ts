@@ -35,8 +35,8 @@ export class DishEntity implements DishModel {
   @ManyToOne(() => UserEntity)
   user: UserEntity;
 
-  @Column()
-  createdById: number;
+  @Column({ nullable: true })
+  createdById?: number;
 
   @ManyToOne(() => UserEntity)
   createdBy: UserEntity;
