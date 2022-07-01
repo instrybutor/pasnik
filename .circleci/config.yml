@@ -2,7 +2,9 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+version: 2.1
+orbs:
+  nx: nrwl/nx@1.5.1
 
 defaults: &defaults
   working_directory: ~/repo
@@ -80,7 +82,7 @@ jobs:
       - restore_cache:
           <<: *npm_cache
       - run: ./node_modules/.bin/nx workspace-lint
-      - run: yarn run affected:lint ${AFFECTED_ARGS} --parallel=3
+      - run: yarn run affected:lint ${AFFECTED_ARGS} --parallel
   build:
     <<: *defaults
     steps:
@@ -94,7 +96,7 @@ jobs:
       - run:
           name: Set commit hash as a build version
           command: echo 'export NX_VERSION="${CIRCLE_SHA1::7}"' >> $BASH_ENV
-      - run: yarn run affected:build ${AFFECTED_ARGS} --parallel=3 --configuration production --sourceMap false
+      - run: yarn run affected:build ${AFFECTED_ARGS} --parallel --configuration production --sourceMap false
       - save_cache:
           key: build-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
@@ -111,7 +113,7 @@ jobs:
           <<: *set_env
       - restore_cache:
           <<: *npm_cache
-      - run: yarn run affected:test ${AFFECTED_ARGS} --parallel=3 --ci --code-coverage
+      - run: yarn run affected:test ${AFFECTED_ARGS} --parallel --ci --code-coverage
   e2e:
     <<: *defaults
     steps:
