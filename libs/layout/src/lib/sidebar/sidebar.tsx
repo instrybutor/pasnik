@@ -67,9 +67,8 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
   const onChangeWorkspace = useCallback(
     async (workspace: WorkspaceModel) => {
       await changeWorkspace(workspace);
-      navigate(`/workspace/${workspace.slug}`);
     },
-    [navigate, changeWorkspace]
+    [changeWorkspace]
   );
 
   return (

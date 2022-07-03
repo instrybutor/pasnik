@@ -29,7 +29,7 @@ export function Layout({ version }: PropsWithChildren<LayoutProps>) {
         />
         <div className="flex-1 overflow-auto focus:outline-none flex-col flex">
           <Header sidebarOpen={sidebarOpen} openSidebar={openSidebar} />
-          <main className="flex-1 relative z-0 overflow-y-auto flex-grow flex flex-col">
+          <main className="flex-1 relative z-0 flex-grow flex flex-col pb-8">
             <Outlet />
           </main>
         </div>
