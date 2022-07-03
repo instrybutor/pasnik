@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router';
 import { useUserStore } from '@pasnik/store';
+import { UserContext } from './user-context';
 
 export interface RequireAuthProps {
   admin?: boolean;
@@ -26,5 +27,9 @@ export function RequireAuth({ admin, children }: RequireAuthProps) {
     return <Navigate to="/" />;
   }
 
-  return children ?? <Outlet />;
+  return (
+    <UserContext.Provider value={user}>
+      {children ?? <Outlet />}
+    </UserContext.Provider>
+  );
 }

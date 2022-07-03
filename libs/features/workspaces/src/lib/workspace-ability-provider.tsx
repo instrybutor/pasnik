@@ -1,7 +1,7 @@
-import { useUserStore } from '@pasnik/store';
 import { AbilityContext, defineWorkspaceRulesFor } from '@pasnik/ability';
 import { PropsWithChildren } from 'react';
 import { useCurrentWorkspaceUser } from './queries';
+import { useCurrentUser } from '@pasnik/auth';
 
 export interface WorkspaceAbilityProviderProps {
   slug?: string;
@@ -12,10 +12,10 @@ export function WorkspaceAbilityProvider({
   children,
 }: PropsWithChildren<WorkspaceAbilityProviderProps>) {
   const currentWorkspaceUser = useCurrentWorkspaceUser(slug);
-  const { user } = useUserStore();
+  const user = useCurrentUser();
   return (
     <AbilityContext.Provider
-      value={defineWorkspaceRulesFor(user!, currentWorkspaceUser)}
+      value={defineWorkspaceRulesFor(user, currentWorkspaceUser)}
     >
       {children}
     </AbilityContext.Provider>

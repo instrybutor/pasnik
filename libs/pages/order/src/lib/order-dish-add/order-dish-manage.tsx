@@ -16,13 +16,13 @@ import {
 import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
 import { Controller } from 'react-hook-form';
 import { useUsersInWorkspace } from '@pasnik/features/workspaces';
-import { useUserStore } from '@pasnik/store';
 import { UsersDropdown } from '../users-dropdown/users-dropdown';
 import {
   useDishAddMutation,
   useDishUpdateMutation,
 } from '@pasnik/features/orders';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { useCurrentUser } from '@pasnik/auth';
 
 export interface OrderDishAddProps {
   onClose: () => void;
@@ -33,7 +33,7 @@ export interface OrderDishAddProps {
 export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { user } = useUserStore();
+  const user = useCurrentUser();
   const users = useUsersInWorkspace(order.workspace?.slug);
 
   const { mutateAsync: mutateAddAsync } = useDishAddMutation(order);

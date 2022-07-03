@@ -1,7 +1,7 @@
 import { Listbox } from '@headlessui/react';
 import { Float } from '@headlessui-float/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/outline';
-import { Fragment, Suspense, useRef } from 'react';
+import { Fragment, Suspense, useCallback, useRef } from 'react';
 import classNames from 'classnames';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
 import { useCurrentWorkspace, useWorkspaces } from '../queries';
@@ -20,13 +20,21 @@ export function SelectWorkspaceDropdown({
   const currentWorkspace = useCurrentWorkspace();
   const { data: workspaces } = useWorkspaces();
   const refButton = useRef<HTMLButtonElement | null>(null);
+  const onListboxChange = useCallback(
+    (value?: WorkspaceModel) => {
+      if (value) {
+        return onChange(value);
+      }
+      setTimeout(() => {
+        onAddClick(); // fix focus behaviour
+      }, 0);
+    },
+    [onChange, onAddClick]
+  );
 
   return (
     <Suspense fallback="Ładowanie">
-      <Listbox
-        onChange={(value) => (value ? onChange(value) : onAddClick())}
-        value={currentWorkspace}
-      >
+      <Listbox onChange={onListboxChange} value={currentWorkspace}>
         {({ open }) => (
           <>
             <Listbox.Label className="flex justify-between w-full text-sm font-medium text-white pl-3 pr-2">

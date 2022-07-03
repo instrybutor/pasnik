@@ -1,6 +1,6 @@
 import { DishModel, OrderModel, UserModel } from '@pasnik/api/data-transfer';
-import { useUserStore } from '@pasnik/store';
 import { useCallback, useState } from 'react';
+import { useCurrentUser } from '@pasnik/auth';
 
 export interface UserDishesSummary {
   user: UserModel;
@@ -10,7 +10,7 @@ export interface UserDishesSummary {
 }
 
 export const useOrderSummary = (order: OrderModel) => {
-  const { user } = useUserStore();
+  const user = useCurrentUser();
   const [groupedSummaries, setGroupedSummaries] = useState<UserDishesSummary[]>(
     []
   );

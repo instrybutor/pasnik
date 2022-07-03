@@ -1,5 +1,5 @@
 import { PassportSerializer } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserEntity } from '@pasnik/nestjs/database';
 import { AuthService } from '../services/auth.service';
 
@@ -14,11 +14,11 @@ export class SessionSerializer extends PassportSerializer {
   }
 
   async deserializeUser(userId: number, done: CallableFunction) {
-    const user = await this.usersService.findUserById(userId);
-    if (user) {
+    try {
+      const user = await this.usersService.findUserById(userId);
       done(null, user);
-    } else {
-      done(new UnauthorizedException());
+    } catch (e) {
+      done(e);
     }
   }
 }

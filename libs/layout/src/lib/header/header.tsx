@@ -4,8 +4,7 @@ import { MenuAlt1Icon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 
-import { useAuth } from '@pasnik/auth';
-import { useUserStore } from '@pasnik/store';
+import { useAuth, useCurrentUser } from '@pasnik/auth';
 import { ModalButton, UserAvatar, UserName } from '@pasnik/components';
 
 import { NotificationsDropdown } from '../containers/notifications-dropdown';
@@ -21,7 +20,7 @@ export interface HeaderProps {
 
 export function Header({ openSidebar }: HeaderProps) {
   const { signOut } = useAuth();
-  const { user } = useUserStore();
+  const user = useCurrentUser();
   const { t } = useTranslation();
   const workspace = useCurrentWorkspace();
 

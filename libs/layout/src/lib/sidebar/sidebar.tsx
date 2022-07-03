@@ -21,6 +21,7 @@ import {
 } from '@pasnik/features/workspaces';
 import { SidebarItem } from '../components/sidebar-item/sidebar-item';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
+import { useCurrentUser } from '@pasnik/auth';
 
 const adminNavigation = [
   {
@@ -44,7 +45,7 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
-  const { user } = useUserStore();
+  const user = useCurrentUser();
   const {
     currentWorkspaceSlugContext,
     showAddWorkspaceModal,
@@ -67,9 +68,17 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
   const onChangeWorkspace = useCallback(
     async (workspace: WorkspaceModel) => {
       await changeWorkspace(workspace);
+      navigate(`/workspace/${workspace.slug}`);
     },
-    [changeWorkspace]
+    [navigate, changeWorkspace]
   );
+
+  const onAddWorkspace = useCallback(async () => {
+    closeSidebar();
+    await new Promise((resolve) => {
+      setTimeout(() => resolve(true), 355);
+    }).then(showAddWorkspaceModal);
+  }, [showAddWorkspaceModal, closeSidebar]);
 
   return (
     <>
@@ -135,7 +144,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                 <div className="px-2">
                   <SelectWorkspaceDropdown
                     onChange={onChangeWorkspace}
-                    onAddClick={showAddWorkspaceModal}
+                    onAddClick={onAddWorkspace}
                   />
                 </div>
                 <div className="px-2 space-y-1 mt-6 pt-6">

@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { OfficeBuildingIcon } from '@heroicons/react/outline';
-import { useUserStore } from '@pasnik/store';
 import { UserAvatar, UserName } from '@pasnik/components';
-import { useCurrentWorkspaceById } from '@pasnik/features/workspaces';
+import { useCurrentWorkspace } from '@pasnik/features/workspaces';
+import { useCurrentUser } from '@pasnik/auth';
 
 /* eslint-disable-next-line */
 export interface DashboardHeaderProps {}
 
 export function DashboardHeader(props: DashboardHeaderProps) {
   const { t } = useTranslation();
-  const { user } = useUserStore();
-  const workspace = useCurrentWorkspaceById(user?.currentWorkspaceId);
+  const user = useCurrentUser();
+  const workspace = useCurrentWorkspace();
 
   return (
     <div className="bg-white shadow">

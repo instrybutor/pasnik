@@ -1,10 +1,7 @@
-import { useUserStore } from '@pasnik/store';
 import { useCurrentWorkspaceById } from './use-workspace-by-id';
+import { useCurrentUser } from '@pasnik/auth';
 
 export const useCurrentWorkspace = () => {
-  const { user } = useUserStore();
-  if (!user) {
-    throw new Error('No user found');
-  }
-  return useCurrentWorkspaceById(user?.currentWorkspaceId);
+  const user = useCurrentUser();
+  return useCurrentWorkspaceById(user.currentWorkspaceId);
 };
