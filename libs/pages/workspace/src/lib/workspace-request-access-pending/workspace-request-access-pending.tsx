@@ -2,7 +2,7 @@ import { ClockIcon } from '@heroicons/react/outline';
 
 export function WorkspaceRequestAccessPending() {
   return (
-    <main className="my-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="mt-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="block bg-white shadow-lg rounded-lg px-4 pt-5 pb-4 text-left sm:my-8 sm:max-w-sm sm:w-full sm:p-6">
         <div>
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100">

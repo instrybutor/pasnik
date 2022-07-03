@@ -20,7 +20,7 @@ export function WorkspaceSuspenseContainer() {
       </header>
 
       <main className="flex-grow flex-1">
-        <div className="my-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mt-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white sm:rounded-md shadow">
             <div className="border-t border-gray-200 divide-y divide-gray-200 sm:border-t-0 sm:rounded-md py-16">
               <Spinner />
