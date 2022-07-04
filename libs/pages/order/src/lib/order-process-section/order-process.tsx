@@ -1,17 +1,15 @@
 import { Price, Users } from '@pasnik/components';
-import { ProcessDish } from '../order-process-section/order-process-section';
+import { ProcessDish } from './order-process-section';
 import { Disclosure } from '@headlessui/react';
 import classNames from 'classnames';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import { OrderDishes } from '../order-dishes/order-dishes';
-import { OrderModel } from '@pasnik/api/data-transfer';
 
 export interface OrderDishesProps {
   dishes: ProcessDish[];
-  order: OrderModel;
 }
 
-export function OrderProcess({ dishes, order }: OrderDishesProps) {
+export function OrderProcess({ dishes }: OrderDishesProps) {
   return (
     <div className="divide-y divide-gray-200">
       {dishes?.map((summary) => (
@@ -42,11 +40,7 @@ export function OrderProcess({ dishes, order }: OrderDishesProps) {
                 </div>
               </div>
               <Disclosure.Panel>
-                <OrderDishes
-                  order={order}
-                  dishes={summary.dishes}
-                  isAdding={false}
-                />
+                <OrderDishes dishes={summary.dishes} isAdding={false} />
               </Disclosure.Panel>
             </>
           )}

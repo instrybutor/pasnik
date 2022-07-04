@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
 
-export const useOrderCreateMutation = (workspaceSlug: string) => {
+export const useOrderCreateMutation = (workspaceSlug?: string) => {
   const queryClient = useQueryClient();
   const queryKey = ['workspaces', workspaceSlug, 'orders', 'active'];
   return useMutation(

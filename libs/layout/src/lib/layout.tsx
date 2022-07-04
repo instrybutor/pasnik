@@ -4,10 +4,7 @@ import { Outlet } from 'react-router';
 import Sidebar from './sidebar/sidebar';
 import Header from './header/header';
 import { useLayoutStore } from './layout.store';
-import {
-  useCurrentWorkspace,
-  WorkspaceAbilityProvider,
-} from '@pasnik/features/workspaces';
+import { WorkspaceProvider } from '@pasnik/features/workspaces';
 
 export interface LayoutProps {
   version?: string;
@@ -17,10 +14,8 @@ export function Layout({ version }: PropsWithChildren<LayoutProps>) {
   const sidebarOpen = useLayoutStore((store) => store.sidebarOpen);
   const { openSidebar, closeSidebar } = useLayoutStore();
 
-  const workspace = useCurrentWorkspace();
-
   return (
-    <WorkspaceAbilityProvider slug={workspace?.slug}>
+    <WorkspaceProvider>
       <div className="relative h-screen flex overflow-hidden bg-gray-100">
         <Sidebar
           sidebarOpen={sidebarOpen}
@@ -34,7 +29,7 @@ export function Layout({ version }: PropsWithChildren<LayoutProps>) {
           </main>
         </div>
       </div>
-    </WorkspaceAbilityProvider>
+    </WorkspaceProvider>
   );
 }
 

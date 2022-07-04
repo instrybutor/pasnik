@@ -2,6 +2,7 @@ import { Can, OrdersAction } from '@pasnik/ability';
 import { Button, ButtonMutate, ModalButton, Tooltip } from '@pasnik/components';
 import {
   EditOrderModal,
+  useCurrentOrder,
   useOrderCreateMutation,
   useOrderDishes,
   useOrderMarkAsClosedMutation,
@@ -18,32 +19,32 @@ import {
   PencilIcon,
   XIcon,
 } from '@heroicons/react/outline';
-import { OrderModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { useOrderState } from '../order-state/order-state';
 import { useNavigate } from 'react-router-dom';
+import { useSlug } from '@pasnik/shared/utils';
+import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 
-export interface OrderHeaderActionsProps {
-  order: OrderModel;
-}
-
-export function OrderHeaderActions({ order }: OrderHeaderActionsProps) {
+export function OrderHeaderActions() {
   const { t } = useTranslation();
   const { shippingCents } = useOrderState();
-  const { data: dishes } = useOrderDishes(order);
+  const { order } = useCurrentOrder();
+  const slug = useSlug();
+  const workspace = useCurrentWorkspace();
+  const { data: dishes } = useOrderDishes(slug, false);
   const navigate = useNavigate();
   const props = useMemo(() => ({ order }), [order]);
 
-  const markAsProcessingMutation = useOrderMarkAsProcessingMutation(order);
-  const markAsOpenMutation = useOrderMarkAsOpenMutation(order);
-  const markAsClosedMutation = useOrderMarkAsClosedMutation(order);
-  const markAsOrderedMutation = useOrderMarkAsOrderedMutation(order);
-  const markAsDeliveredMutation = useOrderMarkAsDeliveredMutation(order);
-  const createOrderMutation = useOrderCreateMutation(order.workspace!.slug);
+  const markAsProcessingMutation = useOrderMarkAsProcessingMutation(slug);
+  const markAsOpenMutation = useOrderMarkAsOpenMutation(slug);
+  const markAsClosedMutation = useOrderMarkAsClosedMutation(slug);
+  const markAsOrderedMutation = useOrderMarkAsOrderedMutation(slug);
+  const markAsDeliveredMutation = useOrderMarkAsDeliveredMutation(slug);
+  const createOrderMutation = useOrderCreateMutation(workspace?.slug);
 
   return (
-    <div className="flex space-x-3 ">
+    <div className="flex space-x-3">
       <Can I={OrdersAction.Update} this={order}>
         <ModalButton
           props={props}

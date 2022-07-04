@@ -8,8 +8,8 @@ export interface FormFieldErrorProps {
 export function FormFieldError({ message }: FormFieldErrorProps) {
   const { t } = useTranslation();
   const translate = useCallback(
-    (message: string) => {
-      const [msg, par] = message.split('::');
+    (_msg: string) => {
+      const [msg, par] = _msg.split('::');
       const params = par ? JSON.parse(par) : undefined;
 
       return t(msg, params);

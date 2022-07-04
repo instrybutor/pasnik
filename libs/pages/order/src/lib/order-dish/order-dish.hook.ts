@@ -1,4 +1,4 @@
-import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import { useCallback } from 'react';
 import {
   useDishAddMutation,
@@ -7,13 +7,15 @@ import {
 } from '@pasnik/features/orders';
 import { useToast } from '@pasnik/components';
 import { useTranslation } from 'react-i18next';
+import { useSlug } from '@pasnik/shared/utils';
 
-export function useOrderDish(order: OrderModel, dish: DishModel) {
+export function useOrderDish(dish: DishModel) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { mutateAsync: deleteDishAsync } = useDishDeleteMutation(order, dish);
-  const { mutateAsync: addDishAsync } = useDishAddMutation(order);
-  const { mutateAsync: updateDishAsync } = useDishUpdateMutation(order, dish);
+  const slug = useSlug();
+  const { mutateAsync: deleteDishAsync } = useDishDeleteMutation(slug, dish);
+  const { mutateAsync: addDishAsync } = useDishAddMutation(slug);
+  const { mutateAsync: updateDishAsync } = useDishUpdateMutation(slug, dish);
 
   const onDuplicate = useCallback(async () => {
     await addDishAsync({

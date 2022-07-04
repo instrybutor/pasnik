@@ -1,18 +1,17 @@
 import { BeakerIcon } from '@heroicons/react/outline';
 import OrderDish from '../order-dish/order-dish';
-import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import { DishModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
 import { Transition } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import { OrderDishManage } from '../order-dish-add/order-dish-manage';
 
 export interface OrderDishesProps {
-  order: OrderModel;
   dishes: DishModel[];
   isAdding: boolean;
 }
 
-export function OrderDishes({ dishes, order, isAdding }: OrderDishesProps) {
+export function OrderDishes({ dishes, isAdding }: OrderDishesProps) {
   const { t } = useTranslation();
   const [updateId, setUpdateId] = useState(-1);
 
@@ -23,7 +22,7 @@ export function OrderDishes({ dishes, order, isAdding }: OrderDishesProps) {
   }, [isAdding]);
 
   return dishes.length === 0 ? (
-    <div className="text-center bg-white px-4 py-12">
+    <div className="text-center bg-white px-4 py-14">
       <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
       <h3 className="mt-2 text-sm font-medium text-gray-900">
         {t('order.no_dishes')}
@@ -44,17 +43,9 @@ export function OrderDishes({ dishes, order, isAdding }: OrderDishesProps) {
           leaveTo="transform opacity-0 scale-95"
         >
           {dish.id === updateId ? (
-            <OrderDishManage
-              onClose={() => setUpdateId(-1)}
-              order={order}
-              dish={dish}
-            />
+            <OrderDishManage onClose={() => setUpdateId(-1)} dish={dish} />
           ) : (
-            <OrderDish
-              dish={dish}
-              order={order}
-              onUpdate={() => setUpdateId(dish.id)}
-            />
+            <OrderDish dish={dish} onUpdate={() => setUpdateId(dish.id)} />
           )}
         </Transition>
       ))}

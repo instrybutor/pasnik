@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import { DishModel } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
 
-export const useDishDeleteMutation = (order: OrderModel, dish: DishModel) => {
+export const useDishDeleteMutation = (orderSlug: string, dish: DishModel) => {
   const queryClient = useQueryClient();
-  const queryKey = ['orders', order.slug, 'dishes'];
+  const queryKey = ['orders', orderSlug, 'dishes'];
   return useMutation(
     async () => {
       const { data } = await axios.delete(
-        `/api/orders/slug/${order.slug}/dishes/${dish.id}`
+        `/api/orders/slug/${orderSlug}/dishes/${dish.id}`
       );
       return data;
     },

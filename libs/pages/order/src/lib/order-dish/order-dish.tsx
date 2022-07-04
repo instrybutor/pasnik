@@ -2,20 +2,21 @@ import { useTranslation } from 'react-i18next';
 import { Menu } from '@headlessui/react';
 import { DotsHorizontalIcon, DuplicateIcon } from '@heroicons/react/outline';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
-import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import { DishModel } from '@pasnik/api/data-transfer';
 import { ConfirmButton, Price, UserAvatar, UserName } from '@pasnik/components';
 import { Can, OrdersAction } from '@pasnik/ability';
 import { Float } from '@headlessui-float/react';
 import { useOrderDish } from './order-dish.hook';
+import { useCurrentOrder } from '@pasnik/features/orders';
 
 export interface OrderDishProps {
   dish: DishModel;
-  order: OrderModel;
   onUpdate: () => void;
 }
-export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
+export function OrderDish({ dish, onUpdate }: OrderDishProps) {
   const { t } = useTranslation();
-  const { onDuplicate, onDelete } = useOrderDish(order, dish);
+  const { order } = useCurrentOrder();
+  const { onDuplicate, onDelete } = useOrderDish(dish);
 
   return (
     <div className="flex items-center gap-6 px-6 py-4">

@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { ProcessDish } from './order-process-section';
-import { OrderModel } from '@pasnik/api/data-transfer';
 import { useOrderDishes } from '@pasnik/features/orders';
+import { useSlug } from '@pasnik/shared/utils';
 
-export function useOrderProcessSection(order: OrderModel) {
-  const { data, isLoading } = useOrderDishes(order);
+export function useOrderProcessSection() {
+  const slug = useSlug();
+  const { data, isLoading } = useOrderDishes(slug, false);
   const dishes = useMemo(() => {
     return Object.values(
       data?.reduce((acc, dish) => {

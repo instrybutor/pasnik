@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
 
-export const useDishUpdateMutation = (order: OrderModel, dish: DishModel) => {
+export const useDishUpdateMutation = (orderSlug: string, dish: DishModel) => {
   const queryClient = useQueryClient();
-  const queryKey = ['orders', order.slug, 'dishes'];
+  const queryKey = ['orders', orderSlug, 'dishes'];
   return useMutation(
     async (addDishDto: AddDishDto) => {
       const { data } = await axios.put<DishModel>(
-        `/api/orders/slug/${order.slug}/dishes/${dish.id}`,
+        `/api/orders/slug/${orderSlug}/dishes/${dish.id}`,
         addDishDto
       );
       return data;

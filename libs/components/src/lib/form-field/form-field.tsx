@@ -75,11 +75,6 @@ export function FormField<TFieldValues extends FieldValues>({
   const error = state?.errors[name];
   const inputId = useMemo(() => `form-field-id:${nextId++}`, []);
 
-  const getValue = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget;
-    return value === '' ? undefined : value;
-  };
-
   useEffect(() => {
     onChange?.(currentValue);
   }, [onChange, currentValue]);
@@ -108,7 +103,8 @@ export function FormField<TFieldValues extends FieldValues>({
               onBlur: () => field.onBlur(),
               onChange: (e: ChangeEvent<HTMLInputElement>) =>
                 field.onChange(
-                  transform?.output?.(e.currentTarget.value) ?? getValue(e)
+                  transform?.output?.(e.currentTarget.value) ??
+                    e.currentTarget.value
                 ),
               value: transform?.input?.(field.value) ?? field.value,
               id: inputId,
@@ -140,7 +136,7 @@ export function FormField<TFieldValues extends FieldValues>({
         )}
         {error?.message && !errorTooltip && (
           <p className="absolute mt-1 text-sm text-red-600">
-            <FormFieldError message={t(String(error.message))} />
+            <FormFieldError message={String(error.message)} />
           </p>
         )}
       </div>

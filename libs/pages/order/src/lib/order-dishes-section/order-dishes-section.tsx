@@ -1,25 +1,19 @@
 import { PlusIcon } from '@heroicons/react/outline';
 import { OrderSection } from '../order-section/order-section';
-import { OrderModel } from '@pasnik/api/data-transfer';
-import { useOrderDishes } from '@pasnik/features/orders';
-import { useMemo, useState } from 'react';
-import { OrderDishes } from '../order-dishes/order-dishes';
-import { Price, Spinner } from '@pasnik/components';
-import { OrderDishManage } from '../order-dish-add/order-dish-manage';
+import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { OrderDishesSectionFooter } from './order-dishes-section-footer';
+import { OrderDishManage } from '../order-dish-add/order-dish-manage';
+import { OrderDishesSectionBody } from './order-dishes-section-body';
+import { useSlug } from '@pasnik/shared/utils';
+import { useOrderDishes } from '@pasnik/features/orders';
+import { OrderDishesSkeleton } from '../order-dishes/order-dishes-skeleton';
 
-export interface OrderDishesProps {
-  order: OrderModel;
-}
-
-export function OrderDishesSection({ order }: OrderDishesProps) {
+export function OrderDishesSection() {
   const { t } = useTranslation();
-  const { data } = useOrderDishes(order);
   const [isAdding, setIsAdding] = useState(false);
-  const totalCents = useMemo(
-    () => data?.reduce((acc, dish) => acc + dish.priceCents, 0),
-    [data]
-  );
+  const slug = useSlug();
+  const { isLoading } = useOrderDishes(slug, false);
 
   return (
     <OrderSection
@@ -27,41 +21,48 @@ export function OrderDishesSection({ order }: OrderDishesProps) {
       header={t('order.order')}
       footer={
         <div className="divide-y divide-gray-200">
-          {isAdding && (
-            <OrderDishManage order={order} onClose={() => setIsAdding(false)} />
-          )}
-          {!!data?.length && (
-            <div className="px-4 py-4 sm:px-6 flex items-center space-between">
-              <span className="text-sm text-gray-500 flex-1">
-                {t('order.position_count')}: {data.length}
-              </span>
-              <span className="text-sm text-gray-500 pr-2 flex-row flex sm:pr-0.5">
-                <Price className="font-bold" priceCents={totalCents} />
-                <div className="w-18 sm:w-32 pl-1">
-                  + <Price priceCents={order.shippingCents} />
+          <Suspense
+            fallback={
+              <div className="px-4 py-4 sm:px-6 flex items-center space-between animate-pulse">
+                <div className="flex-1">
+                  <div className="h-4 w-24 bg-gray-300"></div>
                 </div>
-              </span>
-            </div>
-          )}
+                <div className="text-sm text-gray-500 pr-2 flex-row flex sm:pr-0.5">
+                  <div className="h-4 w-12 bg-gray-300"></div>
+                  <div className="w-18 sm:w-32 flex mr-1.5">
+                    <div className="h-4 w-4 bg-gray-300 mx-1"></div>
+                    <div className="h-4 w-12 bg-gray-300"></div>
+                  </div>
+                </div>
+              </div>
+            }
+          >
+            {isAdding && <OrderDishManage onClose={() => setIsAdding(false)} />}
+            <OrderDishesSectionFooter />
+          </Suspense>
         </div>
       }
       action={
-        <div className="flex gap-2">
-          <button
-            onClick={() => setIsAdding(true)}
-            type="button"
-            className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-          >
-            <PlusIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
-        </div>
+        !isLoading ? (
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsAdding(true)}
+              type="button"
+              className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+            >
+              <PlusIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
+        ) : (
+          <div className="animate-pulse">
+            <div className="h-8 w-8 rounded-full bg-gray-300" />
+          </div>
+        )
       }
     >
-      {data ? (
-        <OrderDishes isAdding={isAdding} order={order} dishes={data} />
-      ) : (
-        <Spinner />
-      )}
+      <Suspense fallback={<OrderDishesSkeleton />}>
+        <OrderDishesSectionBody isAdding={isAdding} />
+      </Suspense>
     </OrderSection>
   );
 }

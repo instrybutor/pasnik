@@ -1,16 +1,12 @@
-import { OrderModel } from '@pasnik/api/data-transfer';
 import { OrderSection } from '../order-section/order-section';
 import { Switch } from '@headlessui/react';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import classNames from 'classnames';
-import { OrderTimeline } from '../order-timeline/order-timeline';
+import { OrderTimeline } from './order-timeline';
 import { useTranslation } from 'react-i18next';
+import { OrderTimelineSkeleton } from './order-timeline-skeleton';
 
-export interface OrderHistoryProps {
-  order: OrderModel;
-}
-
-export function OrderTimelineSection({ order }: OrderHistoryProps) {
+export function OrderTimelineSection() {
   const { t } = useTranslation();
   const [isDetailed, setIsDetailed] = useState(false);
   return (
@@ -42,7 +38,9 @@ export function OrderTimelineSection({ order }: OrderHistoryProps) {
         </Switch.Group>
       }
     >
-      <OrderTimeline actions={order.actions ?? []} isDetailed={isDetailed} />
+      <Suspense fallback={<OrderTimelineSkeleton />}>
+        <OrderTimeline isDetailed={isDetailed} />
+      </Suspense>
     </OrderSection>
   );
 }

@@ -13,9 +13,12 @@ import {
   UserInfo,
   useToast,
 } from '@pasnik/components';
-import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import { Controller } from 'react-hook-form';
-import { useUsersInWorkspace } from '@pasnik/features/workspaces';
+import {
+  useCurrentWorkspace,
+  useUsersInWorkspace,
+} from '@pasnik/features/workspaces';
 import { UsersDropdown } from '../users-dropdown/users-dropdown';
 import {
   useDishAddMutation,
@@ -23,21 +26,23 @@ import {
 } from '@pasnik/features/orders';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { useCurrentUser } from '@pasnik/auth';
+import { useSlug } from '@pasnik/shared/utils';
 
 export interface OrderDishAddProps {
   onClose: () => void;
-  order: OrderModel;
   dish?: DishModel;
 }
 
-export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
+export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const user = useCurrentUser();
-  const users = useUsersInWorkspace(order.workspace?.slug);
+  const slug = useSlug();
+  const workspace = useCurrentWorkspace();
+  const users = useUsersInWorkspace(workspace?.slug);
 
-  const { mutateAsync: mutateAddAsync } = useDishAddMutation(order);
-  const { mutateAsync: mutateDishAsync } = useDishUpdateMutation(order, dish!);
+  const { mutateAsync: mutateAddAsync } = useDishAddMutation(slug);
+  const { mutateAsync: mutateDishAsync } = useDishUpdateMutation(slug, dish!);
   return (
     <Form<AddDishDto>
       resolver={classValidatorResolver(AddDishDto)}

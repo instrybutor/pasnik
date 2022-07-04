@@ -1,23 +1,24 @@
 import { Price, UserInfo } from '@pasnik/components';
 import { useEffect } from 'react';
-import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
 import { useOrderSummary } from './order-summary.hook';
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { useCurrentOrder, useOrderDishes } from '@pasnik/features/orders';
+import { useSlug } from '@pasnik/shared/utils';
 
-export interface OrderSummaryProps {
-  order: OrderModel;
-  dishes: DishModel[];
-}
-
-export function OrderSummary({ order, dishes }: OrderSummaryProps) {
+export function OrderSummary() {
   const { t } = useTranslation();
+  const slug = useSlug();
+  const { order } = useCurrentOrder();
+  const { data: dishes } = useOrderDishes(slug);
   const { groupedSummaries, setDishes } = useOrderSummary(order);
 
   useEffect(() => {
-    setDishes(dishes);
+    if (dishes) {
+      setDishes(dishes);
+    }
   }, [dishes, setDishes]);
 
   return (

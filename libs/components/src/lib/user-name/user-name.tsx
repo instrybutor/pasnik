@@ -41,9 +41,11 @@ export function UserName({
         'flex flex-col': Boolean(children),
       })}
     >
-      <p className="truncate">{formatUser()}</p>
+      <span className="truncate">{formatUser()}</span>
       {children && (
-        <p className="text-xs font-medium text-gray-500 truncate">{children}</p>
+        <span className="text-xs font-medium text-gray-500 truncate">
+          {children}
+        </span>
       )}
     </div>
   );

@@ -1,32 +1,30 @@
-import { OrderModel } from '@pasnik/api/data-transfer';
 import { DateFormat, Header, UserName } from '@pasnik/components';
-import { OrderStatusBadge } from '@pasnik/features/orders';
-import { OrderHeaderActions } from '../order-header-actions/order-header-actions';
+import { OrderStatusBadge, useCurrentOrder } from '@pasnik/features/orders';
+import { OrderHeaderActions } from './order-header-actions';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
+import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 
-export interface OrderHeaderProps {
-  order: OrderModel;
-}
-
-export function OrderHeader({ order }: OrderHeaderProps) {
+export function OrderHeader() {
   const { t } = useTranslation();
+  const { order } = useCurrentOrder();
+  const workspace = useCurrentWorkspace();
   const latestAction = useMemo(() => {
-    if (!order.actions) {
+    if (!order?.actions) {
       return null;
     }
     return order.actions[order.actions.length - 1];
-  }, [order.actions]);
+  }, [order?.actions]);
   return (
     <Header
-      className="bg-white shadow "
+      className="bg-white shadow"
       left={
         <>
           <h1 className="text-2xl font-normal leading-7 text-gray-900 sm:leading-9 sm:truncate flex items-center gap-2">
-            {order.from}
-            {order.menuUrl && (
+            {order?.from}
+            {order?.menuUrl && (
               <a
                 href={order.menuUrl}
                 rel="noreferrer"
@@ -36,27 +34,29 @@ export function OrderHeader({ order }: OrderHeaderProps) {
                 <ExternalLinkIcon className="h-4 w-4" aria-hidden="true" />
               </a>
             )}
-            <div className="inline-flex">
-              <OrderStatusBadge order={order} />
-            </div>
+            {order ? (
+              <div className="inline-flex">
+                <OrderStatusBadge order={order} />
+              </div>
+            ) : null}
           </h1>
-          {latestAction && (
-            <p className="text-sm font-medium text-gray-500">
+          {latestAction && order && (
+            <span className="text-sm font-medium text-gray-500">
               {t(`order.timeline.${latestAction.action}`)}{' '}
               {t(`order.timeline.by`)}{' '}
               <UserName className="text-gray-900" user={latestAction.user} />{' '}
               <DateFormat date={latestAction.createdAt} format="LLL" /> w{' '}
               <NavLink
                 className="text-gray-900"
-                to={`/workspace/${order.workspace?.slug}`}
+                to={`/workspace/${workspace?.slug}`}
               >
-                {order.workspace?.name}
+                {workspace?.name}
               </NavLink>
-            </p>
+            </span>
           )}
         </>
       }
-      right={<OrderHeaderActions order={order} />}
+      right={<OrderHeaderActions />}
     />
   );
 }

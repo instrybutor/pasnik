@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useCurrentWorkspace } from './queries';
+import { useCurrentWorkspace } from './use-current-workspace';
 
 export function RedirectToCurrentWorkspace() {
   const currentWorkspace = useCurrentWorkspace();

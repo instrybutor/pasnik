@@ -9,7 +9,7 @@ export interface UserDishesSummary {
   dishes: DishModel[];
 }
 
-export const useOrderSummary = (order: OrderModel) => {
+export const useOrderSummary = (order?: OrderModel) => {
   const user = useCurrentUser();
   const [groupedSummaries, setGroupedSummaries] = useState<UserDishesSummary[]>(
     []
@@ -19,6 +19,9 @@ export const useOrderSummary = (order: OrderModel) => {
 
   const applyShipping = useCallback(
     (summaries: UserDishesSummary[]) => {
+      if (!order?.shippingCents) {
+        return;
+      }
       summaries.forEach((userSummary) => {
         userSummary.shipping += order.shippingCents! / summaries.length;
       });
@@ -43,7 +46,7 @@ export const useOrderSummary = (order: OrderModel) => {
         acc[dish.user.id] = userSummary;
         return acc;
       }, {} as Record<UserModel['id'], UserDishesSummary>);
-      if (order.shippingCents) {
+      if (order?.shippingCents) {
         applyShipping(Object.values(summaries));
       }
       return {

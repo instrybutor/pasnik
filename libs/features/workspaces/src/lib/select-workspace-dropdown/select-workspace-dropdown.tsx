@@ -4,9 +4,10 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/outline';
 import { Fragment, Suspense, useCallback, useRef } from 'react';
 import classNames from 'classnames';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
-import { useCurrentWorkspace, useWorkspaces } from '../queries';
+import { useWorkspaces } from '../queries';
 import { Can, WorkspacesAction } from '@pasnik/ability';
 import { NavLink } from 'react-router-dom';
+import { useCurrentWorkspace } from '../use-current-workspace';
 
 export interface SelectWorkspaceProps {
   onAddClick: () => void;

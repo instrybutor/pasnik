@@ -48,14 +48,14 @@ export function EditOrderModal({
             />
           </FormField>
           <FormField
-            defaultValue={order.menuUrl}
+            defaultValue={order.menuUrl ?? ''}
             label={t('order.create_form.menu_label')}
             name="menuUrl"
           >
             <Input placeholder={t('order.create_form.menu_placeholder')} />
           </FormField>
           <FormField
-            defaultValue={order.shippingCents}
+            defaultValue={order.shippingCents ?? 0}
             label={t('order.create_form.delivery_price_label')}
             name="shippingCents"
             suffix="zł"

@@ -12,6 +12,7 @@ import {
 import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
 import { DateFormat, UserAvatar } from '@pasnik/components';
 import { useMemo } from 'react';
+import { useCurrentOrder } from '@pasnik/features/orders';
 
 const sortHistory = (actionA: OrderActionModel, actionB: OrderActionModel) =>
   new Date(actionB.createdAt).getTime() > new Date(actionA.createdAt).getTime()
@@ -93,24 +94,24 @@ const typesMap = {
 };
 
 export interface OrderTimelineProps {
-  actions: OrderActionModel[];
   isDetailed: boolean;
 }
 
-export function OrderTimeline({ actions, isDetailed }: OrderTimelineProps) {
+export function OrderTimeline({ isDetailed }: OrderTimelineProps) {
+  const { order } = useCurrentOrder();
   const filteredActions = useMemo(() => {
     return (() => {
       if (isDetailed) {
-        return actions;
+        return order?.actions ?? [];
       }
       const acts = new Map<OrderAction, OrderActionModel>();
-      actions.forEach((acc) => {
+      order?.actions?.forEach((acc) => {
         acts.delete(acc.action);
         acts.set(acc.action, acc);
       });
       return Array.from(acts.values());
     })().sort(sortHistory);
-  }, [actions, isDetailed]);
+  }, [order?.actions, isDetailed]);
 
   return (
     <ul className="-mb-8">
