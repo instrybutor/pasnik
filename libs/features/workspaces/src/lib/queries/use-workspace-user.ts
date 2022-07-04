@@ -1,12 +1,9 @@
 import { useMemo } from 'react';
 import { useWorkspaceUsers } from './use-workspace-users';
-import { UserModel, WorkspaceModel } from '@pasnik/api/data-transfer';
+import { UserModel } from '@pasnik/api/data-transfer';
 
-export const useWorkspaceUser = (
-  workspace?: WorkspaceModel,
-  user?: UserModel
-) => {
-  const { data } = useWorkspaceUsers(workspace?.slug);
+export const useWorkspaceUser = (workspaceSlug?: string, user?: UserModel) => {
+  const { data } = useWorkspaceUsers(workspaceSlug);
 
   return useMemo(() => {
     return data?.find((workspaceUser) => workspaceUser.userId === user?.id);

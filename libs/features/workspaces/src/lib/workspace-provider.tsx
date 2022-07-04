@@ -16,7 +16,7 @@ export function WorkspaceProvider({
   const workspace = useWorkspaceById(
     workspaceId ?? currentUser.currentWorkspaceId
   );
-  const workspaceUser = useWorkspaceUser(workspace, currentUser);
+  const workspaceUser = useWorkspaceUser(workspace?.slug, currentUser);
 
   // const { setCurrentWorkspaceSlugContext } = useSidebarContext();
   //

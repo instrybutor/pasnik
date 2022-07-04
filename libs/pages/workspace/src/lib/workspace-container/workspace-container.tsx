@@ -1,11 +1,4 @@
-import {
-  Outlet,
-  Route,
-  Routes,
-  useMatch,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { Outlet, Route, Routes, useMatch, useNavigate } from 'react-router-dom';
 import { SyntheticEvent, useCallback } from 'react';
 import { WorkspaceHeader } from '../workspace-header/workspace-header';
 import { QueryBoundary, TabLink } from '@pasnik/components';
@@ -17,13 +10,14 @@ import {
   WorkspaceAbilityProvider,
 } from '@pasnik/features/workspaces';
 import { useTranslation } from 'react-i18next';
+import { useSlug } from '@pasnik/shared/utils';
 
 export function WorkspaceContainer() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { slug } = useParams<'slug'>();
+  const slug = useSlug();
 
-  const { data: workspace } = useWorkspace(slug!, (error) => {
+  const { data: workspace } = useWorkspace(slug, (error) => {
     if (error.response?.status === 404) {
       navigate('/');
     }
@@ -41,7 +35,7 @@ export function WorkspaceContainer() {
     : './inactive';
 
   return (
-    <WorkspaceAbilityProvider slug={slug!}>
+    <WorkspaceAbilityProvider slug={slug}>
       <header className="bg-white shadow">
         <WorkspaceHeader />
       </header>
