@@ -36,9 +36,9 @@ export interface OrderDishAddProps {
 export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const user = useCurrentUser();
+  const { user } = useCurrentUser();
   const slug = useSlug();
-  const workspace = useCurrentWorkspace();
+  const { data: workspace } = useCurrentWorkspace();
   const users = useUsersInWorkspace(workspace?.slug);
 
   const { mutateAsync: mutateAddAsync } = useDishAddMutation(slug);
@@ -68,7 +68,7 @@ export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
         <div className="flex items-center flex-shrink-0">
           <Controller
             name="userId"
-            defaultValue={dish?.userId ?? user!.id}
+            defaultValue={dish?.userId ?? user?.id}
             render={({ field: { value, onChange } }) => (
               <UsersDropdown
                 users={users}

@@ -22,6 +22,7 @@ export const useNotificationsQuery = () => {
       refetchInterval: 5000,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      suspense: true,
     }
   );
 };

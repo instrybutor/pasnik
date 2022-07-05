@@ -10,7 +10,7 @@ import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 export function OrderHeader() {
   const { t } = useTranslation();
   const { order } = useCurrentOrder();
-  const workspace = useCurrentWorkspace();
+  const { data: workspace } = useCurrentWorkspace();
   const latestAction = useMemo(() => {
     if (!order?.actions) {
       return null;

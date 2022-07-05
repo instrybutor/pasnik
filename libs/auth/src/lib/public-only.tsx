@@ -1,15 +1,15 @@
 import { Navigate } from 'react-router-dom';
 import { Outlet } from 'react-router';
-import { useUserStore } from '@pasnik/store';
+import { useCurrentUser } from './queries/use-current-user';
 
 export interface PublicOnlyProps {
   children: JSX.Element;
 }
 
 export function PublicOnly({ children }: PublicOnlyProps) {
-  const { user } = useUserStore();
+  const { isSuccess } = useCurrentUser({ suspense: false });
 
-  if (user) {
+  if (isSuccess) {
     return <Navigate to="/" />;
   }
 

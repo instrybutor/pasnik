@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import axios from '@pasnik/axios';
 import { WorkspaceUserModel } from '@pasnik/api/data-transfer';
 
-export const useWorkspaceUsers = (slug?: string) => {
+export const useWorkspaceUsers = (slug?: string, suspense = true) => {
   return useQuery(
     ['workspaces', slug, 'users'],
     async () => {
@@ -16,6 +16,7 @@ export const useWorkspaceUsers = (slug?: string) => {
       useErrorBoundary: false,
       enabled: Boolean(slug),
       refetchOnMount: false,
+      suspense,
     }
   );
 };

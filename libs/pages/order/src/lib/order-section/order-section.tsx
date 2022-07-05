@@ -49,7 +49,11 @@ export function OrderSection({
               })}
             >
               <h2 className="text-lg leading-6 font-medium text-gray-900">
-                {isLoading ? <div className="w-52 h-5 bg-gray-300" /> : header}
+                {isLoading ? (
+                  <div className="w-52 h-5 bg-gray-300 rounded-md" />
+                ) : (
+                  header
+                )}
               </h2>
               {subTitle && (
                 <p className="mt-1 max-w-2xl text-sm text-gray-500">

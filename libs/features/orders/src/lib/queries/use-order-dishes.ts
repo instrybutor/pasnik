@@ -10,10 +10,7 @@ export function useOrderDishes(orderSlug: string, suspense = true) {
         `/api/orders/slug/${orderSlug}/dishes`,
         { signal }
       );
-      return new Promise<DishModel[]>((resolve) => {
-        setTimeout(() => resolve(data), 3000);
-      });
-      // return data;
+      return data;
     },
     {
       retry: false,

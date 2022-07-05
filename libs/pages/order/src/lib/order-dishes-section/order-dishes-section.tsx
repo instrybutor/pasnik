@@ -25,13 +25,13 @@ export function OrderDishesSection() {
             fallback={
               <div className="px-4 py-4 sm:px-6 flex items-center space-between animate-pulse">
                 <div className="flex-1">
-                  <div className="h-4 w-24 bg-gray-300"></div>
+                  <div className="h-4 w-24 bg-gray-300 rounded-md"></div>
                 </div>
                 <div className="text-sm text-gray-500 pr-2 flex-row flex sm:pr-0.5">
-                  <div className="h-4 w-12 bg-gray-300"></div>
+                  <div className="h-4 w-12 bg-gray-300 rounded-md"></div>
                   <div className="w-18 sm:w-32 flex mr-1.5">
-                    <div className="h-4 w-4 bg-gray-300 mx-1"></div>
-                    <div className="h-4 w-12 bg-gray-300"></div>
+                    <div className="h-4 w-4 bg-gray-300 rounded-md mx-1"></div>
+                    <div className="h-4 w-12 bg-gray-300 rounded-md"></div>
                   </div>
                 </div>
               </div>
@@ -55,7 +55,7 @@ export function OrderDishesSection() {
           </div>
         ) : (
           <div className="animate-pulse">
-            <div className="h-8 w-8 rounded-full bg-gray-300" />
+            <div className="h-8 w-8 rounded-full bg-gray-300 rounded-md" />
           </div>
         )
       }

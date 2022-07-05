@@ -11,7 +11,7 @@ export function WorkspaceAbilityProvider({
   slug,
   children,
 }: PropsWithChildren<WorkspaceAbilityProviderProps>) {
-  const user = useCurrentUser();
+  const { user } = useCurrentUser();
   const currentWorkspaceUser = useWorkspaceUser(slug, user);
   return (
     <AbilityContext.Provider

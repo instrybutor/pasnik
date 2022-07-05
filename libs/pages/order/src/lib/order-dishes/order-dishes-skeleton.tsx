@@ -15,15 +15,17 @@ export function OrderDishesSkeleton() {
         >
           <div className="flex items-center">
             <div className="flex relative">
-              <div className="h-8 w-8 rounded-full bg-gray-300" />
+              <div className="h-8 w-8 rounded-full bg-gray-300 rounded-md" />
             </div>
           </div>
 
           <div className="flex-1 w-full">
-            <div className={classNames('h-5 bg-gray-300', sizes[item])} />
+            <div
+              className={classNames('h-5 bg-gray-300 rounded-md', sizes[item])}
+            />
           </div>
 
-          <div className="h-5 w-20 bg-gray-300 text-right" />
+          <div className="h-5 w-20 bg-gray-300 text-right rounded-md" />
 
           <div className="hidden empty:hidden whitespace-nowrap space-x-2 flex-shrink-0 items-center sm:flex flex-row">
             <div className="h-8 w-8 rounded-full bg-gray-300" />

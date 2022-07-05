@@ -15,8 +15,13 @@ export function OrderSummarySkeleton() {
               <div className="flex items-center">
                 <div className="h-10 w-10 bg-gray-300 rounded-full" />
                 <div className="ml-3 overflow-hidden gap-2 flex flex-col">
-                  <div className={classNames('h-4 bg-gray-300', sizes[item])} />
-                  <div className="h-3 w-4 bg-gray-300" />
+                  <div
+                    className={classNames(
+                      'h-4 bg-gray-300 rounded-md',
+                      sizes[item]
+                    )}
+                  />
+                  <div className="h-3 w-4 bg-gray-300 rounded-md" />
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import { RequestAccessModal } from '../request-access-modal/request-access-modal';
 import { SuccessModal } from '@pasnik/components';
 import { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '@pasnik/auth';
+import { useRequestAccessMutation } from '@pasnik/auth';
 
 export interface InvitationsProps {
   requestToken: string | null;
@@ -9,7 +9,7 @@ export interface InvitationsProps {
 }
 
 export function Invitation({ requestToken, onError }: InvitationsProps) {
-  const { requestAccess } = useAuth();
+  const { mutateAsync: requestAccess } = useRequestAccessMutation();
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [requestAccessModalOpen, setRequestAccessModalOpen] = useState(false);
 

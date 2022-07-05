@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import axios from '@pasnik/axios';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
 
-export const useWorkspaces = () => {
+export const useWorkspaces = (suspense = true) => {
   const queryClient = useQueryClient();
 
   return useQuery(
@@ -17,6 +17,7 @@ export const useWorkspaces = () => {
           queryClient.setQueryData(['workspaces', workspace.slug], workspace);
         });
       },
+      suspense,
     }
   );
 };

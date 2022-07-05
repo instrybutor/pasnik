@@ -17,11 +17,7 @@ export function WorkspaceContainer() {
   const navigate = useNavigate();
   const slug = useSlug();
 
-  const { data: workspace } = useWorkspace(slug, (error) => {
-    if (error.response?.status === 404) {
-      navigate('/');
-    }
-  });
+  const { data: workspace } = useWorkspace(slug);
 
   const onTabChange = useCallback(
     (event: SyntheticEvent<HTMLSelectElement>) => {

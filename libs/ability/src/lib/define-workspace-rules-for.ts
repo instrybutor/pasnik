@@ -57,6 +57,7 @@ export enum UsersAction {
   Update = 'update',
   Delete = 'delete',
   SeeEmails = 'seeEmails',
+  ApproveAccess = 'approveAccess',
 }
 
 export type AppAbility = Ability<
@@ -105,6 +106,7 @@ function defineWorkspaceAdminRules(
   { can, cannot }: AppAbilityBuilder,
   workspaceUser: WorkspaceUserModel
 ) {
+  can(UsersAction.ApproveAccess, 'UserModel');
   can(WorkspaceUsersAction.Create, 'WorkspaceUserModel');
   can(WorkspacesAction.ApproveAccess, 'WorkspaceModel');
 

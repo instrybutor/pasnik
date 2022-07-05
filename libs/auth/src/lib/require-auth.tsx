@@ -1,7 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { Outlet } from 'react-router';
-import { useUserStore } from '@pasnik/store';
-import { UserContext } from './user-context';
+import { useCurrentUser } from './queries/use-current-user';
+import axios from 'axios';
 
 export interface RequireAuthProps {
   admin?: boolean;
@@ -9,10 +8,11 @@ export interface RequireAuthProps {
 }
 
 export function RequireAuth({ admin, children }: RequireAuthProps) {
-  const { user } = useUserStore();
   const location = useLocation();
 
-  if (!user) {
+  const { user, error } = useCurrentUser({ suspense: false });
+
+  if (error && axios.isAxiosError(error) && error.response?.status === 401) {
     return (
       <Navigate
         to={{
@@ -23,13 +23,9 @@ export function RequireAuth({ admin, children }: RequireAuthProps) {
     );
   }
 
-  if (admin && !user.isAdmin) {
+  if (user && admin && !user.isAdmin) {
     return <Navigate to="/" />;
   }
 
-  return (
-    <UserContext.Provider value={user}>
-      {children ?? <Outlet />}
-    </UserContext.Provider>
-  );
+  return <>{children}</>;
 }

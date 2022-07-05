@@ -35,7 +35,7 @@ export function DashboardOrders() {
     archivedOrders: getArchivedOrders(Object.values(state.entities ?? {})),
   }));
   const isFetching = useDashboardStore((state) => state.isFetching);
-  const workspace = useCurrentWorkspace();
+  const { data: workspace } = useCurrentWorkspace(false);
   const { t } = useTranslation();
 
   return (

@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { WorkspaceModel, WorkspaceUserModel } from '@pasnik/api/data-transfer';
 import axios from '@pasnik/axios';
-import { useUserStore } from '@pasnik/store';
 import { useWorkspace } from '../queries';
+import { useChangeWorkspaceMutation } from '@pasnik/auth';
 
 export const useWorkspaceJoinMutation = (slug: string) => {
   const queryKey = ['workspaces', slug, 'users'];
   const queryClient = useQueryClient();
   const { data: workspace } = useWorkspace(slug);
-  const { changeWorkspace } = useUserStore();
+  const { mutateAsync: changeWorkspace } = useChangeWorkspaceMutation();
   return useMutation(
     async () => {
       const { data } = await axios.put<WorkspaceUserModel>(

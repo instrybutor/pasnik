@@ -10,12 +10,22 @@ import { OrderContainerSkeleton } from './order-container/order-container-skelet
 import { OrderHeaderSkeleton } from './order-header/order-header-skeleton';
 import { useOrderState } from './order-state/order-state';
 import { useSlug } from '@pasnik/shared/utils';
+import { useSidebarContext } from '@pasnik/layout';
 
 export function PagesOrderDetails() {
   const slug = useSlug();
 
   const { data: order } = useOrder(slug, false);
   const { setShippingCents } = useOrderState();
+
+  const { setCurrentWorkspaceIdContext } = useSidebarContext();
+
+  useEffect(() => {
+    setCurrentWorkspaceIdContext(order?.workspaceId ?? null);
+    return () => {
+      setCurrentWorkspaceIdContext(null);
+    };
+  }, [order?.workspaceId, setCurrentWorkspaceIdContext]);
 
   useEffect(() => {
     setShippingCents(order?.shippingCents ?? 0);

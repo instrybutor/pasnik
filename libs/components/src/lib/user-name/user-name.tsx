@@ -1,11 +1,11 @@
 import { UserModel } from '@pasnik/api/data-transfer';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import classNames from 'classnames';
 
 export interface UserNameProps {
   user?: Partial<UserModel> | null;
   initials?: boolean;
-  fallbackValue?: string;
+  fallbackValue?: ReactNode;
   className?: string;
 }
 

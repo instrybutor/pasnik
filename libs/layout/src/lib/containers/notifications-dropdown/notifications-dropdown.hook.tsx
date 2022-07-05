@@ -1,15 +1,19 @@
-import { useRef, useMemo, useCallback } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { isAfter } from 'date-fns';
 
 import { useNotificationsQuery } from '@pasnik/features-notifications';
-import { useUserStore } from '@pasnik/store';
+import { useCurrentUser, useNotificationSeenMutation } from '@pasnik/auth';
 
 export const useNotificationsDropdown = () => {
   const { data: notifications } = useNotificationsQuery();
-  const { lastSeenDate, setLastSeenDate } = useUserStore((state) => ({
-    lastSeenDate: new Date(state.user?.lastNotificationDate ?? ''),
-    setLastSeenDate: state.updateLastNotificationDate,
-  }));
+  const { data: user } = useCurrentUser();
+
+  const lastSeenDate = useMemo(
+    () => new Date(user?.lastNotificationDate ?? ''),
+    [user?.lastNotificationDate]
+  );
+
+  const { mutateAsync: setLastSeenDate } = useNotificationSeenMutation();
 
   const popoverRef = useRef<HTMLButtonElement>(null);
 

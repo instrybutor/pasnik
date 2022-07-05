@@ -21,18 +21,21 @@ export function OrderTimelineSkeleton() {
               <div className="relative flex space-x-3 items-center">
                 <div>
                   <span className="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white bg-gray-300">
-                    <div className="w-5 h-5 bg-gray-300" />
+                    <div className="w-5 h-5 bg-gray-300 rounded-md" />
                   </span>
                 </div>
                 <div className="min-w-0 flex-1 flex justify-between space-x-4 items-center">
                   <div className="text-sm text-gray-500 flex items-center gap-1 pt-0.5">
                     <div
-                      className={classNames('h-4 bg-gray-300', sizes[item])}
+                      className={classNames(
+                        'h-4 bg-gray-300 rounded-md',
+                        sizes[item]
+                      )}
                     />
                     <div className="h-6 w-6 rounded-full bg-gray-300" />
                   </div>
                   <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                    <div className="h-4 w-12 bg-gray-300" />
+                    <div className="h-4 w-12 bg-gray-300 rounded-md" />
                   </div>
                 </div>
               </div>

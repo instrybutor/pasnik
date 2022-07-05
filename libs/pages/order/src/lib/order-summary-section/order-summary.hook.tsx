@@ -10,7 +10,7 @@ export interface UserDishesSummary {
 }
 
 export const useOrderSummary = (order?: OrderModel) => {
-  const user = useCurrentUser();
+  const { user } = useCurrentUser();
   const [groupedSummaries, setGroupedSummaries] = useState<UserDishesSummary[]>(
     []
   );
@@ -32,7 +32,7 @@ export const useOrderSummary = (order?: OrderModel) => {
   const groupSummaries = useCallback(
     (dishes: DishModel[]) => {
       const summaries = dishes.reduce((acc, dish) => {
-        if (!dish.user) {
+        if (!dish.user || !user) {
           return acc;
         }
         const userSummary: UserDishesSummary = acc[dish.user.id] || {
@@ -50,7 +50,7 @@ export const useOrderSummary = (order?: OrderModel) => {
         applyShipping(Object.values(summaries));
       }
       return {
-        currentUserSummary: summaries[user!.id],
+        currentUserSummary: user ? summaries[user?.id] : null,
         userDishesSummaries: Object.values(summaries),
       };
     },
@@ -60,7 +60,7 @@ export const useOrderSummary = (order?: OrderModel) => {
   const sortSummaries = useCallback(
     (userDishesSummaries: UserDishesSummary[]) => {
       return userDishesSummaries.sort((summary) =>
-        summary.user.id === user!.id ? 0 : 1
+        summary.user.id === user?.id ? 0 : 1
       );
     },
     [user]

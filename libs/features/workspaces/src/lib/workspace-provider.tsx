@@ -12,25 +12,17 @@ export function WorkspaceProvider({
   children,
   workspaceId,
 }: PropsWithChildren<WorkspaceProviderProps>) {
-  const currentUser = useCurrentUser();
+  const { user } = useCurrentUser({ suspense: false });
   const workspace = useWorkspaceById(
-    workspaceId ?? currentUser.currentWorkspaceId
+    workspaceId ?? user?.currentWorkspaceId,
+    false
   );
-  const workspaceUser = useWorkspaceUser(workspace?.slug, currentUser);
-
-  // const { setCurrentWorkspaceSlugContext } = useSidebarContext();
-  //
-  // useEffect(() => {
-  //   setCurrentWorkspaceSlugContext(workspace?.slug ?? null);
-  //   return () => {
-  //     setCurrentWorkspaceSlugContext(null);
-  //   };
-  // }, [workspace?.slug, setCurrentWorkspaceSlugContext]);
+  const workspaceUser = useWorkspaceUser(workspace?.slug, user, false);
 
   return (
-    <WorkspaceContext.Provider value={workspace}>
+    <WorkspaceContext.Provider value={workspace?.slug}>
       <AbilityContext.Provider
-        value={defineWorkspaceRulesFor(currentUser, workspaceUser)}
+        value={defineWorkspaceRulesFor(user, workspaceUser)}
       >
         {children}
       </AbilityContext.Provider>

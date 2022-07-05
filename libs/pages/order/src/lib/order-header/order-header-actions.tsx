@@ -31,7 +31,7 @@ export function OrderHeaderActions() {
   const { shippingCents } = useOrderState();
   const { order } = useCurrentOrder();
   const slug = useSlug();
-  const workspace = useCurrentWorkspace();
+  const { data: workspace } = useCurrentWorkspace();
   const { data: dishes } = useOrderDishes(slug, false);
   const navigate = useNavigate();
   const props = useMemo(() => ({ order }), [order]);
