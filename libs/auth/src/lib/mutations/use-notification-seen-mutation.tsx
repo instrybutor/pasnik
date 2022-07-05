@@ -7,7 +7,7 @@ export const useNotificationSeenMutation = () => {
   const queryKey = ['users', 'me'];
   return useMutation(
     async () => {
-      const { data } = await axios.post<UserModel>(
+      const { data } = await axios.put<UserModel>(
         `/api/users/notifications-seen`
       );
       return data;

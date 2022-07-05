@@ -128,13 +128,15 @@ export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
         </div>
 
         <div className="text-right text-sm font-medium space-x-2 flex-shrink-0">
-          <Button className="flex-1" type="submit">
+          <Button className="flex-1" type="submit" rounded="full">
             <CheckIcon className="h-5 w-5" aria-hidden="true" />
           </Button>
 
           <Button
             onClick={onClose}
-            className="flex-1 bg-red-600 hover:bg-red-700 focus:ring-red-500"
+            color="warn"
+            className="flex-1"
+            rounded="full"
           >
             <XIcon className="h-5 w-5 pointer-events-none" aria-hidden="true" />
           </Button>

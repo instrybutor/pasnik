@@ -34,7 +34,7 @@ export function OrderSummary() {
                   </UserInfo>
                 </div>
                 <div className="flex items-center">
-                  <Disclosure.Button className="-my-1 -ml-1 mr-1 p-1 text-gray-500 border border-transparent rounded-full text-white hover:bg-gray-200 focus:outline-none">
+                  <Disclosure.Button className="-my-1 -ml-1 mr-1 p-1 text-gray-500 border border-transparent rounded-full hover:bg-gray-200 focus:outline-none">
                     <ChevronDownIcon
                       className={classNames(
                         open ? '-rotate-180' : 'rotate-0',

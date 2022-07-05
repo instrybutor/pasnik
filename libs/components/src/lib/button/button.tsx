@@ -1,9 +1,12 @@
 import classNames from 'classnames';
+import { COLOR_TYPE, getColor } from '../color/color';
 
 export interface ButtonProps
   extends Omit<React.HTMLProps<HTMLButtonElement>, 'type'> {
   type?: 'button' | 'submit' | 'reset';
   icon?(props: React.ComponentProps<'svg'>): JSX.Element;
+  rounded?: 'full' | 'md';
+  color?: COLOR_TYPE;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -11,14 +14,22 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   className,
   icon: Icon,
+  color,
+  rounded,
   ...props
 }) => {
+  const colorClasses = getColor(color ?? 'primary', 600);
   return (
     <button
       type={type}
       {...props}
       className={classNames(
-        'inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:bg-gray-300',
+        'inline-flex items-center p-1 border border-transparent rounded-md shadow-sm',
+        colorClasses,
+        {
+          'rounded-full': rounded === 'full',
+          'rounded-md': !rounded || rounded === 'md',
+        },
         className
       )}
     >

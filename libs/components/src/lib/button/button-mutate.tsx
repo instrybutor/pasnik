@@ -68,7 +68,3 @@ export const ButtonMutate = <TData, TError, TVariables, TContext>({
     />
   );
 };
-
-// export const ButtonMutate = React.forwardRef(XDD);
-
-// export default ButtonMutate;

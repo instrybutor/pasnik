@@ -9,7 +9,7 @@ export function HeaderSkeleton() {
       <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
         <div className="flex-1 flex items-center xsm:justify-end">
           <div className="flex space-x-3 flex-grow xsm:flex-grow-0 md:ml-4">
-            <div className="flex-1 h-10 w-36 text-center items-center px-4 py-2 border border-transparent shadow-sm rounded-md bg-gray-300" />
+            <div className="flex-1 h-10 w-40 text-center items-center px-4 py-2 border border-transparent shadow-sm rounded-md bg-gray-300" />
           </div>
         </div>
         <div className="flex items-center ml-3 gap-2">
