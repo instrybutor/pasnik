@@ -1,4 +1,4 @@
-import { PropsWithRef, useCallback } from 'react';
+import { PropsWithRef, Ref, useCallback } from 'react';
 import { Button, ButtonProps } from './button';
 import { useToast } from '../toast';
 import { UseMutationResult } from 'react-query';
@@ -12,6 +12,7 @@ export interface ButtonMutateProps<TData, TError, TVariables, TContext>
   mutationData?: TVariables;
   successMessage?: string;
   mutationSuccess?: (data: TData) => void;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 export const ButtonMutate = <TData, TError, TVariables, TContext>({

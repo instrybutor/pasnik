@@ -9,6 +9,7 @@ import { useWorkspaceCreateMutation } from '../mutations/use-workspace-create-mu
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { Button } from '@pasnik/components';
 
 export interface CreateWorkspaceFormProps {
   onSuccess: (workspace: WorkspaceModel) => void;
@@ -180,21 +181,22 @@ export const CreateWorkspaceForm = ({
         </div>
       </div>
       <div className="flex-shrink-0 px-4 py-4 flex justify-end">
-        <button
+        <Button
           disabled={createWorkspace.isLoading}
           type="button"
-          className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          color="secondary"
+          className="py-2 px-4"
           onClick={onCancel}
         >
           {t('actions.cancel')}
-        </button>
-        <button
+        </Button>
+        <Button
           disabled={!createWorkspace.isIdle}
           type="submit"
-          className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          className="ml-4 py-2 px-4"
         >
           {t('actions.submit')}
-        </button>
+        </Button>
       </div>
     </form>
   );

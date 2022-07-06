@@ -1,4 +1,5 @@
 import {
+  Button,
   CurrencyInput,
   currencyTransform,
   Form,
@@ -67,19 +68,20 @@ export function EditOrderModal({
           </FormField>
           <div className="block flex-grow sm:hidden" />
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-            <button
+            <Button
               type="submit"
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-cyan-600 text-base font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 sm:ml-3 sm:w-auto sm:text-sm"
+              className="w-full px-4 py-2 sm:ml-3 sm:w-auto sm:text-sm"
             >
               {t('actions.submit')}
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={close}
               type="button"
-              className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 sm:mt-0 sm:w-auto sm:text-sm"
+              color="secondary"
+              className="mt-3 w-full px-4 py-2 sm:mt-0 sm:w-auto sm:text-sm"
             >
               {t('actions.cancel')}
-            </button>
+            </Button>
           </div>
         </div>
       </Form>

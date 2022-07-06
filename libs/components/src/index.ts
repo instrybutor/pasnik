@@ -31,3 +31,4 @@ export * from './lib/form-field';
 export * from './lib/form';
 export * from './lib/toast';
 export * from './lib/flip-date/flip-date';
+export * from './lib/trans-skeleton';

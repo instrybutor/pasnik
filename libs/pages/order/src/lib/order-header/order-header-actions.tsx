@@ -47,9 +47,10 @@ export function OrderHeaderActions() {
     <div className="flex space-x-3">
       <Can I={OrdersAction.Update} this={order}>
         <ModalButton
+          color="secondary"
           props={props}
           modal={EditOrderModal}
-          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          className="px-4 py-2 text-sm font-medium"
         >
           <PencilIcon
             className="-ml-1 mr-2 h-5 w-5 text-gray-500"
@@ -61,8 +62,9 @@ export function OrderHeaderActions() {
       <Can I={OrdersAction.MarkAsOpen} this={order}>
         <ButtonMutate
           type="button"
+          color="tertiary"
           mutation={markAsOpenMutation}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          className="px-4 py-2 text-sm font-medium"
         >
           <LockOpenIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           {t('order.actions.open')}
@@ -71,8 +73,9 @@ export function OrderHeaderActions() {
       <Can I={OrdersAction.MarkAsClosed} this={order}>
         <ButtonMutate
           type="button"
+          color="warn"
           mutation={markAsClosedMutation}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          className="px-4 py-2 text-sm font-medium"
         >
           <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           {t('order.actions.close')}
@@ -83,17 +86,14 @@ export function OrderHeaderActions() {
           <ButtonMutate
             type="button"
             mutation={markAsProcessingMutation}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+            className="px-4 py-2 text-sm font-medium"
           >
             <LockClosedIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             {t('order.actions.order')}
           </ButtonMutate>
         ) : (
           <Tooltip title={t('order.no_dishes')}>
-            <Button
-              disabled
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-300"
-            >
+            <Button disabled className="px-4 py-2 text-sm font-medium">
               <LockClosedIcon
                 className="-ml-1 mr-2 h-5 w-5"
                 aria-hidden="true"
@@ -108,7 +108,7 @@ export function OrderHeaderActions() {
           type="button"
           mutation={markAsOrderedMutation}
           mutationData={{ shippingCents }}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          className="px-4 py-2 text-sm font-medium"
         >
           <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           {t('order.actions.ordered')}
@@ -118,7 +118,7 @@ export function OrderHeaderActions() {
         <ButtonMutate
           type="button"
           mutation={markAsDeliveredMutation}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          className="px-4 py-2 text-sm font-medium"
         >
           <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           {t('order.actions.delivered')}
@@ -127,12 +127,13 @@ export function OrderHeaderActions() {
       <Can I={OrdersAction.Duplicate} this={order}>
         <ButtonMutate
           type="button"
+          color="tertiary"
           mutation={createOrderMutation}
           mutationData={order}
           mutationSuccess={({ slug }) => {
             navigate(`/order/${slug}`);
           }}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          className="px-4 py-2 text-sm font-medium"
         >
           <DuplicateIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           {t('order.actions.re_order')}

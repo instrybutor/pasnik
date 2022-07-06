@@ -15,7 +15,7 @@ export function LoginSection() {
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className="flex flex-col py-16 gap-8">
       <Invitation requestToken={requestToken} onError={onError} />
       <h1 className="text-4xl text-center font-semibold flex flex-col">
         <span role="img" aria-label="food">
@@ -49,6 +49,6 @@ export function LoginSection() {
           <SlackLogin onSuccess={onSuccess} onError={onError} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
