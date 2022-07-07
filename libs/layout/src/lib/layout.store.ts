@@ -3,20 +3,20 @@ import create from 'zustand';
 export interface LayoutStore {
   addWorkspaceModalOpen: boolean;
   sidebarOpen: boolean;
-  currentWorkspaceSlugContext: string | null;
+  currentWorkspaceIdContext: number | null;
   showAddWorkspaceModal: () => void;
   hideAddWorkspaceModal: () => void;
   openSidebar: () => void;
   closeSidebar: () => void;
-  setCurrentWorkspaceSlugContext: (
-    currentWorkspaceSlugContext: string | null
+  setCurrentWorkspaceIdContext: (
+    currentWorkspaceIdContext: number | null
   ) => void;
 }
 
 export const useLayoutStore = create<LayoutStore>((set) => ({
   addWorkspaceModalOpen: false,
   sidebarOpen: false,
-  currentWorkspaceSlugContext: null,
+  currentWorkspaceIdContext: null,
 
   showAddWorkspaceModal: () => {
     set({ addWorkspaceModalOpen: true });
@@ -31,9 +31,7 @@ export const useLayoutStore = create<LayoutStore>((set) => ({
   closeSidebar: () => {
     set({ sidebarOpen: false });
   },
-  setCurrentWorkspaceSlugContext: (
-    currentWorkspaceSlugContext: string | null
-  ) => {
-    set({ currentWorkspaceSlugContext });
+  setCurrentWorkspaceIdContext: (currentWorkspaceIdContext: number | null) => {
+    set({ currentWorkspaceIdContext });
   },
 }));

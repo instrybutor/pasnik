@@ -1,9 +1,5 @@
 import { UserModel } from '@pasnik/api/data-transfer';
-import {
-  getSizeClass,
-  UserAvatar,
-  UserAvatarSize,
-} from '../user-avatar/user-avatar';
+import { getSizeClass, UserAvatar, UserAvatarSize } from '../user-avatar';
 import {
   ChangeEvent,
   Fragment,

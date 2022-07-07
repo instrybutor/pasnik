@@ -12,16 +12,17 @@ const API_URL = '/api/notifications';
 export const useNotificationsQuery = () => {
   return useQuery(
     QUERY_KEY,
-    async () => {
+    async ({ signal }) => {
       const { data } = await axios.get<
         NotificationModel<OrderStatusChangedDto>[]
-      >(API_URL);
+      >(API_URL, { signal });
       return data;
     },
     {
       refetchInterval: 5000,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      suspense: true,
     }
   );
 };

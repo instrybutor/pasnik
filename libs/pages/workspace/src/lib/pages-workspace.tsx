@@ -4,16 +4,13 @@ import { WorkspaceContainer } from './workspace-container/workspace-container';
 import { QueryErrorResetBoundary } from 'react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { WorkspaceFallbackRenderer } from './workspace-fallback-renderer/workspace-fallback-renderer';
-import { Navigate, useParams } from 'react-router-dom';
+import { useSlug } from '@pasnik/shared/utils';
 
 /* eslint-disable-next-line */
 export interface PagesWorkspaceProps {}
 
 export function PagesWorkspace(props: PagesWorkspaceProps) {
-  const { slug } = useParams<'slug'>();
-  if (!slug) {
-    return <Navigate to="/" />;
-  }
+  const slug = useSlug();
   return (
     <div className="flex flex-col overflow-auto flex-1">
       <Suspense fallback={<WorkspaceSuspenseContainer />}>

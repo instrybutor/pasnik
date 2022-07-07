@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom';
-import { useCurrentWorkspace } from './queries';
+import { useCurrentWorkspace } from './use-current-workspace';
 
 export function RedirectToCurrentWorkspace() {
-  const currentWorkspace = useCurrentWorkspace();
+  const { data: currentWorkspace } = useCurrentWorkspace(false);
 
   return currentWorkspace ? (
     <Navigate to={`/workspace/${currentWorkspace?.slug}`} />

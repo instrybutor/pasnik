@@ -1,35 +1,27 @@
-import { Fragment, useCallback } from 'react';
+import { Fragment, Suspense, useCallback } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   ClockIcon,
   CogIcon,
   HomeIcon,
-  OfficeBuildingIcon,
   QuestionMarkCircleIcon,
   ShieldCheckIcon,
   UserGroupIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import { useUserStore } from '@pasnik/store';
 import { useLayoutStore } from '../layout.store';
 import {
   CreateWorkspaceDrawer,
   SelectWorkspaceDropdown,
-  useCurrentWorkspace,
+  SelectWorkspaceDropdownSkeleton,
 } from '@pasnik/features/workspaces';
 import { SidebarItem } from '../components/sidebar-item/sidebar-item';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
-
-const adminNavigation = [
-  {
-    name: 'Zaproszenia',
-    href: '/admin/invitations',
-    icon: UserGroupIcon,
-    exact: false,
-  },
-];
+import { Can, UsersAction } from '@pasnik/ability';
+import { SidebarWorkspaceItem } from './sidebar-workspace-item';
+import { useChangeWorkspaceMutation } from '@pasnik/auth';
 
 const secondaryNavigation = [
   { name: 'Settings', href: '#', icon: CogIcon, hide: true },
@@ -44,16 +36,13 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
-  const { user } = useUserStore();
   const {
-    currentWorkspaceSlugContext,
     showAddWorkspaceModal,
     hideAddWorkspaceModal,
     addWorkspaceModalOpen,
   } = useLayoutStore();
-  const { changeWorkspace } = useUserStore();
+  const { mutateAsync: changeWorkspace } = useChangeWorkspaceMutation();
   const navigate = useNavigate();
-  const currentWorkspace = useCurrentWorkspace();
 
   const onCreateWorkspaceSuccess = useCallback(
     async (workspace: WorkspaceModel) => {
@@ -67,9 +56,17 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
   const onChangeWorkspace = useCallback(
     async (workspace: WorkspaceModel) => {
       await changeWorkspace(workspace);
+      navigate(`/workspace/${workspace.slug}`);
     },
-    [changeWorkspace]
+    [navigate, changeWorkspace]
   );
+
+  const onAddWorkspace = useCallback(async () => {
+    closeSidebar();
+    await new Promise((resolve) => {
+      setTimeout(() => resolve(true), 355);
+    }).then(showAddWorkspaceModal);
+  }, [showAddWorkspaceModal, closeSidebar]);
 
   return (
     <>
@@ -135,55 +132,29 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                 <div className="px-2">
                   <SelectWorkspaceDropdown
                     onChange={onChangeWorkspace}
-                    onAddClick={showAddWorkspaceModal}
+                    onAddClick={onAddWorkspace}
                   />
                 </div>
                 <div className="px-2 space-y-1 mt-6 pt-6">
                   <SidebarItem to="/" icon={HomeIcon} label="Dashboard" />
-                  {currentWorkspace && (
-                    <SidebarItem
-                      to={`/workspace/${currentWorkspace.slug}`}
-                      icon={OfficeBuildingIcon}
-                      label={currentWorkspace.name}
-                      forceActive={
-                        currentWorkspace.slug === currentWorkspaceSlugContext
-                      }
-                    />
-                  )}
+                  <SidebarWorkspaceItem />
                   <SidebarItem
                     to="/history"
                     icon={ClockIcon}
                     label="Historia zamówień"
                   />
                 </div>
-                {user?.isAdmin && (
+                <Can I={UsersAction.ApproveAccess} on="UserModel">
                   <div className="mt-6 pt-6">
                     <div className="px-2 space-y-1">
-                      {adminNavigation.map((item) => (
-                        <NavLink
-                          key={item.name}
-                          to={item.href}
-                          className={({ isActive }) =>
-                            classNames(
-                              'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
-                              {
-                                'bg-cyan-800 text-white': isActive,
-                                'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                                  !isActive,
-                              }
-                            )
-                          }
-                        >
-                          <item.icon
-                            className="mr-4 h-6 w-6 text-cyan-200"
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </NavLink>
-                      ))}
+                      <SidebarItem
+                        to="/admin/invitations"
+                        icon={UserGroupIcon}
+                        label="Zaproszenia"
+                      />
                     </div>
                   </div>
-                )}
+                </Can>
                 <div className="mt-6 pt-6">
                   <div className="px-2 space-y-1">
                     {secondaryNavigation.map((item) => (
@@ -240,23 +211,16 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
               aria-label="Sidebar"
             >
               <div className="px-2">
-                <SelectWorkspaceDropdown
-                  onChange={onChangeWorkspace}
-                  onAddClick={showAddWorkspaceModal}
-                />
+                <Suspense fallback={<SelectWorkspaceDropdownSkeleton />}>
+                  <SelectWorkspaceDropdown
+                    onChange={onChangeWorkspace}
+                    onAddClick={showAddWorkspaceModal}
+                  />
+                </Suspense>
               </div>
               <div className="px-2 space-y-1 mt-6 pt-6">
                 <SidebarItem to="/" icon={HomeIcon} label="Dashboard" />
-                {currentWorkspace && (
-                  <SidebarItem
-                    to={`/workspace/${currentWorkspace.slug}`}
-                    icon={OfficeBuildingIcon}
-                    label={currentWorkspace.name}
-                    forceActive={
-                      currentWorkspace.slug === currentWorkspaceSlugContext
-                    }
-                  />
-                )}
+                <SidebarWorkspaceItem />
                 <SidebarItem
                   to="/history"
                   icon={ClockIcon}
@@ -264,34 +228,18 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                 />
               </div>
 
-              {user?.isAdmin && (
+              <Can I={UsersAction.ApproveAccess} on="UserModel">
                 <div className="mt-6 pt-6">
                   <div className="px-2 space-y-1">
-                    {adminNavigation.map((item) => (
-                      <NavLink
-                        key={item.name}
-                        to={item.href}
-                        className={({ isActive }) =>
-                          classNames(
-                            'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md',
-                            {
-                              'bg-cyan-800 text-white': isActive,
-                              'text-cyan-100 hover:text-white hover:bg-cyan-600':
-                                !isActive,
-                            }
-                          )
-                        }
-                      >
-                        <item.icon
-                          className="mr-4 h-6 w-6 text-cyan-200"
-                          aria-hidden="true"
-                        />
-                        {item.name}
-                      </NavLink>
-                    ))}
+                    <SidebarItem
+                      to="/admin/invitations"
+                      icon={UserGroupIcon}
+                      label="Zaproszenia"
+                    />
                   </div>
                 </div>
-              )}
+              </Can>
+
               <div className="mt-6 pt-6 flex-grow">
                 <div className="px-2 space-y-1">
                   {secondaryNavigation.map((item) => (
@@ -324,11 +272,13 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
           </div>
         </div>
       </div>
-      <CreateWorkspaceDrawer
-        isOpen={addWorkspaceModalOpen}
-        onSuccess={onCreateWorkspaceSuccess}
-        onCancel={hideAddWorkspaceModal}
-      />
+      <Suspense>
+        <CreateWorkspaceDrawer
+          isOpen={addWorkspaceModalOpen}
+          onSuccess={onCreateWorkspaceSuccess}
+          onCancel={hideAddWorkspaceModal}
+        />
+      </Suspense>
     </>
   );
 }

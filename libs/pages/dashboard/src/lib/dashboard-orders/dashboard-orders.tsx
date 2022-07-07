@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { useDashboardStore } from '../dashboard-store/dashboard.store';
-import { Spinner } from '@pasnik/components';
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { DashboardOrderList } from '../dashboard-order-list/dashboard-order-list';
-import { OrdersEmpty } from '@pasnik/features/orders';
+import { OrdersEmpty, useActiveOrders } from '@pasnik/features/orders';
 import { useCurrentWorkspace } from '@pasnik/features/workspaces';
+import { DashboardOrdersSkeleton } from './dashboard-orders-skeleton';
+import { useMemo } from 'react';
 
 const sortOrder = (order: OrderModel, nextOrder: OrderModel) =>
   new Date(order.createdAt).getTime() > new Date(nextOrder.createdAt).getTime()
@@ -30,13 +30,16 @@ const getArchivedOrders = (orders: OrderModel[]) =>
     .sort(sortOrder);
 
 export function DashboardOrders() {
-  const { activeOrders, archivedOrders } = useDashboardStore((state) => ({
-    activeOrders: getActiveOrder(Object.values(state.entities ?? {})),
-    archivedOrders: getArchivedOrders(Object.values(state.entities ?? {})),
-  }));
-  const isFetching = useDashboardStore((state) => state.isFetching);
-  const workspace = useCurrentWorkspace();
   const { t } = useTranslation();
+  const { data: orders } = useActiveOrders();
+  const { data: workspace } = useCurrentWorkspace();
+  const { activeOrders, archivedOrders } = useMemo(
+    () => ({
+      activeOrders: getActiveOrder(orders ?? []),
+      archivedOrders: getArchivedOrders(orders ?? []),
+    }),
+    [orders]
+  );
 
   return (
     <>
@@ -45,9 +48,7 @@ export function DashboardOrders() {
       </h2>
       <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">
         <div className="border-b border-gray-200">
-          {isFetching ? (
-            <Spinner />
-          ) : activeOrders.length ? (
+          {activeOrders.length ? (
             <DashboardOrderList orders={activeOrders} />
           ) : (
             <OrdersEmpty workspace={workspace} />
@@ -76,4 +77,4 @@ export function DashboardOrders() {
   );
 }
 
-export default DashboardOrders;
+DashboardOrders.Skeleton = DashboardOrdersSkeleton;

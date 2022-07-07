@@ -13,7 +13,7 @@ export function CallStateWrapper({
   const error = getError(callState);
   if (error) {
     return (
-      <div className="text-center bg-white px-4 py-12">
+      <div className="text-center bg-white px-4 py-14">
         <ExclamationIcon className="mx-auto h-12 w-12 text-red-500" />
         <h3 className="mt-2 text-sm font-medium text-gray-900">{error}</h3>
       </div>

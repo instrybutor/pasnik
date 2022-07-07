@@ -5,6 +5,7 @@ import {
   Length,
   Matches,
   Min,
+  ValidateIf,
 } from 'class-validator';
 
 export class CreateOrderDto {
@@ -19,6 +20,7 @@ export class CreateOrderDto {
     }
   )
   @IsOptional()
+  @ValidateIf(({ menuUrl }) => menuUrl?.length > 0)
   menuUrl?: string;
 
   @Min(0, { message: 'validation.positive' })

@@ -13,31 +13,36 @@ import {
   UserInfo,
   useToast,
 } from '@pasnik/components';
-import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
 import { Controller } from 'react-hook-form';
-import { useUsersInWorkspace } from '@pasnik/features/workspaces';
-import { useUserStore } from '@pasnik/store';
+import {
+  useCurrentWorkspace,
+  useUsersInWorkspace,
+} from '@pasnik/features/workspaces';
 import { UsersDropdown } from '../users-dropdown/users-dropdown';
 import {
   useDishAddMutation,
   useDishUpdateMutation,
 } from '@pasnik/features/orders';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { useCurrentUser } from '@pasnik/auth';
+import { useSlug } from '@pasnik/shared/utils';
 
 export interface OrderDishAddProps {
   onClose: () => void;
-  order: OrderModel;
   dish?: DishModel;
 }
 
-export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
+export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { user } = useUserStore();
-  const users = useUsersInWorkspace(order.workspace?.slug);
+  const { user } = useCurrentUser();
+  const slug = useSlug();
+  const { data: workspace } = useCurrentWorkspace();
+  const users = useUsersInWorkspace(workspace?.slug);
 
-  const { mutateAsync: mutateAddAsync } = useDishAddMutation(order);
-  const { mutateAsync: mutateDishAsync } = useDishUpdateMutation(order, dish!);
+  const { mutateAsync: mutateAddAsync } = useDishAddMutation(slug);
+  const { mutateAsync: mutateDishAsync } = useDishUpdateMutation(slug, dish!);
   return (
     <Form<AddDishDto>
       resolver={classValidatorResolver(AddDishDto)}
@@ -63,7 +68,7 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
         <div className="flex items-center flex-shrink-0">
           <Controller
             name="userId"
-            defaultValue={dish?.userId ?? user!.id}
+            defaultValue={dish?.userId ?? user?.id}
             render={({ field: { value, onChange } }) => (
               <UsersDropdown
                 users={users}
@@ -123,13 +128,15 @@ export function OrderDishManage({ onClose, order, dish }: OrderDishAddProps) {
         </div>
 
         <div className="text-right text-sm font-medium space-x-2 flex-shrink-0">
-          <Button className="flex-1" type="submit">
+          <Button className="flex-1" type="submit" rounded="full">
             <CheckIcon className="h-5 w-5" aria-hidden="true" />
           </Button>
 
           <Button
             onClick={onClose}
-            className="flex-1 bg-red-600 hover:bg-red-700 focus:ring-red-500"
+            color="warn"
+            className="flex-1"
+            rounded="full"
           >
             <XIcon className="h-5 w-5 pointer-events-none" aria-hidden="true" />
           </Button>

@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode, useMemo } from 'react';
+import { PropsWithChildren, ReactNode, Suspense, useMemo } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
@@ -43,9 +43,17 @@ export function OrderSection({
       {({ open }) => (
         <div className="bg-white shadow sm:rounded-lg overflow-hidden">
           <div className="px-4 py-4 sm:px-6 flex items-center">
-            <div className="flex-grow">
+            <div
+              className={classNames('flex-grow', {
+                'animate-pulse': isLoading,
+              })}
+            >
               <h2 className="text-lg leading-6 font-medium text-gray-900">
-                {header}
+                {isLoading ? (
+                  <div className="w-52 h-5 bg-gray-300 rounded-md" />
+                ) : (
+                  header
+                )}
               </h2>
               {subTitle && (
                 <p className="mt-1 max-w-2xl text-sm text-gray-500">
@@ -80,7 +88,9 @@ export function OrderSection({
               'px-4 py-4 sm:px-5': !noPadding,
             })}
           >
-            {isLoading ? <Spinner /> : children}
+            <Suspense fallback={<Spinner />}>
+              {isLoading ? <Spinner /> : children}
+            </Suspense>
           </Disclosure.Panel>
           {footer && <div className="border-t border-gray-200">{footer}</div>}
         </div>

@@ -10,7 +10,7 @@ export interface QueryBoundaryProps {
 
 function DefaultErrorElement({ resetErrorBoundary }: FallbackProps) {
   return (
-    <div className="text-center bg-white px-4 py-12">
+    <div className="text-center bg-white px-4 py-14">
       <button
         onClick={resetErrorBoundary}
         type="button"

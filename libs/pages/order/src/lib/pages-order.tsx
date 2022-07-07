@@ -4,13 +4,11 @@ import { PagesOrderDetails } from './pages-order-details';
 
 export function PagesOrder() {
   return (
-    <div className="flex flex-col overflow-auto flex-1">
-      <QueryErrorResetBoundary>
-        <Routes>
-          <Route path="/" element={<Navigate to="./create" />} />
-          <Route path="/:slug" element={<PagesOrderDetails />} />
-        </Routes>
-      </QueryErrorResetBoundary>
-    </div>
+    <QueryErrorResetBoundary>
+      <Routes>
+        <Route path="/" element={<Navigate to="./create" />} />
+        <Route path="/:slug" element={<PagesOrderDetails />} />
+      </Routes>
+    </QueryErrorResetBoundary>
   );
 }

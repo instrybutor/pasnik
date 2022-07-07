@@ -1,30 +1,48 @@
 import classNames from 'classnames';
+import { COLOR_TYPE, getColor } from '../color/color';
+import { ComponentProps, forwardRef, HTMLProps } from 'react';
 
 export interface ButtonProps
-  extends Omit<React.HTMLProps<HTMLButtonElement>, 'type'> {
+  extends Omit<HTMLProps<HTMLButtonElement>, 'type' | 'ref'> {
   type?: 'button' | 'submit' | 'reset';
-  icon?(props: React.ComponentProps<'svg'>): JSX.Element;
+  icon?(props: ComponentProps<'svg'>): JSX.Element;
+  rounded?: 'full' | 'md' | 'none';
+  color?: COLOR_TYPE | 'none';
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  type = 'button',
-  children,
-  className,
-  icon: Icon,
-  ...props
-}) => {
-  return (
-    <button
-      type={type}
-      {...props}
-      className={classNames(
-        'inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:bg-gray-300',
-        className
-      )}
-    >
-      {children}
-    </button>
-  );
-};
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      type = 'button',
+      children,
+      className,
+      icon: Icon,
+      color,
+      rounded,
+      ...props
+    },
+    ref
+  ) => {
+    const colorClasses = color !== 'none' ? getColor(color ?? 'primary') : null;
+    return (
+      <button
+        type={type}
+        ref={ref}
+        {...props}
+        className={classNames(
+          'inline-flex items-center p-1 shadow-sm',
+          colorClasses,
+          {
+            'rounded-full': rounded === 'full',
+            'rounded-md': !rounded || rounded === 'md',
+          },
+          className
+        )}
+      >
+        {children}
+      </button>
+    );
+  }
+);
 
 export default Button;

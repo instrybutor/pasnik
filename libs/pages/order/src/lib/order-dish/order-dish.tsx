@@ -2,20 +2,27 @@ import { useTranslation } from 'react-i18next';
 import { Menu } from '@headlessui/react';
 import { DotsHorizontalIcon, DuplicateIcon } from '@heroicons/react/outline';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
-import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
-import { ConfirmButton, Price, UserAvatar, UserName } from '@pasnik/components';
+import { DishModel } from '@pasnik/api/data-transfer';
+import {
+  Button,
+  ConfirmButton,
+  Price,
+  UserAvatar,
+  UserName,
+} from '@pasnik/components';
 import { Can, OrdersAction } from '@pasnik/ability';
 import { Float } from '@headlessui-float/react';
 import { useOrderDish } from './order-dish.hook';
+import { useCurrentOrder } from '@pasnik/features/orders';
 
 export interface OrderDishProps {
   dish: DishModel;
-  order: OrderModel;
   onUpdate: () => void;
 }
-export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
+export function OrderDish({ dish, onUpdate }: OrderDishProps) {
   const { t } = useTranslation();
-  const { onDuplicate, onDelete } = useOrderDish(order, dish);
+  const { order } = useCurrentOrder();
+  const { onDuplicate, onDelete } = useOrderDish(dish);
 
   return (
     <div className="flex items-center gap-6 px-6 py-4">
@@ -48,28 +55,32 @@ export function OrderDish({ dish, order, onUpdate }: OrderDishProps) {
 
       <div className="hidden sm:block empty:hidden whitespace-nowrap space-x-2 flex-shrink-0">
         <Can I={OrdersAction.CreateDish} this={order}>
-          <button
+          <Button
             onClick={onDuplicate}
             type="button"
-            className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+            rounded="full"
+            className="p-1"
           >
             <DuplicateIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
+          </Button>
         </Can>
         <Can I={OrdersAction.UpdateDish} this={order}>
-          <button
+          <Button
             onClick={onUpdate}
             type="button"
-            className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+            rounded="full"
+            className="p-1"
           >
             <PencilIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
+          </Button>
         </Can>
         <Can I={OrdersAction.DeleteDish} this={order}>
           <ConfirmButton
             onClick={onDelete}
             type="button"
-            className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            color="warn"
+            rounded="full"
+            className="p-1"
           >
             <TrashIcon
               className="h-5 w-5 pointer-events-none"

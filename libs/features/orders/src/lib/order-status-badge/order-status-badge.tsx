@@ -1,6 +1,7 @@
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { OrderStatusBadgeSkeleton } from './order-status-badge-skeleton';
 
 export interface OrderStatusBadgeProps {
   order: OrderModel;
@@ -28,3 +29,5 @@ export function OrderStatusBadge({ order }: OrderStatusBadgeProps) {
     </p>
   );
 }
+
+OrderStatusBadge.Skeleton = OrderStatusBadgeSkeleton;

@@ -34,13 +34,7 @@ export class OrderService {
     return this.ordersRepository.findOneOrFail(
       { id },
       {
-        relations: [
-          'actions',
-          'actions.user',
-          'payer',
-          'actions.actionUser',
-          'workspace',
-        ],
+        relations: ['actions', 'actions.user', 'actions.actionUser'],
       }
     );
   }
@@ -110,7 +104,7 @@ export class OrderService {
       );
 
       const order = await ordersRepository.findOneOrFail(orderId, {
-        relations: ['dishes', 'payer'],
+        relations: ['dishes'],
       });
       await ordersRepository.markAsDelivered(order, markAsDeliveredDto);
       await orderActionsRepository.createAction(

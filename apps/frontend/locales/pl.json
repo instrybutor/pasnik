@@ -211,7 +211,8 @@
     "yes": "Tak",
     "no": "Nie",
     "back": "Wstecz",
-    "add": "Dodaj"
+    "add": "Dodaj",
+    "logout": "Wyloguj"
   },
   "forms": {
     "email": "Email"

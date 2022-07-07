@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import axios from '@pasnik/axios';
 import { OrderModel } from '@pasnik/api/data-transfer';
 
-export const useOrder = (slug?: string) => {
+export const useOrder = (slug?: string, suspense = true) => {
   return useQuery(
     ['orders', slug],
     async ({ signal }) => {
@@ -16,6 +16,7 @@ export const useOrder = (slug?: string) => {
       retry: false,
       refetchOnMount: false,
       refetchInterval: 5000,
+      suspense,
     }
   );
 };

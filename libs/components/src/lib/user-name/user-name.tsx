@@ -1,11 +1,11 @@
 import { UserModel } from '@pasnik/api/data-transfer';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import classNames from 'classnames';
 
 export interface UserNameProps {
   user?: Partial<UserModel> | null;
   initials?: boolean;
-  fallbackValue?: string;
+  fallbackValue?: ReactNode;
   className?: string;
 }
 
@@ -41,9 +41,11 @@ export function UserName({
         'flex flex-col': Boolean(children),
       })}
     >
-      <p className="truncate">{formatUser()}</p>
+      <span className="truncate">{formatUser()}</span>
       {children && (
-        <p className="text-xs font-medium text-gray-500 truncate">{children}</p>
+        <span className="text-xs font-medium text-gray-500 truncate">
+          {children}
+        </span>
       )}
     </div>
   );

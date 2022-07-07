@@ -11,7 +11,7 @@ export interface OrdersEmptyProps {
 export function OrdersEmpty({ workspace }: OrdersEmptyProps) {
   const { t } = useTranslation();
   return (
-    <div className="text-center bg-white px-4 py-12 flex flex-col items-center">
+    <div className="text-center bg-white px-4 py-14 flex flex-col items-center">
       <BeakerIcon className="mx-auto h-12 w-12 text-gray-400" />
       <div>
         <h3 className="mt-2 text-sm font-medium text-gray-900">

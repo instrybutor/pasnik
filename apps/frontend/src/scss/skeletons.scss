@@ -1,0 +1,18 @@
+@layer components {
+  .skeleton {
+    @apply bg-gray-300;
+    @apply rounded-md;
+    @apply flex-shrink-0;
+
+    &::after {
+      content: '.';
+      visibility: hidden;
+    }
+
+    &.icon {
+      @apply h-5;
+      @apply w-5;
+      @apply mr-1.5;
+    }
+  }
+}

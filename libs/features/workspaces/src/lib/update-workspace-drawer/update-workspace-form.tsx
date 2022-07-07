@@ -14,6 +14,7 @@ import classNames from 'classnames';
 import { useWorkspaceUsers } from '../queries/use-workspace-users';
 import { SelectWorkspaceUser } from '../select-workspace-user/select-workspace-user';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { Button } from '@pasnik/components';
 
 export interface UpdateWorkspaceDrawerProps {
   workspace: WorkspaceModel;
@@ -203,17 +204,18 @@ export const UpdateWorkspaceForm = ({
                   Właściciel
                 </label>
                 {!changeOwner ? (
-                  <button
+                  <Button
                     onClick={changeOwnerClick}
                     type="button"
-                    className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    color="warn"
+                    className="px-4 py-2 text-sm font-medium"
                   >
                     <RefreshIcon
                       className="-ml-1 mr-2 h-5 w-5"
                       aria-hidden="true"
                     />
                     Zmień
-                  </button>
+                  </Button>
                 ) : (
                   <div className="flex flex-row gap-2 items-center">
                     <div className="flex-grow">
@@ -229,19 +231,21 @@ export const UpdateWorkspaceForm = ({
                         )}
                       />
                     </div>
-                    <button
+                    <Button
                       onClick={() => {
                         resetField('workspaceOwnerId');
                         setChangeOwner(false);
                       }}
+                      color="warn"
                       type="button"
-                      className="inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                      className="p-1"
+                      rounded="full"
                     >
                       <XIcon
                         className="h-5 w-5 pointer-events-none"
                         aria-hidden="true"
                       />
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>
@@ -251,31 +255,33 @@ export const UpdateWorkspaceForm = ({
         <div className="flex-shrink-0 px-4 py-4 flex justify-between">
           <div>
             <Can I={WorkspacesAction.Delete} this={workspace}>
-              <button
+              <Button
                 onClick={() => onDelete(workspace)}
                 type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                color="warn"
+                className="px-4 py-2 text-sm font-medium"
               >
                 <TrashIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                 {t('actions.delete')}
-              </button>
+              </Button>
             </Can>
           </div>
           <div>
-            <button
+            <Button
               type="button"
-              className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+              color="secondary"
+              className="text-sm font-medium py-2 px-4"
               onClick={onCancel}
             >
               {t('actions.cancel')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               disabled={updateWorkspace.isLoading}
-              className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+              className="ml-4 justify-center py-2 px-4 text-sm font-medium"
             >
               {t('actions.submit')}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

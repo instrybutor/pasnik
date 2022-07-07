@@ -1,7 +1,8 @@
 import { UserModel } from '@pasnik/api/data-transfer';
 import { PropsWithChildren } from 'react';
-import { UserAvatar, UserAvatarSize } from '../user-avatar/user-avatar';
+import { UserAvatarSize } from '../user-avatar/user-avatar-types';
 import { UserName } from '../user-name/user-name';
+import { UserAvatar } from '../user-avatar/user-avatar';
 
 export interface UserInfoProps {
   user?: Partial<UserModel> | null;

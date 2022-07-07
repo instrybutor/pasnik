@@ -1,4 +1,4 @@
-export * from './lib/user-avatar/user-avatar';
+export * from './lib/user-avatar';
 export * from './lib/user-name/user-name';
 export * from './lib/user-info/user-info';
 export * from './lib/price/price';
@@ -31,3 +31,4 @@ export * from './lib/form-field';
 export * from './lib/form';
 export * from './lib/toast';
 export * from './lib/flip-date/flip-date';
+export * from './lib/trans-skeleton';

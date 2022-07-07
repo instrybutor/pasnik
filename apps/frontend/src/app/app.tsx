@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ProvideAuth, PublicOnly, RequireAuth } from '@pasnik/auth';
+import { RequireAuth } from '@pasnik/auth';
 
 import { PagesLogin } from '@pasnik/pages/login';
 import { PagesDashboard } from '@pasnik/pages/dashboard';
@@ -17,40 +17,28 @@ export function App() {
   return (
     <>
       <BrowserRouter>
-        <ProvideAuth>
-          <Routes>
-            <Route
-              path="/login"
-              element={
-                <PublicOnly>
-                  <PagesLogin />
-                </PublicOnly>
-              }
-            />
+        <Routes>
+          <Route path="/login" element={<PagesLogin />} />
 
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <Layout version={version} />
-                </RequireAuth>
-              }
-            >
-              <Route index element={<PagesDashboard />} />
-              <Route path="/history" element={<PagesOrders />} />
-              <Route
-                path="/workspace"
-                element={<RedirectToCurrentWorkspace />}
-              />
-              <Route path="/workspace/:slug/*" element={<PagesWorkspace />} />
-              <Route path="/admin" element={<RequireAuth admin={true} />}>
-                <Route path="invitations" element={<PagesAdminInvitations />} />
-              </Route>
-
-              <Route path="/order/*" element={<PagesOrder />} />
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Layout version={version} />
+              </RequireAuth>
+            }
+          >
+            <Route index element={<PagesDashboard />} />
+            <Route path="/history" element={<PagesOrders />} />
+            <Route path="/workspace" element={<RedirectToCurrentWorkspace />} />
+            <Route path="/workspace/:slug/*" element={<PagesWorkspace />} />
+            <Route path="/admin" element={<RequireAuth admin={true} />}>
+              <Route path="invitations" element={<PagesAdminInvitations />} />
             </Route>
-          </Routes>
-        </ProvideAuth>
+
+            <Route path="/order/*" element={<PagesOrder />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
       <ToastContainer />
     </>
