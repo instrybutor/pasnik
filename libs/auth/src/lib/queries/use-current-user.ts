@@ -3,7 +3,10 @@ import axios from '@pasnik/axios';
 import { UserModel } from '@pasnik/api/data-transfer';
 
 export const useCurrentUser = (
-  options?: Pick<UseQueryOptions, 'onError' | 'suspense' | 'onSuccess'>
+  options?: Pick<
+    UseQueryOptions,
+    'onError' | 'suspense' | 'onSuccess' | 'enabled'
+  >
 ) => {
   const query = useQuery<UserModel>(
     ['users', 'me'],
@@ -16,6 +19,7 @@ export const useCurrentUser = (
     {
       ...options,
       retry: false,
+      useErrorBoundary: false,
     }
   );
   return {

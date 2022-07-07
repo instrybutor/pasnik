@@ -5,9 +5,10 @@ import { WorkspaceModel } from '@pasnik/api/data-transfer';
 export const useWorkspace = (slug?: string, suspense = true) => {
   return useQuery(
     ['workspaces', slug],
-    async () => {
+    async ({ signal }) => {
       const { data } = await axios.get<WorkspaceModel>(
-        `/api/workspaces/${slug}`
+        `/api/workspaces/${slug}`,
+        { signal }
       );
       return data;
     },

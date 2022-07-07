@@ -2,17 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'react-toastify/dist/ReactToastify.css';
-:root {
-  --toastify-toast-min-height: 0;
-}
-.Toastify__toast-body {
-  margin: 0;
-}
-.Toastify__toast-container {
-  max-width: 24rem;
-  width: 100%;
-}
+@import './scss/skeletons';
+@import './scss/toastify';
 
 .stable-scrollbar {
   scrollbar-gutter: stable;

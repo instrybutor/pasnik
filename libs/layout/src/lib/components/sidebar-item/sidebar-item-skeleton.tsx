@@ -11,14 +11,12 @@ export function SidebarItemSkeleton({
   className,
 }: SidebarItemSkeletonProps) {
   return (
-    <div className="animate-pulse flex items-center px-2 py-2 rounded-md">
+    <div className="animate-pulse group flex items-center px-2 py-2 text-base font-medium rounded-md">
       <Icon
         className="mr-4 flex-shrink-0 h-6 w-6 text-cyan-200"
         aria-hidden="true"
       />
-      <div
-        className={classNames('h-5 bg-cyan-200 mr-6 rounded-md', className)}
-      ></div>
+      <div className={classNames('skeleton bg-cyan-200', className)}></div>
     </div>
   );
 }

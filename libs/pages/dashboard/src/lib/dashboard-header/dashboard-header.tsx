@@ -3,20 +3,17 @@ import { OfficeBuildingIcon } from '@heroicons/react/outline';
 import { UserAvatar, UserName } from '@pasnik/components';
 import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 import { useCurrentUser } from '@pasnik/auth';
+import { DashboardHeaderSkeleton } from './dashboard-header-skeleton';
 
-/* eslint-disable-next-line */
-export interface DashboardHeaderProps {}
-
-export function DashboardHeader(props: DashboardHeaderProps) {
+export function DashboardHeader() {
   const { t } = useTranslation();
   const { user } = useCurrentUser();
-  const { data: workspace } = useCurrentWorkspace(false);
+  const { data: workspace } = useCurrentWorkspace();
 
   return (
     <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
       <div className="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
         <div className="flex-1 min-w-0">
-          {/* Profile */}
           <div className="flex items-center">
             <div className="hidden sm:block">
               <UserAvatar user={user} size="xxlg" />
@@ -48,4 +45,4 @@ export function DashboardHeader(props: DashboardHeaderProps) {
   );
 }
 
-export default DashboardHeader;
+DashboardHeader.Skeleton = DashboardHeaderSkeleton;

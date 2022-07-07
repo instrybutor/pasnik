@@ -60,11 +60,11 @@ export const ButtonMutate = <TData, TError, TVariables, TContext>({
     <Button
       disabled={isLoading}
       ref={ref}
-      onClick={() =>
+      onClickCapture={() => {
         mutateAsync(mutationData ?? ({} as TVariables))
           .then(_onSuccess)
-          .catch(_onError)
-      }
+          .catch(_onError);
+      }}
       {...buttonProps}
     />
   );

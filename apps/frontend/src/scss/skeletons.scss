@@ -1,0 +1,83 @@
+@layer components {
+  .skeleton {
+    @apply bg-gray-300;
+    @apply rounded-md;
+    @apply flex-shrink-0;
+
+    &::after {
+      content: '.';
+      visibility: hidden;
+    }
+
+    &.icon {
+      @apply h-5;
+      @apply w-5;
+      @apply mr-1.5;
+    }
+
+
+    //&.text-2xl {
+    //  @apply h-8;
+    //}
+    //
+    //&.text-xs {
+    //  @apply h-4;
+    //}
+    //
+    //&.text-sm {
+    //  @apply h-5;
+    //}
+    //
+    //&.text-base {
+    //  @apply h-6
+    //}
+    //
+    //&.text-lg, &.text-xl {
+    //  @apply h-7
+    //}
+    //
+    //&.text-2xsl {
+    //  @apply h-8;
+    //}
+    //
+    //&.text-3xl {
+    //  @apply h-9;
+    //}
+    //
+    //&.text-4xl {
+    //  @apply h-10;
+    //}
+    //
+    //&.text-5xl {
+    //  @apply h-12;
+    //}
+    //
+    //&.text-6xl {
+    //  @apply h-9;
+    //}
+    //
+    //&.text-7xl {
+    //  @apply h-9;
+    //}
+    //
+    //&.text-8xl {
+    //  @apply h-9;
+    //}
+    //
+    //&.text-9xl {
+    //  @apply h-9;
+    //}
+
+    &-h1 {
+      @apply h-8;
+    }
+
+    &-h2 {
+
+    }
+
+    &-h3 {
+
+    }
+  }
+}

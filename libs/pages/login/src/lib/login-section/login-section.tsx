@@ -8,11 +8,23 @@ import { usePageLogin } from '../use-page-login';
 import { SlackLogin } from '../slack-login/slack-login';
 import { InvitationRejectedAlert } from '../invitation-rejected-alert/invitation-pending-alert';
 import { Invitation } from '../invitation/invitation';
+import { useCurrentUser } from '@pasnik/auth';
+import { useEffect, useRef } from 'react';
 
 export function LoginSection() {
   const { onError, requestToken, invitationStatus, hasError, onSuccess } =
     usePageLogin();
   const { t } = useTranslation();
+  const activeRef = useRef(false);
+
+  useEffect(() => {
+    activeRef.current = true;
+  }, []);
+
+  useCurrentUser({
+    onSuccess,
+    enabled: activeRef.current,
+  });
 
   return (
     <div className="flex flex-col py-16 gap-8">

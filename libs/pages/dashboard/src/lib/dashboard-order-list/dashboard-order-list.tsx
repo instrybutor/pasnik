@@ -10,6 +10,7 @@ import { OrderStatusBadge, OrderTimestamp } from '@pasnik/features/orders';
 import { CashIcon, OfficeBuildingIcon } from '@heroicons/react/outline';
 import { OrderModel } from '@pasnik/api/data-transfer';
 import { WorkspaceName } from '@pasnik/features/workspaces';
+import { DashboardOrderListSkeleton } from './dashboard-order-list-skeleton';
 
 export interface DashboardOrderListProps {
   orders: OrderModel[];
@@ -70,3 +71,5 @@ export function DashboardOrderList({ orders }: DashboardOrderListProps) {
     </StackedList>
   );
 }
+
+DashboardOrderList.Skeleton = DashboardOrderListSkeleton;

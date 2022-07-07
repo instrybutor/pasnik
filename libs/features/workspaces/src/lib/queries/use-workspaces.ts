@@ -7,8 +7,10 @@ export const useWorkspaces = (suspense = true) => {
 
   return useQuery(
     ['workspaces'],
-    async () => {
-      const { data } = await axios.get<WorkspaceModel[]>('/api/workspaces');
+    async ({ signal }) => {
+      const { data } = await axios.get<WorkspaceModel[]>('/api/workspaces', {
+        signal,
+      });
       return data;
     },
     {

@@ -1,13 +1,15 @@
 import { Menu, Transition } from '@headlessui/react';
-import { UserAvatar, UserName } from '@pasnik/components';
+import { ButtonMutate, UserAvatar, UserName } from '@pasnik/components';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { Fragment } from 'react';
 import classNames from 'classnames';
 import { useCurrentUser, useLogoutLogout } from '@pasnik/auth';
+import { useTranslation } from 'react-i18next';
 
 export function HeaderProfileDropdown() {
+  const { t } = useTranslation();
   const { user } = useCurrentUser();
-  const { mutateAsync: logoutMutation } = useLogoutLogout();
+  const logoutMutation = useLogoutLogout();
   return (
     <Menu as="div" className="relative">
       <div>
@@ -37,46 +39,17 @@ export function HeaderProfileDropdown() {
         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
           <Menu.Item>
             {({ active }) => (
-              <div
-                className={classNames(
-                  {
-                    'bg-gray-100': active,
-                  },
-                  'block px-4 py-2 text-sm text-gray-700'
-                )}
-              >
-                Your Profile
-              </div>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <div
-                className={classNames(
-                  {
-                    'bg-gray-100': active,
-                  },
-                  'block px-4 py-2 text-sm text-gray-700'
-                )}
-              >
-                Settings
-              </div>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <button
-                onClick={() => {
-                  logoutMutation();
-                }}
+              <ButtonMutate
+                rounded="none"
+                color="none"
+                mutation={logoutMutation}
                 className={classNames(
                   { 'bg-gray-100': active },
-                  'text-left w-full',
-                  'block px-4 py-2 text-sm text-gray-700'
+                  'w-full px-4 py-2 text-sm text-gray-700'
                 )}
               >
-                Logout
-              </button>
+                {t('actions.logout')}
+              </ButtonMutate>
             )}
           </Menu.Item>
         </Menu.Items>

@@ -12,16 +12,16 @@ export function DashboardHeaderSkeleton() {
             <div className="max-w-full">
               <div className="flex items-center">
                 <div className="sm:hidden">
-                  <div className="h-16 w-16 bg-gray-300 rounded-full" />
+                  <UserAvatar size="xxlg" />
                 </div>
-                <h1 className="ml-3">
-                  <div className="h-7 w-64 my-0.5 bg-gray-300 rounded-md" />
+                <h1 className="ml-3 text-2xl font-normal leading-7 text-gray-900 sm:leading-9 sm:truncate">
+                  <div className="skeleton w-64" />
                 </h1>
               </div>
               <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap max-w-full">
-                <dd className="flex items-center sm:mr-6 gap-1">
-                  <div className="h-5 w-5 bg-gray-300 rounded-md" />
-                  <div className="h-5 w-32 bg-gray-300 rounded-md" />
+                <dd className="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6 truncate">
+                  <div className="skeleton h-5 w-5 mr-1" />
+                  <div className="skeleton w-32"></div>
                 </dd>
               </dl>
             </div>

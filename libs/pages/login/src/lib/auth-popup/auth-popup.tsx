@@ -15,16 +15,18 @@ export const useAuthPopup = () => {
       windowName: 'oauth',
       width: 600,
       height: 600,
-    }).catch((value: AuthErrorResponse | string) => {
-      const authErrorResponse = value as AuthErrorResponse;
-      if (authErrorResponse.status) {
-        throw new InvitationRequiredError(
-          authErrorResponse.status,
-          authErrorResponse.requestToken
-        );
-      }
-      throw new PopupClosedError();
-    });
+    })
+      .then(() => null)
+      .catch((value: AuthErrorResponse | string) => {
+        const authErrorResponse = value as AuthErrorResponse;
+        if (authErrorResponse.status) {
+          throw new InvitationRequiredError(
+            authErrorResponse.status,
+            authErrorResponse.requestToken
+          );
+        }
+        throw new PopupClosedError();
+      });
   }, []);
 
   return {

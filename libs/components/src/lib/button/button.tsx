@@ -6,8 +6,8 @@ export interface ButtonProps
   extends Omit<HTMLProps<HTMLButtonElement>, 'type' | 'ref'> {
   type?: 'button' | 'submit' | 'reset';
   icon?(props: ComponentProps<'svg'>): JSX.Element;
-  rounded?: 'full' | 'md';
-  color?: COLOR_TYPE;
+  rounded?: 'full' | 'md' | 'none';
+  color?: COLOR_TYPE | 'none';
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -23,14 +23,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const colorClasses = getColor(color ?? 'primary');
+    const colorClasses = color !== 'none' ? getColor(color ?? 'primary') : null;
     return (
       <button
         type={type}
         ref={ref}
         {...props}
         className={classNames(
-          'inline-flex items-center p-1 rounded-md shadow-sm',
+          'inline-flex items-center p-1 shadow-sm',
           colorClasses,
           {
             'rounded-full': rounded === 'full',

@@ -8,9 +8,10 @@ export const useWorkspaceOrders = (
 ) => {
   return useQuery(
     ['workspaces', slug, 'orders', type],
-    async () => {
+    async ({ signal }) => {
       const { data } = await axios.get<OrderModel[]>(
-        `/api/workspaces/${slug}/orders/${type}`
+        `/api/workspaces/${slug}/orders/${type}`,
+        { signal }
       );
       return data;
     },

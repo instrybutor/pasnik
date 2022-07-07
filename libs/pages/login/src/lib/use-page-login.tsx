@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { InvitationRequiredError, useQuery } from '@pasnik/shared/utils';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PopupClosedError } from './auth-popup/popup-closed.error';
+import { useQueryClient } from 'react-query';
 
 export const usePageLogin = () => {
   const navigate = useNavigate();
   const query = useQuery();
+  const queryClient = useQueryClient();
   const [requestToken, setRequestToken] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
   const [invitationStatus, setInvitationStatus] = useState<
@@ -31,17 +33,25 @@ export const usePageLogin = () => {
     [setRequestToken]
   );
 
-  const onSuccess = useCallback(() => {
-    setHasError(false);
-    setInvitationStatus(undefined);
+  const onSuccess = useCallback(
+    async (data: unknown = {}) => {
+      setHasError(false);
+      setInvitationStatus(undefined);
 
-    const redirectTo = query.get('redirectTo');
-    if (redirectTo) {
-      navigate(decodeURIComponent(redirectTo));
-    } else {
-      navigate('/');
-    }
-  }, [navigate, query]);
+      if (!data) {
+        await queryClient.resetQueries(['users', 'me']);
+        return;
+      }
+
+      const redirectTo = query.get('redirectTo');
+      if (redirectTo) {
+        navigate(decodeURIComponent(redirectTo));
+      } else {
+        navigate('/');
+      }
+    },
+    [navigate, query, queryClient]
+  );
 
   return {
     requestToken,

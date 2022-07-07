@@ -6,7 +6,7 @@ export function HeaderProfileDropdownSkeleton() {
       <UserAvatar size="sm" />
 
       <span className="hidden sm:w-36 ml-3 text-gray-700 text-sm font-medium lg:flex">
-        <div className="h-4 bg-gray-300 w-full rounded-md" />
+        <div className="skeleton w-full" />
       </span>
     </div>
   );

@@ -38,7 +38,11 @@ export function StackedListItem({
           </div>
           {(subTitleRight || subTitle) && (
             <div className="mt-2 sm:flex sm:justify-between">
-              {subTitle && <div className="sm:flex sm:gap-x-6">{subTitle}</div>}
+              {subTitle && (
+                <div className="flex flex-col sm:flex-row gap-y-1 sm:gap-x-6 sm:gap-y-0">
+                  {subTitle}
+                </div>
+              )}
               {subTitleRight && (
                 <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                   {subTitleRight}

@@ -5,9 +5,12 @@ import { WorkspaceAccessRequestModel } from '@pasnik/api/data-transfer';
 export const useWorkspaceRequestAccesses = (slug?: string) => {
   return useQuery(
     ['workspaces', slug, 'access-requests'],
-    async () => {
+    async ({ signal }) => {
       const { data } = await axios.get<WorkspaceAccessRequestModel[]>(
-        `/api/workspaces/${slug}/access-requests`
+        `/api/workspaces/${slug}/access-requests`,
+        {
+          signal,
+        }
       );
       return data;
     },

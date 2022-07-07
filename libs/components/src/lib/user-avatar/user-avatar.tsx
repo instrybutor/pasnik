@@ -1,37 +1,10 @@
 import { UserModel } from '@pasnik/api/data-transfer';
 import classNames from 'classnames';
-import { ReactElement, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Tooltip } from '../tooltip/tooltip';
 import { UserName } from '../user-name/user-name';
-
-export type UserAvatarSize =
-  | 'xxsm'
-  | 'xsm'
-  | 'sm'
-  | 'md'
-  | 'lg'
-  | 'xlg'
-  | 'xxlg';
-
-export const getSizeClass = (size?: UserAvatarSize) =>
-  classNames({
-    'h-4 w-4': size === 'xxsm',
-    'h-6 w-6': size === 'xsm',
-    'h-8 w-8': size === 'sm',
-    'h-10 w-10': size === 'md' || !size,
-    'h-12 w-12': size === 'lg',
-    'h-14 w-14': size === 'xlg',
-    'h-16 w-16': size === 'xxlg',
-  });
-
-export interface UserAvatarProps {
-  user?: Partial<UserModel> | null;
-  size?: UserAvatarSize;
-  className?: string;
-  fallback?: ReactElement | null;
-  showInitials?: boolean;
-  showTooltip?: boolean | ((user: Partial<UserModel>) => ReactElement);
-}
+import { UserAvatarSkeleton } from './user-avatar-skeleton';
+import { getSizeClass, UserAvatarProps } from './user-avatar-types';
 
 export function UserAvatar({
   user,
@@ -92,3 +65,5 @@ export function UserAvatar({
     </span>
   );
 }
+
+UserAvatar.Skeleton = UserAvatarSkeleton;
