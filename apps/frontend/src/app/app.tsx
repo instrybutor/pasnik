@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { PublicOnly, RequireAuth } from '@pasnik/auth';
+import { RequireAuth } from '@pasnik/auth';
 
 import { PagesLogin } from '@pasnik/pages/login';
 import { PagesDashboard } from '@pasnik/pages/dashboard';
@@ -18,14 +18,7 @@ export function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/login"
-            element={
-              <PublicOnly>
-                <PagesLogin />
-              </PublicOnly>
-            }
-          />
+          <Route path="/login" element={<PagesLogin />} />
 
           <Route
             path="/"
