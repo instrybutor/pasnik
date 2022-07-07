@@ -64,8 +64,14 @@ export class AuthController {
 
   @UseGuards(CookieAuthenticationGuard)
   @Post('/logout')
-  logout(@Req() req: Request) {
-    req.logout();
+  logout(@Req() req: Request, @Res() res: Response) {
+    req.logout((err: Error) => {
+      if (err) {
+        res.sendStatus(500);
+      } else {
+        res.sendStatus(200);
+      }
+    });
     req.session.cookie.maxAge = 0;
   }
 
