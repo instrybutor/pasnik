@@ -1,34 +1,17 @@
-import { WorkspaceSuspenseContainer } from './workspace-suspense-container/workspace-suspense-container';
-import { WorkspaceContainer } from './workspace-container/workspace-container';
-import { QueryErrorResetBoundary } from 'react-query';
-import { ErrorBoundary } from 'react-error-boundary';
-import { WorkspaceFallbackRenderer } from './workspace-fallback-renderer/workspace-fallback-renderer';
-import { useSlug } from '@pasnik/shared/utils';
-import { QueryBoundary } from '@pasnik/components';
+import { Route, Routes } from 'react-router-dom';
+import { RedirectToCurrentWorkspace } from '@pasnik/features/workspaces';
+import { PagesWorkspaceOrders } from '@pasnik/pages/workspace-orders';
+import { PagesWorkspaceBalances } from '@pasnik/pages/workspace-balances';
+import { PagesWorkspaceLayout } from './pages-workspace-layout';
 
-/* eslint-disable-next-line */
-export interface PagesWorkspaceProps {}
-
-export function PagesWorkspace(props: PagesWorkspaceProps) {
-  const slug = useSlug();
+export function PagesWorkspace() {
   return (
-    <div className="flex flex-col overflow-auto flex-1">
-      <QueryBoundary fallback={<WorkspaceSuspenseContainer />}>
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={(params) => (
-                <WorkspaceFallbackRenderer slug={slug} {...params} />
-              )}
-            >
-              <WorkspaceContainer />
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
-      </QueryBoundary>
-    </div>
+    <Routes>
+      <Route path="/" element={<PagesWorkspaceLayout />}>
+        <Route path="/" element={<RedirectToCurrentWorkspace />} />
+        <Route path="/:slug" element={<PagesWorkspaceOrders />} />
+        <Route path="/:slug/balances" element={<PagesWorkspaceBalances />} />
+      </Route>
+    </Routes>
   );
 }
-
-export default PagesWorkspace;

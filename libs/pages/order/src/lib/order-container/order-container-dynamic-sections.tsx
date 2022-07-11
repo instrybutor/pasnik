@@ -5,6 +5,7 @@ import { OrderDishesSection } from '../order-dishes-section/order-dishes-section
 import { OrderProcessSection } from '../order-process-section/order-process-section';
 import { OrderETASection } from '../order-eta-section/order-eta-section';
 import { OrderSummarySection } from '../order-summary-section/order-summary-section';
+import { OrderBalanceSection } from '../order-balance-section/order-balance-section';
 
 export function OrderContainerDynamicSections() {
   const { order } = useCurrentOrder();
@@ -14,7 +15,11 @@ export function OrderContainerDynamicSections() {
     <OrderProcessSection />
   ) : (
     <>
-      {order?.status === OrderStatus.Ordered ? <OrderETASection /> : null}
+      {order?.status === OrderStatus.Ordered ? (
+        <OrderETASection />
+      ) : (
+        <OrderBalanceSection />
+      )}
 
       <OrderSummarySection />
     </>

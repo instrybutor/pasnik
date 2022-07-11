@@ -576,6 +576,58 @@
       },
       "tags": []
     },
+    "nestjs-orders-api": {
+      "root": "apps/nestjs-orders-api",
+      "sourceRoot": "apps/nestjs-orders-api/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:webpack",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/nestjs-orders-api",
+            "main": "apps/nestjs-orders-api/src/main.ts",
+            "tsConfig": "apps/nestjs-orders-api/tsconfig.app.json",
+            "assets": ["apps/nestjs-orders-api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/nestjs-orders-api/src/environments/environment.ts",
+                  "with": "apps/nestjs-orders-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:node",
+          "options": {
+            "buildTarget": "nestjs-orders-api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/nestjs-orders-api/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/nestjs-orders-api"],
+          "options": {
+            "jestConfig": "apps/nestjs-orders-api/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
     "pages-admin-invitations": {
       "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/pages/admin-invitations",
@@ -717,6 +769,56 @@
           "outputs": ["coverage/libs/pages/workspace"],
           "options": {
             "jestConfig": "libs/pages/workspace/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "pages-workspace-balances": {
+      "root": "libs/pages/workspace-balances",
+      "sourceRoot": "libs/pages/workspace-balances/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/pages/workspace-balances/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/workspace-balances"],
+          "options": {
+            "jestConfig": "libs/pages/workspace-balances/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "pages-workspace-orders": {
+      "root": "libs/pages/workspace-orders",
+      "sourceRoot": "libs/pages/workspace-orders/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/pages/workspace-orders/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/workspace-orders"],
+          "options": {
+            "jestConfig": "libs/pages/workspace-orders/jest.config.ts",
             "passWithNoTests": true
           }
         }
