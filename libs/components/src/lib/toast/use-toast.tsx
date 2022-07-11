@@ -2,7 +2,7 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/outline';
-import { ReactElement, useCallback } from 'react';
+import { ReactElement } from 'react';
 import { toast as toastify, ToastOptions } from 'react-toastify';
 
 export interface ToastProps {
@@ -29,19 +29,22 @@ const ToastComponent = ({ title, subTitle, type }: ToastProps) => (
   </div>
 );
 
+export function toast({
+  title,
+  subTitle,
+  type,
+  ...options
+}: ToastProps & ToastOptions) {
+  const toastFn =
+    type === 'success'
+      ? toastify.success
+      : type === 'error'
+      ? toastify.error
+      : toastify;
+  toastFn(<ToastComponent title={title} subTitle={subTitle} />, options);
+}
+
 export function useToast() {
-  const toast = useCallback(
-    ({ title, subTitle, type, ...options }: ToastProps & ToastOptions) => {
-      const toastFn =
-        type === 'success'
-          ? toastify.success
-          : type === 'error'
-          ? toastify.error
-          : toastify;
-      toastFn(<ToastComponent title={title} subTitle={subTitle} />, options);
-    },
-    []
-  );
   return {
     toast,
   };

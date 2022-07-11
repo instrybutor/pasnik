@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { OfficeBuildingIcon } from '@heroicons/react/outline';
 import { UserAvatar, UserName } from '@pasnik/components';
-import { useCurrentWorkspace } from '@pasnik/features/workspaces';
+import { useWorkspaceById } from '@pasnik/features/workspaces';
 import { useCurrentUser } from '@pasnik/auth';
 import { DashboardHeaderSkeleton } from './dashboard-header-skeleton';
 
 export function DashboardHeader() {
   const { t } = useTranslation();
   const { user } = useCurrentUser();
-  const { data: workspace } = useCurrentWorkspace();
+  const workspace = useWorkspaceById(user?.currentWorkspaceId);
 
   return (
     <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">

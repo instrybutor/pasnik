@@ -64,7 +64,7 @@ export function CreateOrderModal({
           <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
             <Button
               type="submit"
-              className="w-full px-4 py-2 sm:ml-3 sm:w-auto sm:text-sm"
+              className="w-full px-4 py-2 sm:ml-3 sm:w-auto sm:text-sm justify-center"
             >
               {t('actions.submit')}
             </Button>
@@ -72,7 +72,7 @@ export function CreateOrderModal({
               onClick={close}
               type="button"
               color="secondary"
-              className="mt-3 w-full px-4 py-2 sm:mt-0 sm:w-auto sm:text-sm"
+              className="mt-3 w-full px-4 py-2 sm:mt-0 sm:w-auto sm:text-sm justify-center"
             >
               {t('actions.cancel')}
             </Button>

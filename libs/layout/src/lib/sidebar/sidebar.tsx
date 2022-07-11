@@ -1,4 +1,4 @@
-import { Fragment, Suspense, useCallback } from 'react';
+import { Fragment, useCallback } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
@@ -22,6 +22,7 @@ import { WorkspaceModel } from '@pasnik/api/data-transfer';
 import { Can, UsersAction } from '@pasnik/ability';
 import { SidebarWorkspaceItem } from './sidebar-workspace-item';
 import { useChangeWorkspaceMutation } from '@pasnik/auth';
+import { QueryBoundary } from '@pasnik/components';
 
 const secondaryNavigation = [
   { name: 'Settings', href: '#', icon: CogIcon, hide: true },
@@ -85,7 +86,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+            <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" />
           </Transition.Child>
           <Transition.Child
             as={Fragment}
@@ -96,7 +97,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-cyan-700">
+            <div className="relative flex-1 flex flex-col w-full pt-5 pb-4 bg-cyan-700">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"
@@ -106,7 +107,7 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <div className="absolute top-0 right-0 -mr-12 pt-2">
+                <div className="absolute top-0 right-0 mr-2 pt-2">
                   <button
                     type="button"
                     className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -211,12 +212,12 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
               aria-label="Sidebar"
             >
               <div className="px-2">
-                <Suspense fallback={<SelectWorkspaceDropdownSkeleton />}>
+                <QueryBoundary fallback={<SelectWorkspaceDropdownSkeleton />}>
                   <SelectWorkspaceDropdown
                     onChange={onChangeWorkspace}
                     onAddClick={showAddWorkspaceModal}
                   />
-                </Suspense>
+                </QueryBoundary>
               </div>
               <div className="px-2 space-y-1 mt-6 pt-6">
                 <SidebarItem to="/" icon={HomeIcon} label="Dashboard" />
@@ -272,13 +273,11 @@ export function Sidebar({ sidebarOpen, closeSidebar, version }: SidebarProps) {
           </div>
         </div>
       </div>
-      <Suspense>
-        <CreateWorkspaceDrawer
-          isOpen={addWorkspaceModalOpen}
-          onSuccess={onCreateWorkspaceSuccess}
-          onCancel={hideAddWorkspaceModal}
-        />
-      </Suspense>
+      <CreateWorkspaceDrawer
+        isOpen={addWorkspaceModalOpen}
+        onSuccess={onCreateWorkspaceSuccess}
+        onCancel={hideAddWorkspaceModal}
+      />
     </>
   );
 }

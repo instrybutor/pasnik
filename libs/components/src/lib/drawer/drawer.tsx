@@ -33,7 +33,7 @@ export const Drawer = ({
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          <div className="fixed inset-y-0 pr-16 max-w-full left-0 flex">
+          <div className="fixed inset-y-0 sm:pr-16 max-w-full left-0 flex">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"

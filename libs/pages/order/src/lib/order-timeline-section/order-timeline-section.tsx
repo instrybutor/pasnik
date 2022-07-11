@@ -1,10 +1,11 @@
 import { OrderSection } from '../order-section/order-section';
 import { Switch } from '@headlessui/react';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames';
 import { OrderTimeline } from './order-timeline';
 import { useTranslation } from 'react-i18next';
 import { OrderTimelineSkeleton } from './order-timeline-skeleton';
+import { QueryBoundary } from '@pasnik/components';
 
 export function OrderTimelineSection() {
   const { t } = useTranslation();
@@ -38,9 +39,9 @@ export function OrderTimelineSection() {
         </Switch.Group>
       }
     >
-      <Suspense fallback={<OrderTimelineSkeleton />}>
+      <QueryBoundary fallback={<OrderTimelineSkeleton />}>
         <OrderTimeline isDetailed={isDetailed} />
-      </Suspense>
+      </QueryBoundary>
     </OrderSection>
   );
 }

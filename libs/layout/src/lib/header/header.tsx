@@ -27,7 +27,11 @@ export function Header({ openSidebar }: HeaderProps) {
       </button>
       <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
         <div className="flex-1 flex items-center xsm:justify-end">
-          <Suspense fallback="Loading">
+          <Suspense
+            fallback={
+              <div className="skeleton h-10 w-40 text-center items-center px-4 py-2 border border-transparent shadow-sm" />
+            }
+          >
             <Can I={WorkspacesAction.CreateOrder} on="WorkspaceModel">
               <div className="flex space-x-3 flex-grow xsm:flex-grow-0 md:ml-4">
                 <HeaderCreateOrderButton />

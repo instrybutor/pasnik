@@ -14,6 +14,7 @@ export const useWorkspaces = (suspense = true) => {
       return data;
     },
     {
+      retry: false,
       onSuccess: (workspaces) => {
         workspaces.forEach((workspace) => {
           queryClient.setQueryData(['workspaces', workspace.slug], workspace);

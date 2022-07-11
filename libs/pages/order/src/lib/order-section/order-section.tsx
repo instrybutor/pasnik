@@ -1,8 +1,8 @@
-import { PropsWithChildren, ReactNode, Suspense, useMemo } from 'react';
+import { PropsWithChildren, ReactNode, useMemo } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import { Spinner, useBreakpoint } from '@pasnik/components';
+import { QueryBoundary, Spinner, useBreakpoint } from '@pasnik/components';
 
 export interface OrderSectionProps {
   header?: string | ReactNode;
@@ -88,9 +88,9 @@ export function OrderSection({
               'px-4 py-4 sm:px-5': !noPadding,
             })}
           >
-            <Suspense fallback={<Spinner />}>
+            <QueryBoundary fallback={<Spinner />}>
               {isLoading ? <Spinner /> : children}
-            </Suspense>
+            </QueryBoundary>
           </Disclosure.Panel>
           {footer && <div className="border-t border-gray-200">{footer}</div>}
         </div>

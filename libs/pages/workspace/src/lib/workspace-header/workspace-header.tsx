@@ -3,7 +3,7 @@ import {
   useWorkspace,
   WorkspaceUsers,
 } from '@pasnik/features/workspaces';
-import { Suspense, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CogIcon } from '@heroicons/react/outline';
 import { WorkspaceModel } from '@pasnik/api/data-transfer';
 import { WorkspaceJoinLeaveButton } from '../workspace-join-leave-button/workspace-join-leave-button';
@@ -11,6 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { WorkspaceHeaderUsers } from '../workspace-header-users/workspace-header-users';
 import { Can, WorkspacesAction } from '@pasnik/ability';
 import { useTranslation } from 'react-i18next';
+import { QueryBoundary } from '@pasnik/components';
 
 export const WorkspaceHeader = () => {
   const { t } = useTranslation();
@@ -40,13 +41,13 @@ export const WorkspaceHeader = () => {
           </h2>
           <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
             <div className="mt-2 flex items-center text-sm text-gray-500">
-              <Suspense
+              <QueryBoundary
                 fallback={
                   <WorkspaceUsers.Skeleton usersToShow={11} avatarSize="sm" />
                 }
               >
                 <WorkspaceHeaderUsers />
-              </Suspense>
+              </QueryBoundary>
             </div>
           </div>
         </div>
