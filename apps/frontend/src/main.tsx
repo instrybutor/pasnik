@@ -1,6 +1,4 @@
 import { StrictMode, Suspense } from 'react';
-
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { FullscreenSpinner } from '@pasnik/components';
@@ -8,19 +6,7 @@ import { FullscreenSpinner } from '@pasnik/components';
 import App from './app/app';
 import './i18n';
 import { createRoot } from 'react-dom/client';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      suspense: true,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-    },
-    mutations: {
-      useErrorBoundary: false,
-    },
-  },
-});
+import { AppQueryProvider } from './app/app-query-provider';
 
 const container = document.getElementById('root');
 if (!container) {
@@ -30,11 +16,11 @@ const root = createRoot(container);
 
 root.render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<FullscreenSpinner />}>
+    <Suspense fallback={<FullscreenSpinner />}>
+      <AppQueryProvider>
         <App />
-      </Suspense>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </AppQueryProvider>
+    </Suspense>
   </StrictMode>
 );

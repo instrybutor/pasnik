@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -11,6 +11,7 @@ import { OrderHeaderSkeleton } from './order-header/order-header-skeleton';
 import { useOrderState } from './order-state/order-state';
 import { useSlug } from '@pasnik/shared/utils';
 import { useSidebarContext } from '@pasnik/layout';
+import { QueryBoundary } from '@pasnik/components';
 
 export function PagesOrderDetails() {
   const slug = useSlug();
@@ -34,12 +35,12 @@ export function PagesOrderDetails() {
   return (
     <ErrorBoundary fallbackRender={() => <Navigate to="/" />}>
       <WorkspaceProvider workspaceId={order?.workspaceId}>
-        <Suspense fallback={<OrderHeaderSkeleton />}>
+        <QueryBoundary fallback={<OrderHeaderSkeleton />}>
           <OrderHeader />
-        </Suspense>
-        <Suspense fallback={<OrderContainerSkeleton />}>
+        </QueryBoundary>
+        <QueryBoundary fallback={<OrderContainerSkeleton />}>
           <OrderContainer />
-        </Suspense>
+        </QueryBoundary>
       </WorkspaceProvider>
     </ErrorBoundary>
   );

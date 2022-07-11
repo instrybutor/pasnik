@@ -1,25 +1,25 @@
-import { Fragment, Suspense } from 'react';
 import { DashboardHeader } from './dashboard-header/dashboard-header';
 import { DashboardOrders } from './dashboard-orders/dashboard-orders';
+import { QueryBoundary } from '@pasnik/components';
 
 export function PagesDashboard() {
   return (
-    <Fragment>
+    <>
       <header className="bg-white shadow">
-        <Suspense fallback={<DashboardHeader.Skeleton />}>
+        <QueryBoundary fallback={<DashboardHeader.Skeleton />}>
           <DashboardHeader />
-        </Suspense>
+        </QueryBoundary>
       </header>
       <main className="flex-grow flex-1">
         <div className="mt-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Suspense fallback={<DashboardOrders.Skeleton />}>
+            <QueryBoundary fallback={<DashboardOrders.Skeleton />}>
               <DashboardOrders />
-            </Suspense>
+            </QueryBoundary>
           </div>
         </div>
       </main>
-    </Fragment>
+    </>
   );
 }
 

@@ -1,7 +1,7 @@
 import { Outlet, Route, Routes, useMatch, useNavigate } from 'react-router-dom';
 import { SyntheticEvent, useCallback } from 'react';
 import { WorkspaceHeader } from '../workspace-header/workspace-header';
-import { QueryBoundary, TabLink } from '@pasnik/components';
+import { QueryBoundary, Spinner, TabLink } from '@pasnik/components';
 import { WorkspaceOrders } from '../workspace-orders/workspace-orders';
 import { OrdersEmpty } from '@pasnik/features/orders';
 import { WorkspaceInactiveOrdersEmpty } from '../workspace-inactive-orders-empty/workspace-inactive-orders-empty';
@@ -67,7 +67,7 @@ export function WorkspaceContainer() {
               </div>
             </div>
             <div className="border-t border-gray-200 divide-y divide-gray-200 sm:border-t-0 sm:rounded-md">
-              <QueryBoundary>
+              <QueryBoundary fallback={<Spinner />}>
                 <Routes>
                   <Route element={<Outlet />}>
                     <Route

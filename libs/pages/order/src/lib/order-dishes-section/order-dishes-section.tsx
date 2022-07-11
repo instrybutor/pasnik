@@ -1,6 +1,6 @@
 import { PlusIcon } from '@heroicons/react/outline';
 import { OrderSection } from '../order-section/order-section';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { OrderDishesSectionFooter } from './order-dishes-section-footer';
 import { OrderDishManage } from '../order-dish-add/order-dish-manage';
@@ -8,6 +8,7 @@ import { OrderDishesSectionBody } from './order-dishes-section-body';
 import { useSlug } from '@pasnik/shared/utils';
 import { useOrderDishes } from '@pasnik/features/orders';
 import { OrderDishesSkeleton } from '../order-dishes/order-dishes-skeleton';
+import { QueryBoundary } from '@pasnik/components';
 
 export function OrderDishesSection() {
   const { t } = useTranslation();
@@ -21,7 +22,7 @@ export function OrderDishesSection() {
       header={t('order.order')}
       footer={
         <div className="divide-y divide-gray-200">
-          <Suspense
+          <QueryBoundary
             fallback={
               <div className="px-4 py-4 sm:px-6 flex items-center space-between animate-pulse">
                 <div className="flex-1">
@@ -39,7 +40,7 @@ export function OrderDishesSection() {
           >
             {isAdding && <OrderDishManage onClose={() => setIsAdding(false)} />}
             <OrderDishesSectionFooter />
-          </Suspense>
+          </QueryBoundary>
         </div>
       }
       action={
@@ -60,9 +61,9 @@ export function OrderDishesSection() {
         )
       }
     >
-      <Suspense fallback={<OrderDishesSkeleton />}>
+      <QueryBoundary fallback={<OrderDishesSkeleton />}>
         <OrderDishesSectionBody isAdding={isAdding} />
-      </Suspense>
+      </QueryBoundary>
     </OrderSection>
   );
 }
