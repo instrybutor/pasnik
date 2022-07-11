@@ -1,14 +1,7 @@
-import styles from './pages-workspace-balances.module.css';
-
-/* eslint-disable-next-line */
-export interface PagesWorkspaceBalancesProps {}
-
-export function PagesWorkspaceBalances(props: PagesWorkspaceBalancesProps) {
+export function PagesWorkspaceBalances() {
   return (
-    <div className={styles['container']}>
+    <div>
       <h1>Welcome to PagesWorkspaceBalances!</h1>
     </div>
   );
 }
-
-export default PagesWorkspaceBalances;
