@@ -2,18 +2,21 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity';
-import { DishEntity } from './dish.entity';
 import { OrderActionEntity } from './order-action.entity';
 
 import { OrderModel, OrderStatus } from '@pasnik/api/data-transfer';
 import { WorkspaceEntity } from './workspace.entity';
+import { OperationEntity } from './operation.entity';
+import { WorkspaceUserEntity } from './workspace-user.entity';
+import { DishEntity } from './dish.entity';
 
 @Entity()
 export class OrderEntity implements OrderModel {
@@ -25,20 +28,14 @@ export class OrderEntity implements OrderModel {
   @Column()
   slug: string;
 
-  @ManyToOne(() => UserEntity)
-  user: UserEntity;
+  @ManyToOne(() => WorkspaceUserEntity)
+  workspaceUser: WorkspaceUserEntity;
 
   @Column()
-  userId: number;
-
-  @ManyToOne(() => UserEntity, { nullable: true })
-  payer?: UserEntity;
+  workspaceUserId: number;
 
   @Column({ type: 'varchar', default: OrderStatus.InProgress })
   status: OrderStatus;
-
-  @Column()
-  from: string;
 
   @Column({ nullable: true })
   menuUrl?: string;
@@ -58,21 +55,25 @@ export class OrderEntity implements OrderModel {
   @Column({ type: 'timestamptz', nullable: true })
   deliveredAt: string;
 
-  @OneToMany(() => DishEntity, (dish) => dish.order)
-  dishes: DishEntity[];
-
   @OneToMany(() => OrderActionEntity, (action) => action.order)
   actions: OrderActionEntity[];
 
-  @Column({ default: 0 })
-  totalPrice: number;
+  @OneToMany(() => DishEntity, (dish) => dish.order)
+  dishes: DishEntity[];
 
   @ManyToOne(() => WorkspaceEntity, { nullable: false, onDelete: 'CASCADE' })
   workspace: WorkspaceEntity;
 
-  @Column()
+  @Column({ nullable: true })
   workspaceId: number;
 
-  @ManyToMany(() => UserEntity)
-  participants: UserEntity[];
+  @ManyToMany(() => WorkspaceUserEntity)
+  participants: WorkspaceUserEntity[];
+
+  @OneToOne(() => OperationEntity, { cascade: true, eager: true })
+  @JoinColumn()
+  operation: OperationEntity;
+
+  @Column({ nullable: true })
+  operationId: number;
 }

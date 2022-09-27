@@ -7,9 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-
-import { CurrentUser } from '@pasnik/nestjs/auth';
-import { OrderEntity, UserEntity } from '@pasnik/nestjs/database';
+import { OrderEntity, WorkspaceUserEntity } from '@pasnik/nestjs/database';
 import { AddDishDto } from '@pasnik/api/data-transfer';
 
 import { DishesService } from './dishes.service';
@@ -17,6 +15,7 @@ import { CurrentOrder } from '../order/current-order.decorator';
 import { CurrentAbility } from '../app-ability';
 import { AppAbility, OrdersAction } from '@pasnik/ability';
 import { ForbiddenError } from '@casl/ability';
+import { CurrentWorkspaceUser } from '../workspaces/current-workspace-user.decorator';
 
 @Controller('orders/slug/:slug/dishes')
 export class DishesController {
@@ -36,7 +35,7 @@ export class DishesController {
   create(
     @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
-    @CurrentUser() currentUser: UserEntity,
+    @CurrentWorkspaceUser() currentUser: WorkspaceUserEntity,
     @CurrentAbility() ability: AppAbility
   ) {
     ForbiddenError.from(ability).throwUnlessCan(OrdersAction.CreateDish, order);
@@ -58,10 +57,10 @@ export class DishesController {
     @CurrentOrder() order: OrderEntity,
     @Body() addDishDto: AddDishDto,
     @Param('id') id: string,
-    @CurrentUser() user: UserEntity,
+    @CurrentWorkspaceUser() currentUser: WorkspaceUserEntity,
     @CurrentAbility() ability: AppAbility
   ) {
     ForbiddenError.from(ability).throwUnlessCan(OrdersAction.UpdateDish, order);
-    return this.dishesService.update(order, +id, addDishDto, user);
+    return this.dishesService.update(order, +id, addDishDto, currentUser);
   }
 }

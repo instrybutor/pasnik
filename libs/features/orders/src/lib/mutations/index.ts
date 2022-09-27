@@ -9,3 +9,4 @@ export * from './use-order-mark-as-closed-mutation';
 export * from './use-order-mark-as-ordered-mutation';
 export * from './use-order-mark-as-delivered-mutation';
 export * from './use-order-set-eta-mutation';
+export * from './use-order-payment-add-mutation';

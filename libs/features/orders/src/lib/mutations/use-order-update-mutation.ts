@@ -16,7 +16,7 @@ export const useOrderUpdateMutation = (order: OrderModel) => {
     {
       onSuccess: async (newOrder) => {
         const data = queryClient.getQueryData<OrderModel[]>(queryKey) ?? [];
-        const index = data.findIndex(({ id }) => id === order.id);
+        const index = data.findIndex(({ slug }) => slug === order.slug);
         const newData =
           index === -1 ? [newOrder, ...data] : data.splice(index, 1, newOrder);
         queryClient.setQueryData(queryKey, newData);

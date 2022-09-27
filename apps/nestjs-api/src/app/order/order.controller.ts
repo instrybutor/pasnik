@@ -1,11 +1,15 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 
-import { OrderEntity, UserEntity } from '@pasnik/nestjs/database';
 import {
+  OrderEntity,
+  UserEntity,
+  WorkspaceUserEntity,
+} from '@pasnik/nestjs/database';
+import {
+  AddPayerToOrderDto,
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
   SetETADto,
-  SetPayerDto,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
 import { CurrentUser } from '@pasnik/nestjs/auth';
@@ -15,10 +19,15 @@ import { CurrentOrder } from './current-order.decorator';
 import { CurrentAbility } from '../app-ability';
 import { AppAbility, OrdersAction } from '@pasnik/ability';
 import { ForbiddenError } from '@casl/ability';
+import { PaymentsService } from '../payments/payments.service';
+import { CurrentWorkspaceUser } from '../workspaces/current-workspace-user.decorator';
 
 @Controller('orders/slug/:slug')
 export class OrderController {
-  constructor(private readonly ordersService: OrderService) {}
+  constructor(
+    private readonly ordersService: OrderService,
+    private readonly paymentsService: PaymentsService
+  ) {}
 
   @Get()
   findOne(
@@ -77,16 +86,6 @@ export class OrderController {
     return this.ordersService.markAsOpen(order.id, user);
   }
 
-  @Post('/set-payer')
-  markAsPaid(
-    @CurrentOrder() order: OrderEntity,
-    @Body() setPayerDto: SetPayerDto,
-    @CurrentAbility() ability: AppAbility
-  ) {
-    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.SetPayer, order);
-    return this.ordersService.setPayer(order.id, setPayerDto);
-  }
-
   @Post('/set-eta')
   setEta(
     @CurrentOrder() order: OrderEntity,
@@ -102,7 +101,7 @@ export class OrderController {
   @Post('/mark-as-delivered')
   markAsDelivered(
     @CurrentOrder() order: OrderEntity,
-    @CurrentUser() user: UserEntity,
+    @CurrentWorkspaceUser() user: WorkspaceUserEntity,
     @CurrentAbility() ability: AppAbility,
     @Body() markAsDeliveredDto: MarkAsDeliveredDto
   ) {
@@ -128,5 +127,28 @@ export class OrderController {
       order
     );
     return this.ordersService.markAsProcessing(order.id, user);
+  }
+
+  @Get('/payments')
+  getPayments(
+    @CurrentOrder() order: OrderEntity,
+    @CurrentAbility() ability: AppAbility
+  ) {
+    return this.paymentsService.findAllForSource(order.operation);
+  }
+
+  @Put('/payments')
+  addPayment(
+    @Body() addPaymentDto: AddPayerToOrderDto,
+    @CurrentOrder() order: OrderEntity,
+    @CurrentAbility() ability: AppAbility,
+    @CurrentWorkspaceUser() currentWorkspaceUser: WorkspaceUserEntity
+  ) {
+    ForbiddenError.from(ability).throwUnlessCan(OrdersAction.SetPayer, order);
+    return this.ordersService.addPayerToOrder(
+      order,
+      currentWorkspaceUser,
+      addPaymentDto
+    );
   }
 }

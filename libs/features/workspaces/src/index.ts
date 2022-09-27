@@ -13,3 +13,5 @@ export * from './lib/select-workspace-user/select-workspace-user';
 export * from './lib/use-current-workspace';
 export * from './lib/workspace-context';
 export * from './lib/workspace-provider';
+export * from './lib/use-current-workspace-user';
+export * from './lib/workspace-user-to-user';

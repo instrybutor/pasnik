@@ -7,13 +7,13 @@ export enum WorkspaceUserRole {
   User = 'user',
 }
 
-export interface WorkspaceUserModel {
+export interface WorkspaceUserModel<U = UserModel | undefined> {
   kind: 'WorkspaceUserModel';
   id: number;
   createdAt: string;
   workspace?: WorkspaceModel;
   workspaceId: number;
-  user?: UserModel;
+  user: U;
   userId: number;
   addedBy: UserModel;
   role: WorkspaceUserRole;

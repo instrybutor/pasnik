@@ -13,6 +13,7 @@ export function UserAvatar({
   fallback,
   showInitials,
   showTooltip,
+  as,
 }: UserAvatarProps) {
   const formatInitials = ({ givenName, familyName }: Partial<UserModel>) =>
     `${givenName![0]}${familyName![0]}`;
@@ -34,18 +35,20 @@ export function UserAvatar({
     return <UserName user={user} />;
   }, [user, showTooltip]);
 
+  const Wrapper = as || 'span';
+
   return (
-    <span
+    <Wrapper
       className={classNames(
         getSizeClass(size),
         'inline-block rounded-full overflow-hidden flex-shrink-0',
         className
       )}
-      tabIndex={0}
     >
       {user?.avatarImg && !showInitials ? (
         <Tooltip title={tooltipTitle} disabled={!showTooltip}>
           <img
+            className="inline-flex"
             referrerPolicy="no-referrer"
             src={user.avatarImg}
             alt={formatInitials(user)}
@@ -62,7 +65,7 @@ export function UserAvatar({
           {fallback ?? defaultFallback}
         </span>
       )}
-    </span>
+    </Wrapper>
   );
 }
 

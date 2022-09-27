@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { Transition } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import { OrderDishManage } from '../order-dish-add/order-dish-manage';
+import OrderDelivery from '../order-delivery/order-delivery';
+import { useCurrentOrder } from '@pasnik/features/orders';
+import { OrderDeliveryManage } from '../order-delivery/order-delivery-manage';
 
 export interface OrderDishesProps {
   dishes: DishModel[];
@@ -14,6 +17,7 @@ export interface OrderDishesProps {
 export function OrderDishes({ dishes, isAdding }: OrderDishesProps) {
   const { t } = useTranslation();
   const [updateId, setUpdateId] = useState(-1);
+  const { order } = useCurrentOrder();
 
   useEffect(() => {
     if (isAdding) {
@@ -49,6 +53,25 @@ export function OrderDishes({ dishes, isAdding }: OrderDishesProps) {
           )}
         </Transition>
       ))}
+      {order && (order.shippingCents ?? 0) > 0 && (
+        <li>
+          {updateId === 0 ? (
+            <OrderDeliveryManage
+              dishes={dishes}
+              order={order}
+              onClose={() => setUpdateId(-1)}
+            />
+          ) : (
+            <OrderDelivery
+              dishes={dishes}
+              order={order}
+              onUpdate={() => {
+                setUpdateId(0);
+              }}
+            />
+          )}
+        </li>
+      )}
     </ul>
   );
 }

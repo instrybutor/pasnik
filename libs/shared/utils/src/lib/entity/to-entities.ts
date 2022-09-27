@@ -1,7 +1,7 @@
 import { Dictionary, IdSelector } from './models';
 
 export interface BaseEntity {
-  id: number & string;
+  id: number;
 }
 
 export function toEntities<T extends BaseEntity>(

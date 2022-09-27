@@ -6,7 +6,7 @@ import {
   FormField,
   Input,
   Modal,
-  ModalProps,
+  useModalContext,
 } from '@pasnik/components';
 import { CreateOrderDto, OrderModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
@@ -18,13 +18,11 @@ export interface EditOrderModelProps {
   order: OrderModel;
 }
 
-export function EditOrderModal({
-  close,
-  order,
-}: ModalProps<EditOrderModelProps>) {
+export function EditOrderModal({ order }: EditOrderModelProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { mutateAsync } = useOrderUpdateMutation(order);
+  const { closeModal } = useModalContext();
   return (
     <Modal>
       <Modal.Title>{t('order.order_edit')}</Modal.Title>
@@ -34,7 +32,7 @@ export function EditOrderModal({
         onSubmit={async (data) => {
           const { slug } = await mutateAsync(data);
           navigate(`/order/${slug}`);
-          close();
+          closeModal();
         }}
       >
         <div className="flex flex-1 flex-col space-y-6">
@@ -42,7 +40,7 @@ export function EditOrderModal({
             required
             label={t('order.create_form.restaurant_label')}
             name="from"
-            defaultValue={order.from}
+            defaultValue={order.operation.name}
           >
             <Input
               placeholder={t('order.create_form.restaurant_placeholder')}
@@ -75,7 +73,7 @@ export function EditOrderModal({
               {t('actions.submit')}
             </Button>
             <Button
-              onClick={close}
+              onClick={closeModal}
               type="button"
               color="secondary"
               className="mt-3 w-full px-4 py-2 sm:mt-0 sm:w-auto sm:text-sm"

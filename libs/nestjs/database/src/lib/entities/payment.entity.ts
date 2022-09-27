@@ -6,8 +6,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity';
 import { PaymentModel } from '@pasnik/api/data-transfer';
+import { WorkspaceUserEntity } from './workspace-user.entity';
+import { OperationEntity } from './operation.entity';
 
 @Entity()
 export class PaymentEntity implements PaymentModel {
@@ -20,12 +21,15 @@ export class PaymentEntity implements PaymentModel {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => UserEntity)
-  user: UserEntity;
-
-  @ManyToOne(() => UserEntity)
-  payer: UserEntity;
+  @ManyToOne(() => WorkspaceUserEntity)
+  workspaceUser: WorkspaceUserEntity;
 
   @Column()
-  balanceCents: number;
+  workspaceUserId: number;
+
+  @Column()
+  amountCents: number;
+
+  @ManyToOne(() => OperationEntity, (operation) => operation.payments)
+  operation: OperationEntity;
 }

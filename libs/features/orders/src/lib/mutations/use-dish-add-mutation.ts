@@ -18,15 +18,23 @@ export const useDishAddMutation = (orderSlug: string) => {
         await queryClient.cancelQueries(queryKey);
 
         const prevDishes =
-          queryClient.getQueryData<Partial<AddDishDto>[]>(queryKey);
-        queryClient.setQueryData<Partial<AddDishDto>[]>(
+          queryClient.getQueryData<Partial<DishModel>[]>(queryKey);
+        queryClient.setQueryData<Partial<DishModel>[]>(
           queryKey,
           (prev = []) => [
             ...prev,
             {
-              ...dish,
               id: new Date().getTime(),
               createdAt: new Date().toISOString(),
+              expense: {
+                id: -1,
+                name: dish.name,
+                priceCents: dish.priceCents,
+                shares: [],
+                workspaceUserId: -1,
+              },
+              expenseId: -1,
+              orderId: '-1',
             },
           ]
         );

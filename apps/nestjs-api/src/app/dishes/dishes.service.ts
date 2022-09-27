@@ -1,26 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   DishesRepository,
   OrderEntity,
-  UserEntity,
-  UsersRepository,
+  WorkspaceUserEntity,
+  WorkspaceUsersRepository,
 } from '@pasnik/nestjs/database';
-import { AddDishDto } from '@pasnik/api/data-transfer';
+import { AddDishDto, ShareDto } from '@pasnik/api/data-transfer';
+import { In } from 'typeorm';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 @Injectable()
 export class DishesService {
   constructor(
     @InjectRepository(DishesRepository)
     private dishesRepository: DishesRepository,
-    @InjectRepository(UsersRepository)
-    private usersRepository: UsersRepository
+    @InjectRepository(WorkspaceUsersRepository)
+    private usersRepository: WorkspaceUsersRepository
   ) {}
 
   findAll(order: OrderEntity) {
     return this.dishesRepository.find({
       where: { order },
-      relations: ['user', 'createdBy'],
       order: {
         createdAt: 'ASC',
       },
@@ -30,15 +31,16 @@ export class DishesService {
   findOne(order: OrderEntity, id: number) {
     return this.dishesRepository.findOneOrFail({
       where: { order, id },
-      relations: ['user'],
     });
   }
 
   async create(
     addDishDto: AddDishDto,
     order: OrderEntity,
-    currentUser: UserEntity
+    currentUser: WorkspaceUserEntity
   ) {
+    await this.validateSharesUsers(currentUser.workspaceId, addDishDto.shares);
+
     const dishOwner =
       (await this.usersRepository.findOne({
         where: { id: addDishDto.userId },
@@ -62,8 +64,10 @@ export class DishesService {
     order: OrderEntity,
     dishId: number,
     addDishDto: AddDishDto,
-    createdBy: UserEntity
+    createdBy: WorkspaceUserEntity
   ) {
+    await this.validateSharesUsers(createdBy.workspaceId, addDishDto.shares);
+
     const dishOwner =
       (await this.usersRepository.findOne(addDishDto.userId)) ?? createdBy;
 
@@ -76,5 +80,16 @@ export class DishesService {
     );
 
     return this.findOne(order, dish.id);
+  }
+
+  private async validateSharesUsers(workspaceId: number, shares: ShareDto[]) {
+    const userIds = shares.map(({ workspaceUserId }) => workspaceUserId);
+    const userCount = await this.usersRepository.count({
+      where: { id: In(userIds), workspaceId },
+    });
+    const hasValidUsers = userCount === userIds.length;
+    if (!hasValidUsers) {
+      throw new HttpException('Invalid user id', HttpStatus.FORBIDDEN);
+    }
   }
 }

@@ -23,7 +23,7 @@ export function OrderHeader() {
       left={
         <>
           <h1 className="text-2xl font-normal leading-7 text-gray-900 sm:leading-9 sm:truncate flex items-center gap-2">
-            {order?.from}
+            {order?.operation.name}
             {order?.menuUrl && (
               <a
                 href={order.menuUrl}

@@ -66,7 +66,10 @@ export function DashboardOrders() {
             <div className="border-b border-gray-200">
               <ul className="divide-y divide-gray-200">
                 {archivedOrders.map((order) => (
-                  <DashboardOrderList key={order.id} orders={archivedOrders} />
+                  <DashboardOrderList
+                    key={order.slug}
+                    orders={archivedOrders}
+                  />
                 ))}
               </ul>
             </div>

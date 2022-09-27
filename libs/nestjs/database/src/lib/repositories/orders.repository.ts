@@ -10,7 +10,13 @@ import {
 } from '@pasnik/api/data-transfer';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { addMinutes, sub } from 'date-fns';
-import { OrderEntity, UserEntity, WorkspaceEntity } from '../entities';
+import {
+  OperationEntity,
+  OrderEntity,
+  UserEntity,
+  WorkspaceEntity,
+  WorkspaceUserEntity,
+} from '../entities';
 import * as normalizeUrl from 'normalize-url';
 
 @EntityRepository(OrderEntity)
@@ -33,7 +39,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
           }
         })
       )
-      .addSelect('SUM(dish.priceCents)', 'order_totalPrice')
+      .addSelect('SUM(dish_expense.priceCents)', 'order_operation_priceCents')
       .setParameters({
         startDate: yesterday,
         endDate: now,
@@ -41,16 +47,18 @@ export class OrdersRepository extends Repository<OrderEntity> {
   }
 
   findOneWithParticipants(orderId: string) {
-    return this.createQueryBuilder('order')
-      .where('order.id = :orderId', { orderId })
-      .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
-      .leftJoinAndMapMany(
-        'order.participants',
-        UserEntity,
-        'participant',
-        'dish.userId = participant.id'
-      )
-      .getOne();
+    return (
+      this.createQueryBuilder('order')
+        .where('order.id = :orderId', { orderId })
+        .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
+        // .leftJoinAndMapMany(
+        //   'order.participants',
+        //   UserEntity,
+        //   'participant',
+        //   'dish.userId = participant.id'
+        // )
+        .getOne()
+    );
   }
 
   findAllInactive() {
@@ -67,58 +75,68 @@ export class OrdersRepository extends Repository<OrderEntity> {
     return this.createQueryBuilder('order')
       .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
       .leftJoinAndMapOne(
-        'order.workspace',
-        WorkspaceEntity,
-        'workspace',
-        'workspace.id = order.workspaceId'
+        'order.operation',
+        OperationEntity,
+        'order_operation',
+        'order.operationId = order_operation.id'
       )
-      .leftJoinAndMapOne(
-        'order.user',
-        UserEntity,
-        'user',
-        'user.id = order.userId'
+      .leftJoin(
+        'dish.expense',
+        'dish_expense',
+        'dish.expenseId = dish_expense.id'
+      )
+      .leftJoin(
+        'dish_expense.shares',
+        'dish_expense_share',
+        'dish_expense.id = dish_expense_share.expenseId'
       )
       .leftJoinAndMapMany(
         'order.participants',
-        UserEntity,
+        WorkspaceUserEntity,
         'participant',
-        'dish.userId = participant.id'
+        'participant.id = dish_expense_share.workspaceUserId'
       )
       .groupBy('order.id')
-      .addGroupBy('user.id')
+      .addGroupBy('dish.id')
+      .addGroupBy('dish_expense.id')
       .addGroupBy('participant.id')
-      .addGroupBy('workspace.id');
+      .addGroupBy('order_operation.id');
   }
 
   async createOrder(
     createOrderDto: CreateOrderDto,
     workspace: WorkspaceEntity,
-    user: UserEntity
+    user: WorkspaceUserEntity
   ) {
     const order = new OrderEntity();
+    const operation = new OperationEntity();
 
+    order.operation = operation;
+    order.workspaceUser = user;
     order.workspace = workspace;
-    order.user = user;
-    order.from = createOrderDto.from;
     order.shippingCents = createOrderDto.shippingCents;
-    console.log(createOrderDto.menuUrl);
     order.menuUrl = createOrderDto.menuUrl
       ? normalizeUrl(createOrderDto.menuUrl, {
           defaultProtocol: 'https://',
         })
       : null;
-    order.slug = slugify([order.from, nanoid(6)].join(' '), { lower: true });
-    order.payer = user;
+    order.slug = slugify([order.operation.name, nanoid(6)].join(' '), {
+      lower: true,
+    });
+
+    order.operation = operation;
+    order.operation.name = createOrderDto.name;
+    order.operation.workspaceUser = user;
 
     return this.save(order);
   }
 
   async updateOrder(createOrderDto: CreateOrderDto, order: OrderEntity) {
     order.slug =
-      createOrderDto.from !== order.from
-        ? slugify([createOrderDto.from, nanoid(6)].join(' '), { lower: true })
+      createOrderDto.name !== order.operation.name
+        ? slugify([createOrderDto.name, nanoid(6)].join(' '), { lower: true })
         : order.slug;
-    order.from = createOrderDto.from;
+    order.operation.name = createOrderDto.name;
     order.shippingCents = createOrderDto.shippingCents;
     order.menuUrl = createOrderDto.menuUrl
       ? normalizeUrl(createOrderDto.menuUrl, {
@@ -151,17 +169,27 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
     order.status = OrderStatus.Delivered;
     order.deliveredAt = 'NOW()';
-    order.totalPrice = order.dishes.reduce(
-      (acc, cur) => acc + cur.priceCents,
+    order.operation.priceCents = order.dishes.reduce(
+      (acc, cur) => acc + cur.expense.priceCents,
       0
     );
 
     return await this.save(order);
   }
 
-  async markAsProcessing(order: OrderEntity) {
+  async markAsProcessing({ id }: OrderEntity) {
+    const order = await this.findOneOrFail({
+      where: { id },
+      relations: ['dishes', 'dishes.shares'],
+    });
     if (order.dishes.length === 0) {
       throw new HttpException('No dishes found', HttpStatus.FORBIDDEN);
+    }
+    const hasMissingShares = order.dishes.some(
+      (dish) => dish.expense.shares.length === 0
+    );
+    if (hasMissingShares) {
+      throw new HttpException('Missing shares', HttpStatus.FORBIDDEN);
     }
     order.status = OrderStatus.Processing;
     return await this.save(order);
@@ -180,7 +208,6 @@ export class OrdersRepository extends Repository<OrderEntity> {
   }
 
   async markAsPaid(order: OrderEntity, payer: UserEntity) {
-    order.payer = payer;
     return await this.save(order);
   }
 

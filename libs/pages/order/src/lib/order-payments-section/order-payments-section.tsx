@@ -1,15 +1,15 @@
 import { OrderSection } from '../order-section/order-section';
 import { useTranslation } from 'react-i18next';
 import { QueryBoundary } from '@pasnik/components';
-import { OrderBalance } from './order-balance';
+import { OrderPayments } from './order-payments';
 
-export function OrderBalanceSection() {
+export function OrderPaymentsSection() {
   const { t } = useTranslation();
 
   return (
-    <OrderSection noPadding={true} header={t('order.balance')}>
-      <QueryBoundary fallback={<OrderBalance.Skeleton />}>
-        <OrderBalance />
+    <OrderSection noPadding={true} header={t('order.payment')}>
+      <QueryBoundary fallback={<OrderPayments.Skeleton />}>
+        <OrderPayments />
       </QueryBoundary>
     </OrderSection>
   );

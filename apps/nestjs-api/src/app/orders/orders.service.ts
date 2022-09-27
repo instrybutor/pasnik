@@ -14,11 +14,14 @@ export class OrdersService {
   findAllActiveForUser(user: UserEntity) {
     return this.ordersRepository
       .findAllActive(true)
+      .leftJoin(
+        'dish_expense_share.workspaceUser',
+        'workspace_user',
+        'workspace_user.id = dish_expense_share.workspaceUserId'
+      )
       .andWhere(
         new Brackets((db) => {
-          db.where('dish.userId = :userId')
-            .orWhere('order.userId = :userId')
-            .orWhere('order.payerId = :userId');
+          db.where('workspace_user.userId = :userId');
         })
       )
       .setParameters({ userId: user.id })
@@ -26,16 +29,16 @@ export class OrdersService {
   }
 
   findAllInactiveForUser(user: UserEntity) {
-    return this.ordersRepository
-      .findAllInactive()
-      .andWhere(
-        new Brackets((db) => {
-          db.where('dish.userId = :userId')
-            .orWhere('order.userId = :userId')
-            .orWhere('order.payerId = :userId');
-        })
-      )
-      .setParameters({ userId: user.id })
-      .getMany();
+    return (
+      this.ordersRepository
+        .findAllInactive()
+        // .andWhere(
+        //   new Brackets((db) => {
+        //     db.where('dish.userId = :userId').orWhere('order.userId = :userId');
+        //   })
+        // )
+        .setParameters({ userId: user.id })
+        .getMany()
+    );
   }
 }

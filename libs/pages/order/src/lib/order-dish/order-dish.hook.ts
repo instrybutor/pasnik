@@ -19,8 +19,8 @@ export function useOrderDish(dish: DishModel) {
 
   const onDuplicate = useCallback(async () => {
     await addDishAsync({
-      priceCents: dish.priceCents,
-      name: dish.name,
+      priceCents: dish.expense.priceCents,
+      name: dish.expense.name,
     });
 
     toast({ type: 'success', title: t('order.toast.duplicate_dish') });

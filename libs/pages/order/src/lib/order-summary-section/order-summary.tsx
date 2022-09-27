@@ -52,10 +52,10 @@ export function OrderSummary() {
                       {summary.dishes?.map((dish) => (
                         <tr key={dish.id}>
                           <td className="pl-8 py-4 text-sm text-gray-500 w-11/12">
-                            {dish.name}
+                            {dish.expense.name}
                           </td>
                           <td className="pr-8 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12 text-right">
-                            <Price priceCents={dish.priceCents} />
+                            <Price priceCents={dish.expense.priceCents} />
                           </td>
                         </tr>
                       ))}

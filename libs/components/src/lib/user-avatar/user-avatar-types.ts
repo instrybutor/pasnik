@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { UserModel } from '@pasnik/api/data-transfer';
-import { ReactElement } from 'react';
+import { ElementType, ReactElement } from 'react';
 
 export type UserAvatarSize =
   | 'xxsm'
@@ -29,4 +29,5 @@ export interface UserAvatarProps {
   fallback?: ReactElement | null;
   showInitials?: boolean;
   showTooltip?: boolean | ((user: Partial<UserModel>) => ReactElement);
+  as?: ElementType;
 }

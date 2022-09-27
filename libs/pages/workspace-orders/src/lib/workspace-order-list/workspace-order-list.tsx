@@ -1,14 +1,9 @@
-import {
-  Price,
-  StackedList,
-  UserAvatar,
-  UserName,
-  Users,
-} from '@pasnik/components';
+import { Price, StackedList, UserAvatar, UserName } from '@pasnik/components';
 import { NavLink } from 'react-router-dom';
 import { OrderStatusBadge, OrderTimestamp } from '@pasnik/features/orders';
 import { CashIcon } from '@heroicons/react/outline';
 import { OrderModel } from '@pasnik/api/data-transfer';
+import { WorkspaceUserToUser } from '@pasnik/features/workspaces';
 
 export interface WorkspaceOrderListProps {
   orders: OrderModel[];
@@ -19,7 +14,7 @@ export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
     <StackedList>
       {orders.map((order) => (
         <StackedList.Item
-          key={order.id}
+          key={order.slug}
           wrapper={({ children }) => (
             <NavLink
               to={`/order/${order.slug}`}
@@ -28,13 +23,22 @@ export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
               {children}
             </NavLink>
           )}
-          title={order.from}
+          title={order.operation.name}
           titleRight={<OrderStatusBadge order={order} />}
           subTitle={
             <>
               <StackedList.SubItem className="sm:w-40">
-                <UserAvatar user={order.user} size="xsm" className="mr-2" />
-                <UserName user={order.user} />
+                <WorkspaceUserToUser
+                  workspaceUserId={order.operation.workspaceUserId}
+                  workspaceId={order.workspaceId}
+                >
+                  {(user) => (
+                    <>
+                      <UserAvatar user={user} size="xsm" className="mr-2" />
+                      <UserName user={user} />
+                    </>
+                  )}
+                </WorkspaceUserToUser>
               </StackedList.SubItem>
               <StackedList.SubItem className="sm:w-24">
                 <CashIcon
@@ -42,7 +46,7 @@ export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
                   aria-hidden="true"
                 />
                 <span className="truncate">
-                  <Price priceCents={order.totalPrice} />
+                  <Price priceCents={order.operation.priceCents} />
                 </span>
               </StackedList.SubItem>
               <StackedList.SubItem>
@@ -50,13 +54,13 @@ export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
               </StackedList.SubItem>
             </>
           }
-          subTitleRight={
-            <Users
-              avatarSize="xsm"
-              usersToShow={3}
-              users={order.participants}
-            />
-          }
+          // subTitleRight={
+          //   <Users
+          //     avatarSize="xsm"
+          //     usersToShow={3}
+          //     users={order.participants}
+          //   />
+          // }
         />
       ))}
     </StackedList>

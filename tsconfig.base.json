@@ -26,6 +26,7 @@
       "@pasnik/features-notifications": [
         "libs/features/notifications/src/index.ts"
       ],
+      "@pasnik/features/expenses": ["libs/features/expenses/src/index.ts"],
       "@pasnik/features/orders": ["libs/features/orders/src/index.ts"],
       "@pasnik/features/workspaces": ["libs/features/workspaces/src/index.ts"],
       "@pasnik/layout": ["libs/layout/src/index.ts"],

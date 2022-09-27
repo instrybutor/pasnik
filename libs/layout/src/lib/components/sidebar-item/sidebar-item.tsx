@@ -20,7 +20,6 @@ export function SidebarItem({
 }: SidebarItemProps) {
   return !children ? (
     <NavLink
-      end={true}
       to={to}
       className={({ isActive }) =>
         classNames(

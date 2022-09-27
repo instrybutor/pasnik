@@ -1,7 +1,8 @@
-import { UserModel } from './user.model';
-import { DishModel } from './dish.model';
 import { OrderActionModel } from './order-action.model';
 import { WorkspaceModel } from './workspace.model';
+import { OperationModel } from './operation.model';
+import { DishModel } from './dish.model';
+import { WorkspaceUserModel } from './workspace-user.model';
 
 export enum OrderStatus {
   InProgress = 'in-progress',
@@ -14,10 +15,7 @@ export enum OrderStatus {
 export interface OrderModel {
   kind: 'OrderModel';
   id: string;
-  user: UserModel;
-  userId: number;
   status: OrderStatus;
-  from: string;
   slug: string;
   menuUrl?: string;
   shippingCents?: number;
@@ -25,11 +23,10 @@ export interface OrderModel {
   updatedAt: string;
   orderedAt: string;
   deliveredAt: string;
-  payer?: UserModel;
-  dishes?: DishModel[];
+  operation: OperationModel;
   actions?: OrderActionModel[];
-  totalPrice: number;
   workspace?: WorkspaceModel;
+  dishes: DishModel[];
   workspaceId: number;
-  participants?: UserModel[];
+  participants: WorkspaceUserModel[];
 }

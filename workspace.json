@@ -121,6 +121,29 @@
       },
       "tags": []
     },
+    "features-expenses": {
+      "root": "libs/features/expenses",
+      "sourceRoot": "libs/features/expenses/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/features/expenses/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/features/expenses"],
+          "options": {
+            "jestConfig": "libs/features/expenses/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "features-notifications": {
       "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/features/notifications",

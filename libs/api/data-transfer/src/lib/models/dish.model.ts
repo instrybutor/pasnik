@@ -1,13 +1,8 @@
-import { UserModel } from './user.model';
+import { ExpenseModel } from './expense.model';
 
 export interface DishModel {
   id: number;
-  name: string;
-  priceCents: number;
-  createdAt: string;
-  updatedAt: string;
-  userId: number;
-  user: UserModel;
-  createdBy?: UserModel;
-  createdById?: number;
+  orderId: string;
+  expense: ExpenseModel;
+  expenseId: number;
 }

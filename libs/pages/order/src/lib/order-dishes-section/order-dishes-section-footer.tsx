@@ -10,7 +10,7 @@ export function OrderDishesSectionFooter() {
   const { data: dishes } = useOrderDishes(slug);
   const { order } = useCurrentOrder();
   const totalCents = useMemo(
-    () => dishes?.reduce((acc, dish) => acc + dish.priceCents, 0),
+    () => dishes?.reduce((acc, dish) => acc + dish.expense.priceCents, 0),
     [dishes]
   );
 

@@ -18,7 +18,7 @@ export function SidebarWorkspaceItem() {
       label={currentWorkspace.name}
     >
       <SidebarItem
-        to={`/workspace/${currentWorkspace.slug}`}
+        to={`/workspace/${currentWorkspace.slug}/orders`}
         icon={(props) => (
           <svg
             xmlns="http://www.w3.org/2000/svg"
