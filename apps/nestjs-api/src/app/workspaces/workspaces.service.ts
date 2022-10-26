@@ -86,7 +86,7 @@ export class WorkspacesService {
   findActiveOrders(workspace: WorkspaceEntity) {
     return this.ordersRepository
       .findAllActive(false)
-      .andWhere('order.workspaceId = :workspaceId', {
+      .andWhere('order_operation.workspaceId = :workspaceId', {
         workspaceId: workspace.id,
       })
       .getMany();

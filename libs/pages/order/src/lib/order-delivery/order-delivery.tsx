@@ -1,39 +1,33 @@
 import { useTranslation } from 'react-i18next';
 import { Menu } from '@headlessui/react';
-import { DotsHorizontalIcon, DuplicateIcon } from '@heroicons/react/outline';
-import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
-import { DishModel, OrderModel } from '@pasnik/api/data-transfer';
 import {
-  Button,
-  ConfirmButton,
-  Popover,
-  Price,
-  UserAvatar,
-} from '@pasnik/components';
+  DotsHorizontalIcon,
+  DuplicateIcon,
+  TruckIcon,
+} from '@heroicons/react/outline';
+import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
+import { ExpenseModel, OrderModel } from '@pasnik/api/data-transfer';
+import { Button, ConfirmButton, Popover, Price } from '@pasnik/components';
 import { Can, OrdersAction } from '@pasnik/ability';
 import { Float } from '@headlessui-float/react';
 import { useOrderUpdateMutation } from '@pasnik/features/orders';
 import {
   useCurrentWorkspace,
   useWorkspaceUsers,
-  useWorkspaceUsersEntities,
 } from '@pasnik/features/workspaces';
 import { OrderSharesReadonly } from '../order-shares/order-shares-readonly';
 import { useOrderDelivery } from './order-delivery.hook';
-import { useCurrentUser } from '@pasnik/auth';
 
 export interface OrderDishProps {
-  dishes: DishModel[];
+  expenses: ExpenseModel[];
   order: OrderModel;
   onUpdate: () => void;
 }
-export function OrderDish({ onUpdate, dishes, order }: OrderDishProps) {
+export function OrderDish({ onUpdate, expenses, order }: OrderDishProps) {
   const { t } = useTranslation();
   const { data: workspace } = useCurrentWorkspace();
   const { data: workspaceUsers } = useWorkspaceUsers(workspace?.slug);
-  const entities = useWorkspaceUsersEntities(workspace?.slug);
-  const { shares } = useOrderDelivery(order, dishes);
-  const { data: currentUser } = useCurrentUser();
+  const { shares } = useOrderDelivery(order, expenses);
 
   const { mutateAsync } = useOrderUpdateMutation(order!);
 
@@ -50,24 +44,14 @@ export function OrderDish({ onUpdate, dishes, order }: OrderDishProps) {
                   totalPriceCents={order!.shippingCents ?? 0}
                 />
               )}
-              className="relative overflow-hidden ring-2 ring-offset-2 ring-gray-200 flex-shrink-0 text-xs leading-5 focus:ring-cyan-500 font-bold rounded-full bg-gray-200 h-8 w-8 max-w-none outline-none"
+              className="relative overflow-hidden bg-gray-200 text-gray-500 ring-2 ring-offset-2 ring-gray-200 flex-shrink-0 text-xs leading-5 focus:ring-cyan-500 font-bold rounded-full h-8 w-8 max-w-none outline-none flex items-center justify-center"
             >
-              <UserAvatar
-                showTooltip={true}
-                user={currentUser}
-                size="sm"
-                className="absolute inset-0 opacity-40"
-              />
-              <span className="flex justify-center items-center absolute inset-0">
-                <div className="text-gray-500 relative">+ {shares?.length}</div>
-              </span>
+              <TruckIcon className="h-5 w-5" />
             </Popover>
           ) : (
-            <UserAvatar
-              showTooltip={true}
-              user={entities[shares?.[0]?.workspaceUserId ?? -1]?.user}
-              size="sm"
-            />
+            <div className="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white bg-cyan-600 text-white">
+              <TruckIcon className="h-5 w-5" />
+            </div>
           )}
         </div>
       </div>

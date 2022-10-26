@@ -1,5 +1,4 @@
 import { OrderActionModel } from './order-action.model';
-import { WorkspaceModel } from './workspace.model';
 import { OperationModel } from './operation.model';
 import { DishModel } from './dish.model';
 import { WorkspaceUserModel } from './workspace-user.model';
@@ -25,8 +24,6 @@ export interface OrderModel {
   deliveredAt: string;
   operation: OperationModel;
   actions?: OrderActionModel[];
-  workspace?: WorkspaceModel;
   dishes: DishModel[];
-  workspaceId: number;
   participants: WorkspaceUserModel[];
 }

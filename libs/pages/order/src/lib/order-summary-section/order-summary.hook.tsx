@@ -1,4 +1,4 @@
-import { DishModel, OrderModel, UserModel } from '@pasnik/api/data-transfer';
+import { ExpenseModel, OrderModel, UserModel } from '@pasnik/api/data-transfer';
 import { useCallback, useState } from 'react';
 import {
   useCurrentWorkspaceUser,
@@ -10,7 +10,7 @@ export interface UserDishesSummary {
   user: UserModel;
   total: number;
   shipping: number;
-  dishes: DishModel[];
+  expenses: ExpenseModel[];
 }
 
 export const useOrderSummary = (order?: OrderModel) => {
@@ -20,7 +20,7 @@ export const useOrderSummary = (order?: OrderModel) => {
   );
   const [currentUserSummary, setCurrentUserSummary] =
     useState<UserDishesSummary | null>(null);
-  const workspace = useWorkspaceById(order?.workspaceId);
+  const workspace = useWorkspaceById(order?.operation.workspaceId);
   const { data: workspaceUsers } = useWorkspaceUsers(workspace?.slug);
 
   const applyShipping = useCallback(
@@ -36,9 +36,9 @@ export const useOrderSummary = (order?: OrderModel) => {
   );
 
   const groupSummaries = useCallback(
-    (dishes: DishModel[]) => {
-      const summaries = dishes.reduce((acc, dish) => {
-        dish.expense.shares.forEach((share) => {
+    (expenses: ExpenseModel[]) => {
+      const summaries = expenses.reduce((acc, expense) => {
+        expense.shares.forEach((share) => {
           const workspaceUser = workspaceUsers?.find(
             ({ id }) => id === share.workspaceUserId
           );
@@ -47,13 +47,13 @@ export const useOrderSummary = (order?: OrderModel) => {
           }
           const userSummary: UserDishesSummary = acc[share.workspaceUserId] || {
             user: workspaceUser?.user,
-            dishes: [],
+            expenses: [],
             total: 0,
             shipping: 0,
           };
 
-          userSummary.dishes.push(dish);
-          userSummary.total += dish.expense.priceCents;
+          userSummary.expenses.push(expense);
+          userSummary.total += expense.priceCents;
           acc[share.workspaceUserId] = userSummary;
         });
         return acc;
@@ -79,9 +79,9 @@ export const useOrderSummary = (order?: OrderModel) => {
   );
 
   const setDishes = useCallback(
-    (dishes: DishModel[]) => {
+    (expenses: ExpenseModel[]) => {
       const { userDishesSummaries, currentUserSummary } =
-        groupSummaries(dishes);
+        groupSummaries(expenses);
       setGroupedSummaries(sortSummaries(userDishesSummaries));
       setCurrentUserSummary(currentUserSummary);
     },

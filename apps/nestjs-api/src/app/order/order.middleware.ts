@@ -22,14 +22,17 @@ export class OrderMiddleware implements NestMiddleware {
 
     const order = await this.ordersRepository.findOne({
       where: { slug },
-      relations: ['workspace'],
     });
 
     if (!order) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
     const workspaceUser = await this.workspaceUsersRepository.findOne({
-      where: { workspace: order.workspace, user, isRemoved: false },
+      where: {
+        workspaceId: order.operation.workspaceId,
+        user,
+        isRemoved: false,
+      },
       relations: ['user', 'workspace'],
     });
 

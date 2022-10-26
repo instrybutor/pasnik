@@ -1,6 +1,6 @@
 import { BeakerIcon } from '@heroicons/react/outline';
 import OrderDish from '../order-dish/order-dish';
-import { DishModel } from '@pasnik/api/data-transfer';
+import { ExpenseModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
 import { Transition } from '@headlessui/react';
 import { useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ import { useCurrentOrder } from '@pasnik/features/orders';
 import { OrderDeliveryManage } from '../order-delivery/order-delivery-manage';
 
 export interface OrderDishesProps {
-  dishes: DishModel[];
+  dishes: ExpenseModel[];
   isAdding: boolean;
 }
 
@@ -47,9 +47,9 @@ export function OrderDishes({ dishes, isAdding }: OrderDishesProps) {
           leaveTo="transform opacity-0 scale-95"
         >
           {dish.id === updateId ? (
-            <OrderDishManage onClose={() => setUpdateId(-1)} dish={dish} />
+            <OrderDishManage onClose={() => setUpdateId(-1)} expense={dish} />
           ) : (
-            <OrderDish dish={dish} onUpdate={() => setUpdateId(dish.id)} />
+            <OrderDish expense={dish} onUpdate={() => setUpdateId(dish.id)} />
           )}
         </Transition>
       ))}
@@ -63,7 +63,7 @@ export function OrderDishes({ dishes, isAdding }: OrderDishesProps) {
             />
           ) : (
             <OrderDelivery
-              dishes={dishes}
+              expenses={dishes}
               order={order}
               onUpdate={() => {
                 setUpdateId(0);

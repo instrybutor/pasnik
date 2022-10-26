@@ -49,13 +49,13 @@ export function OrderSummary() {
                 <div className="mt-4 text-base italic text-gray-600 px-4">
                   <table className="min-w-full divide-y divide-gray-200">
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {summary.dishes?.map((dish) => (
-                        <tr key={dish.id}>
+                      {summary.expenses?.map((expense) => (
+                        <tr key={expense.id}>
                           <td className="pl-8 py-4 text-sm text-gray-500 w-11/12">
-                            {dish.expense.name}
+                            {expense.name}
                           </td>
                           <td className="pr-8 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12 text-right">
-                            <Price priceCents={dish.expense.priceCents} />
+                            <Price priceCents={expense.priceCents} />
                           </td>
                         </tr>
                       ))}

@@ -30,7 +30,7 @@ export function WorkspaceOrderList({ orders }: WorkspaceOrderListProps) {
               <StackedList.SubItem className="sm:w-40">
                 <WorkspaceUserToUser
                   workspaceUserId={order.operation.workspaceUserId}
-                  workspaceId={order.workspaceId}
+                  workspaceId={order.operation.workspaceId}
                 >
                   {(user) => (
                     <>

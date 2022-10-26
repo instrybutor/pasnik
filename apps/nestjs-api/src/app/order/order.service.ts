@@ -179,7 +179,7 @@ export class OrderService {
       const payer = await workspaceUserRepository.findOneOrFail({
         where: {
           id: addPayerDto.workspaceUserId,
-          workspaceId: order.workspaceId,
+          workspaceId: order.operation.workspaceId,
         },
       });
 

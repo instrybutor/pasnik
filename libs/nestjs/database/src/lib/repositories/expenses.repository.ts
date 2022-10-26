@@ -17,6 +17,7 @@ export class ExpensesRepository extends Repository<ExpenseEntity> {
   ) {
     const expense = new ExpenseEntity();
 
+    expense.operationId = order.operationId;
     expense.name = addDishDto.name;
     expense.priceCents = addDishDto.priceCents;
     expense.workspaceUser = currentUser;

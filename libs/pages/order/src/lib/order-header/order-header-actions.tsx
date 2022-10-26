@@ -32,7 +32,7 @@ export function OrderHeaderActions() {
   const { order } = useCurrentOrder();
   const slug = useSlug();
   const { data: workspace } = useCurrentWorkspace();
-  const { data: dishes } = useOrderDishes(slug, false);
+  const { data: expenses } = useOrderDishes(slug, false);
   const navigate = useNavigate();
 
   const markAsProcessingMutation = useOrderMarkAsProcessingMutation(slug);
@@ -43,17 +43,17 @@ export function OrderHeaderActions() {
   const createOrderMutation = useOrderCreateMutation(workspace?.slug);
 
   const processingErrorMessage = useMemo(() => {
-    if ((dishes?.length ?? 0) === 0) {
+    if ((expenses?.length ?? 0) === 0) {
       return 'order.no_dishes';
     }
-    const hasNonSharedDishes = dishes!.some(
-      (dish) => (dish.expense.shares?.length ?? 0) === 0
+    const hasNonSharedDishes = expenses!.some(
+      (expense) => (expense.shares?.length ?? 0) === 0
     );
     if (hasNonSharedDishes) {
       return 'order.missing_shares';
     }
     return null;
-  }, [dishes]);
+  }, [expenses]);
 
   return (
     <div className="flex space-x-3">

@@ -4,7 +4,12 @@ import axios from '@pasnik/axios';
 
 export const useOrderUpdateMutation = (order: OrderModel) => {
   const queryClient = useQueryClient();
-  const queryKey = ['workspaces', order.workspace?.slug, 'orders', 'active'];
+  const queryKey = [
+    'workspaces',
+    order.operation.workspace?.slug,
+    'orders',
+    'active',
+  ];
   return useMutation(
     async (createOrderDto: CreateOrderDto) => {
       const { data } = await axios.put<OrderModel>(

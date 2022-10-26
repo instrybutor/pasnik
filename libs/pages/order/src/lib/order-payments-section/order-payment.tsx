@@ -12,7 +12,7 @@ export interface OrderPaymentProps {
 }
 export function OrderPayment({ payment }: OrderPaymentProps) {
   const { data: order } = useCurrentOrder();
-  const workspace = useWorkspaceById(order?.workspaceId);
+  const workspace = useWorkspaceById(order?.operation.workspaceId);
   const { data: users } = useWorkspaceUsers(workspace?.slug);
   const user = useMemo(
     () => users?.find((user) => user.id === payment.workspaceUserId),

@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  DishesRepository,
+  ExpensesRepository,
   OrderEntity,
   WorkspaceUserEntity,
   WorkspaceUsersRepository,
@@ -13,15 +13,15 @@ import { HttpException } from '@nestjs/common/exceptions/http.exception';
 @Injectable()
 export class DishesService {
   constructor(
-    @InjectRepository(DishesRepository)
-    private dishesRepository: DishesRepository,
     @InjectRepository(WorkspaceUsersRepository)
-    private usersRepository: WorkspaceUsersRepository
+    private usersRepository: WorkspaceUsersRepository,
+    @InjectRepository(ExpensesRepository)
+    private expensesRepository: ExpensesRepository
   ) {}
 
   findAll(order: OrderEntity) {
-    return this.dishesRepository.find({
-      where: { order },
+    return this.expensesRepository.find({
+      where: { operationId: order.operationId },
       order: {
         createdAt: 'ASC',
       },
@@ -29,8 +29,8 @@ export class DishesService {
   }
 
   findOne(order: OrderEntity, id: number) {
-    return this.dishesRepository.findOneOrFail({
-      where: { order, id },
+    return this.expensesRepository.findOneOrFail({
+      where: { operationId: order.operationId, id },
     });
   }
 
@@ -46,7 +46,7 @@ export class DishesService {
         where: { id: addDishDto.userId },
       })) ?? currentUser;
 
-    const dish = await this.dishesRepository.addDish(
+    const dish = await this.expensesRepository.addExpense(
       addDishDto,
       order,
       dishOwner,
@@ -57,7 +57,10 @@ export class DishesService {
   }
 
   async delete(order: OrderEntity, id: number) {
-    return await this.dishesRepository.delete({ id, order });
+    return await this.expensesRepository.delete({
+      id,
+      operationId: order.operationId,
+    });
   }
 
   async update(
@@ -72,7 +75,7 @@ export class DishesService {
       (await this.usersRepository.findOne(addDishDto.userId)) ?? createdBy;
 
     const dish = await this.findOne(order, dishId);
-    await this.dishesRepository.updateDish(
+    await this.expensesRepository.updateExpense(
       addDishDto,
       dish,
       dishOwner,

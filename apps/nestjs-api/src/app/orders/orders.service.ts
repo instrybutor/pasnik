@@ -15,9 +15,9 @@ export class OrdersService {
     return this.ordersRepository
       .findAllActive(true)
       .leftJoin(
-        'dish_expense_share.workspaceUser',
+        'expense_share.workspaceUser',
         'workspace_user',
-        'workspace_user.id = dish_expense_share.workspaceUserId'
+        'workspace_user.id = expense_share.workspaceUserId'
       )
       .andWhere(
         new Brackets((db) => {

@@ -1,17 +1,17 @@
 import {
-  DishModel,
+  ExpenseModel,
   OrderModel,
   ShareModel,
   ShareType,
 } from '@pasnik/api/data-transfer';
 import { useMemo } from 'react';
 
-export function useOrderDelivery(order: OrderModel, dishes: DishModel[]) {
+export function useOrderDelivery(order: OrderModel, expenses: ExpenseModel[]) {
   const shares = useMemo(
     () =>
       Object.values(
-        dishes.reduce((acc, dish) => {
-          dish.expense.shares.forEach((share) => {
+        expenses.reduce((acc, expense) => {
+          expense.shares.forEach((share) => {
             if (acc[share.workspaceUserId]) {
               return;
             }
@@ -25,7 +25,7 @@ export function useOrderDelivery(order: OrderModel, dishes: DishModel[]) {
           return acc;
         }, {} as Record<string, ShareModel>)
       ),
-    [dishes]
+    [expenses]
   );
 
   return {

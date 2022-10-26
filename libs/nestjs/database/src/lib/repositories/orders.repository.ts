@@ -39,7 +39,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
           }
         })
       )
-      .addSelect('SUM(dish_expense.priceCents)', 'order_operation_priceCents')
+      .addSelect('SUM(expense.priceCents)', 'order_operation_priceCents')
       .setParameters({
         startDate: yesterday,
         endDate: now,
@@ -47,18 +47,20 @@ export class OrdersRepository extends Repository<OrderEntity> {
   }
 
   findOneWithParticipants(orderId: string) {
-    return (
-      this.createQueryBuilder('order')
-        .where('order.id = :orderId', { orderId })
-        .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
-        // .leftJoinAndMapMany(
-        //   'order.participants',
-        //   UserEntity,
-        //   'participant',
-        //   'dish.userId = participant.id'
-        // )
-        .getOne()
-    );
+    return this.createQueryBuilder('order')
+      .where('order.id = :orderId', { orderId })
+      .leftJoin(
+        'order.expenses',
+        'expense',
+        'expense.operationId = order.operationId'
+      )
+      .leftJoinAndMapMany(
+        'order.participants',
+        WorkspaceUserEntity,
+        'participant',
+        'expense.workspaceUserId = participant.id'
+      )
+      .getOne();
   }
 
   findAllInactive() {
@@ -73,7 +75,6 @@ export class OrdersRepository extends Repository<OrderEntity> {
 
   findAllWithDetails() {
     return this.createQueryBuilder('order')
-      .leftJoin('order.dishes', 'dish', 'dish.orderId = order.id')
       .leftJoinAndMapOne(
         'order.operation',
         OperationEntity,
@@ -81,24 +82,22 @@ export class OrdersRepository extends Repository<OrderEntity> {
         'order.operationId = order_operation.id'
       )
       .leftJoin(
-        'dish.expense',
-        'dish_expense',
-        'dish.expenseId = dish_expense.id'
+        'order_operation.expenses',
+        'expense',
+        'expense.operationId = order.operationId'
       )
       .leftJoin(
-        'dish_expense.shares',
-        'dish_expense_share',
-        'dish_expense.id = dish_expense_share.expenseId'
+        'expense.shares',
+        'expense_share',
+        'expense.id = expense_share.expenseId'
       )
       .leftJoinAndMapMany(
         'order.participants',
         WorkspaceUserEntity,
         'participant',
-        'participant.id = dish_expense_share.workspaceUserId'
+        'participant.id = expense_share.workspaceUserId'
       )
       .groupBy('order.id')
-      .addGroupBy('dish.id')
-      .addGroupBy('dish_expense.id')
       .addGroupBy('participant.id')
       .addGroupBy('order_operation.id');
   }
@@ -112,8 +111,6 @@ export class OrdersRepository extends Repository<OrderEntity> {
     const operation = new OperationEntity();
 
     order.operation = operation;
-    order.workspaceUser = user;
-    order.workspace = workspace;
     order.shippingCents = createOrderDto.shippingCents;
     order.menuUrl = createOrderDto.menuUrl
       ? normalizeUrl(createOrderDto.menuUrl, {
@@ -127,6 +124,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     order.operation = operation;
     order.operation.name = createOrderDto.name;
     order.operation.workspaceUser = user;
+    order.operation.workspace = workspace;
 
     return this.save(order);
   }
@@ -148,7 +146,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
   }
 
   async markAsOrdered(order: OrderEntity, { shippingCents }: MarkAsOrderedDto) {
-    if (order.dishes.length === 0) {
+    if (order.operation.expenses.length === 0) {
       throw new HttpException('No dishes found', HttpStatus.FORBIDDEN);
     }
     if (shippingCents !== null && shippingCents !== undefined) {
@@ -169,8 +167,8 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
     order.status = OrderStatus.Delivered;
     order.deliveredAt = 'NOW()';
-    order.operation.priceCents = order.dishes.reduce(
-      (acc, cur) => acc + cur.expense.priceCents,
+    order.operation.priceCents = order.operation.expenses.reduce(
+      (acc, cur) => acc + cur.priceCents,
       0
     );
 
@@ -180,13 +178,17 @@ export class OrdersRepository extends Repository<OrderEntity> {
   async markAsProcessing({ id }: OrderEntity) {
     const order = await this.findOneOrFail({
       where: { id },
-      relations: ['dishes', 'dishes.shares'],
+      relations: [
+        'operation',
+        'operation.expenses',
+        'operation.expenses.shares',
+      ],
     });
-    if (order.dishes.length === 0) {
+    if (order.operation.expenses.length === 0) {
       throw new HttpException('No dishes found', HttpStatus.FORBIDDEN);
     }
-    const hasMissingShares = order.dishes.some(
-      (dish) => dish.expense.shares.length === 0
+    const hasMissingShares = order.operation.expenses.some(
+      (expense) => expense.shares.length === 0
     );
     if (hasMissingShares) {
       throw new HttpException('Missing shares', HttpStatus.FORBIDDEN);

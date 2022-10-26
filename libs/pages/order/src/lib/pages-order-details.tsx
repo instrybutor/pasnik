@@ -22,11 +22,11 @@ export function PagesOrderDetails() {
   const { setCurrentWorkspaceIdContext } = useSidebarContext();
 
   useEffect(() => {
-    setCurrentWorkspaceIdContext(order?.workspaceId ?? null);
+    setCurrentWorkspaceIdContext(order?.operation.workspaceId ?? null);
     return () => {
       setCurrentWorkspaceIdContext(null);
     };
-  }, [order?.workspaceId, setCurrentWorkspaceIdContext]);
+  }, [order?.operation.workspaceId, setCurrentWorkspaceIdContext]);
 
   useEffect(() => {
     setShippingCents(order?.shippingCents ?? 0);
@@ -34,7 +34,7 @@ export function PagesOrderDetails() {
 
   return (
     <ErrorBoundary fallbackRender={() => <Navigate to="/" />}>
-      <WorkspaceProvider workspaceId={order?.workspaceId}>
+      <WorkspaceProvider workspaceId={order?.operation.workspaceId}>
         <QueryBoundary fallback={<OrderHeaderSkeleton />}>
           <OrderHeader />
         </QueryBoundary>

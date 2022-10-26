@@ -27,7 +27,7 @@ export function OrderProcess({ dishes }: OrderDishesProps) {
                   />
                 </Disclosure.Button>
                 <div className="text-sm text-gray-500">
-                  {summary.dishes.length} x
+                  {summary.expenses.length} x
                 </div>
                 <div className="pl-2 text-sm text-gray-500 font-bold flex-1">
                   {summary.name}
@@ -35,12 +35,12 @@ export function OrderProcess({ dishes }: OrderDishesProps) {
                 <div className="text-sm text-gray-500 flex gap-6 items-center">
                   <Users users={summary.users} avatarSize="xsm" />
                   <Price
-                    priceCents={summary.priceCents * summary.dishes.length}
+                    priceCents={summary.priceCents * summary.expenses.length}
                   />
                 </div>
               </div>
               <Disclosure.Panel>
-                <OrderDishes dishes={summary.dishes} isAdding={false} />
+                <OrderDishes dishes={summary.expenses} isAdding={false} />
               </Disclosure.Panel>
             </>
           )}

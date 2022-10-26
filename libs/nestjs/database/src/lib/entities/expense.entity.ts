@@ -17,6 +17,9 @@ export class ExpenseEntity implements ExpenseModel {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  name: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -37,9 +40,6 @@ export class ExpenseEntity implements ExpenseModel {
     eager: true,
   })
   shares: ShareEntity[];
-
-  @Column()
-  name: string;
 
   @ManyToOne(() => OperationEntity)
   operation: OperationEntity;

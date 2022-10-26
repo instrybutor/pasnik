@@ -21,12 +21,12 @@ export interface DashboardOrderListItemProps {
 }
 
 export function DashboardOrderListItem({ order }: DashboardOrderListItemProps) {
-  const workspace = useWorkspaceById(order.workspaceId);
+  const workspace = useWorkspaceById(order.operation.workspaceId);
   const workspaceUsers = useWorkspaceUsersEntities(workspace?.slug);
   const participants = useMemo(() => {
-    return order.participants.map(
-      (participant) => workspaceUsers[participant.id]?.user
-    );
+    return order.participants
+      .map((participant) => workspaceUsers[participant.id]?.user)
+      .filter(Boolean);
   }, [workspaceUsers, order.participants]);
   return (
     <StackedList.Item

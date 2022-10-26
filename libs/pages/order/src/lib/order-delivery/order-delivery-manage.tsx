@@ -10,7 +10,11 @@ import {
   Popover,
   UserAvatar,
 } from '@pasnik/components';
-import { AddDishDto, DishModel, OrderModel } from '@pasnik/api/data-transfer';
+import {
+  AddDishDto,
+  ExpenseModel,
+  OrderModel,
+} from '@pasnik/api/data-transfer';
 import {
   useCurrentWorkspace,
   useWorkspaceUsers,
@@ -24,7 +28,7 @@ import { useCurrentUser } from '@pasnik/auth';
 export interface OrderDishAddProps {
   onClose: () => void;
   order: OrderModel;
-  dishes: DishModel[];
+  dishes: ExpenseModel[];
 }
 
 export function OrderDeliveryManage({

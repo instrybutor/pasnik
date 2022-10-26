@@ -1,4 +1,4 @@
-import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
+import { AddDishDto, ExpenseModel } from '@pasnik/api/data-transfer';
 import { useCallback } from 'react';
 import {
   useDishAddMutation,
@@ -9,22 +9,22 @@ import { useToast } from '@pasnik/components';
 import { useTranslation } from 'react-i18next';
 import { useSlug } from '@pasnik/shared/utils';
 
-export function useOrderDish(dish: DishModel) {
+export function useOrderDish(expense: ExpenseModel) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const slug = useSlug();
-  const { mutateAsync: deleteDishAsync } = useDishDeleteMutation(slug, dish);
+  const { mutateAsync: deleteDishAsync } = useDishDeleteMutation(slug, expense);
   const { mutateAsync: addDishAsync } = useDishAddMutation(slug);
-  const { mutateAsync: updateDishAsync } = useDishUpdateMutation(slug, dish);
+  const { mutateAsync: updateDishAsync } = useDishUpdateMutation(slug, expense);
 
   const onDuplicate = useCallback(async () => {
     await addDishAsync({
-      priceCents: dish.expense.priceCents,
-      name: dish.expense.name,
+      priceCents: expense.priceCents,
+      name: expense.name,
     });
 
     toast({ type: 'success', title: t('order.toast.duplicate_dish') });
-  }, [t, dish, addDishAsync, toast]);
+  }, [t, expense, addDishAsync, toast]);
 
   const onDelete = useCallback(async () => {
     await deleteDishAsync();

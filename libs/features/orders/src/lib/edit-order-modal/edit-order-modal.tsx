@@ -39,7 +39,7 @@ export function EditOrderModal({ order }: EditOrderModelProps) {
           <FormField
             required
             label={t('order.create_form.restaurant_label')}
-            name="from"
+            name="name"
             defaultValue={order.operation.name}
           >
             <Input

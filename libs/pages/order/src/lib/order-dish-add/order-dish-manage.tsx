@@ -10,7 +10,7 @@ import {
   Input,
   useToast,
 } from '@pasnik/components';
-import { AddDishDto, DishModel } from '@pasnik/api/data-transfer';
+import { AddDishDto, ExpenseModel } from '@pasnik/api/data-transfer';
 import { useCurrentWorkspace } from '@pasnik/features/workspaces';
 import {
   useDishAddMutation,
@@ -22,23 +22,26 @@ import { OrderDishSharesField } from './order-dish-shares-field';
 
 export interface OrderDishAddProps {
   onClose: () => void;
-  dish?: DishModel;
+  expense?: ExpenseModel;
 }
 
-export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
+export function OrderDishManage({ onClose, expense }: OrderDishAddProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const slug = useSlug();
   const { data: workspace } = useCurrentWorkspace();
 
   const { mutateAsync: mutateAddAsync } = useDishAddMutation(slug);
-  const { mutateAsync: mutateDishAsync } = useDishUpdateMutation(slug, dish!);
+  const { mutateAsync: mutateDishAsync } = useDishUpdateMutation(
+    slug,
+    expense!
+  );
 
   return (
     <Form<AddDishDto>
       resolver={classValidatorResolver(AddDishDto)}
       onSubmit={async (formData) => {
-        if (dish) {
+        if (expense) {
           mutateDishAsync(formData).then(() =>
             toast({
               type: 'success',
@@ -58,7 +61,7 @@ export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
       <div className="flex gap-3 w-full items-stretch xsm:flex-row flex-col-reverse">
         <div className="flex items-center flex-shrink-0">
           {workspace && (
-            <OrderDishSharesField dish={dish?.expense} workspace={workspace} />
+            <OrderDishSharesField dish={expense} workspace={workspace} />
           )}
         </div>
         <div className="text-sm text-gray-500 w-full">
@@ -67,7 +70,7 @@ export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
             labelClassName="xsm:hidden block"
             name="name"
             errorTooltip={true}
-            defaultValue={dish?.expense.name}
+            defaultValue={expense?.name}
           >
             <Input
               type="text"
@@ -82,7 +85,7 @@ export function OrderDishManage({ onClose, dish }: OrderDishAddProps) {
           <FormField
             label={t('order.form.price')}
             labelClassName="xsm:hidden block"
-            defaultValue={dish?.expense.priceCents}
+            defaultValue={expense?.priceCents}
             name="priceCents"
             errorTooltip={true}
             suffix="zł"
