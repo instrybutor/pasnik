@@ -39,6 +39,7 @@ export function UserName({
       className={classNames(className, 'overflow-hidden', {
         'inline-flex': !children,
         'flex flex-col': Boolean(children),
+        'text-gray-500': !user,
       })}
     >
       <span className="truncate">{formatUser()}</span>

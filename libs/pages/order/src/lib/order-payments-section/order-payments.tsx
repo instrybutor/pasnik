@@ -1,29 +1,41 @@
 import { OrderPaymentsSkeleton } from './order-payments-skeleton';
-import { CashIcon } from '@heroicons/react/outline';
-import { Button } from '@pasnik/components';
-import { useOrderPayments } from '@pasnik/features/orders';
-import { useSlug } from '@pasnik/shared/utils';
+import { useCurrentOrder, useOrderPayments } from '@pasnik/features/orders';
 import { OrderPayment } from './order-payment';
+import {
+  useWorkspaceById,
+  useWorkspaceUsers,
+} from '@pasnik/features/workspaces';
+import { useMemo } from 'react';
+import { toEntities, useSlug } from '@pasnik/shared/utils';
+import { AddPayerToOrderDto } from '@pasnik/api/data-transfer';
 
 export function OrderPayments() {
   // const { t } = useTranslation();
   const slug = useSlug();
+  const { data: order } = useCurrentOrder();
+  const workspace = useWorkspaceById(order?.operation.workspaceId);
+  const { data: users } = useWorkspaceUsers(workspace?.slug);
   const { data: payments } = useOrderPayments(slug);
+  const paymentEntities = useMemo(() => {
+    return toEntities(payments ?? [], ({ workspaceUserId }) => workspaceUserId);
+  }, [payments]);
+  const _payments = useMemo((): AddPayerToOrderDto[] => {
+    return (
+      users?.map(({ id }) => ({
+        amountCents: paymentEntities[id]?.amountCents,
+        workspaceUserId: id ?? -1,
+        id: paymentEntities[id]?.id,
+      })) ?? []
+    );
+  }, [users, paymentEntities]);
   return (
-    <>
-      {payments?.map((payment) => (
-        <OrderPayment payment={payment} />
+    <ul className="divide-y divide-gray-200">
+      {_payments?.map((payment) => (
+        <li key={payment.workspaceUserId}>
+          <OrderPayment payment={payment} />
+        </li>
       ))}
-      {(payments?.length ?? 0) === 0 && (
-        <div className="text-center bg-white px-4 py-6 flex gap-2 flex-col">
-          <CashIcon className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="text-sm font-medium text-gray-900">
-            Czy chciałbyś rozliczyć zamówienie?
-          </h3>
-          <Button className="px-4 py-2 mx-auto">Dodaj płacącego</Button>
-        </div>
-      )}
-    </>
+    </ul>
   );
 }
 

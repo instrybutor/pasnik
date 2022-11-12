@@ -183,7 +183,14 @@ export class OrderService {
         },
       });
 
-      const { id } = await paymentsRepository.createPayment(
+      if (addPayerDto.amountCents === 0) {
+        return await paymentsRepository.delete({
+          operation: order.operation,
+          workspaceUser: payer,
+        });
+      }
+
+      const { id } = await paymentsRepository.upsertPayment(
         payer.id,
         addPayerDto.amountCents,
         order.operation

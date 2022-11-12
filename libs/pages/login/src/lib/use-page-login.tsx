@@ -1,19 +1,39 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { InvitationRequiredError, useQuery } from '@pasnik/shared/utils';
 import { InvitationStatus } from '@pasnik/api/data-transfer';
 import { PopupClosedError } from './auth-popup/popup-closed.error';
-import { useQueryClient } from 'react-query';
+import { useCurrentUser } from '@pasnik/auth';
 
 export const usePageLogin = () => {
   const navigate = useNavigate();
   const query = useQuery();
-  const queryClient = useQueryClient();
+  const [queryEnabled, setQueryEnabled] = useState(false);
   const [requestToken, setRequestToken] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
   const [invitationStatus, setInvitationStatus] = useState<
     InvitationStatus | undefined
   >();
+
+  const redirectToParams = useCallback(() => {
+    const redirectTo = query.get('redirectTo');
+    if (redirectTo) {
+      navigate(decodeURIComponent(redirectTo));
+    } else {
+      navigate('/');
+    }
+  }, [navigate, query]);
+
+  const { refetch } = useCurrentUser({
+    onSuccess: redirectToParams,
+    enabled: queryEnabled,
+  });
+
+  const onSuccess = useCallback(async () => {
+    setHasError(false);
+    setInvitationStatus(undefined);
+    await refetch();
+  }, [refetch]);
 
   const onError = useCallback(
     (error?: Error) => {
@@ -33,25 +53,9 @@ export const usePageLogin = () => {
     [setRequestToken]
   );
 
-  const onSuccess = useCallback(
-    async (data: unknown = {}) => {
-      setHasError(false);
-      setInvitationStatus(undefined);
-
-      if (!data) {
-        await queryClient.resetQueries(['users', 'me']);
-        return;
-      }
-
-      const redirectTo = query.get('redirectTo');
-      if (redirectTo) {
-        navigate(decodeURIComponent(redirectTo));
-      } else {
-        navigate('/');
-      }
-    },
-    [navigate, query, queryClient]
-  );
+  useEffect(() => {
+    setQueryEnabled(true);
+  }, []);
 
   return {
     requestToken,

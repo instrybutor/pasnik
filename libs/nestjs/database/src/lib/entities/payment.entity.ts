@@ -32,4 +32,7 @@ export class PaymentEntity implements PaymentModel {
 
   @ManyToOne(() => OperationEntity, (operation) => operation.payments)
   operation: OperationEntity;
+
+  @Column()
+  operationId: number;
 }

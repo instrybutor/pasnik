@@ -1,6 +1,8 @@
 import React, {
   ChangeEvent,
   cloneElement,
+  FocusEvent,
+  FocusEventHandler,
   ReactElement,
   ReactNode,
   useEffect,
@@ -36,6 +38,7 @@ export interface FormFieldProps<
   children: ReactElement<FormFieldInputProps>;
   errorIcon?: JSX.Element;
   suffix?: ReactNode;
+  prefix?: ReactNode;
   required?: boolean;
   transform?: {
     input?: (value: FieldPathValue<TFieldValues, TName>) => string;
@@ -47,6 +50,7 @@ export interface FormFieldProps<
   onChange?: (value: FieldPathValue<TFieldValues, TName>) => void;
   vertical?: boolean;
   resolver?: Resolver<TFieldValues>;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
 let nextId = 0;
@@ -57,6 +61,7 @@ export function FormField<TFieldValues extends FieldValues>({
   label,
   errorIcon,
   suffix,
+  prefix,
   transform,
   defaultValue,
   required,
@@ -65,6 +70,7 @@ export function FormField<TFieldValues extends FieldValues>({
   onChange,
   vertical,
   resolver,
+  onBlur,
 }: FormFieldProps<TFieldValues>) {
   const formContext = useFormContext<TFieldValues>();
   const form = useForm({ resolver, mode: 'onChange' });
@@ -78,6 +84,7 @@ export function FormField<TFieldValues extends FieldValues>({
   useEffect(() => {
     onChange?.(currentValue);
   }, [onChange, currentValue]);
+
   return (
     <div
       className={classNames('flex', {
@@ -91,16 +98,26 @@ export function FormField<TFieldValues extends FieldValues>({
         </Label>
       )}
       <div className="relative rounded-md shadow-sm">
+        {prefix && (
+          <div className="absolute inset-y-0 left-0 pl-2 flex items-center">
+            {prefix}
+          </div>
+        )}
         <Controller
           control={control}
           name={name}
           defaultValue={defaultValue}
-          render={({ field }) => {
+          render={({ field, fieldState }) => {
             return cloneElement(children, {
               error: Boolean(error),
               ref: field.ref,
               name: field.name,
-              onBlur: () => field.onBlur(),
+              onBlur: (e: FocusEvent<HTMLInputElement>) => {
+                field.onBlur();
+                if (fieldState.isDirty) {
+                  onBlur?.(e);
+                }
+              },
               onChange: (e: ChangeEvent<HTMLInputElement>) =>
                 field.onChange(
                   transform?.output?.(e.currentTarget.value) ??
@@ -115,7 +132,7 @@ export function FormField<TFieldValues extends FieldValues>({
         {(error || suffix) && (
           <div className="absolute inset-y-0 right-0 pr-2 flex items-center">
             {error?.message && errorTooltip ? (
-              <span className="ml-1">
+              <span className="flex -mr-1">
                 <Tooltip title={t(String(error.message))}>
                   {errorIcon ? (
                     errorIcon
