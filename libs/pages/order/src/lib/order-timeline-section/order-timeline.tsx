@@ -9,10 +9,13 @@ import {
   QuestionMarkCircleIcon,
   XIcon,
 } from '@heroicons/react/outline';
-import { OrderAction, OrderActionModel } from '@pasnik/api/data-transfer';
+import {
+  OrderAction,
+  OrderActionModel,
+  OrderModel,
+} from '@pasnik/api/data-transfer';
 import { DateFormat, UserAvatar } from '@pasnik/components';
 import { useMemo } from 'react';
-import { useCurrentOrder } from '@pasnik/features/orders';
 
 const sortHistory = (actionA: OrderActionModel, actionB: OrderActionModel) =>
   new Date(actionB.createdAt).getTime() > new Date(actionA.createdAt).getTime()
@@ -95,10 +98,10 @@ const typesMap = {
 
 export interface OrderTimelineProps {
   isDetailed: boolean;
+  order: OrderModel;
 }
 
-export function OrderTimeline({ isDetailed }: OrderTimelineProps) {
-  const { order } = useCurrentOrder();
+export function OrderTimeline({ isDetailed, order }: OrderTimelineProps) {
   const filteredActions = useMemo(() => {
     return (() => {
       if (isDetailed) {

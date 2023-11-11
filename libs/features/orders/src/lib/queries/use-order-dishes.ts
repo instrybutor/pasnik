@@ -1,12 +1,12 @@
 import { useQuery } from 'react-query';
 import axios from '@pasnik/axios';
-import { DishModel } from '@pasnik/api/data-transfer';
+import { ExpenseModel } from '@pasnik/api/data-transfer';
 
 export function useOrderDishes(orderSlug: string, suspense = true) {
   return useQuery(
     ['orders', orderSlug, 'dishes'],
     async ({ signal }) => {
-      const { data } = await axios.get<DishModel[]>(
+      const { data } = await axios.get<ExpenseModel[]>(
         `/api/orders/slug/${orderSlug}/dishes`,
         { signal }
       );

@@ -13,6 +13,7 @@ import {
 } from './workspace-users-container';
 
 export interface WorkspaceUsersProps {
+  workspaceId?: number;
   users?: WorkspaceUserModel[];
   avatarSize?: UserAvatarSize;
   usersToShow?: number;

@@ -2,8 +2,11 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   DishEntity,
+  OperationsRepository,
   OrderActionEntity,
   OrdersRepository,
+  PaymentsRepository,
+  SharesRepository,
   UsersRepository,
   WorkspacesRepository,
   WorkspaceUsersRepository,
@@ -12,6 +15,7 @@ import {
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { OrderMiddleware } from './order.middleware';
+import { PaymentsService } from '../payments/payments.service';
 
 @Module({
   imports: [
@@ -22,10 +26,13 @@ import { OrderMiddleware } from './order.middleware';
       UsersRepository,
       WorkspacesRepository,
       WorkspaceUsersRepository,
+      PaymentsRepository,
+      SharesRepository,
+      OperationsRepository,
     ]),
   ],
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [OrderService, PaymentsService],
 })
 export class OrderModule {
   configure(consumer: MiddlewareConsumer) {

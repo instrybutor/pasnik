@@ -40,7 +40,7 @@ export class WorkspacesService {
 
   async createOrder(
     createOrderDto: CreateOrderDto,
-    { user, workspace }: WorkspaceUserEntity
+    workspaceUser: WorkspaceUserEntity
   ) {
     return await this.connection.transaction(async (manager) => {
       const ordersRepository = manager.getCustomRepository(OrdersRepository);
@@ -50,11 +50,11 @@ export class WorkspacesService {
 
       const order = await ordersRepository.createOrder(
         createOrderDto,
-        workspace,
-        user
+        workspaceUser.workspace,
+        workspaceUser
       );
       await orderActionsRepository.createAction(
-        user,
+        workspaceUser.user,
         order,
         OrderAction.Created
       );
@@ -86,7 +86,7 @@ export class WorkspacesService {
   findActiveOrders(workspace: WorkspaceEntity) {
     return this.ordersRepository
       .findAllActive(false)
-      .andWhere('order.workspaceId = :workspaceId', {
+      .andWhere('order_operation.workspaceId = :workspaceId', {
         workspaceId: workspace.id,
       })
       .getMany();

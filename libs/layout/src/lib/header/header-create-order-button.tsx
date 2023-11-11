@@ -12,8 +12,7 @@ export function HeaderCreateOrderButton() {
   return (
     <ModalButton
       className="flex-1 px-4 py-2 text-sm font-medium rounded-md justify-center"
-      modal={CreateOrderModal}
-      props={{ workspace }}
+      modal={<CreateOrderModal workspace={workspace!} />}
     >
       {t('dashboard.create_order')}
     </ModalButton>

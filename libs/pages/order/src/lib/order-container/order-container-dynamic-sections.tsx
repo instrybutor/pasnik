@@ -12,11 +12,9 @@ export function OrderContainerDynamicSections() {
     <OrderDishesSection />
   ) : order?.status === OrderStatus.Processing ? (
     <OrderProcessSection />
+  ) : order?.status === OrderStatus.Ordered ? (
+    <OrderETASection />
   ) : (
-    <>
-      {order?.status === OrderStatus.Ordered ? <OrderETASection /> : null}
-
-      <OrderSummarySection />
-    </>
+    <OrderSummarySection />
   );
 }

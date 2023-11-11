@@ -6,7 +6,7 @@ import {
   FormField,
   Input,
   Modal,
-  ModalProps,
+  useModalContext,
 } from '@pasnik/components';
 import { CreateOrderDto, WorkspaceModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
@@ -18,13 +18,11 @@ export interface CreateOrderModelProps {
   workspace: WorkspaceModel;
 }
 
-export function CreateOrderModal({
-  close,
-  workspace,
-}: ModalProps<CreateOrderModelProps>) {
+export function CreateOrderModal({ workspace }: CreateOrderModelProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { mutateAsync } = useOrderCreateMutation(workspace.slug);
+  const { closeModal } = useModalContext();
   return (
     <Modal>
       <Modal.Title>{t('order.order_create')}</Modal.Title>
@@ -34,14 +32,15 @@ export function CreateOrderModal({
         onSubmit={async (data) => {
           const { slug } = await mutateAsync(data);
           navigate(`/order/${slug}`);
-          close();
+          closeModal();
         }}
       >
         <div className="flex flex-1 flex-col space-y-6">
           <FormField
             required
             label={t('order.create_form.restaurant_label')}
-            name="from"
+            name="name"
+            defaultValue={''}
           >
             <Input
               placeholder={t('order.create_form.restaurant_placeholder')}
@@ -60,23 +59,22 @@ export function CreateOrderModal({
               placeholder={t('order.create_form.delivery_price_placeholder')}
             />
           </FormField>
-          <div className="block flex-grow sm:hidden" />
-          <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+          <Modal.Footer>
             <Button
               type="submit"
-              className="w-full px-4 py-2 sm:ml-3 sm:w-auto sm:text-sm justify-center"
+              className="px-4 py-2 sm:text-sm justify-center"
             >
               {t('actions.submit')}
             </Button>
             <Button
-              onClick={close}
+              onClick={closeModal}
               type="button"
               color="secondary"
-              className="mt-3 w-full px-4 py-2 sm:mt-0 sm:w-auto sm:text-sm justify-center"
+              className="px-4 py-2 sm:text-sm justify-center"
             >
               {t('actions.cancel')}
             </Button>
-          </div>
+          </Modal.Footer>
         </div>
       </Form>
     </Modal>

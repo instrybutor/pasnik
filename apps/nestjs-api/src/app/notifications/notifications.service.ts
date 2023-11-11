@@ -28,7 +28,7 @@ export class NotificationService {
     await this.notificationRepository.createNotification<OrderStatusChangedDto>(
       orderStatusChangedDto,
       action,
-      order.participants
+      order.participants.map(({ user }) => user)
     );
   }
 

@@ -179,9 +179,7 @@ function defineWorkspaceUserRules(
   can(OrdersAction.DeleteDish, 'OrderModel', {
     status: OrderStatus.InProgress,
   });
-  can(OrdersAction.SetPayer, 'OrderModel', {
-    status: OrderStatus.Ordered,
-  });
+  can(OrdersAction.SetPayer, 'OrderModel');
   can(OrdersAction.SetETA, 'OrderModel', {
     status: OrderStatus.Ordered,
   });

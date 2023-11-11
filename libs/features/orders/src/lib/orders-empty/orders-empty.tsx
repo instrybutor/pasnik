@@ -24,8 +24,7 @@ export function OrdersEmpty({ workspace }: OrdersEmptyProps) {
       {workspace && (
         <ModalButton
           className="bg-cyan-500 hover:bg-cyan-600 text-white py-2 text-sm rounded px-10 mt-4"
-          modal={CreateOrderModal}
-          props={{ workspace }}
+          modal={<CreateOrderModal workspace={workspace!} />}
         >
           {t('dashboard.create_order')}
         </ModalButton>

@@ -26,6 +26,7 @@
       "@pasnik/features-notifications": [
         "libs/features/notifications/src/index.ts"
       ],
+      "@pasnik/features/expenses": ["libs/features/expenses/src/index.ts"],
       "@pasnik/features/orders": ["libs/features/orders/src/index.ts"],
       "@pasnik/features/workspaces": ["libs/features/workspaces/src/index.ts"],
       "@pasnik/layout": ["libs/layout/src/index.ts"],
@@ -44,6 +45,12 @@
       "@pasnik/pages/order": ["libs/pages/order/src/index.ts"],
       "@pasnik/pages/orders": ["libs/pages/orders/src/index.ts"],
       "@pasnik/pages/workspace": ["libs/pages/workspace/src/index.ts"],
+      "@pasnik/pages/workspace-balances": [
+        "libs/pages/workspace-balances/src/index.ts"
+      ],
+      "@pasnik/pages/workspace-orders": [
+        "libs/pages/workspace-orders/src/index.ts"
+      ],
       "@pasnik/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@pasnik/theme": ["theme.mjs"]
     }

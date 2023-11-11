@@ -2,24 +2,26 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { OrderEntity } from './order.entity';
-import { UserEntity } from './user.entity';
 import { DishModel } from '@pasnik/api/data-transfer';
+import { ExpenseEntity } from './expense.entity';
 
 @Entity()
 export class DishEntity implements DishModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column()
-  priceCents: number;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne(() => OrderEntity, (order: OrderEntity) => order.dishes, {
     cascade: true,
@@ -29,21 +31,10 @@ export class DishEntity implements DishModel {
   @Column()
   orderId: string;
 
+  @OneToOne(() => ExpenseEntity, { cascade: true, eager: true })
+  @JoinColumn()
+  expense: ExpenseEntity;
+
   @Column()
-  userId: number;
-
-  @ManyToOne(() => UserEntity)
-  user: UserEntity;
-
-  @Column({ nullable: true })
-  createdById?: number;
-
-  @ManyToOne(() => UserEntity)
-  createdBy: UserEntity;
-
-  @CreateDateColumn()
-  createdAt: string;
-
-  @UpdateDateColumn()
-  updatedAt: string;
+  expenseId: number;
 }

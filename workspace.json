@@ -121,6 +121,29 @@
       },
       "tags": []
     },
+    "features-expenses": {
+      "root": "libs/features/expenses",
+      "sourceRoot": "libs/features/expenses/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/features/expenses/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/features/expenses"],
+          "options": {
+            "jestConfig": "libs/features/expenses/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "features-notifications": {
       "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/features/notifications",
@@ -717,6 +740,56 @@
           "outputs": ["coverage/libs/pages/workspace"],
           "options": {
             "jestConfig": "libs/pages/workspace/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "pages-workspace-balances": {
+      "root": "libs/pages/workspace-balances",
+      "sourceRoot": "libs/pages/workspace-balances/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/pages/workspace-balances/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/workspace-balances"],
+          "options": {
+            "jestConfig": "libs/pages/workspace-balances/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "pages-workspace-orders": {
+      "root": "libs/pages/workspace-orders",
+      "sourceRoot": "libs/pages/workspace-orders/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "libs/pages/workspace-orders/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pages/workspace-orders"],
+          "options": {
+            "jestConfig": "libs/pages/workspace-orders/jest.config.ts",
             "passWithNoTests": true
           }
         }

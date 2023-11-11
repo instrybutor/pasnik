@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { Menu } from '@headlessui/react';
 import { DotsHorizontalIcon, DuplicateIcon } from '@heroicons/react/outline';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
-import { DishModel } from '@pasnik/api/data-transfer';
+import { ExpenseModel } from '@pasnik/api/data-transfer';
 import {
   Button,
   ConfirmButton,
+  Popover,
   Price,
   UserAvatar,
   UserName,
@@ -14,43 +15,97 @@ import { Can, OrdersAction } from '@pasnik/ability';
 import { Float } from '@headlessui-float/react';
 import { useOrderDish } from './order-dish.hook';
 import { useCurrentOrder } from '@pasnik/features/orders';
+import {
+  useCurrentWorkspace,
+  useWorkspaceUsers,
+} from '@pasnik/features/workspaces';
+import { useMemo } from 'react';
+import { OrderSharesReadonly } from '../order-shares/order-shares-readonly';
 
 export interface OrderDishProps {
-  dish: DishModel;
+  expense: ExpenseModel;
   onUpdate: () => void;
 }
-export function OrderDish({ dish, onUpdate }: OrderDishProps) {
+export function OrderDish({ expense, onUpdate }: OrderDishProps) {
   const { t } = useTranslation();
   const { order } = useCurrentOrder();
-  const { onDuplicate, onDelete } = useOrderDish(dish);
+  const { onDuplicate, onDelete } = useOrderDish(expense);
+  const { data: workspace } = useCurrentWorkspace();
+  const { data: workspaceUsers } = useWorkspaceUsers(workspace?.slug);
+  const workspaceUser = useMemo(
+    () =>
+      (expense.shares.map(({ workspaceUserId }) =>
+        workspaceUsers?.find(({ id }) => workspaceUserId === id)
+      ) ?? [])[0],
+    [workspaceUsers, expense.shares]
+  );
+
+  const owner = useMemo(
+    () => workspaceUsers?.find(({ id }) => id === expense.workspaceUserId),
+    [workspaceUsers, expense.workspaceUserId]
+  );
 
   return (
     <div className="flex items-center gap-6 px-6 py-4">
       <div className="flex items-center">
-        <div className="flex relative">
-          <UserAvatar showTooltip={true} user={dish.user} size="sm" />
-          {dish.createdBy && dish.createdById !== dish.userId && (
-            <UserAvatar
-              showTooltip={(user) => (
-                <span className="flex flex-col text-center">
-                  {t('order.added_by')} <br />
-                  <UserName user={user} />
-                </span>
+        <div className="flex relative items-center justify-center">
+          {(expense.shares ?? []).length > 0 ? (
+            <Popover
+              panel={() => (
+                <OrderSharesReadonly
+                  users={workspaceUsers ?? []}
+                  shares={expense.shares ?? []}
+                  totalPriceCents={expense.priceCents ?? 0}
+                />
               )}
-              className="absolute right-0 bottom-0"
-              user={dish.createdBy}
-              size="xxsm"
-            />
+              className={
+                'relative overflow-hidden bg-gray-200 text-gray-500 ring-2 ring-offset-2 ring-gray-200 flex-shrink-0 text-xs leading-5 focus:ring-cyan-500 font-bold rounded-full h-8 w-8 max-w-none outline-none flex items-center justify-center'
+              }
+            >
+              <span className="flex justify-center">
+                {(expense.shares ?? []).length > 1 ? (
+                  <span className="text-gray-500">
+                    + {expense.shares.length}
+                  </span>
+                ) : (
+                  <UserAvatar size="sm" user={workspaceUser?.user} />
+                )}
+              </span>
+            </Popover>
+          ) : (
+            <span className="relative overflow-hidden bg-gray-200 text-gray-500 ring-2 ring-offset-2 ring-gray-200 flex-shrink-0 text-xs leading-5 focus:ring-cyan-500 font-bold rounded-full h-8 w-8 max-w-none outline-none flex items-center justify-center">
+              <UserAvatar
+                showTooltip={true}
+                user={workspaceUser?.user}
+                size="sm"
+              />
+            </span>
           )}
+          {expense.workspaceUserId !== workspaceUser?.id &&
+            (expense.shares ?? []).length === 1 && (
+              <UserAvatar
+                showTooltip={(user) => (
+                  <span className="flex flex-col text-center">
+                    {t('order.added_by')} <br />
+                    <UserName user={user} />
+                  </span>
+                )}
+                className="absolute right-0 bottom-0"
+                user={owner?.user}
+                size="xxsm"
+              />
+            )}
         </div>
       </div>
 
       <div className="flex-1 w-full">
-        <div className="text-sm text-gray-500 min-w-0 flex-1">{dish.name}</div>
+        <div className="text-sm text-gray-500 min-w-0 flex-1">
+          {expense.name}
+        </div>
       </div>
 
       <div className="flex-0 text-sm text-gray-500 w-20 text-right">
-        <Price priceCents={dish.priceCents} />
+        <Price priceCents={expense.priceCents} />
       </div>
 
       <div className="hidden sm:block empty:hidden whitespace-nowrap space-x-2 flex-shrink-0">

@@ -1,7 +1,7 @@
-import { OrderTimelineSection } from '../order-timeline-section/order-timeline-section';
 import { OrderContainerDynamicSections } from './order-container-dynamic-sections';
 import { OrderSection } from '../order-section/order-section';
 import { QueryBoundary } from '@pasnik/components';
+import { OrderPaymentsSection } from '../order-payments-section/order-payments-section';
 
 export function OrderContainer() {
   return (
@@ -12,7 +12,7 @@ export function OrderContainer() {
         </QueryBoundary>
       </div>
       <div className="space-y-6 xl:col-start-3 xl:col-span-1">
-        <OrderTimelineSection />
+        <OrderPaymentsSection />
       </div>
     </main>
   );

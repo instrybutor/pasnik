@@ -1,17 +1,17 @@
 import { OrderSection } from '../order-section/order-section';
-import { DishModel, UserModel } from '@pasnik/api/data-transfer';
-import { OrderProcess } from './order-process';
-import { useOrderProcessSection } from './order-process-section.hook';
+import { ExpenseModel, UserModel } from '@pasnik/api/data-transfer';
 import { useTranslation } from 'react-i18next';
+import { useOrderProcessSection } from './order-process-section.hook';
 import { OrderProcessSkeleton } from './order-process-skeleton';
-import { OrderProcessSectionFooter } from './order-process-section-footer';
+import { OrderProcess } from './order-process';
 import { OrderProcessSectionFooterSkeleton } from './order-process-section-footer-skeleton';
+import { OrderProcessSectionFooter } from './order-process-section-footer';
 
 export interface ProcessDish {
   name: string;
   priceCents: number;
   users: UserModel[];
-  dishes: DishModel[];
+  expenses: ExpenseModel[];
 }
 
 export function OrderProcessSection() {

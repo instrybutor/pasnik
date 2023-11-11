@@ -1,4 +1,13 @@
-import { IsDefined, IsNumber, IsOptional, Length, Min } from 'class-validator';
+import {
+  IsDefined,
+  IsNumber,
+  IsOptional,
+  Length,
+  Min,
+  Validate,
+} from 'class-validator';
+import { ShareDto } from './share.dto';
+import { ShareDtoValidator } from '../validators/share-dto.validator';
 
 export class AddDishDto {
   @Min(0, { message: 'validation.positive' })
@@ -14,4 +23,8 @@ export class AddDishDto {
   @IsNumber({ maxDecimalPlaces: 0 }, { message: 'validation.invalid' })
   @Min(0, { message: 'validation.invalid' })
   userId?: number;
+
+  @IsOptional()
+  @Validate(ShareDtoValidator, { message: 'validation.invalid' })
+  shares?: ShareDto[];
 }

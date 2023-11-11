@@ -7,7 +7,6 @@ import { Layout } from '@pasnik/layout';
 import { PagesOrders } from '@pasnik/pages/orders';
 import { PagesAdminInvitations } from '@pasnik/pages/admin-invitations';
 import { PagesWorkspace } from '@pasnik/pages/workspace';
-import { RedirectToCurrentWorkspace } from '@pasnik/features/workspaces';
 import { PagesOrder } from '@pasnik/pages/order';
 import { ToastContainer } from '@pasnik/components';
 
@@ -30,8 +29,7 @@ export function App() {
           >
             <Route index element={<PagesDashboard />} />
             <Route path="/history" element={<PagesOrders />} />
-            <Route path="/workspace" element={<RedirectToCurrentWorkspace />} />
-            <Route path="/workspace/:slug/*" element={<PagesWorkspace />} />
+            <Route path="/workspace/*" element={<PagesWorkspace />} />
             <Route path="/admin" element={<RequireAuth admin={true} />}>
               <Route path="invitations" element={<PagesAdminInvitations />} />
             </Route>

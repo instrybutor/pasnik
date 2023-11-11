@@ -1,21 +1,12 @@
-import { Fragment, PropsWithChildren } from 'react';
+import { Fragment, PropsWithChildren, useContext } from 'react';
 import { FloatingPortal } from '@floating-ui/react-dom-interactions';
 
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
+import { ModalContext } from './modal-context';
 
-export interface ModalContainerProps {
-  isOpen: boolean;
-  closeModal: () => void;
-  afterClose: () => void;
-}
-
-export const ModalContainer = ({
-  closeModal,
-  afterClose,
-  isOpen,
-  children,
-}: PropsWithChildren<ModalContainerProps>) => {
+export const ModalContainer = ({ children }: PropsWithChildren) => {
+  const { closeModal, afterClose, isOpen } = useContext(ModalContext);
   return (
     <FloatingPortal>
       <Transition.Root

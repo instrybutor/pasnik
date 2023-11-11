@@ -8,17 +8,19 @@ export function useOrderProcessSection() {
   const { data, isLoading } = useOrderDishes(slug, false);
   const dishes = useMemo(() => {
     return Object.values(
-      data?.reduce((acc, dish) => {
-        const key = dish.name + dish.priceCents;
+      data?.reduce((acc, expense) => {
+        const key = expense.name + expense.priceCents;
         acc[key] = acc[key] || {
-          name: dish.name,
-          priceCents: dish.priceCents,
-          dishes: [],
+          name: expense.name,
+          priceCents: expense.priceCents,
+          expenses: [],
           users: [],
         };
-        acc[key].dishes.push(dish);
-        if (!acc[key].users.some((value) => value.id === dish.userId)) {
-          acc[key].users.push(dish.user);
+        acc[key].expenses.push(expense);
+        if (
+          !acc[key].users.some((value) => value.id === expense.workspaceUserId)
+        ) {
+          // acc[key].users.push(expense.user);
         }
         return acc;
       }, {} as Record<string, ProcessDish>) ?? []

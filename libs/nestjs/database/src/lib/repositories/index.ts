@@ -7,3 +7,8 @@ export * from './workspace-access-requests.repository';
 export * from './users.repository';
 export * from './invitations.repository';
 export * from './notifications.repository';
+export * from './payments.repository';
+export * from './balances.repository';
+export * from './shares.repository';
+export * from './operations.repository';
+export * from './expenses.repository';

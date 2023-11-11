@@ -1,4 +1,4 @@
-import { DateFormat, Header, UserName } from '@pasnik/components';
+import { DateFormat, Header, ModalButton, UserName } from '@pasnik/components';
 import { OrderStatusBadge, useCurrentOrder } from '@pasnik/features/orders';
 import { OrderHeaderActions } from './order-header-actions';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
 import { useCurrentWorkspace } from '@pasnik/features/workspaces';
+import { OrderTimelineModal } from '../order-timeline-modal/order-timeline-modal';
 
 export function OrderHeader() {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ export function OrderHeader() {
       left={
         <>
           <h1 className="text-2xl font-normal leading-7 text-gray-900 sm:leading-9 sm:truncate flex items-center gap-2">
-            {order?.from}
+            {order?.operation.name}
             {order?.menuUrl && (
               <a
                 href={order.menuUrl}
@@ -36,7 +37,12 @@ export function OrderHeader() {
             )}
             {order ? (
               <div className="inline-flex">
-                <OrderStatusBadge order={order} />
+                <ModalButton
+                  modal={<OrderTimelineModal order={order} />}
+                  color="none"
+                >
+                  <OrderStatusBadge order={order} />
+                </ModalButton>
               </div>
             ) : null}
           </h1>

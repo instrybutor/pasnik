@@ -48,13 +48,16 @@
     "order_create": "Tworzenie zamówienia",
     "order_edit": "Edycja zamówienia",
     "added_by": "Dodane przez",
+    "payment": "Płatność",
     "order_placed": "Zamówienie złożone",
+    "delivery": "Dostawa",
     "estimated_delivery": "Szacowana dostawa",
     "order_summary": "Podsumowanie zamówienia",
     "position_count": "Ilość pozycji",
     "detailed": "Szczegółowa",
     "total": "Suma",
     "no_dishes": "Brak pozycji w zamówieniu",
+    "missing_shares": "Nie wszystkie pozycje są rozliczone",
     "shipping": "Dostawa",
     "history": "Historia zamówień",
     "form": {
@@ -87,6 +90,7 @@
       "by": "przez"
     },
     "toast": {
+      "update_dish": "Zaktualizowano pozycję",
       "duplicate_dish": "Zduplikowano pozycję",
       "delete_dish": "Usunięto pozycję",
       "add_dish": "Utworzono pozycję"

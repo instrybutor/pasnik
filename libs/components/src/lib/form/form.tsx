@@ -5,7 +5,7 @@ import {
   useForm,
   UseFormProps,
 } from 'react-hook-form';
-import { ReactElement, useCallback } from 'react';
+import { ReactElement, useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import { useToast } from '../toast';
 import { useTranslation } from 'react-i18next';
@@ -37,7 +37,6 @@ export const Form = <
   });
   const { toast } = useToast();
   const { t } = useTranslation();
-
   const { handleSubmit } = methods;
 
   const _onError = useCallback(
@@ -71,6 +70,10 @@ export const Form = <
     },
     [onSubmit, successMessage, toast]
   );
+
+  useEffect(() => {
+    methods.reset(formProps.defaultValues);
+  }, [formProps.defaultValues, methods]);
 
   return (
     <FormProvider {...methods}>

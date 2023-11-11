@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {
   DishesRepository,
+  ExpensesRepository,
   OrdersRepository,
   UsersRepository,
   WorkspaceUsersRepository,
@@ -19,6 +20,7 @@ import { OrderMiddleware } from '../order/order.middleware';
       DishesRepository,
       UsersRepository,
       WorkspaceUsersRepository,
+      ExpensesRepository,
     ]),
   ],
   controllers: [DishesController],

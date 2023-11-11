@@ -61,7 +61,7 @@ export function WorkspaceUserInvitePopover({
   const onSubmit = useCallback(
     (data: EmailForm) => {
       if (data.email && data.email.length > 0) {
-        insert(0, data);
+        insert(0, { email: data.email });
         reset();
       } else {
         onSubmitButtonClick();

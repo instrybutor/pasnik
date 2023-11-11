@@ -1,21 +1,27 @@
-import { DishModel, OrderModel, UserModel } from '@pasnik/api/data-transfer';
+import { ExpenseModel, OrderModel, UserModel } from '@pasnik/api/data-transfer';
 import { useCallback, useState } from 'react';
-import { useCurrentUser } from '@pasnik/auth';
+import {
+  useCurrentWorkspaceUser,
+  useWorkspaceById,
+  useWorkspaceUsers,
+} from '@pasnik/features/workspaces';
 
 export interface UserDishesSummary {
   user: UserModel;
   total: number;
   shipping: number;
-  dishes: DishModel[];
+  expenses: ExpenseModel[];
 }
 
 export const useOrderSummary = (order?: OrderModel) => {
-  const { user } = useCurrentUser();
+  const user = useCurrentWorkspaceUser();
   const [groupedSummaries, setGroupedSummaries] = useState<UserDishesSummary[]>(
     []
   );
   const [currentUserSummary, setCurrentUserSummary] =
     useState<UserDishesSummary | null>(null);
+  const workspace = useWorkspaceById(order?.operation.workspaceId);
+  const { data: workspaceUsers } = useWorkspaceUsers(workspace?.slug);
 
   const applyShipping = useCallback(
     (summaries: UserDishesSummary[]) => {
@@ -30,20 +36,26 @@ export const useOrderSummary = (order?: OrderModel) => {
   );
 
   const groupSummaries = useCallback(
-    (dishes: DishModel[]) => {
-      const summaries = dishes.reduce((acc, dish) => {
-        if (!dish.user || !user) {
-          return acc;
-        }
-        const userSummary: UserDishesSummary = acc[dish.user.id] || {
-          user: dish.user,
-          dishes: [],
-          total: 0,
-          shipping: 0,
-        };
-        userSummary.dishes.push(dish);
-        userSummary.total += dish.priceCents;
-        acc[dish.user.id] = userSummary;
+    (expenses: ExpenseModel[]) => {
+      const summaries = expenses.reduce((acc, expense) => {
+        expense.shares.forEach((share) => {
+          const workspaceUser = workspaceUsers?.find(
+            ({ id }) => id === share.workspaceUserId
+          );
+          if (!user) {
+            return;
+          }
+          const userSummary: UserDishesSummary = acc[share.workspaceUserId] || {
+            user: workspaceUser?.user,
+            expenses: [],
+            total: 0,
+            shipping: 0,
+          };
+
+          userSummary.expenses.push(expense);
+          userSummary.total += expense.priceCents;
+          acc[share.workspaceUserId] = userSummary;
+        });
         return acc;
       }, {} as Record<UserModel['id'], UserDishesSummary>);
       if (order?.shippingCents) {
@@ -54,22 +66,22 @@ export const useOrderSummary = (order?: OrderModel) => {
         userDishesSummaries: Object.values(summaries),
       };
     },
-    [applyShipping, order, user]
+    [applyShipping, order, user, workspaceUsers]
   );
 
   const sortSummaries = useCallback(
     (userDishesSummaries: UserDishesSummary[]) => {
       return userDishesSummaries.sort((summary) =>
-        summary.user.id === user?.id ? 0 : 1
+        summary.user.id === user?.userId ? 0 : 1
       );
     },
     [user]
   );
 
   const setDishes = useCallback(
-    (dishes: DishModel[]) => {
+    (expenses: ExpenseModel[]) => {
       const { userDishesSummaries, currentUserSummary } =
-        groupSummaries(dishes);
+        groupSummaries(expenses);
       setGroupedSummaries(sortSummaries(userDishesSummaries));
       setCurrentUserSummary(currentUserSummary);
     },

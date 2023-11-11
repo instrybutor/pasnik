@@ -8,15 +8,17 @@ import {
   OrderActionsRepository,
   OrderEntity,
   OrdersRepository,
+  PaymentsRepository,
   UserEntity,
-  UsersRepository,
+  WorkspaceUserEntity,
+  WorkspaceUsersRepository,
 } from '@pasnik/nestjs/database';
 import {
+  AddPayerToOrderDto,
   MarkAsDeliveredDto,
   MarkAsOrderedDto,
   OrderAction,
   SetETADto,
-  SetPayerDto,
   UpdateOrderDto,
 } from '@pasnik/api/data-transfer';
 import { EventName, OrderStatusChangedEvent } from '../notifications';
@@ -95,20 +97,19 @@ export class OrderService {
   async markAsDelivered(
     orderId: string,
     markAsDeliveredDto: MarkAsDeliveredDto,
-    user: UserEntity
+    workspaceUser: WorkspaceUserEntity
   ) {
     await this.connection.transaction(async (manager) => {
       const ordersRepository = manager.getCustomRepository(OrdersRepository);
       const orderActionsRepository = manager.getCustomRepository(
         OrderActionsRepository
       );
-
       const order = await ordersRepository.findOneOrFail(orderId, {
         relations: ['dishes'],
       });
       await ordersRepository.markAsDelivered(order, markAsDeliveredDto);
       await orderActionsRepository.createAction(
-        user,
+        workspaceUser.user,
         order,
         OrderAction.Delivered
       );
@@ -152,23 +153,6 @@ export class OrderService {
     return this.findOneById(orderId);
   }
 
-  async setPayer(orderId: string, { payerId }: SetPayerDto) {
-    await this.connection.transaction(async (manager) => {
-      const usersRepository = manager.getCustomRepository(UsersRepository);
-      const ordersRepository = manager.getCustomRepository(OrdersRepository);
-
-      const payer = await usersRepository.findOneOrFail(payerId);
-      const order = await this.findOneById(orderId);
-
-      if (order.payer?.id === payer.id) {
-        return;
-      }
-
-      await ordersRepository.markAsPaid(order, payer);
-    });
-    return this.findOneById(orderId);
-  }
-
   async setETA(orderId: string, { eta }: SetETADto) {
     await this.connection.transaction(async (manager) => {
       const ordersRepository = manager.getCustomRepository(OrdersRepository);
@@ -180,11 +164,47 @@ export class OrderService {
     return this.findOneById(orderId);
   }
 
-  private dispatchNotification({ id, from, slug, status }: OrderEntity) {
+  async addPayerToOrder(
+    order: OrderEntity,
+    workspaceUser: WorkspaceUserEntity,
+    addPayerDto: AddPayerToOrderDto
+  ) {
+    await this.connection.transaction(async (manager) => {
+      const paymentsRepository =
+        manager.getCustomRepository(PaymentsRepository);
+      const workspaceUserRepository = manager.getCustomRepository(
+        WorkspaceUsersRepository
+      );
+
+      const payer = await workspaceUserRepository.findOneOrFail({
+        where: {
+          id: addPayerDto.workspaceUserId,
+          workspaceId: order.operation.workspaceId,
+        },
+      });
+
+      if (addPayerDto.amountCents === 0) {
+        return await paymentsRepository.delete({
+          operation: order.operation,
+          workspaceUser: payer,
+        });
+      }
+
+      const { id } = await paymentsRepository.upsertPayment(
+        payer.id,
+        addPayerDto.amountCents,
+        order.operation
+      );
+
+      return await paymentsRepository.findOne({ where: { id } });
+    });
+  }
+
+  private dispatchNotification({ id, operation, slug, status }: OrderEntity) {
     const event = new OrderStatusChangedEvent();
     event.data = {
       id,
-      from,
+      from: operation.name,
       slug,
       status,
     };

@@ -47,7 +47,10 @@ export const Tooltip = ({
 
   return (
     <>
-      <span ref={reference} {...getReferenceProps({ className })}>
+      <span
+        ref={reference}
+        {...getReferenceProps({ className: 'inline-flex' })}
+      >
         {children}
       </span>
       <FloatingPortal>

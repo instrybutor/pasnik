@@ -115,7 +115,7 @@ export function Users({
             <Popover.Button
               className={classNames(
                 getSizeClass(avatarSize),
-                'relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 max-w-none ring-2 ring-white'
+                'relative ring-2 ring-white flex-shrink-0 text-xs leading-5 font-bold rounded-full bg-gray-200 max-w-none ring-2 ring-white text-gray-500'
               )}
             >
               + {users.length - visibleUsers.length}
